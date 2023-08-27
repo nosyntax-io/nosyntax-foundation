@@ -17,7 +17,8 @@ android {
         targetSdk = 33
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME))
+            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME)),
+            ResourceValue("string", "onesignal_app_id", appConfig.getProperty(AppConfig.APP_ONESIGNAL_ID))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)

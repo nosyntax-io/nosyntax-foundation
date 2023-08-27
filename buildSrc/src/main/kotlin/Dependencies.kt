@@ -18,6 +18,7 @@ object Libraries {
         "com.squareup.retrofit2:retrofit:${Versions.retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
         "com.google.code.gson:gson:${Versions.gson}",
+        "com.onesignal:OneSignal:${Versions.oneSignal}",
     )
     val kapts = listOf(
         "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
