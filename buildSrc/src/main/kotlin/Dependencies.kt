@@ -6,28 +6,27 @@ object Libraries {
         "dagger.hilt.android.plugin",
     )
     val implementations = listOf(
-        "androidx.core:core-ktx:1.9.0",
-        "androidx.core:core-ktx:1.9.0",
-        "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1",
-        "androidx.activity:activity-compose:1.7.2",
+        "androidx.core:core-ktx:${Versions.core}",
+        "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRunTime}",
+        "androidx.activity:activity-compose:${Versions.activityCompose}",
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
         "androidx.compose.material3:material3",
-        "com.google.dagger:hilt-android:2.44",
-        "com.squareup.retrofit2:retrofit:2.9.0",
-        "com.squareup.retrofit2:converter-gson:2.9.0",
-        "com.google.code.gson:gson:2.9.1",
+        "com.google.dagger:hilt-android:${Versions.daggerHilt}",
+        "com.squareup.retrofit2:retrofit:${Versions.retrofit}",
+        "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
+        "com.google.code.gson:gson:${Versions.gson}",
     )
     val kapts = listOf(
-        "com.google.dagger:hilt-android-compiler:2.44"
+        "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
     )
     val testImplementations = listOf(
-        "junit:junit:4.13.2"
+        "junit:junit:${Versions.junit}"
     )
     val androidTestImplementations = listOf(
-        "androidx.test.ext:junit:1.1.5",
-        "androidx.test.espresso:espresso-core:3.5.1",
+        "androidx.test.ext:junit:${Versions.junit}",
+        "androidx.test.espresso:espresso-core:${Versions.espressoCore}",
         "androidx.compose.ui:ui-test-junit4"
     )
     val debugImplementation = listOf(
