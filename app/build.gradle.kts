@@ -2,6 +2,8 @@ plugins {
     Libraries.plugins.forEach { id(it) }
 }
 
+val signingConfig = Properties().load(rootProject.file("signing.properties"))
+
 android {
     namespace = "app.mynta.template.android"
     compileSdk = 33
@@ -19,13 +21,20 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(signingConfig.getProperty(SigningConfig.KEYSTORE_FILE))
+            storePassword = signingConfig.getProperty(SigningConfig.KEYSTORE_PASSWORD)
+            keyAlias = signingConfig.getProperty(SigningConfig.KEY_ALIAS)
+            keyPassword = signingConfig.getProperty(SigningConfig.KEY_PASSWORD)
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            signingConfig = signingConfigs["release"]
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {

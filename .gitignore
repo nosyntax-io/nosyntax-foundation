@@ -2,8 +2,9 @@
 .gradle/
 build/
 
-# Local configuration file (sdk path, etc)
+# configuration files
 local.properties
+signing.properties
 
 # Log/OS Files
 *.log
