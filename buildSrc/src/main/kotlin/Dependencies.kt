@@ -15,6 +15,9 @@ object Libraries {
         "androidx.compose.ui:ui-tooling-preview",
         "androidx.compose.material3:material3",
         "com.google.dagger:hilt-android:2.44",
+        "com.squareup.retrofit2:retrofit:2.9.0",
+        "com.squareup.retrofit2:converter-gson:2.9.0",
+        "com.google.code.gson:gson:2.9.1",
     )
     val kapts = listOf(
         "com.google.dagger:hilt-android-compiler:2.44"

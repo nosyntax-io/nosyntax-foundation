@@ -22,6 +22,7 @@ android {
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
+        buildConfigField("String", "ACCESS_TOKEN", "\"${appConfig.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
