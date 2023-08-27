@@ -1,4 +1,4 @@
-package app.mynta.template.android
+package app.mynta.template.android.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
