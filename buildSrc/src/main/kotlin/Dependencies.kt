@@ -4,6 +4,7 @@ object Libraries {
         "kotlin-kapt",
         "com.android.application",
         "dagger.hilt.android.plugin",
+        "com.google.gms.google-services"
     )
     val implementations = listOf(
         "androidx.core:core-ktx:${Versions.core}",
