@@ -1,7 +1,9 @@
 object Libraries {
     val plugins = listOf(
+        "kotlin-android",
+        "kotlin-kapt",
         "com.android.application",
-        "org.jetbrains.kotlin.android"
+        "dagger.hilt.android.plugin",
     )
     val implementations = listOf(
         "androidx.core:core-ktx:1.9.0",
@@ -12,6 +14,10 @@ object Libraries {
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
         "androidx.compose.material3:material3",
+        "com.google.dagger:hilt-android:2.44",
+    )
+    val kapts = listOf(
+        "com.google.dagger:hilt-android-compiler:2.44"
     )
     val testImplementations = listOf(
         "junit:junit:4.13.2"
