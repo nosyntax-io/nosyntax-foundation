@@ -3,11 +3,14 @@ package app.mynta.template.android.presentation.web
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import app.mynta.template.android.core.Constants
+import app.mynta.template.android.core.utility.Let
 
 class WebViewManager(context: Context) {
     @SuppressLint("SetJavaScriptEnabled")
@@ -49,6 +52,19 @@ class WebViewManager(context: Context) {
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
+        }
+
+        override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
+            val url = request?.url.toString()
+            webView?.let { view ->
+                if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
+                    view.loadUrl(url)
+                    return true
+                } else {
+                    return false
+                }
+            }
+            return false
         }
     }
 }
