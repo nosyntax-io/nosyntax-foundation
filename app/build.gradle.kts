@@ -2,6 +2,7 @@ plugins {
     Libraries.plugins.forEach { id(it) }
 }
 
+val appConfig = Properties().load(rootProject.file("local.properties"))
 val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
@@ -9,11 +10,18 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "app.mynta.template.android"
+        applicationId = appConfig.getProperty(AppConfig.APP_PACKAGE_NAME)
+        versionCode = appConfig.getProperty(AppConfig.APP_VERSION_CODE).toInt()
+        versionName = appConfig.getProperty(AppConfig.APP_VERSION_NAME)
         minSdk = 24
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+
+        val resourceValues = listOf(
+            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME))
+        )
+        resourceValues.forEach { resourceValue ->
+            resValue(resourceValue.type, resourceValue.name, resourceValue.value)
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -45,6 +53,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
