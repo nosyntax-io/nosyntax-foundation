@@ -7,14 +7,14 @@ val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
     namespace = "app.mynta.template.android"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = appConfig.getProperty(AppConfig.APP_PACKAGE_NAME)
         versionCode = appConfig.getProperty(AppConfig.APP_VERSION_CODE).toInt()
         versionName = appConfig.getProperty(AppConfig.APP_VERSION_NAME)
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
 
         val resourceValues = listOf(
             ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME)),

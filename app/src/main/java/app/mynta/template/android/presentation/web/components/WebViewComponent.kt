@@ -1,8 +1,11 @@
 package app.mynta.template.android.presentation.web.components
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.MailTo
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
@@ -12,6 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,66 +27,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
+import app.mynta.template.android.core.components.ChangeScreenOrientationComponent
+import app.mynta.template.android.core.components.SystemUIControllerComponent
+import app.mynta.template.android.core.components.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Intents.openDial
 import app.mynta.template.android.core.utility.Intents.openEmail
 import app.mynta.template.android.core.utility.Intents.openPlayStore
 import app.mynta.template.android.core.utility.Intents.openSMS
-import app.mynta.template.android.presentation.web.JsDialogState
+
+data class JsDialogState(
+    val type: String,
+    val message: String,
+    val defaultValue: String = ""
+)
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebViewComponent(url: String) {
+    val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
+    var requestedOrientation by remember { mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
     var canGoBack by remember { mutableStateOf(false) }
-    var noConnectionComponentState by remember { mutableStateOf(false) }
+    var noConnectionState by remember { mutableStateOf(false) }
     var jsDialogState by remember { mutableStateOf<JsDialogState?>(null) }
     var jsResult by remember { mutableStateOf<JsResult?>(null) }
     var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
+    var webCustomView by remember { mutableStateOf<View?>(null) }
+    var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
 
-    jsDialogState?.let { dialog ->
-        when (dialog.type) {
-            "alert" -> {
-                AlertDialogComponent(title = "Alert", message = dialog.message) {
-                    jsDialogState = null
-                    jsResult?.let {
-                        it.confirm()
-                        jsResult = null
-                    }
-                }
-            }
-            "confirm" -> {
-                ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
-                    jsDialogState = null
-                    jsResult?.let {
-                        it.cancel()
-                        jsResult = null
-                    }
-                }, onConfirm = {
-                    jsDialogState = null
-                    jsResult?.let {
-                        it.confirm()
-                        jsResult = null
-                    }
-                })
-            }
-            "prompt" -> {
-                PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
-                    jsDialogState = null
-                    jsPromptResult?.let {
-                        it.cancel()
-                        jsPromptResult = null
-                    }
-                }, onConfirm = { result ->
-                    jsDialogState = null
-                    jsPromptResult?.let {
-                        it.confirm(result)
-                        jsPromptResult = null
-                    }
-                })
-            }
-        }
-    }
+    SystemUIControllerComponent(systemUiState = systemUiState)
+    ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
@@ -149,7 +124,7 @@ fun WebViewComponent(url: String) {
 
                         override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                             super.onReceivedError(view, request, error)
-                            noConnectionComponentState = true
+                            noConnectionState = true
                         }
                     }
 
@@ -171,6 +146,37 @@ fun WebViewComponent(url: String) {
                             jsPromptResult = result
                             return true
                         }
+
+                        override fun getDefaultVideoPoster(): Bitmap? {
+                            if (webCustomView == null) {
+                                return null
+                            }
+                            return BitmapFactory.decodeResource(context.resources, 2130837573)
+                        }
+
+                        override fun onHideCustomView() {
+                            if (webCustomView == null) {
+                                return
+                            }
+                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                            webCustomView = null
+                            webCustomViewCallback?.onCustomViewHidden()
+                            webCustomViewCallback = null
+                        }
+
+                        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                            if (webCustomView != null) {
+                                onHideCustomView()
+                                return
+                            }
+                            webCustomView = view
+                            webCustomViewCallback = callback
+
+                            systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        }
                     }
 
                     loadUrl(url)
@@ -181,13 +187,65 @@ fun WebViewComponent(url: String) {
             }
         )
 
-        if (noConnectionComponentState) {
+        if (webCustomView != null) {
+            AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
+                val frameLayout = FrameLayout(context)
+                frameLayout.addView(webCustomView)
+                frameLayout
+            })
+        }
+
+        if (noConnectionState) {
             NoConnectionComponent(onRetry = {
                 if (Connectivity.getInstance().isOnline()) {
-                    noConnectionComponentState = false
+                    noConnectionState = false
                     webView?.reload()
                 }
             })
+        }
+
+        jsDialogState?.let { dialog ->
+            when (dialog.type) {
+                "alert" -> {
+                    AlertDialogComponent(title = "Alert", message = dialog.message) {
+                        jsDialogState = null
+                        jsResult?.let {
+                            it.confirm()
+                            jsResult = null
+                        }
+                    }
+                }
+                "confirm" -> {
+                    ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
+                        jsDialogState = null
+                        jsResult?.let {
+                            it.cancel()
+                            jsResult = null
+                        }
+                    }, onConfirm = {
+                        jsDialogState = null
+                        jsResult?.let {
+                            it.confirm()
+                            jsResult = null
+                        }
+                    })
+                }
+                "prompt" -> {
+                    PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
+                        jsDialogState = null
+                        jsPromptResult?.let {
+                            it.cancel()
+                            jsPromptResult = null
+                        }
+                    }, onConfirm = { result ->
+                        jsDialogState = null
+                        jsPromptResult?.let {
+                            it.confirm(result)
+                            jsPromptResult = null
+                        }
+                    })
+                }
+            }
         }
     }
 
