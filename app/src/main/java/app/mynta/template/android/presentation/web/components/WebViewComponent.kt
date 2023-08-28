@@ -33,6 +33,21 @@ fun WebViewComponent(url: String) {
                     }
                 })
             }
+            "confirm" -> {
+                ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
+                    jsDialogState.value = null
+                    jsResult.apply {
+                        value?.cancel()
+                        value = null
+                    }
+                }, onConfirm = {
+                    jsDialogState.value = null
+                    jsResult.apply {
+                        value?.confirm()
+                        value = null
+                    }
+                })
+            }
         }
     }
 
@@ -83,6 +98,12 @@ fun WebViewComponent(url: String) {
                 webChromeClient = object: WebChromeClient() {
                     override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                         jsDialogState.value = JsDialogState(type = "alert", message = message.toString())
+                        jsResult.value = result
+                        return true
+                    }
+
+                    override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                        jsDialogState.value = JsDialogState(type = "confirm", message = message.toString())
                         jsResult.value = result
                         return true
                     }
