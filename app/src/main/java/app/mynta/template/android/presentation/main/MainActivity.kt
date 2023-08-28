@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import app.mynta.template.android.presentation.web.WebScreen
+import app.mynta.template.android.ui.theme.MyntaTemplateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,9 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            WebScreen()
+            MyntaTemplateTheme {
+                WebScreen()
+            }
         }
     }
 }

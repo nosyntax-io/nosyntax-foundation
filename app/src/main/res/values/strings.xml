@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mynta Template</string>
     <string name="onesignal_app_id">onesignal_app_id</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
