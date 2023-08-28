@@ -3,6 +3,7 @@ package app.mynta.template.android.presentation.web.components
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
+import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -21,6 +22,7 @@ import app.mynta.template.android.presentation.web.JsDialogState
 fun WebViewComponent(url: String) {
     val jsDialogState = remember { mutableStateOf<JsDialogState?>(null) }
     val jsResult = remember { mutableStateOf<JsResult?>(null) }
+    val jsPromptResult = remember { mutableStateOf<JsPromptResult?>(null) }
 
     jsDialogState.value?.let { dialog ->
         when (dialog.type) {
@@ -44,6 +46,21 @@ fun WebViewComponent(url: String) {
                     jsDialogState.value = null
                     jsResult.apply {
                         value?.confirm()
+                        value = null
+                    }
+                })
+            }
+            "prompt" -> {
+                PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
+                    jsDialogState.value = null
+                    jsPromptResult.apply {
+                        value?.cancel()
+                        value = null
+                    }
+                }, onConfirm = { result ->
+                    jsDialogState.value = null
+                    jsPromptResult.apply {
+                        value?.confirm(result)
                         value = null
                     }
                 })
@@ -105,6 +122,12 @@ fun WebViewComponent(url: String) {
                     override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                         jsDialogState.value = JsDialogState(type = "confirm", message = message.toString())
                         jsResult.value = result
+                        return true
+                    }
+
+                    override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+                        jsDialogState.value = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
+                        jsPromptResult.value = result
                         return true
                     }
                 }

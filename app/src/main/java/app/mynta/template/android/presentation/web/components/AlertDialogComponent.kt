@@ -26,8 +26,8 @@ fun AlertDialogComponent(title: String, message: String, onDismiss: () -> Unit) 
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
-            dismissOnClickOutside = false,
-            dismissOnBackPress = false
+            dismissOnClickOutside = true,
+            dismissOnBackPress = true
         ),
         content = {
             Column(
@@ -36,7 +36,7 @@ fun AlertDialogComponent(title: String, message: String, onDismiss: () -> Unit) 
                     .background(color = MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.large)
                     .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(text = title, style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(5.dp))
