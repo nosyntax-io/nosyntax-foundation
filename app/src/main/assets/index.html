@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Call Example</title>
+</head>
+<body>
+
+<h1>Phone Call Example</h1>
+
+<!-- Button for initiating a phone call using the "tel:" intent -->
+<button onclick="makePhoneCall()">Make Phone Call</button>
+
+<script>
+function makePhoneCall() {
+    let phoneNumber = "201002992225";
+
+    // Create the tel link
+    let telLink = `tel:${phoneNumber}`;
+
+    // Initiate the phone call
+    window.location.href = telLink;
+}
+</script>
+
+</body>
+</html>
