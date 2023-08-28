@@ -12,11 +12,14 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
@@ -30,50 +33,51 @@ import app.mynta.template.android.presentation.web.JsDialogState
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebViewComponent(url: String) {
-    val webView = remember { mutableStateOf<WebView?>(null) }
-    val noConnectionComponentState = remember { mutableStateOf(false) }
-    val jsDialogState = remember { mutableStateOf<JsDialogState?>(null) }
-    val jsResult = remember { mutableStateOf<JsResult?>(null) }
-    val jsPromptResult = remember { mutableStateOf<JsPromptResult?>(null) }
+    var webView by remember { mutableStateOf<WebView?>(null) }
+    var canGoBack by remember { mutableStateOf(false) }
+    var noConnectionComponentState by remember { mutableStateOf(false) }
+    var jsDialogState by remember { mutableStateOf<JsDialogState?>(null) }
+    var jsResult by remember { mutableStateOf<JsResult?>(null) }
+    var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
 
-    jsDialogState.value?.let { dialog ->
+    jsDialogState?.let { dialog ->
         when (dialog.type) {
             "alert" -> {
-                AlertDialogComponent(title = "Alert", message = dialog.message, onDismiss = {
-                    jsDialogState.value = null
-                    jsResult.apply {
-                        value?.confirm()
-                        value = null
+                AlertDialogComponent(title = "Alert", message = dialog.message) {
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.confirm()
+                        jsResult = null
                     }
-                })
+                }
             }
             "confirm" -> {
                 ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
-                    jsDialogState.value = null
-                    jsResult.apply {
-                        value?.cancel()
-                        value = null
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.cancel()
+                        jsResult = null
                     }
                 }, onConfirm = {
-                    jsDialogState.value = null
-                    jsResult.apply {
-                        value?.confirm()
-                        value = null
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.confirm()
+                        jsResult = null
                     }
                 })
             }
             "prompt" -> {
                 PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
-                    jsDialogState.value = null
-                    jsPromptResult.apply {
-                        value?.cancel()
-                        value = null
+                    jsDialogState = null
+                    jsPromptResult?.let {
+                        it.cancel()
+                        jsPromptResult = null
                     }
                 }, onConfirm = { result ->
-                    jsDialogState.value = null
-                    jsPromptResult.apply {
-                        value?.confirm(result)
-                        value = null
+                    jsDialogState = null
+                    jsPromptResult?.let {
+                        it.confirm(result)
+                        jsPromptResult = null
                     }
                 })
             }
@@ -105,6 +109,7 @@ fun WebViewComponent(url: String) {
                     webViewClient = object: WebViewClient() {
                         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                             super.onPageStarted(view, url, favicon)
+                            canGoBack = view?.canGoBack() ?: false
                         }
 
                         override fun onPageFinished(view: WebView?, url: String?) {
@@ -144,42 +149,49 @@ fun WebViewComponent(url: String) {
 
                         override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                             super.onReceivedError(view, request, error)
-                            noConnectionComponentState.value = true
+                            noConnectionComponentState = true
                         }
                     }
 
                     webChromeClient = object: WebChromeClient() {
                         override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                            jsDialogState.value = JsDialogState(type = "alert", message = message.toString())
-                            jsResult.value = result
+                            jsDialogState = JsDialogState(type = "alert", message = message.toString())
+                            jsResult = result
                             return true
                         }
 
                         override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                            jsDialogState.value = JsDialogState(type = "confirm", message = message.toString())
-                            jsResult.value = result
+                            jsDialogState = JsDialogState(type = "confirm", message = message.toString())
+                            jsResult = result
                             return true
                         }
 
                         override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                            jsDialogState.value = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
-                            jsPromptResult.value = result
+                            jsDialogState = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
+                            jsPromptResult = result
                             return true
                         }
                     }
 
                     loadUrl(url)
-                    webView.value = this
+                    webView = this
                 }
+            }, update = {
+                it.loadUrl(url)
             }
         )
-        if (noConnectionComponentState.value) {
+
+        if (noConnectionComponentState) {
             NoConnectionComponent(onRetry = {
                 if (Connectivity.getInstance().isOnline()) {
-                    noConnectionComponentState.value = false
-                    webView.value?.reload()
+                    noConnectionComponentState = false
+                    webView?.reload()
                 }
             })
         }
+    }
+
+    BackHandler(enabled = canGoBack) {
+        webView?.goBack()
     }
 }
