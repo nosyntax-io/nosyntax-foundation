@@ -5,5 +5,5 @@ import app.mynta.template.android.presentation.web.components.WebViewComponent
 
 @Composable
 fun WebScreen() {
-    WebViewComponent(url = "https://google.com")
+    WebViewComponent(url = "file:///android_asset/index.html")
 }

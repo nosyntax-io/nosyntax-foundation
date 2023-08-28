@@ -2,6 +2,7 @@ package app.mynta.template.android.presentation.web.components
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.net.MailTo
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
@@ -15,6 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
+import app.mynta.template.android.core.utility.Intents.openDial
+import app.mynta.template.android.core.utility.Intents.openEmail
+import app.mynta.template.android.core.utility.Intents.openPlayStore
+import app.mynta.template.android.core.utility.Intents.openSMS
 import app.mynta.template.android.presentation.web.JsDialogState
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -105,7 +110,25 @@ fun WebViewComponent(url: String) {
                                 view.loadUrl(webUrl)
                                 return true
                             } else {
-                                return false
+                                when {
+                                    webUrl.startsWith("mailto:") -> {
+                                        val mail = MailTo.parse(webUrl)
+                                        val recipient = mail.to
+                                        val subject = mail.subject ?: ""
+                                        val body = mail.body ?: ""
+                                        context.openEmail(recipient = recipient, subject = subject, body = body)
+                                    }
+                                    webUrl.startsWith("tel:") -> {
+                                        context.openDial(url = webUrl)
+                                    }
+                                    webUrl.startsWith("sms:") -> {
+                                        context.openSMS(url = webUrl)
+                                    }
+                                    webUrl.startsWith("market://") -> {
+                                        context.openPlayStore(packageName = context.packageName)
+                                    }
+                                }
+                                return true
                             }
                         }
                         return false
