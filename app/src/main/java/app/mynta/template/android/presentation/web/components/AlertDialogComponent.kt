@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -40,7 +41,11 @@ fun AlertDialogComponent(title: String, message: String, onDismiss: () -> Unit) 
             ) {
                 Text(text = title, style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = message, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth().height(40.dp).padding(0.dp),
@@ -52,7 +57,7 @@ fun AlertDialogComponent(title: String, message: String, onDismiss: () -> Unit) 
                     Text(
                         text = stringResource(id = R.string.dismiss),
                         modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }

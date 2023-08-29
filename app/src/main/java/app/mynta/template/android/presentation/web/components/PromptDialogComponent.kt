@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -50,7 +51,10 @@ fun PromptDialogComponent(message: String, defaultValue: String, onCancel: () ->
             ) {
                 Text(text = "Prompt!", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = message, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(20.dp))
                 TextFieldComponent(defaultValue = defaultValue, onValueChange = {
                     promptValue.value = it
@@ -70,7 +74,7 @@ fun PromptDialogComponent(message: String, defaultValue: String, onCancel: () ->
                         Text(
                             text = stringResource(id = R.string.cancel),
                             modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
