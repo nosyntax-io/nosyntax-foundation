@@ -1,7 +1,6 @@
-package app.mynta.template.android.presentation.app
+package app.mynta.template.android
 
 import android.app.Application
-import app.mynta.template.android.R
 import app.mynta.template.android.core.utility.Connectivity
 import com.onesignal.OneSignal
 import dagger.hilt.android.HiltAndroidApp

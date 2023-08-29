@@ -44,7 +44,7 @@ data class JsDialogState(
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebViewComponent(url: String) {
+fun WebViewComponent(modifier: Modifier = Modifier, url: String) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
@@ -59,7 +59,7 @@ fun WebViewComponent(url: String) {
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
         AndroidView(
             factory = { context ->
                 WebView(context).apply {

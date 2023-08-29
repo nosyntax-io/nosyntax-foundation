@@ -9,10 +9,12 @@ object Libraries {
     val implementations = listOf(
         "androidx.core:core-ktx:${Versions.core}",
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRunTime}",
+        "androidx.lifecycle:lifecycle-runtime-compose:${Versions.lifecycleRunTime}",
         "androidx.activity:activity-compose:${Versions.activityCompose}",
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
+        "androidx.navigation:navigation-compose:${Versions.navigation}",
         "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
         "androidx.compose.material3:material3",
         "com.google.dagger:hilt-android:${Versions.daggerHilt}",
