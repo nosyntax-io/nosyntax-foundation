@@ -17,13 +17,14 @@ android {
         targetSdk = 34
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME)),
-            ResourceValue("string", "onesignal_app_id", appConfig.getProperty(AppConfig.APP_ONESIGNAL_ID))
+            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
         buildConfigField("String", "ACCESS_TOKEN", "\"${appConfig.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
+        buildConfigField("String", "APP_FONT_FAMILY", "\"${appConfig.getProperty(AppConfig.APP_FONT_FAMILY)}\"")
+        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${appConfig.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

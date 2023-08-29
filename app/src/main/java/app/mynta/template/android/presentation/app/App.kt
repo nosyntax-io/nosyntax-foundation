@@ -23,7 +23,7 @@ class App : Application() {
 
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
         OneSignal.initWithContext(this)
-        OneSignal.setAppId(getString(R.string.onesignal_app_id))
+        OneSignal.setAppId(getString(R.string.app_name))
         OneSignal.promptForPushNotifications()
     }
 }

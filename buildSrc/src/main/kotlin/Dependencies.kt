@@ -13,6 +13,7 @@ object Libraries {
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
+        "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
         "androidx.compose.material3:material3",
         "com.google.dagger:hilt-android:${Versions.daggerHilt}",
         "com.squareup.retrofit2:retrofit:${Versions.retrofit}",

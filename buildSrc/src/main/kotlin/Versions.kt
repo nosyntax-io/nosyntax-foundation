@@ -2,6 +2,7 @@ object Versions {
     const val core = "1.9.0"
     const val lifecycleRunTime = "2.6.1"
     const val activityCompose = "1.7.2"
+    const val googleFonts = "1.4.3"
     const val daggerHilt = "2.44"
     const val retrofit = "2.9.0"
     const val gson = "2.9.1"
