@@ -14,7 +14,12 @@ object Utilities {
 
     fun getIconResourceId(iconName: String): Int? {
         val iconMappings = mapOf(
-            "web" to R.drawable.icon_chevron_right_outline,
+            "youtube" to R.drawable.icon_youtube_filled,
+            "facebook" to R.drawable.icon_facebook_filled,
+            "instagram" to R.drawable.icon_instagram_filled,
+            "twitter" to R.drawable.icon_twitter_filled,
+            "pinterest" to R.drawable.icon_pinterest_filled,
+            "netflix" to R.drawable.icon_netflix_filled
         )
         return iconMappings[iconName]
     }

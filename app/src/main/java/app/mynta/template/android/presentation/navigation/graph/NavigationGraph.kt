@@ -34,7 +34,11 @@ fun HomeNavigationGraph(
     ) {
         navigationItems.forEach { item ->
             composable(route = item.id) {
-                WebViewComponent(modifier = modifier, url = "https://facebook.com")
+                when (item.type) {
+                    "web" -> {
+                        WebViewComponent(modifier = modifier, url = "https://facebook.com")
+                    }
+                }
             }
         }
     }

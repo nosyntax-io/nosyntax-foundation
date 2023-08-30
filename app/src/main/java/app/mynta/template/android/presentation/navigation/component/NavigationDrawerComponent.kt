@@ -1,10 +1,14 @@
 package app.mynta.template.android.presentation.navigation.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -54,20 +58,35 @@ fun NavigationDrawerContent(
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
-    ModalDrawerSheet {
-        NavigationDrawerHeader()
-        navigationItems.forEach { item ->
-            NavigationItem(currentRoute = currentRoute, item = item, onClick = {
-                navController.navigate(route = item.id)
-                coroutineScope.launch { drawerState.close() }
-            })
+    ModalDrawerSheet(
+        drawerContainerColor = MaterialTheme.colorScheme.surface,
+        drawerShape = MaterialTheme.shapes.small,
+        content = {
+            NavigationDrawerHeader()
+            navigationItems.forEach { item ->
+                when (item.type) {
+                    "divider" -> {
+                        Divider(
+                            modifier = Modifier.padding(vertical = 7.dp),
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    }
+                    else -> {
+                        NavigationItem(currentRoute = currentRoute, item = item, onClick = {
+                            navController.navigate(route = item.id)
+                            coroutineScope.launch { drawerState.close() }
+                        })
+                    }
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable
 fun NavigationDrawerHeader() {
-
+    Box(modifier = Modifier.padding(30.dp))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,14 +99,22 @@ fun NavigationItem(
 ) {
     val iconResourceId = getIconResourceId(iconName = item.icon)
     NavigationDrawerItem(
-        modifier = modifier,
-        label = { Text(text = item.label) },
+        modifier = modifier.height(50.dp).padding(horizontal = 10.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
+        label = {
+            Text(
+                modifier = Modifier,
+                text = item.label,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
         icon = {
             iconResourceId?.let {
                 Icon(
-                    modifier = Modifier.width(25.dp).height(25.dp),
+                    modifier = Modifier
+                        .width(25.dp)
+                        .height(25.dp),
                     painter = painterResource(id = it),
                     contentDescription = null
                 )

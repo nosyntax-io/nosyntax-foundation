@@ -6,7 +6,6 @@ import app.mynta.template.android.data.mapper.toConfiguration
 import app.mynta.template.android.data.source.remote.APIService
 import app.mynta.template.android.domain.model.Configuration
 import app.mynta.template.android.domain.repository.ConfigurationRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -19,7 +18,6 @@ class ConfigurationRepositoryImpl @Inject constructor(private val service: APISe
     override suspend fun getConfiguration(): Flow<Resource<Configuration>> {
         return flow {
             emit(Resource.Loading(true))
-            delay(1000L)
             try {
                 val response = service.configuration()
                 emit(Resource.Success(response.toConfiguration()))
