@@ -18,6 +18,7 @@ object Libraries {
         "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
         "androidx.compose.material3:material3",
         "com.google.dagger:hilt-android:${Versions.daggerHilt}",
+        "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}",
         "com.squareup.retrofit2:retrofit:${Versions.retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
         "com.google.code.gson:gson:${Versions.gson}",
