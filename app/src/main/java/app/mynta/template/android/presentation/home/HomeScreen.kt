@@ -35,8 +35,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(coroutineScope: CoroutineScope = rememberCoroutineScope(), navController: NavHostController = rememberNavController()) {
-    val viewModel: MainViewModel = viewModel()
+fun HomeScreen(
+    viewModel: MainViewModel = viewModel(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    navController: NavHostController = rememberNavController()
+) {
     val configuration by viewModel.configurationUI.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME

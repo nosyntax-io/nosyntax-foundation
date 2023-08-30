@@ -15,11 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases): ViewModel() {
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized = _isInitialized.asStateFlow()
+
     private val _configurationUI = MutableStateFlow<Configuration?>(null)
     val configurationUI: StateFlow<Configuration?> = _configurationUI
 
     private val _configuration = MutableStateFlow(ConfigurationState())
-    val configuration = _configuration.asStateFlow()
+    val configuration: StateFlow<ConfigurationState> = _configuration
+
+    init {
+        requestConfiguration()
+    }
 
     fun requestConfiguration() {
         viewModelScope.launch {
@@ -33,10 +40,12 @@ class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases):
                         _configuration.emit(ConfigurationState(
                             response = result.data))
                         _configurationUI.value = result.data
+                        _isInitialized.emit(true)
                     }
                     is Resource.Error -> {
                         _configuration.emit(ConfigurationState(
                             error = result.message))
+                        _isInitialized.emit(true)
                     }
                 }
             }

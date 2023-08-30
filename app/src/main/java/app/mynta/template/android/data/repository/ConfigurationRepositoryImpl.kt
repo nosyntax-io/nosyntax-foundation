@@ -28,7 +28,6 @@ class ConfigurationRepositoryImpl @Inject constructor(private val service: APISe
                     else -> emit(Resource.Error(Exceptions.MALFORMED_REQUEST_EXCEPTION))
                 }
             }
-            emit(Resource.Loading(false))
         }
     }
 }

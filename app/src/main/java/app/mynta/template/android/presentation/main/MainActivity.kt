@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import app.mynta.template.android.core.components.NoConnectionComponent
+import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Coroutines.collectLatestOnLifecycleStarted
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.ui.theme.MyntaTemplateTheme
@@ -17,21 +19,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSplashScreen()
-        setContent {
-            MyntaTemplateTheme {
-                HomeScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                !mainViewModel.isInitialized.value
             }
         }
-    }
 
-    private fun setSplashScreen() {
-        installSplashScreen().apply {
-            setOnExitAnimationListener { splashScreen ->
-                mainViewModel.requestConfiguration()
-                collectLatestOnLifecycleStarted(mainViewModel.configuration) { state ->
-                    if (state.response != null) {
-                        splashScreen.remove()
+        collectLatestOnLifecycleStarted(mainViewModel.configuration) { state ->
+            setContent {
+                MyntaTemplateTheme {
+                    when {
+                        state.response != null -> {
+                            HomeScreen()
+                        }
+                        state.error != null -> {
+                            NoConnectionComponent(onRetry = {
+                                if (Connectivity.getInstance().isOnline()) {
+                                    mainViewModel.requestConfiguration()
+                                }
+                            })
+                        }
                     }
                 }
             }
