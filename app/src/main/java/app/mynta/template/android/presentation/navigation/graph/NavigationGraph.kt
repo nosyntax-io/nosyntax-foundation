@@ -26,7 +26,6 @@ fun MainNavigationGraph(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavigationGraph(
-    modifier: Modifier,
     navController: NavHostController,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
@@ -41,7 +40,6 @@ fun HomeNavigationGraph(
                 when (item.type) {
                     "web" -> {
                         WebScreen(
-                            modifier = modifier,
                             url = "https://google.com",
                             isDrawerOpen = drawerState.isOpen
                         )

@@ -16,16 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onValueChange: (String) -> Unit) {
-    val colors = TextFieldDefaults.textFieldColors(
-        focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent,
-        disabledIndicatorColor = Color.Transparent,
-    )
     val inputValue = remember { mutableStateOf(defaultValue) }
 
     BasicTextField(
@@ -40,7 +36,11 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
                 enabled = true,
                 isError = false,
                 interactionSource = MutableInteractionSource(),
-                colors = colors,
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
                 focusedIndicatorLineThickness = 0.dp,
                 unfocusedIndicatorLineThickness = 0.dp
             )
@@ -56,12 +56,17 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             innerTextField = it,
             singleLine = true,
             enabled = true,
-            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            shape = MaterialTheme.shapes.large,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            shape = MaterialTheme.shapes.medium,
             visualTransformation = VisualTransformation.None,
             trailingIcon = { /* ... */ },
             placeholder = {
-                Text(text = placeholder, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = placeholder,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             },
             interactionSource = MutableInteractionSource(),
             contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(
@@ -69,4 +74,13 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             )
         )
     }
+}
+
+@Composable
+@Preview
+fun TextFieldPreview() {
+    TextFieldComponent(
+        placeholder = "Enter Text",
+        onValueChange = { }
+    )
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,9 +22,10 @@ import app.mynta.template.android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(title: String, onActionClick: () -> Unit) {
+fun AppBar(scrollBehavior: TopAppBarScrollBehavior, title: String, onActionClick: () -> Unit) {
     TopAppBar(
         modifier = Modifier.height(50.dp),
+        scrollBehavior = scrollBehavior,
         title = {
             Box(
                 modifier = Modifier.fillMaxHeight(),
@@ -36,10 +38,11 @@ fun AppBar(title: String, onActionClick: () -> Unit) {
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            titleContentColor = MaterialTheme.colorScheme.onBackground,
-            navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
-            actionIconContentColor = MaterialTheme.colorScheme.onBackground
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface
         ),
         navigationIcon = {
             Box(
@@ -48,7 +51,9 @@ fun AppBar(title: String, onActionClick: () -> Unit) {
             ) {
                 IconButton(onClick = onActionClick) {
                     Icon(
-                        modifier = Modifier.width(30.dp).height(30.dp),
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp),
                         painter = painterResource(id = R.drawable.icon_menu_filled),
                         contentDescription = stringResource(id = R.string.toggle_menu))
                 }

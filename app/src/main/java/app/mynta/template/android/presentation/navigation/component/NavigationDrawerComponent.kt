@@ -1,5 +1,6 @@
 package app.mynta.template.android.presentation.navigation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,9 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import app.mynta.template.android.domain.model.NavigationItem
@@ -59,8 +62,7 @@ fun NavigationDrawerContent(
     drawerState: DrawerState
 ) {
     ModalDrawerSheet(
-        drawerContainerColor = MaterialTheme.colorScheme.surface,
-        drawerShape = MaterialTheme.shapes.small,
+        drawerContainerColor = MaterialTheme.colorScheme.background,
         content = {
             NavigationDrawerHeader()
             LazyColumn(content = {
@@ -71,7 +73,7 @@ fun NavigationDrawerContent(
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
                                 thickness = 1.dp,
-                                color = MaterialTheme.colorScheme.surfaceVariant
+                                color = MaterialTheme.colorScheme.surface
                             )
                         }
                         else -> {
@@ -89,7 +91,9 @@ fun NavigationDrawerContent(
 
 @Composable
 fun NavigationDrawerHeader() {
-    Box(modifier = Modifier.padding(50.dp))
+    Box(modifier = Modifier
+        .padding(50.dp)
+        .background(color = MaterialTheme.colorScheme.surfaceVariant))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,11 +111,16 @@ fun NavigationItem(
             .padding(horizontal = 15.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
+        colors = NavigationDrawerItemDefaults.colors(
+            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unselectedContainerColor = Color.Transparent
+        ),
         label = {
             Text(
                 modifier = Modifier,
                 text = item.label,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
         },
         icon = {
@@ -120,7 +129,8 @@ fun NavigationItem(
                     .width(25.dp)
                     .height(25.dp),
                 painter = rememberAsyncImagePainter(item.icon),
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
     )

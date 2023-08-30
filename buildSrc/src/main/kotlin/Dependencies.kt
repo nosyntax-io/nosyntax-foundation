@@ -33,7 +33,7 @@ object Libraries {
         "junit:junit:${Versions.junit}"
     )
     val androidTestImplementations = listOf(
-        "androidx.test.ext:junit:${Versions.junit}",
+        "androidx.test.ext:junit:${Versions.extJunit}",
         "androidx.test.espresso:espresso-core:${Versions.espressoCore}",
         "androidx.compose.ui:ui-test-junit4"
     )

@@ -17,7 +17,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,17 +41,13 @@ import app.mynta.template.android.presentation.web.components.NoConnectionCompon
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @Composable
-fun WebScreen(
-    modifier: Modifier,
-    url: String,
-    isDrawerOpen: Boolean
-) {
-    WebView(modifier = modifier, url = url, isDrawerOpen)
+fun WebScreen(url: String, isDrawerOpen: Boolean) {
+    WebView(url = url, isDrawerOpen)
 }
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebView(modifier: Modifier = Modifier, url: String, isDrawerOpen: Boolean) {
+fun WebView(url: String, isDrawerOpen: Boolean) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
@@ -67,199 +62,197 @@ fun WebView(modifier: Modifier = Modifier, url: String, isDrawerOpen: Boolean) {
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
-    Box(modifier = modifier) {
-        AndroidView(
-            factory = { context ->
-                WebView(context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    settings.apply {
-                        javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
-                        allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
-                        allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
-                        domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
-                        databaseEnabled = Constants.WEB_DATABASE_ENABLED
-                        javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
-                        cacheMode = WebSettings.LOAD_DEFAULT
-                        supportMultipleWindows()
-                        setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                settings.apply {
+                    javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
+                    allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
+                    allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
+                    domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
+                    databaseEnabled = Constants.WEB_DATABASE_ENABLED
+                    javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
+                    cacheMode = WebSettings.LOAD_DEFAULT
+                    supportMultipleWindows()
+                    setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+                }
+                isVerticalScrollBarEnabled = false
+                isHorizontalScrollBarEnabled = false
+
+                webViewClient = object: WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        canGoBack = view?.canGoBack() ?: false
                     }
-                    isVerticalScrollBarEnabled = false
-                    isHorizontalScrollBarEnabled = false
 
-                    webViewClient = object: WebViewClient() {
-                        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                            super.onPageStarted(view, url, favicon)
-                            canGoBack = view?.canGoBack() ?: false
-                        }
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                    }
 
-                        override fun onPageFinished(view: WebView?, url: String?) {
-                            super.onPageFinished(view, url)
-                        }
-
-                        override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
-                            val webUrl = request?.url.toString()
-                            webView?.let { view ->
-                                if (webUrl.startsWith("http://") || webUrl.startsWith("https://") || webUrl.startsWith("file://")) {
-                                    view.loadUrl(webUrl)
-                                    return true
-                                } else {
-                                    when {
-                                        webUrl.startsWith("mailto:") -> {
-                                            val mail = MailTo.parse(webUrl)
-                                            val recipient = mail.to
-                                            val subject = mail.subject ?: ""
-                                            val body = mail.body ?: ""
-                                            context.openEmail(recipient = recipient, subject = subject, body = body)
-                                        }
-                                        webUrl.startsWith("tel:") -> {
-                                            context.openDial(url = webUrl)
-                                        }
-                                        webUrl.startsWith("sms:") -> {
-                                            context.openSMS(url = webUrl)
-                                        }
-                                        webUrl.startsWith("market://") -> {
-                                            context.openPlayStore(packageName = context.packageName)
-                                        }
+                    override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
+                        val webUrl = request?.url.toString()
+                        webView?.let { view ->
+                            if (webUrl.startsWith("http://") || webUrl.startsWith("https://") || webUrl.startsWith("file://")) {
+                                view.loadUrl(webUrl)
+                                return true
+                            } else {
+                                when {
+                                    webUrl.startsWith("mailto:") -> {
+                                        val mail = MailTo.parse(webUrl)
+                                        val recipient = mail.to
+                                        val subject = mail.subject ?: ""
+                                        val body = mail.body ?: ""
+                                        context.openEmail(recipient = recipient, subject = subject, body = body)
                                     }
-                                    return true
+                                    webUrl.startsWith("tel:") -> {
+                                        context.openDial(url = webUrl)
+                                    }
+                                    webUrl.startsWith("sms:") -> {
+                                        context.openSMS(url = webUrl)
+                                    }
+                                    webUrl.startsWith("market://") -> {
+                                        context.openPlayStore(packageName = context.packageName)
+                                    }
                                 }
+                                return true
                             }
-                            return false
                         }
-
-                        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                            super.onReceivedError(view, request, error)
-                            noConnectionState = true
-                        }
+                        return false
                     }
 
-                    webChromeClient = object: WebChromeClient() {
-                        override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                            jsDialogState = JsDialogState(type = "alert", message = message.toString())
-                            jsResult = result
-                            return true
-                        }
-
-                        override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                            jsDialogState = JsDialogState(type = "confirm", message = message.toString())
-                            jsResult = result
-                            return true
-                        }
-
-                        override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                            jsDialogState = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
-                            jsPromptResult = result
-                            return true
-                        }
-
-                        override fun getDefaultVideoPoster(): Bitmap? {
-                            if (webCustomView == null) {
-                                return null
-                            }
-                            return BitmapFactory.decodeResource(context.resources, 2130837573)
-                        }
-
-                        override fun onHideCustomView() {
-                            if (webCustomView == null) {
-                                return
-                            }
-                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                            webCustomView = null
-                            webCustomViewCallback?.onCustomViewHidden()
-                            webCustomViewCallback = null
-                        }
-
-                        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-                            if (webCustomView != null) {
-                                onHideCustomView()
-                                return
-                            }
-                            webCustomView = view
-                            webCustomViewCallback = callback
-
-                            systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
-                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        }
-                    }
-
-                    loadUrl(url)
-                    webView = this
-                }
-            }, update = {
-                it.loadUrl(url)
-            }
-        )
-
-        if (webCustomView != null) {
-            AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
-                val frameLayout = FrameLayout(context)
-                frameLayout.addView(webCustomView)
-                frameLayout
-            })
-        }
-
-        if (noConnectionState) {
-            NoConnectionComponent(onRetry = {
-                if (Connectivity.getInstance().isOnline()) {
-                    noConnectionState = false
-                    webView?.reload()
-                }
-            })
-        }
-
-        jsDialogState?.let { dialog ->
-            when (dialog.type) {
-                "alert" -> {
-                    AlertDialogComponent(title = "Alert", message = dialog.message) {
-                        jsDialogState = null
-                        jsResult?.let {
-                            it.confirm()
-                            jsResult = null
-                        }
+                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                        super.onReceivedError(view, request, error)
+                        noConnectionState = true
                     }
                 }
-                "confirm" -> {
-                    ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
-                        jsDialogState = null
-                        jsResult?.let {
-                            it.cancel()
-                            jsResult = null
+
+                webChromeClient = object: WebChromeClient() {
+                    override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                        jsDialogState = JsDialogState(type = "alert", message = message.toString())
+                        jsResult = result
+                        return true
+                    }
+
+                    override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                        jsDialogState = JsDialogState(type = "confirm", message = message.toString())
+                        jsResult = result
+                        return true
+                    }
+
+                    override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+                        jsDialogState = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
+                        jsPromptResult = result
+                        return true
+                    }
+
+                    override fun getDefaultVideoPoster(): Bitmap? {
+                        if (webCustomView == null) {
+                            return null
                         }
-                    }, onConfirm = {
-                        jsDialogState = null
-                        jsResult?.let {
-                            it.confirm()
-                            jsResult = null
+                        return BitmapFactory.decodeResource(context.resources, 2130837573)
+                    }
+
+                    override fun onHideCustomView() {
+                        if (webCustomView == null) {
+                            return
                         }
-                    })
+                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                        webCustomView = null
+                        webCustomViewCallback?.onCustomViewHidden()
+                        webCustomViewCallback = null
+                    }
+
+                    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                        if (webCustomView != null) {
+                            onHideCustomView()
+                            return
+                        }
+                        webCustomView = view
+                        webCustomViewCallback = callback
+
+                        systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
+                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    }
                 }
-                "prompt" -> {
-                    PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
-                        jsDialogState = null
-                        jsPromptResult?.let {
-                            it.cancel()
-                            jsPromptResult = null
-                        }
-                    }, onConfirm = { result ->
-                        jsDialogState = null
-                        jsPromptResult?.let {
-                            it.confirm(result)
-                            jsPromptResult = null
-                        }
-                    })
+
+                loadUrl(url)
+                webView = this
+            }
+        }, update = {
+            it.loadUrl(url)
+        }
+    )
+
+    if (webCustomView != null) {
+        AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
+            val frameLayout = FrameLayout(context)
+            frameLayout.addView(webCustomView)
+            frameLayout
+        })
+    }
+
+    if (noConnectionState) {
+        NoConnectionComponent(onRetry = {
+            if (Connectivity.getInstance().isOnline()) {
+                noConnectionState = false
+                webView?.reload()
+            }
+        })
+    }
+
+    jsDialogState?.let { dialog ->
+        when (dialog.type) {
+            "alert" -> {
+                AlertDialogComponent(title = "Alert", message = dialog.message) {
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.confirm()
+                        jsResult = null
+                    }
                 }
+            }
+            "confirm" -> {
+                ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.cancel()
+                        jsResult = null
+                    }
+                }, onConfirm = {
+                    jsDialogState = null
+                    jsResult?.let {
+                        it.confirm()
+                        jsResult = null
+                    }
+                })
+            }
+            "prompt" -> {
+                PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
+                    jsDialogState = null
+                    jsPromptResult?.let {
+                        it.cancel()
+                        jsPromptResult = null
+                    }
+                }, onConfirm = { result ->
+                    jsDialogState = null
+                    jsPromptResult?.let {
+                        it.confirm(result)
+                        jsPromptResult = null
+                    }
+                })
             }
         }
+    }
 
-        BackHandler(enabled = !isDrawerOpen && canGoBack) {
-            if (!isDrawerOpen && canGoBack) {
-                webView?.goBack()
-            }
+    BackHandler(enabled = !isDrawerOpen && canGoBack) {
+        if (!isDrawerOpen && canGoBack) {
+            webView?.goBack()
         }
     }
 }
