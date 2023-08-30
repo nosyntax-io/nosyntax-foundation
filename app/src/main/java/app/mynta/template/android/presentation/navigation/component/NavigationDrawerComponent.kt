@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,23 +64,26 @@ fun NavigationDrawerContent(
         drawerShape = MaterialTheme.shapes.small,
         content = {
             NavigationDrawerHeader()
-            navigationItems.forEach { item ->
-                when (item.type) {
-                    "divider" -> {
-                        Divider(
-                            modifier = Modifier.padding(vertical = 7.dp),
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                    }
-                    else -> {
-                        NavigationItem(currentRoute = currentRoute, item = item, onClick = {
-                            navController.navigate(route = item.id)
-                            coroutineScope.launch { drawerState.close() }
-                        })
+            LazyColumn(content = {
+                items(navigationItems.size) { index ->
+                    val item = navigationItems[index]
+                    when (item.type) {
+                        "divider" -> {
+                            Divider(
+                                modifier = Modifier.padding(vertical = 7.dp),
+                                thickness = 1.dp,
+                                color = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        }
+                        else -> {
+                            NavigationItem(currentRoute = currentRoute, item = item, onClick = {
+                                navController.navigate(route = item.id)
+                                coroutineScope.launch { drawerState.close() }
+                            })
+                        }
                     }
                 }
-            }
+            })
         }
     )
 }
@@ -115,7 +119,9 @@ fun NavigationItem(
         icon = {
             iconResourceId?.let {
                 Icon(
-                    modifier = Modifier.width(25.dp).height(25.dp),
+                    modifier = Modifier
+                        .width(25.dp)
+                        .height(25.dp),
                     painter = painterResource(id = it),
                     contentDescription = null
                 )
