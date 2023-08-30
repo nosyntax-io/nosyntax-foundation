@@ -42,13 +42,17 @@ import app.mynta.template.android.presentation.web.components.NoConnectionCompon
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @Composable
-fun WebScreen(modifier: Modifier, url: String) {
-    WebViewComponent(modifier = modifier.fillMaxSize(), url = url)
+fun WebScreen(
+    modifier: Modifier,
+    url: String,
+    isDrawerOpen: Boolean
+) {
+    WebView(modifier = modifier, url = url, isDrawerOpen)
 }
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebViewComponent(modifier: Modifier = Modifier, url: String) {
+fun WebView(modifier: Modifier = Modifier, url: String, isDrawerOpen: Boolean) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
@@ -251,9 +255,11 @@ fun WebViewComponent(modifier: Modifier = Modifier, url: String) {
                 }
             }
         }
-    }
 
-    BackHandler(enabled = canGoBack) {
-        webView?.goBack()
+        BackHandler(enabled = !isDrawerOpen && canGoBack) {
+            if (!isDrawerOpen && canGoBack) {
+                webView?.goBack()
+            }
+        }
     }
 }

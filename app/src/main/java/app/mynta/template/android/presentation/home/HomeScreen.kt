@@ -1,5 +1,6 @@
 package app.mynta.template.android.presentation.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -53,6 +54,12 @@ fun HomeScreen(coroutineScope: CoroutineScope = rememberCoroutineScope(), navCon
             }
         )
     }
+
+    BackHandler(enabled = drawerState.isOpen) {
+        coroutineScope.launch {
+            drawerState.close()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +72,6 @@ fun HomeContent(
     drawerState: DrawerState
 ) {
     val selectedItem = navigationItems.find { it.id == currentRoute }
-
     Scaffold(
         topBar = {
             AppBar(
@@ -79,7 +85,8 @@ fun HomeContent(
             HomeNavigationGraph(
                 modifier = Modifier.padding(inlinePadding),
                 navController = navController,
-                navigationItems = navigationItems)
+                navigationItems = navigationItems,
+                drawerState = drawerState)
         }
     )
 }

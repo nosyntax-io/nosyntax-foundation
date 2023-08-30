@@ -1,5 +1,7 @@
 package app.mynta.template.android.presentation.navigation.graph
 
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -21,11 +23,13 @@ fun MainNavigationGraph(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
-    navigationItems: List<NavigationItem>
+    navigationItems: List<NavigationItem>,
+    drawerState: DrawerState
 ) {
     NavHost(
         navController = navController,
@@ -38,7 +42,8 @@ fun HomeNavigationGraph(
                     "web" -> {
                         WebScreen(
                             modifier = modifier,
-                            url = "https://google.com"
+                            url = "https://google.com",
+                            isDrawerOpen = drawerState.isOpen
                         )
                     }
                 }
