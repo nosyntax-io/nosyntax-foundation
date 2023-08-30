@@ -37,7 +37,7 @@ import app.mynta.template.android.core.utility.Intents.openSMS
 import app.mynta.template.android.domain.model.JsDialogState
 import app.mynta.template.android.presentation.web.components.AlertDialogComponent
 import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
-import app.mynta.template.android.presentation.web.components.NoConnectionComponent
+import app.mynta.template.android.core.components.NoConnectionComponent
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @Composable
