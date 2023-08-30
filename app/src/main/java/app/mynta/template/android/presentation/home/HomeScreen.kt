@@ -30,11 +30,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
-    viewModel: MainViewModel = viewModel(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController()
-) {
+fun HomeScreen(coroutineScope: CoroutineScope = rememberCoroutineScope(), navController: NavHostController = rememberNavController()) {
+    val viewModel: MainViewModel = viewModel()
     val configuration by viewModel.configurationUI.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
@@ -50,9 +47,10 @@ fun HomeScreen(
             content = {
                 HomeContent(
                     coroutineScope = coroutineScope,
-                    drawerState = drawerState,
                     navController = navController,
-                    navigationItems = data.navigationItems
+                    currentRoute = currentRoute,
+                    navigationItems = data.navigationItems,
+                    drawerState = drawerState,
                 )
             }
         )
@@ -64,14 +62,19 @@ fun HomeScreen(
 fun HomeContent(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
+    currentRoute: String,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
+    val selectedItem = navigationItems.find { it.id == currentRoute }
+
     Scaffold(
         topBar = {
-            AppBar(title = stringResource(id = R.string.app_name)) {
-                coroutineScope.launch { drawerState.open() }
-            }
+            AppBar(title = selectedItem?.label ?: stringResource(id = R.string.app_name), onNavigationIconClick = {
+                coroutineScope.launch {
+                    drawerState.open()
+                }
+            })
         },
         content = { inlinePadding ->
             HomeNavigationGraph(

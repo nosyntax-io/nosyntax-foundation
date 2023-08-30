@@ -19,7 +19,9 @@ object Utilities {
             "instagram" to R.drawable.icon_instagram_filled,
             "twitter" to R.drawable.icon_twitter_filled,
             "pinterest" to R.drawable.icon_pinterest_filled,
-            "netflix" to R.drawable.icon_netflix_filled
+            "netflix" to R.drawable.icon_netflix_filled,
+            "settings" to R.drawable.icon_gear_filled,
+            "about" to R.drawable.icon_info_filled
         )
         return iconMappings[iconName]
     }

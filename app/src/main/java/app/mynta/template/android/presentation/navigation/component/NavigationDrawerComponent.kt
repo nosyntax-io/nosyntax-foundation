@@ -86,7 +86,7 @@ fun NavigationDrawerContent(
 
 @Composable
 fun NavigationDrawerHeader() {
-    Box(modifier = Modifier.padding(30.dp))
+    Box(modifier = Modifier.padding(50.dp))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +99,10 @@ fun NavigationItem(
 ) {
     val iconResourceId = getIconResourceId(iconName = item.icon)
     NavigationDrawerItem(
-        modifier = modifier.height(50.dp).padding(horizontal = 10.dp),
+        shape = MaterialTheme.shapes.large,
+        modifier = modifier
+            .height(50.dp)
+            .padding(horizontal = 15.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
         label = {
@@ -112,9 +115,7 @@ fun NavigationItem(
         icon = {
             iconResourceId?.let {
                 Icon(
-                    modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp),
+                    modifier = Modifier.width(25.dp).height(25.dp),
                     painter = painterResource(id = it),
                     contentDescription = null
                 )
