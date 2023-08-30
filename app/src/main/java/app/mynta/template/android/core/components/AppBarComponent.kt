@@ -21,7 +21,7 @@ import app.mynta.template.android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(title: String, onNavigationIconClick: () -> Unit) {
+fun AppBar(title: String, onActionClick: () -> Unit) {
     TopAppBar(
         modifier = Modifier.height(50.dp),
         title = {
@@ -46,7 +46,7 @@ fun AppBar(title: String, onNavigationIconClick: () -> Unit) {
                 modifier = Modifier.fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ) {
-                IconButton(onClick = onNavigationIconClick) {
+                IconButton(onClick = onActionClick) {
                     Icon(
                         modifier = Modifier.width(30.dp).height(30.dp),
                         painter = painterResource(id = R.drawable.icon_menu_filled),

@@ -1,8 +1,6 @@
 package app.mynta.template.android.presentation.home
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,7 +68,8 @@ fun HomeContent(
 
     Scaffold(
         topBar = {
-            AppBar(title = selectedItem?.label ?: stringResource(id = R.string.app_name), onNavigationIconClick = {
+            AppBar(
+                title = selectedItem?.label ?: stringResource(id = R.string.app_name), onActionClick = {
                 coroutineScope.launch {
                     drawerState.open()
                 }
@@ -78,9 +77,7 @@ fun HomeContent(
         },
         content = { inlinePadding ->
             HomeNavigationGraph(
-                modifier = Modifier
-                    .padding(inlinePadding)
-                    .verticalScroll(rememberScrollState()),
+                modifier = Modifier.padding(inlinePadding),
                 navController = navController,
                 navigationItems = navigationItems)
         }

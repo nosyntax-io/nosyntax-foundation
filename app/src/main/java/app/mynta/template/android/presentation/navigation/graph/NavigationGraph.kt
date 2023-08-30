@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.home.HomeScreen
-import app.mynta.template.android.presentation.web.components.WebViewComponent
+import app.mynta.template.android.presentation.web.WebScreen
 
 @Composable
 fun MainNavigationGraph(navController: NavHostController) {
@@ -23,7 +23,7 @@ fun MainNavigationGraph(navController: NavHostController) {
 
 @Composable
 fun HomeNavigationGraph(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     navController: NavHostController,
     navigationItems: List<NavigationItem>
 ) {
@@ -36,7 +36,10 @@ fun HomeNavigationGraph(
             composable(route = item.id) {
                 when (item.type) {
                     "web" -> {
-                        WebViewComponent(modifier = modifier, url = "https://facebook.com")
+                        WebScreen(
+                            modifier = modifier,
+                            url = "https://google.com"
+                        )
                     }
                 }
             }
