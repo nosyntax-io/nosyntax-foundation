@@ -16,11 +16,10 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import app.mynta.template.android.core.utility.Utilities.getIconResourceId
 import app.mynta.template.android.domain.model.NavigationItem
+import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -101,7 +100,6 @@ fun NavigationItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val iconResourceId = getIconResourceId(iconName = item.icon)
     NavigationDrawerItem(
         shape = MaterialTheme.shapes.large,
         modifier = modifier
@@ -117,15 +115,13 @@ fun NavigationItem(
             )
         },
         icon = {
-            iconResourceId?.let {
-                Icon(
-                    modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp),
-                    painter = painterResource(id = it),
-                    contentDescription = null
-                )
-            }
+            Icon(
+                modifier = Modifier
+                    .width(25.dp)
+                    .height(25.dp),
+                painter = rememberAsyncImagePainter(item.icon),
+                contentDescription = null
+            )
         }
     )
 }

@@ -17,13 +17,14 @@ object Libraries {
         "androidx.navigation:navigation-compose:${Versions.navigation}",
         "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
         "androidx.compose.material3:material3",
+        "io.coil-kt:coil-compose:${Versions.coilCompose}",
         "com.google.dagger:hilt-android:${Versions.daggerHilt}",
         "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}",
         "com.squareup.retrofit2:retrofit:${Versions.retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
         "com.google.code.gson:gson:${Versions.gson}",
         "com.onesignal:OneSignal:${Versions.oneSignal}",
-        "androidx.core:core-splashscreen:${Versions.splashScreen}"
+        "androidx.core:core-splashscreen:${Versions.splashScreen}",
     )
     val kapts = listOf(
         "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
