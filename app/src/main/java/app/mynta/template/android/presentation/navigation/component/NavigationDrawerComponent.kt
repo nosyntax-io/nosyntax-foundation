@@ -1,11 +1,13 @@
 package app.mynta.template.android.presentation.navigation.component
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,9 +20,13 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import app.mynta.template.android.R
 import app.mynta.template.android.domain.model.NavigationItem
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +68,7 @@ fun NavigationDrawerContent(
     drawerState: DrawerState
 ) {
     ModalDrawerSheet(
+        modifier = Modifier.padding(end = 90.dp),
         drawerContainerColor = MaterialTheme.colorScheme.background,
         content = {
             NavigationDrawerHeader()
@@ -79,7 +86,9 @@ fun NavigationDrawerContent(
                         else -> {
                             NavigationItem(currentRoute = currentRoute, item = item, onClick = {
                                 navController.navigate(route = item.id)
-                                coroutineScope.launch { drawerState.close() }
+                                coroutineScope.launch {
+                                    drawerState.close()
+                                }
                             })
                         }
                     }
@@ -91,9 +100,17 @@ fun NavigationDrawerContent(
 
 @Composable
 fun NavigationDrawerHeader() {
-    Box(modifier = Modifier
-        .padding(50.dp)
-        .background(color = MaterialTheme.colorScheme.surfaceVariant))
+    Box {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth().height(150.dp)
+                .padding(all = 20.dp)
+                .clip(shape = RoundedCornerShape(15.dp)),
+            painter = painterResource(id = R.drawable.navigation_header),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +125,7 @@ fun NavigationItem(
         shape = MaterialTheme.shapes.large,
         modifier = modifier
             .height(50.dp)
-            .padding(horizontal = 15.dp),
+            .padding(horizontal = 20.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
         colors = NavigationDrawerItemDefaults.colors(

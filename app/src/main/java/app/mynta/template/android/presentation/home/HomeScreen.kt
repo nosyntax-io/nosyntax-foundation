@@ -103,7 +103,6 @@ fun HomeContent(
                     navController = navController,
                     navigationItems = navigationItems,
                     drawerState = drawerState)
-
             }
         }
     )
