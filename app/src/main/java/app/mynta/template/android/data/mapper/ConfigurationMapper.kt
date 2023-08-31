@@ -5,8 +5,10 @@ import app.mynta.template.android.domain.model.configuration.AppBar
 import app.mynta.template.android.domain.model.configuration.Appearance
 import app.mynta.template.android.domain.model.configuration.BottomNavigation
 import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.configuration.Header
 import app.mynta.template.android.domain.model.configuration.Typography
 import app.mynta.template.android.domain.model.configuration.Navigation
+import app.mynta.template.android.domain.model.configuration.NavigationDrawer
 import app.mynta.template.android.domain.model.configuration.NavigationItem
 import app.mynta.template.android.domain.model.configuration.ThemeColors
 
@@ -31,6 +33,14 @@ fun ConfigurationDto.toConfiguration(): Configuration {
                 display = appearance.appBar.display,
                 background = appearance.appBar.background,
                 displayTitle = appearance.appBar.displayTitle
+            ),
+            navigationDrawer = NavigationDrawer(
+                display = appearance.navigationDrawer.display,
+                background = appearance.navigationDrawer.background,
+                header = Header(
+                    display = appearance.navigationDrawer.header.display,
+                    image = appearance.navigationDrawer.header.image
+                )
             ),
             bottomNavigation = BottomNavigation(
                 display = appearance.bottomNavigation.display,

@@ -25,6 +25,8 @@ data class ConfigurationDto(
                 val typography: Typography,
                 @SerializedName("app_bar")
                 val appBar: AppBar,
+                @SerializedName("navigation_drawer")
+                val navigationDrawer: NavigationDrawer,
                 @SerializedName("bottom_navigation")
                 val bottomNavigation: BottomNavigation) {
 
@@ -51,6 +53,21 @@ data class ConfigurationDto(
                     @SerializedName("display_title")
                     val displayTitle: Boolean
                 )
+
+                data class NavigationDrawer(
+                    @SerializedName("display")
+                    val display: Boolean,
+                    @SerializedName("background")
+                    val background: String,
+                    @SerializedName("header")
+                    val header: Header) {
+
+                    data class Header(
+                        @SerializedName("display")
+                        val display: Boolean,
+                        @SerializedName("image")
+                        val image: String)
+                }
 
                 data class BottomNavigation(
                     @SerializedName("display")

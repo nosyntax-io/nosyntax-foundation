@@ -46,6 +46,7 @@ fun HomeScreen(
     configuration?.let { data ->
         val navigationItems = data.navigation.items
         NavigationDrawer(
+            navigationConfig = data.appearance.navigationDrawer,
             coroutineScope = coroutineScope,
             navController = navController,
             currentRoute = currentRoute,

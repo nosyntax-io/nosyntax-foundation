@@ -1,11 +1,13 @@
 package app.mynta.template.android.presentation.navigation.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
@@ -21,12 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import app.mynta.template.android.R
+import app.mynta.template.android.domain.model.configuration.NavigationDrawer
 import app.mynta.template.android.domain.model.configuration.NavigationItem
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +38,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawer(
+    navigationConfig: NavigationDrawer,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
@@ -42,11 +46,16 @@ fun NavigationDrawer(
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
+    if (!navigationConfig.display) {
+        return
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = drawerState.isOpen,
         drawerContent = {
             NavigationDrawerContent(
+                navigationConfig = navigationConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
@@ -61,17 +70,36 @@ fun NavigationDrawer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawerContent(
+    navigationConfig: NavigationDrawer,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
+    val containerColor = when (navigationConfig.background) {
+        "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
+        "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        "gradient" -> Modifier.background(
+            Brush.verticalGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
+            )
+        )
+        else -> Modifier
+    }
+
     ModalDrawerSheet(
-        modifier = Modifier.padding(end = 90.dp),
-        drawerContainerColor = MaterialTheme.colorScheme.background,
+        modifier = Modifier
+            .padding(end = 90.dp)
+            .clip(shape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp))
+            .then(other = containerColor),
+        drawerContainerColor = Color.Transparent,
         content = {
-            NavigationDrawerHeader()
+            NavigationDrawerHeader(navigationConfig = navigationConfig)
+            Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(content = {
                 items(navigationItems.size) { index ->
                     val item = navigationItems[index]
@@ -84,12 +112,17 @@ fun NavigationDrawerContent(
                             )
                         }
                         else -> {
-                            NavigationItem(currentRoute = currentRoute, item = item, onClick = {
-                                navController.navigate(route = item.id)
-                                coroutineScope.launch {
-                                    drawerState.close()
+                            NavigationItem(
+                                navigationConfig = navigationConfig,
+                                currentRoute = currentRoute,
+                                item = item,
+                                onClick = {
+                                    navController.navigate(route = item.id)
+                                    coroutineScope.launch {
+                                        drawerState.close()
+                                    }
                                 }
-                            })
+                            )
                         }
                     }
                 }
@@ -99,16 +132,24 @@ fun NavigationDrawerContent(
 }
 
 @Composable
-fun NavigationDrawerHeader() {
+fun NavigationDrawerHeader(navigationConfig: NavigationDrawer) {
+    val header = navigationConfig.header
+    if (!header.display) {
+        return
+    }
     Box {
         Image(
             modifier = Modifier
-                .fillMaxWidth().height(150.dp)
-                .padding(all = 20.dp)
+                .fillMaxWidth()
+                .height(150.dp)
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = RoundedCornerShape(15.dp)),
-            painter = painterResource(id = R.drawable.navigation_header),
+            painter = rememberAsyncImagePainter(
+                model = header.image,
+                filterQuality = FilterQuality.High
+            ),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Crop
         )
     }
 }
@@ -116,38 +157,47 @@ fun NavigationDrawerHeader() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationItem(
-    modifier: Modifier = Modifier,
+    navigationConfig: NavigationDrawer,
     currentRoute: String,
     item: NavigationItem,
     onClick: () -> Unit
 ) {
+    val contentColor = when (navigationConfig.background) {
+        "neutral" -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.surface
+    }
+
     NavigationDrawerItem(
         shape = MaterialTheme.shapes.large,
-        modifier = modifier
+        modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            unselectedContainerColor = Color.Transparent
+            unselectedContainerColor = Color.Transparent,
+            selectedTextColor = contentColor,
+            selectedIconColor = contentColor,
+            unselectedTextColor = contentColor,
+            unselectedIconColor = contentColor,
         ),
         label = {
             Text(
                 modifier = Modifier,
                 text = item.label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.bodyMedium
             )
         },
         icon = {
             Icon(
-                modifier = Modifier
-                    .width(25.dp)
-                    .height(25.dp),
-                painter = rememberAsyncImagePainter(item.icon),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
+                modifier = Modifier.size(22.dp),
+                painter = rememberAsyncImagePainter(
+                    model = item.icon,
+                    contentScale = ContentScale.Crop,
+                    filterQuality = FilterQuality.High
+                ),
+                contentDescription = null
             )
         }
     )
