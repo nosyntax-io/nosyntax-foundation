@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import app.mynta.template.android.domain.model.configuration.NavigationItem
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.presentation.web.WebScreen
 

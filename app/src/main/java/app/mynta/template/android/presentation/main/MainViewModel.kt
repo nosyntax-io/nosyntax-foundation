@@ -3,7 +3,7 @@ package app.mynta.template.android.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.mynta.template.android.core.utility.Resource
-import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.Configuration
 import app.mynta.template.android.domain.usecase.main.MainUseCases
 import app.mynta.template.android.presentation.configuration.ConfigurationState
 import dagger.hilt.android.lifecycle.HiltViewModel

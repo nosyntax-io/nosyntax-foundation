@@ -4,7 +4,7 @@ import app.mynta.template.android.core.utility.Exceptions
 import app.mynta.template.android.core.utility.Resource
 import app.mynta.template.android.data.mapper.toConfiguration
 import app.mynta.template.android.data.source.remote.APIService
-import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.Configuration
 import app.mynta.template.android.domain.repository.ConfigurationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
