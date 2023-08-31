@@ -2,7 +2,9 @@ package app.mynta.template.android.data.mapper
 
 import app.mynta.template.android.data.source.remote.dto.ConfigurationDto
 import app.mynta.template.android.domain.model.configuration.AppBar
+import app.mynta.template.android.domain.model.configuration.Appearance
 import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.configuration.Navigation
 import app.mynta.template.android.domain.model.configuration.NavigationItem
 import app.mynta.template.android.domain.model.configuration.ThemeColors
 
@@ -13,7 +15,7 @@ fun ConfigurationDto.toConfiguration(): Configuration {
 
     return Configuration(
         appId = app.appId,
-        appearance = Configuration.Appearance(
+        appearance = Appearance(
             themeColors = ThemeColors(
                 primary = appearance.themeColors.primary,
                 secondary = appearance.themeColors.secondary,
@@ -25,7 +27,7 @@ fun ConfigurationDto.toConfiguration(): Configuration {
                 displayTitle = appearance.appBar.displayTitle
             )
         ),
-        navigation = Configuration.Navigation(
+        navigation = Navigation(
             default = navigation.default,
             items = navigation.items.map { navigationItemDto ->
                 NavigationItem(
