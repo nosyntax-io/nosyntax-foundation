@@ -1,6 +1,6 @@
 package app.mynta.template.android.presentation.configuration
 
-import app.mynta.template.android.domain.model.Configuration
+import app.mynta.template.android.domain.model.configuration.Configuration
 
 data class ConfigurationState(
     val isLoading: Boolean = false,
