@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.R
-import app.mynta.template.android.ui.theme.MyntaTemplateTheme
+import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
 fun NoConnectionComponent(onRetry: () -> Unit) {
@@ -38,7 +38,9 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier.width(150.dp).height(150.dp),
+            modifier = Modifier
+                .width(150.dp)
+                .height(150.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
@@ -59,7 +61,9 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            modifier = Modifier.height(40.dp).padding(0.dp),
+            modifier = Modifier
+                .height(40.dp)
+                .padding(0.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
@@ -80,7 +84,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
 @Composable
 @Preview
 fun NoConnectionPreview() {
-    MyntaTemplateTheme {
+    DynamicTheme {
         NoConnectionComponent {
 
         }

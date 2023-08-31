@@ -46,18 +46,19 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     configuration?.let { data ->
+        val navigationItems = data.navigation.items
         NavigationDrawer(
             coroutineScope = coroutineScope,
             navController = navController,
             currentRoute = currentRoute,
-            navigationItems = data.navigationItems,
+            navigationItems = navigationItems,
             drawerState = drawerState,
             content = {
                 HomeContent(
                     coroutineScope = coroutineScope,
                     navController = navController,
                     currentRoute = currentRoute,
-                    navigationItems = data.navigationItems,
+                    navigationItems = navigationItems,
                     drawerState = drawerState,
                 )
             }

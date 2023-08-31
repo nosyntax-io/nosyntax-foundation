@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +31,9 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             inputValue.value = it
             onValueChange(it)
         },
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = MaterialTheme.typography.bodyMedium.copy(
+            MaterialTheme.colorScheme.onSurface
+        ),
         modifier = Modifier
             .indicatorLine(
                 enabled = true,
@@ -57,15 +60,21 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             singleLine = true,
             enabled = true,
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.surface,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent
             ),
             shape = MaterialTheme.shapes.medium,
             visualTransformation = VisualTransformation.None,
             trailingIcon = { /* ... */ },
             placeholder = {
                 Text(
+                    modifier = Modifier.alpha(.7f),
                     text = placeholder,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             },
             interactionSource = MutableInteractionSource(),

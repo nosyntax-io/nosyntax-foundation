@@ -5,14 +5,29 @@ import app.mynta.template.android.domain.model.Configuration
 import app.mynta.template.android.domain.model.NavigationItem
 
 fun ConfigurationDto.toConfiguration(): Configuration {
+    val configuration = app.configuration
+    val navigation = configuration.navigation
+    val appearance = configuration.appearance
+
     return Configuration(
-        navigationItems = navigationItems.map { navigationItem ->
-            NavigationItem(
-                id = navigationItem.id,
-                type = navigationItem.type,
-                label = navigationItem.label,
-                icon = navigationItem.icon
+        appId = app.appId,
+        appearance = Configuration.Appearance(
+            themeColors = Configuration.Appearance.ThemeColors(
+                primary = appearance.themeColors.primary,
+                secondary = appearance.themeColors.secondary,
+                highlight = appearance.themeColors.highlight
             )
-        }
+        ),
+        navigation = Configuration.Navigation(
+            default = navigation.default,
+            items = navigation.items.map { navigationItemDto ->
+                NavigationItem(
+                    id = navigationItemDto.id,
+                    type = navigationItemDto.type,
+                    label = navigationItemDto.label,
+                    icon = navigationItemDto.icon
+                )
+            }
+        )
     )
 }

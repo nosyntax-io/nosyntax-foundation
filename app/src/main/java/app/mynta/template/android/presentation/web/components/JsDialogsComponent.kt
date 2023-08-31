@@ -31,7 +31,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import app.mynta.template.android.R
 import app.mynta.template.android.core.components.TextFieldComponent
-import app.mynta.template.android.ui.theme.MyntaTemplateTheme
+import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
 fun AlertDialogComponent(
@@ -139,7 +139,10 @@ fun ConfirmDialogComponent(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedButton(
-                        modifier = Modifier.weight(1f).height(40.dp).padding(0.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(40.dp)
+                            .padding(0.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent
                         ),
@@ -157,7 +160,10 @@ fun ConfirmDialogComponent(
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                     Button(
-                        modifier = Modifier.weight(1f).height(40.dp).padding(0.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(40.dp)
+                            .padding(0.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
@@ -276,7 +282,7 @@ fun PromptDialogComponent(
 @Composable
 @Preview
 fun AlertDialogPreview() {
-    MyntaTemplateTheme {
+    DynamicTheme {
         AlertDialogComponent(
             title = "Dialog Preview",
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -288,7 +294,7 @@ fun AlertDialogPreview() {
 @Composable
 @Preview
 fun ConfirmDialogPreview() {
-    MyntaTemplateTheme {
+    DynamicTheme {
         ConfirmDialogComponent(
             title = "Dialog Preview",
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -301,7 +307,7 @@ fun ConfirmDialogPreview() {
 @Composable
 @Preview
 fun PromptDialogPreview() {
-    MyntaTemplateTheme {
+    DynamicTheme {
         PromptDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             defaultValue = "",

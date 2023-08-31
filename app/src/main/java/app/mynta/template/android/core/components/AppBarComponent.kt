@@ -1,5 +1,6 @@
 package app.mynta.template.android.core.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,7 +27,14 @@ import app.mynta.template.android.R
 @Composable
 fun AppBar(scrollBehavior: TopAppBarScrollBehavior, title: String, onActionClick: () -> Unit) {
     TopAppBar(
-        modifier = Modifier.height(50.dp),
+        modifier = Modifier
+            .height(50.dp)
+            .background(Brush.horizontalGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
+            )),
         scrollBehavior = scrollBehavior,
         title = {
             Box(
@@ -38,8 +48,7 @@ fun AppBar(scrollBehavior: TopAppBarScrollBehavior, title: String, onActionClick
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = Color.Transparent,
             titleContentColor = MaterialTheme.colorScheme.onSurface,
             navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
             actionIconContentColor = MaterialTheme.colorScheme.onSurface
