@@ -21,6 +21,8 @@ data class ConfigurationDto(
             data class Appearance(
                 @SerializedName("theme_colors")
                 val themeColors: ThemeColors,
+                @SerializedName("typography")
+                val typography: Typography,
                 @SerializedName("app_bar")
                 val appBar: AppBar) {
 
@@ -31,6 +33,13 @@ data class ConfigurationDto(
                     val secondary: String,
                     @SerializedName("highlight")
                     val highlight: String)
+
+                data class Typography(
+                    @SerializedName("heading_typeface")
+                    val headingTypeface: String,
+                    @SerializedName("body_typeface")
+                    val bodyTypeface: String
+                )
 
                 data class AppBar(
                     @SerializedName("display")

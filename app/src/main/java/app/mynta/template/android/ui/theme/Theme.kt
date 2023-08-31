@@ -12,12 +12,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-data class DynamicThemeColors(
-    val primaryColor: Color = ColorPrimary,
-    val secondaryColor: Color = ColorSecondary,
-    val primaryContainer: Color = ColorPrimaryContainer
-)
-
 private val lightColorScheme = lightColorScheme(
     primary = ColorPrimary,
     primaryContainer = ColorPrimaryContainer,
@@ -44,7 +38,8 @@ private val darkColorScheme = darkColorScheme(
 
 @Composable
 fun DynamicTheme(
-    dynamicColors: DynamicThemeColors = DynamicThemeColors(),
+    dynamicThemeColors: DynamicThemeColors = DynamicThemeColors(),
+    dynamicTypography: DynamicTypography = DynamicTypography(),
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -56,17 +51,24 @@ fun DynamicTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = dynamicColors.primaryContainer.toArgb()
+            window.statusBarColor = dynamicThemeColors.primaryContainer.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
     MaterialTheme(
         colorScheme = colorScheme.copy(
-            primary = dynamicColors.primaryColor,
-            secondary = dynamicColors.secondaryColor,
-            primaryContainer = dynamicColors.primaryContainer
+            primary = dynamicThemeColors.primaryColor,
+            secondary = dynamicThemeColors.secondaryColor,
+            primaryContainer = dynamicThemeColors.primaryContainer
         ),
-        typography = Typography,
+        typography = Typography.copy(
+            titleMedium = Typography.titleMedium.copy(
+                fontFamily = dynamicTypography.headingTypeface
+            ),
+            bodyMedium = Typography.bodyMedium.copy(
+                fontFamily = dynamicTypography.bodyTypeface
+            )
+        ),
         shapes = Shapes,
         content = content
     )

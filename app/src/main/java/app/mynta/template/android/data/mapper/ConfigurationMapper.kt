@@ -4,6 +4,7 @@ import app.mynta.template.android.data.source.remote.dto.ConfigurationDto
 import app.mynta.template.android.domain.model.configuration.AppBar
 import app.mynta.template.android.domain.model.configuration.Appearance
 import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.configuration.Typography
 import app.mynta.template.android.domain.model.configuration.Navigation
 import app.mynta.template.android.domain.model.configuration.NavigationItem
 import app.mynta.template.android.domain.model.configuration.ThemeColors
@@ -20,6 +21,10 @@ fun ConfigurationDto.toConfiguration(): Configuration {
                 primary = appearance.themeColors.primary,
                 secondary = appearance.themeColors.secondary,
                 highlight = appearance.themeColors.highlight
+            ),
+            typography = Typography(
+                headingTypeface = appearance.typography.headingTypeface,
+                bodyTypeface = appearance.typography.bodyTypeface
             ),
             appBar = AppBar(
                 display = appearance.appBar.display,

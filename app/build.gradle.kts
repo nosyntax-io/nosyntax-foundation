@@ -23,7 +23,6 @@ android {
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
         buildConfigField("String", "ACCESS_TOKEN", "\"${appConfig.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
-        buildConfigField("String", "APP_FONT_FAMILY", "\"${appConfig.getProperty(AppConfig.APP_FONT_FAMILY)}\"")
         buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${appConfig.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

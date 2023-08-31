@@ -3,5 +3,4 @@ config.app.package_name = PARAMETER_APP_PACKAGE_NAME
 config.app.version_name = PARAMETER_APP_VERSION_NAME
 config.app.version_code = PARAMETER_APP_VERSION_CODE
 config.app.access_token = PARAMETER_APP_ACCESS_TOKEN
-config.app.font_family = PARAMETER_APP_FONT_FAMILY
 config.app.onesignal_app_id = PARAMETER_APP_ONESIGNAL_APP_ID

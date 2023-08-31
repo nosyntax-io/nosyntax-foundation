@@ -2,6 +2,12 @@ package app.mynta.template.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+data class DynamicThemeColors(
+    val primaryColor: Color = ColorPrimary,
+    val secondaryColor: Color = ColorSecondary,
+    val primaryContainer: Color = ColorPrimaryContainer
+)
+
 val ColorPrimary = Color(0xFF8EBBFF)
 val ColorSecondary = Color(0xFF121212)
 val ColorPrimaryContainer = Color(0x338EBBFF)
