@@ -9,17 +9,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -30,7 +25,7 @@ import app.mynta.template.android.domain.model.configuration.Configuration
 import app.mynta.template.android.presentation.navigation.component.NavigationDrawer
 import app.mynta.template.android.domain.model.configuration.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
-import app.mynta.template.android.presentation.navigation.component.BottomNavigation
+import app.mynta.template.android.presentation.navigation.component.BottomNavigationBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import kotlinx.coroutines.CoroutineScope
@@ -118,11 +113,15 @@ private fun HomeContent(
             }
         },
         bottomBar = {
-            BottomNavigation(
-                navController = navController,
-                currentRoute = currentRoute,
-                navigationItems = navigationItems
-            )
+            val bottomNavigationConfig = configuration.appearance.bottomNavigation
+            if (bottomNavigationConfig.display) {
+                BottomNavigationBar(
+                    navigationConfig = bottomNavigationConfig,
+                    navController = navController,
+                    currentRoute = currentRoute,
+                    navigationItems = navigationItems
+                )
+            }
         }
     )
 }

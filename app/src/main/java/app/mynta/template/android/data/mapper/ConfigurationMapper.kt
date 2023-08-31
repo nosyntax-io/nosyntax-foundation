@@ -3,6 +3,7 @@ package app.mynta.template.android.data.mapper
 import app.mynta.template.android.data.source.remote.dto.ConfigurationDto
 import app.mynta.template.android.domain.model.configuration.AppBar
 import app.mynta.template.android.domain.model.configuration.Appearance
+import app.mynta.template.android.domain.model.configuration.BottomNavigation
 import app.mynta.template.android.domain.model.configuration.Configuration
 import app.mynta.template.android.domain.model.configuration.Typography
 import app.mynta.template.android.domain.model.configuration.Navigation
@@ -30,6 +31,11 @@ fun ConfigurationDto.toConfiguration(): Configuration {
                 display = appearance.appBar.display,
                 background = appearance.appBar.background,
                 displayTitle = appearance.appBar.displayTitle
+            ),
+            bottomNavigation = BottomNavigation(
+                display = appearance.bottomNavigation.display,
+                background = appearance.bottomNavigation.background,
+                label = appearance.bottomNavigation.label
             )
         ),
         navigation = Navigation(

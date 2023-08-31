@@ -24,7 +24,9 @@ data class ConfigurationDto(
                 @SerializedName("typography")
                 val typography: Typography,
                 @SerializedName("app_bar")
-                val appBar: AppBar) {
+                val appBar: AppBar,
+                @SerializedName("bottom_navigation")
+                val bottomNavigation: BottomNavigation) {
 
                 data class ThemeColors(
                     @SerializedName("primary")
@@ -48,6 +50,15 @@ data class ConfigurationDto(
                     val background: String,
                     @SerializedName("display_title")
                     val displayTitle: Boolean
+                )
+
+                data class BottomNavigation(
+                    @SerializedName("display")
+                    val display: Boolean,
+                    @SerializedName("background")
+                    val background: String,
+                    @SerializedName("label")
+                    val label: String
                 )
             }
 
