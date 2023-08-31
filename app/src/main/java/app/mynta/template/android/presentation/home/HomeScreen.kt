@@ -10,23 +10,20 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.mynta.template.android.R
 import app.mynta.template.android.core.components.AppBar
+import app.mynta.template.android.domain.model.configuration.Configuration
 import app.mynta.template.android.presentation.navigation.component.NavigationDrawer
-import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.domain.model.configuration.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
@@ -55,6 +52,7 @@ fun HomeScreen(
             drawerState = drawerState,
             content = {
                 HomeContent(
+                    configuration = data,
                     coroutineScope = coroutineScope,
                     navController = navController,
                     currentRoute = currentRoute,
@@ -74,21 +72,22 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(
+private fun HomeContent(
+    configuration: Configuration,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val selectedItem = navigationItems.find { it.id == currentRoute }
+
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
+            val appBarConfig = configuration.appearance.appBar
             AppBar(
-                scrollBehavior = scrollBehavior,
-                title = selectedItem?.label ?: stringResource(id = R.string.app_name),
+                appBarConfig = appBarConfig,
+                title = selectedItem?.label ?: "",
                 onActionClick = {
                     coroutineScope.launch {
                         drawerState.open()
@@ -106,7 +105,8 @@ fun HomeContent(
                 HomeNavigationGraph(
                     navController = navController,
                     navigationItems = navigationItems,
-                    drawerState = drawerState)
+                    drawerState = drawerState
+                )
             }
         }
     )

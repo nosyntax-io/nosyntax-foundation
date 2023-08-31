@@ -20,7 +20,9 @@ data class ConfigurationDto(
 
             data class Appearance(
                 @SerializedName("theme_colors")
-                val themeColors: ThemeColors) {
+                val themeColors: ThemeColors,
+                @SerializedName("app_bar")
+                val appBar: AppBar) {
 
                 data class ThemeColors(
                     @SerializedName("primary")
@@ -29,6 +31,15 @@ data class ConfigurationDto(
                     val secondary: String,
                     @SerializedName("highlight")
                     val highlight: String)
+
+                data class AppBar(
+                    @SerializedName("display")
+                    val display: Boolean,
+                    @SerializedName("background")
+                    val background: String,
+                    @SerializedName("display_title")
+                    val displayTitle: Boolean
+                )
             }
 
             data class Navigation(

@@ -1,4 +1,4 @@
-package app.mynta.template.android.domain.model
+package app.mynta.template.android.domain.model.configuration
 
 data class NavigationItem(
     val id: String,
