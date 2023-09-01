@@ -88,18 +88,15 @@ private fun HomeContent(
 
     Scaffold(
         topBar = {
-            val appBarConfig = components.appBar
-            if (appBarConfig.display) {
-                AppBar(
-                    appBarConfig = appBarConfig,
-                    title = selectedItem?.label ?: "",
-                    onActionClick = {
-                        coroutineScope.launch {
-                            drawerState.open()
-                        }
+            AppBar(
+                appBarConfig = components.appBar,
+                title = selectedItem?.label ?: "",
+                onNavigationClick = {
+                    coroutineScope.launch {
+                        drawerState.open()
                     }
-                )
-            }
+                }
+            )
         },
         content = { inlinePadding ->
             Column(
