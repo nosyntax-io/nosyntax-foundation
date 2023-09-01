@@ -29,7 +29,12 @@ import app.mynta.template.android.ui.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(appBarConfig: AppBarConfig, title: String, onNavigationClick: () -> Unit) {
+fun AppBar(
+    appBarConfig: AppBarConfig,
+    title: String,
+    isNavigationEnabled: Boolean,
+    onNavigationClick: () -> Unit
+) {
     if (!appBarConfig.display) {
         return
     }
@@ -61,7 +66,9 @@ fun AppBar(appBarConfig: AppBarConfig, title: String, onNavigationClick: () -> U
                 )
             },
             navigationIcon = {
-                AppBarActionIcon(onClick = onNavigationClick)
+                if (isNavigationEnabled) {
+                    AppBarActionIcon(onClick = onNavigationClick)
+                }
             }
         )
     } else {
@@ -77,7 +84,9 @@ fun AppBar(appBarConfig: AppBarConfig, title: String, onNavigationClick: () -> U
                 )
             },
             navigationIcon = {
-                AppBarActionIcon(onClick = onNavigationClick)
+                if (isNavigationEnabled) {
+                    AppBarActionIcon(onClick = onNavigationClick)
+                }
             }
         )
     }
@@ -143,6 +152,7 @@ fun AppBarPreview() {
                 )
             ),
             title = stringResource(id = R.string.app_name),
+            isNavigationEnabled = false,
             onNavigationClick = { }
         )
     }

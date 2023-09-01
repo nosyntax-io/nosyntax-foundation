@@ -91,6 +91,7 @@ private fun HomeContent(
             AppBar(
                 appBarConfig = components.appBar,
                 title = selectedItem?.label ?: "",
+                isNavigationEnabled = components.sideMenu.display,
                 onNavigationClick = {
                     coroutineScope.launch {
                         drawerState.open()
