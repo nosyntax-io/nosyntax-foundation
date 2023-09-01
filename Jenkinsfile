@@ -24,6 +24,8 @@ pipeline {
     VERSION_NAME            = "${params.VERSION_NAME}"
     VERSION_CODE            = "${params.VERSION_CODE}"
     ONESIGNAL_APP_ID        = "${params.ONESIGNAL_APP_ID}"
+
+    REPOSITORY_PATH         = '/var/www/cloud.mynta.app/repository'
 	}
 
 	stages {
@@ -35,23 +37,42 @@ pipeline {
 			}
 		}
 
-    stage('Set Application Properties') {
-      steps {
-        script {
-          def propertyMap = [
-            'PARAMETER_APP_NAME': 'APP_NAME',
-            'PARAMETER_APP_PACKAGE_NAME': 'PACKAGE_NAME',
-            'PARAMETER_APP_VERSION_NAME': 'VERSION_NAME',
-            'PARAMETER_APP_VERSION_CODE': 'VERSION_CODE',
-            'PARAMETER_APP_ACCESS_TOKEN': 'ACCESS_TOKEN',
-            'PARAMETER_APP_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID'
-          ]
-          def templateSourcePath = "${WORKSPACE}/local.properties.template"
-          def outputSourceDestination = "${WORKSPACE}/local.properties"
+    stage('Configure Application') {
+			parallel {
+				stage('Set Application Properties') {
+					steps {
+						script {
+							def propertyMap = [
+								'PARAMETER_APP_NAME': 'APP_NAME',
+								'PARAMETER_APP_PACKAGE_NAME': 'PACKAGE_NAME',
+								'PARAMETER_APP_VERSION_NAME': 'VERSION_NAME',
+								'PARAMETER_APP_VERSION_CODE': 'VERSION_CODE',
+								'PARAMETER_APP_ACCESS_TOKEN': 'ACCESS_TOKEN',
+								'PARAMETER_APP_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID'
+							]
+							def templateSourcePath = "${WORKSPACE}/local.properties.template"
+            	def outputSourceDestination = "${WORKSPACE}/local.properties"
 
-          setTemplateProperties(propertyMap, templateSourcePath, outputSourceDestination)
-        }
-      }
-    }
+							setTemplateProperties(propertyMap, templateSourcePath, outputSourceDestination)
+						}
+					}
+				}
+
+				stage('Copy Google Services Config') {
+					steps {
+						script {
+							try {
+								def googleServicesSourcePath = "${REPOSITORY_PATH}/google_services/${PACKAGE_NAME}.json"
+                def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
+								sh "cp -f ${googleServicesSourcePath} ${googleServicesDestination}"
+							} catch (Exception ex) {
+								currentBuild.result = 'FAILURE'
+								error "Error in Copy Google Services Config stage: ${ex.getMessage()}"
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
