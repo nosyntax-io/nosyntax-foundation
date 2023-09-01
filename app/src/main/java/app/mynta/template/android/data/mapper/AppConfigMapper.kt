@@ -1,5 +1,6 @@
 package app.mynta.template.android.data.mapper
 
+import app.mynta.template.android.data.source.remote.dto.app_config.AboutPageConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppBarConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppearanceConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.BottomBarConfigDto
@@ -16,6 +17,7 @@ import app.mynta.template.android.domain.model.app_config.ComponentsConfig
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.domain.model.app_config.NavigationConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.app_config.ThemeColorsConfig
@@ -25,11 +27,10 @@ fun AppConfigDto.toConfiguration(): AppConfig {
     return AppConfig(
         appId = this.app.appId,
         appearance = configuration.appearance.toAppearance(),
-        navigation = configuration.navigation.toNavigation()
+        navigation = configuration.navigation.toNavigation(),
+        aboutPage = configuration.aboutPage.toAboutPage()
     )
 }
-
-
 
 fun AppearanceConfigDto.toAppearance(): AppearanceConfig {
     val (themeColors, typography, components) = this
@@ -110,6 +111,24 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
             type = dto.type,
             label = dto.label,
             icon = dto.icon
+        )
+    }
+}
+
+fun AboutPageConfigDto.toAboutPage(): AboutPageConfig {
+    return AboutPageConfig(
+        introduction = this.introduction,
+        socialLinks = this.socialLinks.toSocialLinks()
+    )
+}
+
+fun List<AboutPageConfigDto.SocialLink>.toSocialLinks(): List<AboutPageConfig.SocialLink> {
+    return map { link ->
+        AboutPageConfig.SocialLink(
+            id = link.id,
+            label = link.label,
+            icon = link.icon,
+            url = link.url
         )
     }
 }
