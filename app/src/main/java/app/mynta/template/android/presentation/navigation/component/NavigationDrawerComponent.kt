@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import app.mynta.template.android.domain.model.configuration.NavigationDrawer
-import app.mynta.template.android.domain.model.configuration.NavigationItem
+import app.mynta.template.android.domain.model.app_config.SideMenuConfig
+import app.mynta.template.android.domain.model.NavigationItem
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawer(
-    navigationConfig: NavigationDrawer,
+    sideMenuConfig: SideMenuConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
@@ -46,7 +46,7 @@ fun NavigationDrawer(
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
-    if (!navigationConfig.display) {
+    if (!sideMenuConfig.display) {
         return
     }
 
@@ -55,7 +55,7 @@ fun NavigationDrawer(
         gesturesEnabled = drawerState.isOpen,
         drawerContent = {
             NavigationDrawerContent(
-                navigationConfig = navigationConfig,
+                sideMenuConfig = sideMenuConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
@@ -70,14 +70,14 @@ fun NavigationDrawer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawerContent(
-    navigationConfig: NavigationDrawer,
+    sideMenuConfig: SideMenuConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
-    val containerColor = when (navigationConfig.background) {
+    val containerColor = when (sideMenuConfig.background) {
         "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
         "gradient" -> Modifier.background(
@@ -98,7 +98,7 @@ fun NavigationDrawerContent(
             .then(other = containerColor),
         drawerContainerColor = Color.Transparent,
         content = {
-            NavigationDrawerHeader(navigationConfig = navigationConfig)
+            NavigationDrawerHeader(sideMenuConfig = sideMenuConfig)
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(content = {
                 items(navigationItems.size) { index ->
@@ -113,7 +113,7 @@ fun NavigationDrawerContent(
                         }
                         else -> {
                             NavigationItem(
-                                navigationConfig = navigationConfig,
+                                sideMenuConfig = sideMenuConfig,
                                 currentRoute = currentRoute,
                                 item = item,
                                 onClick = {
@@ -132,8 +132,8 @@ fun NavigationDrawerContent(
 }
 
 @Composable
-fun NavigationDrawerHeader(navigationConfig: NavigationDrawer) {
-    val header = navigationConfig.header
+fun NavigationDrawerHeader(sideMenuConfig: SideMenuConfig) {
+    val header = sideMenuConfig.header
     if (!header.display) {
         return
     }
@@ -157,12 +157,12 @@ fun NavigationDrawerHeader(navigationConfig: NavigationDrawer) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationItem(
-    navigationConfig: NavigationDrawer,
+    sideMenuConfig: SideMenuConfig,
     currentRoute: String,
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val contentColor = when (navigationConfig.background) {
+    val contentColor = when (sideMenuConfig.background) {
         "neutral" -> MaterialTheme.colorScheme.onSurface
         else -> MaterialTheme.colorScheme.surface
     }

@@ -22,13 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.R
-import app.mynta.template.android.domain.model.configuration.AppBar
-import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.app_config.AppBarConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(appBarConfig: AppBar, title: String, onActionClick: () -> Unit) {
+fun AppBar(appBarConfig: AppBarConfig, title: String, onActionClick: () -> Unit) {
     if(appBarConfig.display) {
         val backgroundModifier  = when (appBarConfig.background) {
             "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
@@ -46,7 +45,7 @@ fun AppBar(appBarConfig: AppBar, title: String, onActionClick: () -> Unit) {
         TopAppBar(
             modifier = Modifier.height(50.dp).then(backgroundModifier),
             title = {
-                if (appBarConfig.displayTitle) {
+                if (appBarConfig.title.display) {
                     Box(
                         modifier = Modifier.fillMaxHeight(),
                         contentAlignment = Alignment.Center
@@ -88,10 +87,13 @@ fun AppBar(appBarConfig: AppBar, title: String, onActionClick: () -> Unit) {
 fun AppBarPreview() {
     DynamicTheme {
         AppBar(
-            appBarConfig = AppBar(
+            appBarConfig = AppBarConfig(
                 display = true,
                 background = "neutral",
-                displayTitle = true
+                title = AppBarConfig.Title(
+                    display = true,
+                    position = "left"
+                )
             ),
             title = stringResource(id = R.string.app_name),
             onActionClick = { }

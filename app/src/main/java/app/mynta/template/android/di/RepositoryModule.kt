@@ -1,8 +1,8 @@
 package app.mynta.template.android.di
 
-import app.mynta.template.android.data.repository.ConfigurationRepositoryImpl
+import app.mynta.template.android.data.repository.AppConfigRepositoryImpl
 import app.mynta.template.android.data.source.remote.APIService
-import app.mynta.template.android.domain.repository.ConfigurationRepository
+import app.mynta.template.android.domain.repository.AppConfigRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun providerConfigurationRepository(api: APIService): ConfigurationRepository {
-        return ConfigurationRepositoryImpl(api)
+    fun providesAppConfigRepository(api: APIService): AppConfigRepository {
+        return AppConfigRepositoryImpl(api)
     }
 }

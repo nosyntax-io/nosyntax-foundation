@@ -18,22 +18,22 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import app.mynta.template.android.domain.model.configuration.BottomNavigation
-import app.mynta.template.android.domain.model.configuration.NavigationItem
+import app.mynta.template.android.domain.model.app_config.BottomBarConfig
+import app.mynta.template.android.domain.model.NavigationItem
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun BottomNavigationBar(
-    navigationConfig: BottomNavigation,
+    bottomBarConfig: BottomBarConfig,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
 ) {
-    if (!navigationConfig.display) {
+    if (!bottomBarConfig.display) {
         return
     }
 
-    val containerColor = when (navigationConfig.background) {
+    val containerColor = when (bottomBarConfig.background) {
         "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
         "gradient" -> Modifier.background(
@@ -47,12 +47,12 @@ fun BottomNavigationBar(
         else -> Modifier
     }
 
-    val contentColor = when (navigationConfig.background) {
+    val contentColor = when (bottomBarConfig.background) {
         "neutral" -> MaterialTheme.colorScheme.onSurface
         else -> MaterialTheme.colorScheme.surface
     }
 
-    val navBarHeight = if (navigationConfig.label == "hidden") {
+    val navBarHeight = if (bottomBarConfig.label == "hidden") {
         Modifier.height(55.dp)
     } else {
         Modifier
@@ -68,7 +68,7 @@ fun BottomNavigationBar(
         navigationItems.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.id,
-                alwaysShowLabel = navigationConfig.label != "selected",
+                alwaysShowLabel = bottomBarConfig.label != "selected",
                 colors = NavigationBarItemDefaults.colors(
                     selectedTextColor = contentColor,
                     selectedIconColor = contentColor,
@@ -77,7 +77,7 @@ fun BottomNavigationBar(
                     indicatorColor = MaterialTheme.colorScheme.primaryContainer
                 ),
                 label = {
-                    if (navigationConfig.label != "hidden") {
+                    if (bottomBarConfig.label != "hidden") {
                         Text(
                             modifier = Modifier,
                             text = item.label,

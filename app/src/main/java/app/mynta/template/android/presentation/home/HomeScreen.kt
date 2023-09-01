@@ -21,9 +21,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.components.AppBar
-import app.mynta.template.android.domain.model.configuration.Configuration
+import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.NavigationDrawer
-import app.mynta.template.android.domain.model.configuration.NavigationItem
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomNavigationBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
@@ -38,15 +38,16 @@ fun HomeScreen(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ) {
-    val configuration by viewModel.configurationUI.collectAsState()
+    val appConfig by viewModel.appConfigUI.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    configuration?.let { data ->
+    appConfig?.let { data ->
+        val components = data.appearance.components
         val navigationItems = data.navigation.items
         NavigationDrawer(
-            navigationConfig = data.appearance.navigationDrawer,
+            sideMenuConfig = components.sideMenu,
             coroutineScope = coroutineScope,
             navController = navController,
             currentRoute = currentRoute,
@@ -54,7 +55,7 @@ fun HomeScreen(
             drawerState = drawerState,
             content = {
                 HomeContent(
-                    configuration = data,
+                    appConfig = data,
                     coroutineScope = coroutineScope,
                     navController = navController,
                     currentRoute = currentRoute,
@@ -75,7 +76,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContent(
-    configuration: Configuration,
+    appConfig: AppConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
@@ -83,10 +84,11 @@ private fun HomeContent(
     drawerState: DrawerState
 ) {
     val selectedItem = navigationItems.find { it.id == currentRoute }
+    val components = appConfig.appearance.components
 
     Scaffold(
         topBar = {
-            val appBarConfig = configuration.appearance.appBar
+            val appBarConfig = components.appBar
             if (appBarConfig.display) {
                 AppBar(
                     appBarConfig = appBarConfig,
@@ -114,10 +116,10 @@ private fun HomeContent(
             }
         },
         bottomBar = {
-            val bottomNavigationConfig = configuration.appearance.bottomNavigation
-            if (bottomNavigationConfig.display) {
+            val bottomBarConfig = components.bottomBar
+            if (bottomBarConfig.display) {
                 BottomNavigationBar(
-                    navigationConfig = bottomNavigationConfig,
+                    bottomBarConfig = bottomBarConfig,
                     navController = navController,
                     currentRoute = currentRoute,
                     navigationItems = navigationItems

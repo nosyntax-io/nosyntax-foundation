@@ -2,7 +2,7 @@ package app.mynta.template.android.data.source.remote
 
 import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.core.utility.ConnectivityInterceptor
-import app.mynta.template.android.data.source.remote.dto.ConfigurationDto
+import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,9 +13,9 @@ import retrofit2.http.POST
 interface APIService {
     @FormUrlEncoded
     @POST("exp_config.inc.php")
-    suspend fun configuration(
+    suspend fun appConfig(
         @Field("access_token") accessToken: String = API_ACCESS_TOKEN
-    ): ConfigurationDto
+    ): AppConfigDto
 
     companion object {
         private const val API_BASE_URL = "https://api.mynta.app/v1/service/"

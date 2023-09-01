@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        collectLatestOnLifecycleStarted(mainViewModel.configuration) { state ->
+        collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             setContent {
                 when {
                     state.response != null && state.error == null -> {
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         DynamicTheme {
                             NoConnectionComponent(onRetry = {
                                 if (Connectivity.getInstance().isOnline()) {
-                                    mainViewModel.requestConfiguration()
+                                    mainViewModel.requestAppConfig()
                                 }
                             })
                         }

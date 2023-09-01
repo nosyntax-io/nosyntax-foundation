@@ -4,8 +4,8 @@ import app.mynta.template.android.core.utility.Exceptions
 import app.mynta.template.android.core.utility.Resource
 import app.mynta.template.android.data.mapper.toConfiguration
 import app.mynta.template.android.data.source.remote.APIService
-import app.mynta.template.android.domain.model.configuration.Configuration
-import app.mynta.template.android.domain.repository.ConfigurationRepository
+import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.domain.repository.AppConfigRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -14,12 +14,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ConfigurationRepositoryImpl @Inject constructor(private val service: APIService): ConfigurationRepository {
-    override suspend fun getConfiguration(): Flow<Resource<Configuration>> {
+class AppConfigRepositoryImpl @Inject constructor(private val service: APIService): AppConfigRepository {
+    override suspend fun getAppConfig(): Flow<Resource<AppConfig>> {
         return flow {
             emit(Resource.Loading(true))
             try {
-                val response = service.configuration()
+                val response = service.appConfig()
                 emit(Resource.Success(response.toConfiguration()))
             } catch (t: Throwable) {
                 when (t) {
