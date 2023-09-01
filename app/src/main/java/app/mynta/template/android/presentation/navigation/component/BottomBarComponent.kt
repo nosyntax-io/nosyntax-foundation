@@ -34,10 +34,6 @@ fun BottomBar(
     currentRoute: String,
     navigationItems: List<NavigationItem>
 ) {
-    if (!bottomBarConfig.display) {
-        return
-    }
-
     val containerColor = when (bottomBarConfig.background) {
         "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)

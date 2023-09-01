@@ -35,10 +35,6 @@ fun AppBar(
     isNavigationEnabled: Boolean,
     onNavigationClick: () -> Unit
 ) {
-    if (!appBarConfig.display) {
-        return
-    }
-
     val backgroundModifier  = when (appBarConfig.background) {
         "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)

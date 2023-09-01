@@ -46,10 +46,6 @@ fun NavigationDrawer(
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
-    if (!sideMenuConfig.display) {
-        return
-    }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = drawerState.isOpen,

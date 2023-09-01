@@ -43,27 +43,31 @@ fun HomeScreen(
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    appConfig?.let { data ->
-        val components = data.appearance.components
-        val navigationItems = data.navigation.items
-        NavigationDrawer(
-            sideMenuConfig = components.sideMenu,
-            coroutineScope = coroutineScope,
-            navController = navController,
-            currentRoute = currentRoute,
-            navigationItems = navigationItems,
-            drawerState = drawerState,
-            content = {
-                HomeContent(
-                    appConfig = data,
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    currentRoute = currentRoute,
-                    navigationItems = navigationItems,
-                    drawerState = drawerState,
-                )
-            }
-        )
+    appConfig?.let { config ->
+        val components = config.appearance.components
+        val navigationItems = config.navigation.items
+
+        val sideMenuConfig = components.sideMenu
+        if (sideMenuConfig.display) {
+            NavigationDrawer(
+                sideMenuConfig = sideMenuConfig,
+                coroutineScope = coroutineScope,
+                navController = navController,
+                currentRoute = currentRoute,
+                navigationItems = navigationItems,
+                drawerState = drawerState,
+                content = {
+                    HomeContent(
+                        appConfig = config,
+                        coroutineScope = coroutineScope,
+                        navController = navController,
+                        currentRoute = currentRoute,
+                        navigationItems = navigationItems,
+                        drawerState = drawerState,
+                    )
+                }
+            )
+        }
     }
 
     BackHandler(enabled = drawerState.isOpen) {
@@ -88,16 +92,19 @@ private fun HomeContent(
 
     Scaffold(
         topBar = {
-            AppBar(
-                appBarConfig = components.appBar,
-                title = selectedItem?.label ?: "",
-                isNavigationEnabled = components.sideMenu.display,
-                onNavigationClick = {
-                    coroutineScope.launch {
-                        drawerState.open()
+            val appBarConfig = components.appBar
+            if (appBarConfig.display) {
+                AppBar(
+                    appBarConfig = appBarConfig,
+                    title = selectedItem?.label ?: "",
+                    isNavigationEnabled = components.sideMenu.display,
+                    onNavigationClick = {
+                        coroutineScope.launch {
+                            drawerState.open()
+                        }
                     }
-                }
-            )
+                )
+            }
         },
         content = { inlinePadding ->
             Column(
