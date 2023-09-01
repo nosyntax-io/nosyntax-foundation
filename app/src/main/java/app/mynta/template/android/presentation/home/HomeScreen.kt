@@ -25,7 +25,7 @@ import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.NavigationDrawer
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
-import app.mynta.template.android.presentation.navigation.component.BottomNavigationBar
+import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +115,7 @@ private fun HomeContent(
         bottomBar = {
             val bottomBarConfig = components.bottomBar
             if (bottomBarConfig.display) {
-                BottomNavigationBar(
+                BottomBar(
                     bottomBarConfig = bottomBarConfig,
                     navController = navController,
                     currentRoute = currentRoute,
