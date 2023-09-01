@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,24 +21,29 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.ui.theme.DynamicTheme
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawer(
+fun SideMenu(
     sideMenuConfig: SideMenuConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -50,7 +56,7 @@ fun NavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerContent(
+            SideMenuContent(
                 sideMenuConfig = sideMenuConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
@@ -65,7 +71,7 @@ fun NavigationDrawer(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawerContent(
+fun SideMenuContent(
     sideMenuConfig: SideMenuConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -94,7 +100,7 @@ fun NavigationDrawerContent(
             .then(other = containerColor),
         drawerContainerColor = Color.Transparent,
         content = {
-            NavigationDrawerHeader(sideMenuConfig = sideMenuConfig)
+            SideMenuHeader(sideMenuConfig = sideMenuConfig)
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(content = {
                 items(navigationItems.size) { index ->
@@ -104,11 +110,11 @@ fun NavigationDrawerContent(
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
                                 thickness = 1.dp,
-                                color = MaterialTheme.colorScheme.surface
+                                color = MaterialTheme.colorScheme.surfaceVariant
                             )
                         }
                         else -> {
-                            NavigationItem(
+                            SideMenuNavigationItem(
                                 sideMenuConfig = sideMenuConfig,
                                 currentRoute = currentRoute,
                                 item = item,
@@ -128,7 +134,7 @@ fun NavigationDrawerContent(
 }
 
 @Composable
-fun NavigationDrawerHeader(sideMenuConfig: SideMenuConfig) {
+fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
     val header = sideMenuConfig.header
     if (!header.display) {
         return
@@ -139,7 +145,7 @@ fun NavigationDrawerHeader(sideMenuConfig: SideMenuConfig) {
                 .fillMaxWidth()
                 .height(150.dp)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
-                .clip(shape = RoundedCornerShape(15.dp)),
+                .clip(shape = MaterialTheme.shapes.large),
             painter = rememberAsyncImagePainter(
                 model = header.image,
                 filterQuality = FilterQuality.High
@@ -152,7 +158,7 @@ fun NavigationDrawerHeader(sideMenuConfig: SideMenuConfig) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationItem(
+fun SideMenuNavigationItem(
     sideMenuConfig: SideMenuConfig,
     currentRoute: String,
     item: NavigationItem,
@@ -197,4 +203,42 @@ fun NavigationItem(
             )
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun SideMenuPreview() {
+    DynamicTheme {
+        val coroutineScope = rememberCoroutineScope()
+        val navController = rememberNavController()
+        val currentRoute = "item1"
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+
+        val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
+        val navigationItems = listOf(
+            NavigationItem("item1", "type", "Item 1", placeholderIcon),
+            NavigationItem("item2", "type", "Item 2", placeholderIcon),
+            NavigationItem("divider", "divider", "", ""),
+            NavigationItem("item3", "type", "Item 3", placeholderIcon),
+            NavigationItem("item4", "type", "Item 4", placeholderIcon)
+        )
+
+        SideMenu(
+            sideMenuConfig = SideMenuConfig(
+                display = true,
+                background = "neutral",
+                header = SideMenuConfig.Header(
+                    display = true,
+                    image = "https://via.placeholder.com/700x400"
+                )
+            ),
+            coroutineScope = coroutineScope,
+            navController = navController,
+            currentRoute = currentRoute,
+            navigationItems = navigationItems,
+            drawerState = drawerState,
+            content = { }
+        )
+    }
 }

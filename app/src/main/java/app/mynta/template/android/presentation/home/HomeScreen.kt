@@ -22,7 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.components.AppBar
 import app.mynta.template.android.domain.model.app_config.AppConfig
-import app.mynta.template.android.presentation.navigation.component.NavigationDrawer
+import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
@@ -49,7 +49,7 @@ fun HomeScreen(
 
         val sideMenuConfig = components.sideMenu
         if (sideMenuConfig.display) {
-            NavigationDrawer(
+            SideMenu(
                 sideMenuConfig = sideMenuConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
