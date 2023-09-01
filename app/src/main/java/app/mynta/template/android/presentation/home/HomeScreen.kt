@@ -67,6 +67,15 @@ fun HomeScreen(
                     )
                 }
             )
+        } else {
+            HomeContent(
+                appConfig = config,
+                coroutineScope = coroutineScope,
+                navController = navController,
+                currentRoute = currentRoute,
+                navigationItems = navigationItems,
+                drawerState = drawerState,
+            )
         }
     }
 
