@@ -10,6 +10,7 @@ import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.home.HomeScreen
+import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
 @Composable
@@ -49,6 +50,11 @@ fun HomeNavigationGraph(
                     "about" -> {
                         AboutScreen(
                             aboutPageConfig = appConfig.aboutPage
+                        )
+                    }
+                    "policies" -> {
+                        PoliciesScreen(
+                            request = item.id
                         )
                     }
                 }
