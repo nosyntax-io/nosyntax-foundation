@@ -44,14 +44,14 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.background)
-        .padding(30.dp)
+        .padding(horizontal = 30.dp)
         .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(70.dp))
             Image(
                 modifier = Modifier.size(100.dp),
                 painter = painterResource(id = R.drawable.splash_logo),

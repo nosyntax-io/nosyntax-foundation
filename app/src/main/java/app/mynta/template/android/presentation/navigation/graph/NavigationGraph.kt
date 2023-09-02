@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
@@ -25,6 +27,7 @@ fun MainNavigationGraph(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavigationGraph(
+    appConfig: AppConfig,
     navController: NavHostController,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
@@ -43,6 +46,11 @@ fun HomeNavigationGraph(
                             isDrawerOpen = drawerState.isOpen
                         )
                     }
+                    "about" -> {
+                        AboutScreen(
+                            aboutPageConfig = appConfig.aboutPage
+                        )
+                    }
                 }
             }
         }
@@ -51,4 +59,5 @@ fun HomeNavigationGraph(
 
 object Routes {
     const val ROUTE_HOME = "home"
+    const val ROUTE_ABOUT = "about"
 }

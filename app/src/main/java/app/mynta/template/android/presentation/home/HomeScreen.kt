@@ -128,6 +128,7 @@ private fun HomeContent(
                     .padding(inlinePadding)
             ) {
                 HomeNavigationGraph(
+                    appConfig = appConfig,
                     navController = navController,
                     navigationItems = navigationItems,
                     drawerState = drawerState
