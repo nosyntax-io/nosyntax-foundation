@@ -4,8 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -103,13 +101,21 @@ private fun HomeContent(
         topBar = {
             val appBarConfig = components.appBar
             if (appBarConfig.display) {
+                val showBackIcon = when (currentRoute) {
+                    Routes.ROUTE_ABOUT -> true
+                    else -> false
+                }
                 AppBar(
                     appBarConfig = appBarConfig,
                     title = selectedItem?.label ?: "",
-                    isNavigationEnabled = components.sideMenu.display,
-                    onNavigationClick = {
-                        coroutineScope.launch {
-                            drawerState.open()
+                    showBackButton = showBackIcon,
+                    onNavigationActionClick = {
+                        if (!showBackIcon) {
+                            coroutineScope.launch {
+                                drawerState.open()
+                            }
+                        } else {
+                            navController.popBackStack()
                         }
                     }
                 )
@@ -120,7 +126,6 @@ private fun HomeContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(inlinePadding)
-                    .verticalScroll(rememberScrollState())
             ) {
                 HomeNavigationGraph(
                     navController = navController,

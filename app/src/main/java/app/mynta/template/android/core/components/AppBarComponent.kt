@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +33,8 @@ import app.mynta.template.android.ui.theme.DynamicTheme
 fun AppBar(
     appBarConfig: AppBarConfig,
     title: String,
-    isNavigationEnabled: Boolean,
-    onNavigationClick: () -> Unit
+    showBackButton: Boolean,
+    onNavigationActionClick: () -> Unit
 ) {
     val backgroundModifier  = when (appBarConfig.background) {
         "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
@@ -49,6 +50,11 @@ fun AppBar(
         else -> Modifier
     }
 
+    val navigationIcon = when (showBackButton) {
+        true -> painterResource(id = R.drawable.icon_arrow_left_filled)
+        else -> painterResource(id = R.drawable.icon_menu_filled)
+    }
+
     if (appBarConfig.title.position == "center") {
         CenterAlignedTopAppBar(
             modifier = Modifier
@@ -62,9 +68,11 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (isNavigationEnabled) {
-                    AppBarActionIcon(onClick = onNavigationClick)
-                }
+
+                AppBarActionIcon(
+                    icon = navigationIcon,
+                    onClick = onNavigationActionClick
+                )
             }
         )
     } else {
@@ -80,9 +88,10 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (isNavigationEnabled) {
-                    AppBarActionIcon(onClick = onNavigationClick)
-                }
+                AppBarActionIcon(
+                    icon = navigationIcon,
+                    onClick = onNavigationActionClick
+                )
             }
         )
     }
@@ -105,7 +114,7 @@ fun AppBarTitle(appBarConfig: AppBarConfig, title: String) {
 }
 
 @Composable
-fun AppBarActionIcon(onClick: () -> Unit) {
+fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.Center
@@ -113,8 +122,9 @@ fun AppBarActionIcon(onClick: () -> Unit) {
         IconButton(onClick = onClick) {
             Icon(
                 modifier = Modifier.size(size = 30.dp),
-                painter = painterResource(id = R.drawable.icon_menu_filled),
-                contentDescription = stringResource(id = R.string.toggle_menu))
+                painter = icon,
+                contentDescription = null
+            )
         }
     }
 }
@@ -148,8 +158,8 @@ fun AppBarPreview() {
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            isNavigationEnabled = false,
-            onNavigationClick = { }
+            showBackButton = false,
+            onNavigationActionClick = { }
         )
     }
 }
