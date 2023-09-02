@@ -30,10 +30,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import app.mynta.template.android.R
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -198,6 +200,9 @@ fun SideMenuNavigationItem(
                 modifier = Modifier.size(22.dp),
                 painter = rememberAsyncImagePainter(
                     model = item.icon,
+                    placeholder = painterResource(
+                        id = R.drawable.icon_circle_outline
+                    ),
                     contentScale = ContentScale.Crop,
                     filterQuality = FilterQuality.High
                 ),
