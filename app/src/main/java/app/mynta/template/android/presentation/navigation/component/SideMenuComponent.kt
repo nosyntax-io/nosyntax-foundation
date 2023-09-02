@@ -105,7 +105,7 @@ fun SideMenuContent(
             LazyColumn(content = {
                 items(navigationItems.size) { index ->
                     val item = navigationItems[index]
-                    when (item.type) {
+                    when (item.role) {
                         "divider" -> {
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
@@ -119,7 +119,9 @@ fun SideMenuContent(
                                 currentRoute = currentRoute,
                                 item = item,
                                 onClick = {
-                                    navController.navigate(route = item.id)
+                                    navController.navigate(
+                                        route = item.id
+                                    )
                                     coroutineScope.launch {
                                         drawerState.close()
                                     }

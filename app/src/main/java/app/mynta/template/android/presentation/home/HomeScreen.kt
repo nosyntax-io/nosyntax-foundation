@@ -26,6 +26,7 @@ import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
+import app.mynta.template.android.presentation.navigation.item.coreNavigationItems
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -47,12 +48,15 @@ fun HomeScreen(
 
         val sideMenuConfig = components.sideMenu
         if (sideMenuConfig.display) {
+            val sideMenuNavigationItems =
+                navigationItems + coreNavigationItems()
+
             SideMenu(
                 sideMenuConfig = sideMenuConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
-                navigationItems = navigationItems,
+                navigationItems = sideMenuNavigationItems,
                 drawerState = drawerState,
                 content = {
                     HomeContent(
@@ -60,7 +64,7 @@ fun HomeScreen(
                         coroutineScope = coroutineScope,
                         navController = navController,
                         currentRoute = currentRoute,
-                        navigationItems = navigationItems,
+                        navigationItems = sideMenuNavigationItems,
                         drawerState = drawerState,
                     )
                 }
@@ -103,6 +107,8 @@ private fun HomeContent(
             if (appBarConfig.display) {
                 val showBackIcon = when (currentRoute) {
                     Routes.ROUTE_ABOUT -> true
+                    Routes.ROUTE_PRIVACY_POLICY -> true
+                    Routes.ROUTE_TERMS_OF_USE -> true
                     else -> false
                 }
                 AppBar(

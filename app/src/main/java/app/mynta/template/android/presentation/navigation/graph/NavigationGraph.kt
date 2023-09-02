@@ -9,21 +9,8 @@ import androidx.navigation.compose.composable
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.about.AboutScreen
-import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
-
-@Composable
-fun MainNavigationGraph(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = Routes.ROUTE_HOME
-    ) {
-        composable(route = Routes.ROUTE_HOME) {
-            HomeScreen()
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,21 +27,21 @@ fun HomeNavigationGraph(
     ) {
         navigationItems.forEach { item ->
             composable(route = item.id) {
-                when (item.type) {
+                when (item.role) {
                     "web" -> {
                         WebScreen(
                             url = "https://google.com",
                             isDrawerOpen = drawerState.isOpen
                         )
                     }
-                    "about" -> {
-                        AboutScreen(
-                            aboutPageConfig = appConfig.aboutPage
-                        )
-                    }
                     "policies" -> {
                         PoliciesScreen(
                             request = item.id
+                        )
+                    }
+                    "about" -> {
+                        AboutScreen(
+                            aboutPageConfig = appConfig.aboutPage
                         )
                     }
                 }
@@ -65,5 +52,7 @@ fun HomeNavigationGraph(
 
 object Routes {
     const val ROUTE_HOME = "home"
+    const val ROUTE_PRIVACY_POLICY = "privacy_policy"
+    const val ROUTE_TERMS_OF_USE = "terms_of_use"
     const val ROUTE_ABOUT = "about"
 }

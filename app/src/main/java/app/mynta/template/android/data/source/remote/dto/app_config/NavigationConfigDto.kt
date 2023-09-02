@@ -11,8 +11,8 @@ data class NavigationConfigDto(
     data class NavigationItem(
         @SerializedName("id")
         val id: String,
-        @SerializedName("type")
-        val type: String,
+        @SerializedName("role")
+        val role: String,
         @SerializedName("label")
         val label: String,
         @SerializedName("icon")

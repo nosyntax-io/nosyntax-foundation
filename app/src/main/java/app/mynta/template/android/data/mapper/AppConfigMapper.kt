@@ -105,12 +105,12 @@ fun NavigationConfigDto.toNavigation(): NavigationConfig {
 }
 
 fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<NavigationItem> {
-    return map { dto ->
+    return map { item ->
         NavigationItem(
-            id = dto.id,
-            type = dto.type,
-            label = dto.label,
-            icon = dto.icon
+            id = item.id,
+            role = item.role,
+            label = item.label,
+            icon = item.icon
         )
     }
 }
