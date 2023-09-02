@@ -72,6 +72,17 @@ pipeline {
 						}
 					}
 				}
+
+				stage('Generate Launcher Icons') {
+					steps {
+						script {
+							def iconSourcePath = "${REPOSITORY_PATH}/icons/${PACKAGE_NAME}.png"
+							def resDirectory = "${WORKSPACE}/app/src/main/res"
+
+							generateLauncherIcons(resDirectory, iconSourcePath)
+						}
+					}
+				}
 			}
 		}
 	}
