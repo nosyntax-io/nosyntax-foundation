@@ -14,6 +14,11 @@ pipeline {
 		string defaultValue: '', name: 'VERSION_NAME'
 		string defaultValue: '', name: 'VERSION_CODE'
 		string defaultValue: '', name: 'ONESIGNAL_APP_ID'
+		// keystore credentials
+		string defaultValue: '', name: 'KEYSTORE_FILE'
+		string defaultValue: '', name: 'KEYSTORE_PASSWORD'
+		string defaultValue: '', name: 'KEY_ALIAS'
+		string defaultValue: '', name: 'KEY_PASSWORD'
 	}
 
 	environment {
@@ -24,6 +29,10 @@ pipeline {
     VERSION_NAME            = "${params.VERSION_NAME}"
     VERSION_CODE            = "${params.VERSION_CODE}"
     ONESIGNAL_APP_ID        = "${params.ONESIGNAL_APP_ID}"
+		KEYSTORE_FILE						= "${params.KEYSTORE_FILE}"
+    KEYSTORE_PASSWORD       = "${params.KEYSTORE_PASSWORD}"
+    KEY_ALIAS               = "${params.KEY_ALIAS}"
+    KEY_PASSWORD            = "${params.KEY_PASSWORD}"
 
     REPOSITORY_PATH         = '/var/www/cloud.mynta.app/repository'
 	}
@@ -81,6 +90,31 @@ pipeline {
 
 							generateLauncherIcons(resDirectory, iconSourcePath)
 						}
+					}
+				}
+			}
+		}
+
+		stage('Manage Application Signing') {
+			steps {
+				script {
+					try {
+						def propertyMap = [
+							'PARAMETER_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
+							'PARAMETER_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+							'PARAMETER_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
+							'PARAMETER_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
+						]
+						def templateSourcePath = "${WORKSPACE}/signing.properties.template"
+						def outputDestination = "${WORKSPACE}/signing.properties"
+
+						setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
+
+						def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${PACKAGE_NAME}.zip"
+						sh "unzip -o ${keystoreSourcePath} -d ${WORKSPACE}"
+					} catch (Exception ex) {
+						currentBuild.result = 'FAILURE'
+						error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
 					}
 				}
 			}
