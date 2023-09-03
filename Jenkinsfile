@@ -120,23 +120,28 @@ pipeline {
 			}
 		}
 
-		stage('Build Release APK') {
+		stage('Build Release APK and AAB') {
 			steps {
 				script {
 					try {
 						sh 'chmod +rx gradlew'
-						sh "./gradlew clean assembleRelease"
+						sh "./gradlew clean assembleRelease bundleRelease"
 
 						def outputsPath = "${WORKSPACE}/app/build/outputs"
 						def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
+            def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
 
 						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PACKAGE_NAME}.apk"
+            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${PACKAGE_NAME}.aab"
 
 						sh "mv ${apkSourcePath} ${apkDestinationPath}"
 						env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
+
+						sh "mv ${aabSourcePath} ${aabDestinationPath}"
+						env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
 					} catch (Exception ex) {
 						currentBuild.result = 'FAILURE'
-						error "Error in Build Release APK stage: ${ex.getMessage()}"
+						error "Error in Build Release APK and AAB stage: ${ex.getMessage()}"
 					}
 				}
 			}
