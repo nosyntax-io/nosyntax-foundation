@@ -119,5 +119,27 @@ pipeline {
 				}
 			}
 		}
+
+		stage('Build Release APK') {
+			steps {
+				script {
+					try {
+						sh 'chmod +rx gradlew'
+						sh "./gradlew clean assembleRelease"
+
+						def outputsPath = "${WORKSPACE}/app/build/outputs"
+						def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
+
+						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PACKAGE_NAME}.apk"
+
+						sh "mv ${apkSourcePath} ${apkDestinationPath}"
+						env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
+					} catch (Exception ex) {
+						currentBuild.result = 'FAILURE'
+						error "Error in Build Release APK stage: ${ex.getMessage()}"
+					}
+				}
+			}
+		}
 	}
 }
