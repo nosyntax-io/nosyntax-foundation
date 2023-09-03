@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = appConfig.getProperty(AppConfig.APP_PACKAGE_NAME)
+        applicationId = appConfig.getProperty(AppConfig.APP_ID)
         versionCode = appConfig.getProperty(AppConfig.APP_VERSION_CODE).toInt()
         versionName = appConfig.getProperty(AppConfig.APP_VERSION_NAME)
         minSdk = 24

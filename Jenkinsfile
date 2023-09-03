@@ -9,8 +9,8 @@ pipeline {
 		string defaultValue: '', name: 'BUILD_ID'
 		string defaultValue: '', name: 'USER_TOKEN'
 		string defaultValue: '', name: 'ACCESS_TOKEN'
+		string defaultValue: '', name: 'APP_ID'
 		string defaultValue: '', name: 'APP_NAME'
-		string defaultValue: '', name: 'PACKAGE_NAME'
 		string defaultValue: '', name: 'VERSION_NAME'
 		string defaultValue: '', name: 'VERSION_CODE'
 		string defaultValue: '', name: 'ONESIGNAL_APP_ID'
@@ -24,8 +24,8 @@ pipeline {
 	environment {
     USER_TOKEN              = "${params.USER_TOKEN}"
     ACCESS_TOKEN            = "${params.ACCESS_TOKEN}"
+    APP_ID            			= "${params.APP_ID}"
     APP_NAME                = "${params.APP_NAME}"
-    PACKAGE_NAME            = "${params.PACKAGE_NAME}"
     VERSION_NAME            = "${params.VERSION_NAME}"
     VERSION_CODE            = "${params.VERSION_CODE}"
     ONESIGNAL_APP_ID        = "${params.ONESIGNAL_APP_ID}"
@@ -52,8 +52,8 @@ pipeline {
 					steps {
 						script {
 							def propertyMap = [
+								'PARAMETER_APP_ID': 'APP_ID',
 								'PARAMETER_APP_NAME': 'APP_NAME',
-								'PARAMETER_APP_PACKAGE_NAME': 'PACKAGE_NAME',
 								'PARAMETER_APP_VERSION_NAME': 'VERSION_NAME',
 								'PARAMETER_APP_VERSION_CODE': 'VERSION_CODE',
 								'PARAMETER_APP_ACCESS_TOKEN': 'ACCESS_TOKEN',
@@ -71,7 +71,7 @@ pipeline {
 					steps {
 						script {
 							try {
-								def googleServicesSourcePath = "${REPOSITORY_PATH}/google_services/${PACKAGE_NAME}.json"
+								def googleServicesSourcePath = "${REPOSITORY_PATH}/google_services/${APP_ID}.json"
                 def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
 								sh "cp -f ${googleServicesSourcePath} ${googleServicesDestination}"
 							} catch (Exception ex) {
@@ -85,7 +85,7 @@ pipeline {
 				stage('Generate Launcher Icons') {
 					steps {
 						script {
-							def iconSourcePath = "${REPOSITORY_PATH}/icons/${PACKAGE_NAME}.png"
+							def iconSourcePath = "${REPOSITORY_PATH}/icons/${APP_ID}.png"
 							def resDirectory = "${WORKSPACE}/app/src/main/res"
 
 							generateLauncherIcons(resDirectory, iconSourcePath)
@@ -110,7 +110,7 @@ pipeline {
 
 						setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
 
-						def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${PACKAGE_NAME}.zip"
+						def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${APP_ID}.zip"
 						sh "unzip -o ${keystoreSourcePath} -d ${WORKSPACE}"
 					} catch (Exception ex) {
 						currentBuild.result = 'FAILURE'
@@ -131,8 +131,8 @@ pipeline {
 						def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
             def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
 
-						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PACKAGE_NAME}.apk"
-            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${PACKAGE_NAME}.aab"
+						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
+            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
 
 						sh "mv ${apkSourcePath} ${apkDestinationPath}"
 						env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()

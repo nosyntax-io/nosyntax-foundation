@@ -1,5 +1,5 @@
+config.app.id = PARAMETER_APP_ID
 config.app.name = PARAMETER_APP_NAME
-config.app.package_name = PARAMETER_APP_PACKAGE_NAME
 config.app.version_name = PARAMETER_APP_VERSION_NAME
 config.app.version_code = PARAMETER_APP_VERSION_CODE
 config.app.access_token = PARAMETER_APP_ACCESS_TOKEN
