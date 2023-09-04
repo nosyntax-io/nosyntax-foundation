@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.components.AppBar
+import app.mynta.template.android.core.components.NavigationActionType
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.SideMenu
@@ -64,7 +65,7 @@ fun HomeScreen(
                 content = content
             )
         } else {
-            content
+            content()
         }
     }
 
@@ -89,23 +90,19 @@ private fun HomeContent(
 
     Scaffold(
         topBar = {
-            val appBarConfig = components.appBar
-            if (appBarConfig.display) {
-                val showBackIcon = when (currentRoute) {
-                    Routes.ROUTE_ABOUT -> true
-                    Routes.ROUTE_PRIVACY_POLICY -> true
-                    Routes.ROUTE_TERMS_OF_USE -> true
-                    else -> false
+            if (components.appBar.display) {
+                val navigationActionType = when (currentRoute) {
+                    Routes.ROUTE_ABOUT, Routes.ROUTE_PRIVACY_POLICY, Routes.ROUTE_TERMS_OF_USE -> NavigationActionType.Back
+                    else -> NavigationActionType.Menu(isEnabled = components.sideMenu.display)
                 }
+
                 AppBar(
-                    appBarConfig = appBarConfig,
+                    appBarConfig = components.appBar,
                     title = selectedItem?.label ?: "",
-                    showBackButton = showBackIcon,
+                    navigationActionType = navigationActionType,
                     onNavigationActionClick = {
-                        if (!showBackIcon) {
-                            coroutineScope.launch {
-                                drawerState.open()
-                            }
+                        if (navigationActionType is NavigationActionType.Menu) {
+                            coroutineScope.launch { drawerState.open() }
                         } else {
                             navController.popBackStack()
                         }

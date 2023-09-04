@@ -27,15 +27,20 @@ import app.mynta.template.android.core.Constants
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 
+sealed class NavigationActionType {
+    data class Menu(val isEnabled: Boolean) : NavigationActionType()
+    object Back : NavigationActionType()
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     appBarConfig: AppBarConfig,
     title: String,
-    showBackButton: Boolean,
+    navigationActionType: NavigationActionType,
     onNavigationActionClick: () -> Unit
 ) {
-    val backgroundModifier  = when (appBarConfig.background) {
+    val backgroundModifier = when (appBarConfig.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
@@ -49,44 +54,50 @@ fun AppBar(
         else -> Modifier
     }
 
-    val navigationIcon = when (showBackButton) {
-        true -> painterResource(id = R.drawable.icon_arrow_left_filled)
-        else -> painterResource(id = R.drawable.icon_menu_filled)
+    val appBarModifier = Modifier
+        .height(50.dp)
+        .then(backgroundModifier)
+
+    val appBarTitle: @Composable () -> Unit = {
+        AppBarTitle(
+            appBarConfig = appBarConfig,
+            title = title
+        )
+    }
+
+    val appBarNavigationIcon: @Composable () -> Unit = {
+        val navigationIcon = when (navigationActionType) {
+            is NavigationActionType.Back -> R.drawable.icon_arrow_left_filled
+            is NavigationActionType.Menu -> {
+                if (navigationActionType.isEnabled) {
+                    R.drawable.icon_menu_filled
+                } else {
+                    null
+                }
+            }
+        }
+
+        navigationIcon?.let {
+            AppBarActionIcon(
+                icon = painterResource(id = it),
+                onClick = onNavigationActionClick
+            )
+        }
     }
 
     if (appBarConfig.title.position == Constants.POSITION_CENTER) {
         CenterAlignedTopAppBar(
-            modifier = Modifier.height(50.dp).then(backgroundModifier),
-            colors = appBarColors(appBarConfig = appBarConfig),
-            title = {
-                AppBarTitle(
-                    appBarConfig = appBarConfig,
-                    title = title
-                )
-            },
-            navigationIcon = {
-                AppBarActionIcon(
-                    icon = navigationIcon,
-                    onClick = onNavigationActionClick
-                )
-            }
+            modifier = appBarModifier,
+            colors = appBarColors(appBarConfig),
+            title = appBarTitle,
+            navigationIcon = appBarNavigationIcon
         )
     } else {
         TopAppBar(
-            modifier = Modifier.height(50.dp).then(backgroundModifier),
-            colors = appBarColors(appBarConfig = appBarConfig),
-            title = {
-                AppBarTitle(
-                    appBarConfig = appBarConfig,
-                    title = title
-                )
-            },
-            navigationIcon = {
-                AppBarActionIcon(
-                    icon = navigationIcon,
-                    onClick = onNavigationActionClick
-                )
-            }
+            modifier = appBarModifier,
+            colors = appBarColors(appBarConfig),
+            title = appBarTitle,
+            navigationIcon = appBarNavigationIcon
         )
     }
 }
@@ -109,26 +120,25 @@ fun AppBarTitle(appBarConfig: AppBarConfig, title: String) {
 
 @Composable
 fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ) {
-        DynamicClickableIcon(
-            modifier = Modifier.size(30.dp),
-            source = icon,
-            onClick = onClick
-        )
-    }
+    DynamicClickableIcon(
+        modifier = Modifier
+            .size(30.dp)
+            .fillMaxHeight(),
+        source = icon,
+        onClick = onClick
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
-    val contentColor = when (appBarConfig.background) {
-        Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.surface
+    val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.surface
     }
-    return TopAppBarDefaults.smallTopAppBarColors(
+
+    return TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,
         titleContentColor = contentColor,
         navigationIconContentColor = contentColor,
@@ -150,7 +160,7 @@ fun AppBarPreview() {
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            showBackButton = false,
+            navigationActionType = NavigationActionType.Menu(isEnabled = true),
             onNavigationActionClick = { }
         )
     }
