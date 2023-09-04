@@ -1,7 +1,6 @@
 package app.mynta.template.android.core.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,9 +47,6 @@ private fun AsyncImage(
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,
-        placeholder = painterResource(
-            id = R.drawable.icon_circle_outline
-        ),
         contentScale = contentScale,
         filterQuality = FilterQuality.High
     )
@@ -66,7 +62,8 @@ private fun AsyncImage(
         if (painter.state is AsyncImagePainter.State.Loading) {
             Box(modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surfaceVariant))
+                .shimmerEffect()
+            )
         }
     }
 }
@@ -76,7 +73,9 @@ private fun AsyncImage(
 fun DynamicImagePreview() {
     MaterialTheme {
         DynamicImage(
-            modifier = Modifier.fillMaxWidth().height(150.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
             source = "https://via.placeholder.com/700x400"
         )
     }
