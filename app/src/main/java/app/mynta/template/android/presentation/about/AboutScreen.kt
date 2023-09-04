@@ -40,9 +40,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(
-            color = MaterialTheme.colorScheme.background
-        )
+        .background(color = MaterialTheme.colorScheme.background)
         .padding(horizontal = 30.dp)
         .verticalScroll(rememberScrollState())
     ) {
@@ -84,12 +82,14 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
                 maxItemsInEachRow = 5
             ) {
                 aboutPageConfig.socialLinks.forEach { socialLink ->
-                    SocialIcon(
-                        imageUrl = socialLink.icon,
-                        onClick = {
-                            context.openUrl(url = socialLink.url)
-                        }
-                    )
+                    Box(modifier = Modifier.padding(5.dp)) {
+                        SocialIcon(
+                            imageUrl = socialLink.icon,
+                            onClick = {
+                                context.openUrl(url = socialLink.url)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -99,9 +99,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
 @Composable
 fun SocialIcon(imageUrl: String, onClick: () -> Unit) {
     DynamicClickableIcon(
-        modifier = Modifier
-            .padding(10.dp)
-            .size(35.dp),
+        modifier = Modifier.size(35.dp),
         source = imageUrl,
         tint = MaterialTheme.colorScheme.surfaceVariant,
         onClick = onClick

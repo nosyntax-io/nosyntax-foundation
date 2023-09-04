@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -58,9 +56,7 @@ fun AppBar(
 
     if (appBarConfig.title.position == Constants.POSITION_CENTER) {
         CenterAlignedTopAppBar(
-            modifier = Modifier
-                .height(50.dp)
-                .then(backgroundModifier),
+            modifier = Modifier.height(50.dp).then(backgroundModifier),
             colors = appBarColors(appBarConfig = appBarConfig),
             title = {
                 AppBarTitle(
@@ -77,9 +73,7 @@ fun AppBar(
         )
     } else {
         TopAppBar(
-            modifier = Modifier
-                .height(50.dp)
-                .then(backgroundModifier),
+            modifier = Modifier.height(50.dp).then(backgroundModifier),
             colors = appBarColors(appBarConfig = appBarConfig),
             title = {
                 AppBarTitle(
@@ -119,13 +113,11 @@ fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        IconButton(onClick = onClick) {
-            Icon(
-                modifier = Modifier.size(size = 30.dp),
-                painter = icon,
-                contentDescription = null
-            )
-        }
+        DynamicClickableIcon(
+            modifier = Modifier.size(30.dp),
+            source = icon,
+            onClick = onClick
+        )
     }
 }
 

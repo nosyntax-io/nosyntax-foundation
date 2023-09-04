@@ -45,17 +45,17 @@ fun DynamicClickableIcon(
     enabled: Boolean = true
 ) {
     IconButton(
-        modifier = modifier,
+        modifier = Modifier,
         enabled = enabled,
         onClick = onClick,
         content = {
             when (source) {
                 is String -> {
-                    IconWithAsyncImage(modifier = Modifier, url = source, tint = tint)
+                    IconWithAsyncImage(modifier = modifier, url = source, tint = tint)
                 }
                 is Painter -> {
                     Icon(
-                        modifier = Modifier,
+                        modifier = modifier,
                         painter = source,
                         contentDescription = null,
                         tint = tint
