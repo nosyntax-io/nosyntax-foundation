@@ -168,8 +168,8 @@ fun SideMenuItem(
 
     NavigationDrawerItem(
         modifier = Modifier
-        .height(50.dp)
-        .padding(horizontal = 20.dp),
+            .height(50.dp)
+            .padding(horizontal = 20.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
@@ -185,8 +185,7 @@ fun SideMenuItem(
             Text(
                 modifier = Modifier,
                 text = item.label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = MaterialTheme.typography.bodyMedium
             )
         },
         icon = {
