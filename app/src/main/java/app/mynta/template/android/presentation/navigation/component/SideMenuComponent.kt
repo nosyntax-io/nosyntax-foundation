@@ -1,10 +1,9 @@
 package app.mynta.template.android.presentation.navigation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,19 +26,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.components.DynamicIcon
+import app.mynta.template.android.core.components.DynamicImage
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
-import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -144,19 +141,13 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
         return
     }
     Box {
-        // TODO: Update placeholder.
-        Image(
+        DynamicImage(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .height(150.dp)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
-            painter = rememberAsyncImagePainter(
-                model = header.image,
-                filterQuality = FilterQuality.High
-            ),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
+            source = header.image
         )
     }
 }
