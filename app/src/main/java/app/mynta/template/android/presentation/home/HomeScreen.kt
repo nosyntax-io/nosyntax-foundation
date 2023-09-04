@@ -136,7 +136,13 @@ private fun HomeContent(
         },
         bottomBar = {
             val bottomBarConfig = components.bottomBar
-            if (bottomBarConfig.display) {
+            val shouldHideBottomBar = when (currentRoute) {
+                Routes.ROUTE_ABOUT -> true
+                Routes.ROUTE_PRIVACY_POLICY -> true
+                Routes.ROUTE_TERMS_OF_USE -> true
+                else -> false
+            }
+            if (bottomBarConfig.display && !shouldHideBottomBar) {
                 BottomBar(
                     bottomBarConfig = bottomBarConfig,
                     coroutineScope = coroutineScope,
