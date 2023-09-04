@@ -14,7 +14,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -30,13 +29,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import app.mynta.template.android.R
 import app.mynta.template.android.core.Constants
+import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.navigation.graph.Roles
@@ -199,18 +197,9 @@ fun SideMenuNavigationItem(
             )
         },
         icon = {
-            // TODO: Update placeholder
-            Icon(
+            DynamicIcon(
                 modifier = Modifier.size(22.dp),
-                painter = rememberAsyncImagePainter(
-                    model = item.icon,
-                    placeholder = painterResource(
-                        id = R.drawable.icon_circle_outline
-                    ),
-                    contentScale = ContentScale.Crop,
-                    filterQuality = FilterQuality.High
-                ),
-                contentDescription = null
+                source = item.icon
             )
         }
     )

@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.R
-import app.mynta.template.android.core.components.ClickableIcon
+import app.mynta.template.android.core.components.DynamicClickableIcon
 import app.mynta.template.android.core.utility.Intents.openUrl
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -98,11 +98,11 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
 
 @Composable
 fun SocialIcon(imageUrl: String, onClick: () -> Unit) {
-    ClickableIcon(
+    DynamicClickableIcon(
         modifier = Modifier
             .padding(10.dp)
             .size(35.dp),
-        url = imageUrl,
+        source = imageUrl,
         tint = MaterialTheme.colorScheme.surfaceVariant,
         onClick = onClick
     )

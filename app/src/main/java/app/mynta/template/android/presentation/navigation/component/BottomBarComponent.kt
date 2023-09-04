@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,18 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.Constants
+import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.ui.theme.DynamicTheme
-import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun BottomBar(
@@ -95,15 +92,9 @@ fun RowScope.BottomBarNavigationItem(
             }
         },
         icon = {
-            // TODO: Update placeholder.
-            Icon(
+            DynamicIcon(
                 modifier = Modifier.size(22.dp),
-                painter = rememberAsyncImagePainter(
-                    model = item.icon,
-                    contentScale = ContentScale.Crop,
-                    filterQuality = FilterQuality.High
-                ),
-                contentDescription = null
+                source = item.icon
             )
         },
         onClick = {
