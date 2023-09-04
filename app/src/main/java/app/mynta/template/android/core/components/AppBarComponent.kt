@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.R
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 
@@ -37,9 +38,9 @@ fun AppBar(
     onNavigationActionClick: () -> Unit
 ) {
     val backgroundModifier  = when (appBarConfig.background) {
-        "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
-        "gradient" -> Modifier.background(
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
+        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_GRADIENT -> Modifier.background(
             Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -55,7 +56,7 @@ fun AppBar(
         else -> painterResource(id = R.drawable.icon_menu_filled)
     }
 
-    if (appBarConfig.title.position == "center") {
+    if (appBarConfig.title.position == Constants.POSITION_CENTER) {
         CenterAlignedTopAppBar(
             modifier = Modifier
                 .height(50.dp)
@@ -68,7 +69,6 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-
                 AppBarActionIcon(
                     icon = navigationIcon,
                     onClick = onNavigationActionClick
@@ -133,7 +133,7 @@ fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
 @Composable
 fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
     val contentColor = when (appBarConfig.background) {
-        "neutral" -> MaterialTheme.colorScheme.onSurface
+        Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
         else -> MaterialTheme.colorScheme.surface
     }
     return TopAppBarDefaults.smallTopAppBarColors(
@@ -151,10 +151,10 @@ fun AppBarPreview() {
         AppBar(
             appBarConfig = AppBarConfig(
                 display = true,
-                background = "neutral",
+                background = Constants.BACKGROUND_NEUTRAL,
                 title = AppBarConfig.Title(
                     display = true,
-                    position = "center"
+                    position = Constants.POSITION_CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),

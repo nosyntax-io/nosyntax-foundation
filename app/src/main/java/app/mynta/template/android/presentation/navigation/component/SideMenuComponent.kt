@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.R
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.CoroutineScope
@@ -82,9 +84,9 @@ fun SideMenuContent(
     drawerState: DrawerState
 ) {
     val containerColor = when (sideMenuConfig.background) {
-        "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
-        "gradient" -> Modifier.background(
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
+        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_GRADIENT -> Modifier.background(
             Brush.verticalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -108,7 +110,7 @@ fun SideMenuContent(
                 items(navigationItems.size) { index ->
                     val item = navigationItems[index]
                     when (item.role) {
-                        "divider" -> {
+                        Roles.ROLE_DIVIDER -> {
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
                                 thickness = 1.dp,
@@ -144,6 +146,7 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
         return
     }
     Box {
+        // TODO: Update placeholder.
         Image(
             modifier = Modifier
                 .fillMaxWidth()
@@ -169,7 +172,7 @@ fun SideMenuNavigationItem(
     onClick: () -> Unit
 ) {
     val contentColor = when (sideMenuConfig.background) {
-        "neutral" -> MaterialTheme.colorScheme.onSurface
+        Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
         else -> MaterialTheme.colorScheme.surface
     }
 
@@ -196,6 +199,7 @@ fun SideMenuNavigationItem(
             )
         },
         icon = {
+            // TODO: Update placeholder
             Icon(
                 modifier = Modifier.size(22.dp),
                 painter = rememberAsyncImagePainter(
@@ -234,7 +238,7 @@ fun SideMenuPreview() {
         SideMenu(
             sideMenuConfig = SideMenuConfig(
                 display = true,
-                background = "neutral",
+                background = Constants.BACKGROUND_NEUTRAL,
                 header = SideMenuConfig.Header(
                     display = true,
                     image = "https://via.placeholder.com/700x400"

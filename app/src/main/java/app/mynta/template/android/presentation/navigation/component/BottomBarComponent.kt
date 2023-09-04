@@ -22,8 +22,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.ui.theme.DynamicTheme
 import coil.compose.rememberAsyncImagePainter
 
@@ -35,9 +37,9 @@ fun BottomBar(
     navigationItems: List<NavigationItem>
 ) {
     val containerColor = when (bottomBarConfig.background) {
-        "neutral" -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        "solid" -> Modifier.background(color = MaterialTheme.colorScheme.primary)
-        "gradient" -> Modifier.background(
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
+        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_GRADIENT -> Modifier.background(
             Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -48,7 +50,7 @@ fun BottomBar(
         else -> Modifier
     }
 
-    val navBarHeight = if (bottomBarConfig.label == "hidden") {
+    val navBarHeight = if (bottomBarConfig.label == Constants.LABEL_HIDDEN) {
         Modifier.height(55.dp)
     } else {
         Modifier
@@ -81,10 +83,10 @@ fun RowScope.BottomBarNavigationItem(
 ) {
     NavigationBarItem(
         selected = currentRoute == item.id,
-        alwaysShowLabel = bottomBarConfig.label != "selected",
+        alwaysShowLabel = bottomBarConfig.label != Constants.LABEL_SELECTED,
         colors = bottomBarNavigationItemColors(bottomBarConfig = bottomBarConfig),
         label = {
-            if (bottomBarConfig.label != "hidden") {
+            if (bottomBarConfig.label != Constants.LABEL_HIDDEN) {
                 Text(
                     modifier = Modifier,
                     text = item.label,
@@ -93,6 +95,7 @@ fun RowScope.BottomBarNavigationItem(
             }
         },
         icon = {
+            // TODO: Update placeholder.
             Icon(
                 modifier = Modifier.size(22.dp),
                 painter = rememberAsyncImagePainter(
@@ -112,7 +115,7 @@ fun RowScope.BottomBarNavigationItem(
 @Composable
 fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationBarItemColors {
     val contentColor = when (bottomBarConfig.background) {
-        "neutral" -> MaterialTheme.colorScheme.onSurface
+        Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
         else -> MaterialTheme.colorScheme.surface
     }
     return NavigationBarItemDefaults.colors(
@@ -129,7 +132,7 @@ fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationB
 fun BottomBarPreview() {
     DynamicTheme {
         val navController = rememberNavController()
-        val currentRoute = "home"
+        val currentRoute = Routes.ROUTE_HOME
 
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val navigationItems = listOf(
@@ -142,8 +145,8 @@ fun BottomBarPreview() {
         BottomBar(
             bottomBarConfig = BottomBarConfig(
                 display = true,
-                background = "neutral",
-                label = "always"
+                background = Constants.BACKGROUND_NEUTRAL,
+                label = Constants.LABEL_ALWAYS
             ),
             navController = navController,
             currentRoute = currentRoute,

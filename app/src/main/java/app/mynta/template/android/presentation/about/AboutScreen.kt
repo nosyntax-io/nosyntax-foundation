@@ -43,7 +43,9 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background)
+        .background(
+            color = MaterialTheme.colorScheme.background
+        )
         .padding(horizontal = 30.dp)
         .verticalScroll(rememberScrollState())
     ) {
@@ -88,6 +90,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
                     SocialIcon(
                         imageUrl = socialLink.icon,
                         onClick = {
+                            // TODO: Move intent to intentHandler
                             try {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(socialLink.url)).also { intent ->
                                     context.startActivity(intent)
@@ -106,7 +109,9 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
 @Composable
 fun SocialIcon(imageUrl: String, onClick: () -> Unit) {
     ClickableIcon(
-        modifier = Modifier.padding(10.dp).size(35.dp),
+        modifier = Modifier
+            .padding(10.dp)
+            .size(35.dp),
         url = imageUrl,
         tint = MaterialTheme.colorScheme.surfaceVariant,
         onClick = onClick

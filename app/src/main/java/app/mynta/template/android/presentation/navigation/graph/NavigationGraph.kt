@@ -28,18 +28,18 @@ fun HomeNavigationGraph(
         navigationItems.forEach { item ->
             composable(route = item.id) {
                 when (item.role) {
-                    "web" -> {
+                    Roles.ROLE_WEB -> {
                         WebScreen(
                             url = "https://google.com",
                             isDrawerOpen = drawerState.isOpen
                         )
                     }
-                    "policies" -> {
+                    Roles.ROLE_POLICIES -> {
                         PoliciesScreen(
                             request = item.id
                         )
                     }
-                    "about" -> {
+                    Roles.ROLE_ABOUT -> {
                         AboutScreen(
                             aboutPageConfig = appConfig.aboutPage
                         )
@@ -55,4 +55,11 @@ object Routes {
     const val ROUTE_PRIVACY_POLICY = "privacy_policy"
     const val ROUTE_TERMS_OF_USE = "terms_of_use"
     const val ROUTE_ABOUT = "about"
+}
+
+object Roles {
+    const val ROLE_WEB = "web"
+    const val ROLE_POLICIES = "policies"
+    const val ROLE_ABOUT = "about"
+    const val ROLE_DIVIDER = "divider"
 }
