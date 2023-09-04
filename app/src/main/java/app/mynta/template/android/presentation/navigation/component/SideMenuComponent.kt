@@ -20,6 +20,9 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,15 +37,14 @@ import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.core.components.DynamicImage
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.domain.model.generateMockNavigationItems
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun SideMenu(
     sideMenuConfig: SideMenuConfig,
-    coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
@@ -55,7 +57,6 @@ fun SideMenu(
         drawerContent = {
             SideMenuContent(
                 sideMenuConfig = sideMenuConfig,
-                coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
                 navigationItems = navigationItems,
@@ -69,23 +70,26 @@ fun SideMenu(
 @Composable
 fun SideMenuContent(
     sideMenuConfig: SideMenuConfig,
-    coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     val containerColor = when (sideMenuConfig.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
-        Constants.BACKGROUND_GRADIENT -> Modifier.background(
-            Brush.verticalGradient(
-                colors = listOf(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary
+        Constants.BACKGROUND_GRADIENT -> {
+            Modifier.background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary
+                    )
                 )
             )
-        )
+        }
         else -> Modifier
     }
 
@@ -110,14 +114,12 @@ fun SideMenuContent(
                             )
                         }
                         else -> {
-                            SideMenuNavigationItem(
+                            SideMenuItem(
                                 sideMenuConfig = sideMenuConfig,
                                 currentRoute = currentRoute,
                                 item = item,
                                 onClick = {
-                                    navController.navigate(
-                                        route = item.id
-                                    )
+                                    navController.navigate(route = item.id)
                                     coroutineScope.launch {
                                         drawerState.close()
                                     }
@@ -134,40 +136,43 @@ fun SideMenuContent(
 @Composable
 fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
     val header = sideMenuConfig.header
-    if (!header.display) {
-        return
-    }
-    Box {
-        DynamicImage(
+    if (header.display) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
-            source = header.image
+            content = {
+                DynamicImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    source = header.image
+                )
+            }
         )
     }
 }
 
 @Composable
-fun SideMenuNavigationItem(
+fun SideMenuItem(
     sideMenuConfig: SideMenuConfig,
     currentRoute: String,
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val contentColor = when (sideMenuConfig.background) {
-        Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.surface
+    val contentColor = if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.surface
     }
 
     NavigationDrawerItem(
-        shape = MaterialTheme.shapes.large,
         modifier = Modifier
-            .height(50.dp)
-            .padding(horizontal = 20.dp),
+        .height(50.dp)
+        .padding(horizontal = 20.dp),
         selected = currentRoute == item.id,
         onClick = onClick,
+        shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unselectedContainerColor = Color.Transparent,
@@ -180,7 +185,8 @@ fun SideMenuNavigationItem(
             Text(
                 modifier = Modifier,
                 text = item.label,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
         },
         icon = {
@@ -194,21 +200,11 @@ fun SideMenuNavigationItem(
 
 @Preview
 @Composable
-fun SideMenuPreview() {
+private fun SideMenuPreview() {
     DynamicTheme {
-        val coroutineScope = rememberCoroutineScope()
         val navController = rememberNavController()
-        val currentRoute = "item1"
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-
-        val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
-        val navigationItems = listOf(
-            NavigationItem("item1", "type", "Item 1", placeholderIcon, "regular"),
-            NavigationItem("item2", "type", "Item 2", placeholderIcon, "regular"),
-            NavigationItem("divider", "divider", "", "", "regular"),
-            NavigationItem("item3", "type", "Item 3", placeholderIcon, "regular"),
-            NavigationItem("item4", "type", "Item 4", placeholderIcon, "regular")
-        )
+        val currentRoute by remember { mutableStateOf("item1") }
 
         SideMenu(
             sideMenuConfig = SideMenuConfig(
@@ -219,10 +215,11 @@ fun SideMenuPreview() {
                     image = "https://via.placeholder.com/700x400"
                 )
             ),
-            coroutineScope = coroutineScope,
             navController = navController,
             currentRoute = currentRoute,
-            navigationItems = navigationItems,
+            navigationItems = generateMockNavigationItems(
+                itemCount = 10
+            ),
             drawerState = drawerState,
             content = { }
         )

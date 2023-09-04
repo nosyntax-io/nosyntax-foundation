@@ -43,27 +43,7 @@ fun HomeScreen(
         val components = config.appearance.components
         val navigationItems = config.navigation.items
 
-        val sideMenuConfig = components.sideMenu
-        if (sideMenuConfig.display) {
-            SideMenu(
-                sideMenuConfig = sideMenuConfig,
-                coroutineScope = coroutineScope,
-                navController = navController,
-                currentRoute = currentRoute,
-                navigationItems = navigationItems,
-                drawerState = drawerState,
-                content = {
-                    HomeContent(
-                        appConfig = config,
-                        coroutineScope = coroutineScope,
-                        navController = navController,
-                        currentRoute = currentRoute,
-                        navigationItems = navigationItems,
-                        drawerState = drawerState,
-                    )
-                }
-            )
-        } else {
+        val content: @Composable () -> Unit = {
             HomeContent(
                 appConfig = config,
                 coroutineScope = coroutineScope,
@@ -72,6 +52,19 @@ fun HomeScreen(
                 navigationItems = navigationItems,
                 drawerState = drawerState,
             )
+        }
+
+        if (components.sideMenu.display) {
+            SideMenu(
+                sideMenuConfig = components.sideMenu,
+                navController = navController,
+                currentRoute = currentRoute,
+                navigationItems = navigationItems,
+                drawerState = drawerState,
+                content = content
+            )
+        } else {
+            content
         }
     }
 
