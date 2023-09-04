@@ -24,6 +24,7 @@ import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.navigation.graph.Routes
+import app.mynta.template.android.presentation.navigation.graph.Types
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
@@ -60,7 +61,7 @@ fun BottomBar(
             .padding(horizontal = 15.dp),
         containerColor = Color.Transparent
     ) {
-        navigationItems.forEach { item ->
+        navigationItems.filter { it.type == Types.TYPE_REGULAR }.forEach { item ->
             BottomBarNavigationItem(
                 bottomBarConfig = bottomBarConfig,
                 navController = navController,
@@ -127,10 +128,10 @@ fun BottomBarPreview() {
 
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val navigationItems = listOf(
-            NavigationItem("item1", "type", "Item 1", placeholderIcon),
-            NavigationItem("item2", "type", "Item 2", placeholderIcon),
-            NavigationItem("item3", "type", "Item 3", placeholderIcon),
-            NavigationItem("item4", "type", "Item 4", placeholderIcon)
+            NavigationItem("item1", "type", "Item 1", placeholderIcon, type = "regular"),
+            NavigationItem("item2", "type", "Item 2", placeholderIcon, type = "regular"),
+            NavigationItem("item3", "type", "Item 3", placeholderIcon, type = "regular"),
+            NavigationItem("item4", "type", "Item 4", placeholderIcon, type = "regular")
         )
 
         BottomBar(

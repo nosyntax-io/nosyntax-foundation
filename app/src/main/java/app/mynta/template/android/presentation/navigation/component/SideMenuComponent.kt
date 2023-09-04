@@ -203,11 +203,11 @@ fun SideMenuPreview() {
 
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val navigationItems = listOf(
-            NavigationItem("item1", "type", "Item 1", placeholderIcon),
-            NavigationItem("item2", "type", "Item 2", placeholderIcon),
-            NavigationItem("divider", "divider", "", ""),
-            NavigationItem("item3", "type", "Item 3", placeholderIcon),
-            NavigationItem("item4", "type", "Item 4", placeholderIcon)
+            NavigationItem("item1", "type", "Item 1", placeholderIcon, "regular"),
+            NavigationItem("item2", "type", "Item 2", placeholderIcon, "regular"),
+            NavigationItem("divider", "divider", "", "", "regular"),
+            NavigationItem("item3", "type", "Item 3", placeholderIcon, "regular"),
+            NavigationItem("item4", "type", "Item 4", placeholderIcon, "regular")
         )
 
         SideMenu(

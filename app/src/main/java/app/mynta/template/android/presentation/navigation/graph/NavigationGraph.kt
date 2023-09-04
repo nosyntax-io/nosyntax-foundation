@@ -1,7 +1,6 @@
 package app.mynta.template.android.presentation.navigation.graph
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +11,6 @@ import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavigationGraph(
     appConfig: AppConfig,
@@ -62,4 +60,10 @@ object Roles {
     const val ROLE_POLICIES = "policies"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
+}
+
+object Types {
+    const val TYPE_REGULAR = "regular"
+    const val TYPE_CORE = "core"
+    const val TYPE_OTHER = "other"
 }
