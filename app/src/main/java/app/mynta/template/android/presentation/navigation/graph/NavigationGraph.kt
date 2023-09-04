@@ -60,6 +60,7 @@ object Roles {
     const val ROLE_POLICIES = "policies"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
+    const val ROLE_MORE = "more"
 }
 
 object Types {

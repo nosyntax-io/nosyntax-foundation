@@ -12,6 +12,11 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -23,17 +28,35 @@ import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.presentation.navigation.graph.Types
 import app.mynta.template.android.ui.theme.DynamicTheme
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun BottomBar(
     bottomBarConfig: BottomBarConfig,
+    coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>
 ) {
+    var isMoreOptionsOpened by rememberSaveable { mutableStateOf(false) }
+
+    if (isMoreOptionsOpened) {
+        MoreOptionsBottomSheet(
+            coroutineScope = coroutineScope,
+            navController = navController,
+            navigationItems = navigationItems.filter { item ->
+                item.type == "core"
+            },
+            onDismiss = {
+                isMoreOptionsOpened = false
+            }
+        )
+    }
+
     val containerColor = when (bottomBarConfig.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
         Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
@@ -61,12 +84,19 @@ fun BottomBar(
             .padding(horizontal = 15.dp),
         containerColor = Color.Transparent
     ) {
-        navigationItems.filter { it.type == Types.TYPE_REGULAR }.forEach { item ->
+        navigationItems.filter { it.type == Types.TYPE_REGULAR }.plus(
+            NavigationItem(id = "more", role = Roles.ROLE_MORE, icon = "https://img.icons8.com/?size=512&id=61873&format=png")
+        ).forEach { item ->
             BottomBarNavigationItem(
                 bottomBarConfig = bottomBarConfig,
-                navController = navController,
                 currentRoute = currentRoute,
-                item = item
+                item = item,
+                onClick = {
+                    when (item.id) {
+                        "more" -> isMoreOptionsOpened = true
+                        else -> navController.navigate(route = item.id)
+                    }
+                }
             )
         }
     }
@@ -75,9 +105,9 @@ fun BottomBar(
 @Composable
 fun RowScope.BottomBarNavigationItem(
     bottomBarConfig: BottomBarConfig,
-    navController: NavHostController,
     currentRoute: String,
-    item: NavigationItem
+    item: NavigationItem,
+    onClick: () -> Unit
 ) {
     NavigationBarItem(
         selected = currentRoute == item.id,
@@ -98,9 +128,7 @@ fun RowScope.BottomBarNavigationItem(
                 source = item.icon
             )
         },
-        onClick = {
-            navController.navigate(route = item.id)
-        }
+        onClick = onClick
     )
 }
 
@@ -123,6 +151,7 @@ fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationB
 @Composable
 fun BottomBarPreview() {
     DynamicTheme {
+        val coroutineScope = rememberCoroutineScope()
         val navController = rememberNavController()
         val currentRoute = Routes.ROUTE_HOME
 
@@ -140,6 +169,7 @@ fun BottomBarPreview() {
                 background = Constants.BACKGROUND_NEUTRAL,
                 label = Constants.LABEL_ALWAYS
             ),
+            coroutineScope = coroutineScope,
             navController = navController,
             currentRoute = currentRoute,
             navigationItems = navigationItems

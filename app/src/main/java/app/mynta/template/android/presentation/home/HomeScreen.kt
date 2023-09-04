@@ -139,6 +139,7 @@ private fun HomeContent(
             if (bottomBarConfig.display) {
                 BottomBar(
                     bottomBarConfig = bottomBarConfig,
+                    coroutineScope = coroutineScope,
                     navController = navController,
                     currentRoute = currentRoute,
                     navigationItems = navigationItems
