@@ -8,6 +8,16 @@ import android.widget.Toast
 import app.mynta.template.android.R
 
 object Intents {
+    fun Context.openUrl(url: String) {
+        try {
+            Intent(Intent.ACTION_VIEW, Uri.parse(url)).also { intent ->
+                startActivity(intent)
+            }
+        } catch (exception: ActivityNotFoundException) {
+            Toast.makeText(this, this.getString(R.string.no_apps_handle), Toast.LENGTH_LONG).show()
+        }
+    }
+
     fun Context.openPlayStore(packageName: String) {
         try {
             Intent(Intent.ACTION_VIEW).also { intent ->

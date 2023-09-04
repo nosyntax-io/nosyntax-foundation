@@ -1,9 +1,5 @@
 package app.mynta.template.android.presentation.about
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.R
 import app.mynta.template.android.core.components.ClickableIcon
+import app.mynta.template.android.core.utility.Intents.openUrl
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 
@@ -90,14 +87,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
                     SocialIcon(
                         imageUrl = socialLink.icon,
                         onClick = {
-                            // TODO: Move intent to intentHandler
-                            try {
-                                Intent(Intent.ACTION_VIEW, Uri.parse(socialLink.url)).also { intent ->
-                                    context.startActivity(intent)
-                                }
-                            } catch (exception: ActivityNotFoundException) {
-                                Toast.makeText(context, context.getString(R.string.no_apps_handle), Toast.LENGTH_LONG).show()
-                            }
+                            context.openUrl(url = socialLink.url)
                         }
                     )
                 }
