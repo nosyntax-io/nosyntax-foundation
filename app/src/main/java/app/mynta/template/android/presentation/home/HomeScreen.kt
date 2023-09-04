@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -19,18 +18,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.components.AppBar
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.SideMenu
-import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
-import app.mynta.template.android.presentation.navigation.item.coreNavigationItems
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: MainViewModel = viewModel(),
@@ -48,15 +45,12 @@ fun HomeScreen(
 
         val sideMenuConfig = components.sideMenu
         if (sideMenuConfig.display) {
-            val sideMenuNavigationItems =
-                navigationItems + coreNavigationItems()
-
             SideMenu(
                 sideMenuConfig = sideMenuConfig,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
-                navigationItems = sideMenuNavigationItems,
+                navigationItems = navigationItems,
                 drawerState = drawerState,
                 content = {
                     HomeContent(
@@ -64,7 +58,7 @@ fun HomeScreen(
                         coroutineScope = coroutineScope,
                         navController = navController,
                         currentRoute = currentRoute,
-                        navigationItems = sideMenuNavigationItems,
+                        navigationItems = navigationItems,
                         drawerState = drawerState,
                     )
                 }
@@ -88,7 +82,6 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContent(
     appConfig: AppConfig,

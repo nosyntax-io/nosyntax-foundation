@@ -141,6 +141,7 @@ fun BottomBarPreview() {
             ),
             navController = navController,
             currentRoute = currentRoute,
-            navigationItems = navigationItems)
+            navigationItems = navigationItems
+        )
     }
 }

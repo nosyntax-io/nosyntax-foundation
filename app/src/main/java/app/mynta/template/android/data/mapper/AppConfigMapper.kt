@@ -110,7 +110,8 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
             id = item.id,
             role = item.role,
             label = item.label,
-            icon = item.icon
+            icon = item.icon,
+            type = item.type
         )
     }
 }

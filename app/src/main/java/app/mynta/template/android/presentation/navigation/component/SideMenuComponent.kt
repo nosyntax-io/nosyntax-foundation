@@ -3,7 +3,6 @@ package app.mynta.template.android.presentation.navigation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -41,7 +39,6 @@ import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SideMenu(
     sideMenuConfig: SideMenuConfig,
@@ -69,7 +66,6 @@ fun SideMenu(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SideMenuContent(
     sideMenuConfig: SideMenuConfig,
@@ -153,7 +149,6 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SideMenuNavigationItem(
     sideMenuConfig: SideMenuConfig,
@@ -197,7 +192,6 @@ fun SideMenuNavigationItem(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SideMenuPreview() {

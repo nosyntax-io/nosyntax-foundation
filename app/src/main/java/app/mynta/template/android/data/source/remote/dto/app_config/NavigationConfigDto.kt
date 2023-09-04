@@ -16,6 +16,8 @@ data class NavigationConfigDto(
         @SerializedName("label")
         val label: String,
         @SerializedName("icon")
-        val icon: String
+        val icon: String,
+        @SerializedName("type")
+        val type: String
     )
 }

@@ -75,7 +75,7 @@ dependencies {
     Libraries.androidTestImplementations.forEach(::androidTestImplementation)
     Libraries.debugImplementation.forEach(::debugImplementation)
     // platform bom
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
 }
