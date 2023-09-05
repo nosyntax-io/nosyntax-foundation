@@ -14,30 +14,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import app.mynta.template.android.R
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
+import app.mynta.template.android.domain.model.generateMockNavigationItems
 import app.mynta.template.android.presentation.navigation.graph.Roles
-import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.presentation.navigation.graph.Types
 import app.mynta.template.android.ui.theme.DynamicTheme
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun BottomBar(
     bottomBarConfig: BottomBarConfig,
-    coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>
@@ -46,7 +47,6 @@ fun BottomBar(
 
     if (isMoreOptionsOpened) {
         MoreOptionsBottomSheet(
-            coroutineScope = coroutineScope,
             navController = navController,
             navigationItems = navigationItems.filter { item ->
                 item.type == "core"
@@ -85,7 +85,12 @@ fun BottomBar(
         containerColor = Color.Transparent
     ) {
         navigationItems.filter { it.type == Types.TYPE_REGULAR }.plus(
-            NavigationItem(id = "more", role = Roles.ROLE_MORE, icon = "https://img.icons8.com/?size=512&id=61873&format=png")
+            NavigationItem(
+                id = "more",
+                role = Roles.ROLE_MORE,
+                label = stringResource(id = R.string.more),
+                icon = "https://img.icons8.com/?size=512&id=61873&format=png"
+            )
         ).forEach { item ->
             BottomBarNavigationItem(
                 bottomBarConfig = bottomBarConfig,
@@ -118,7 +123,10 @@ fun RowScope.BottomBarNavigationItem(
                 Text(
                     modifier = Modifier,
                     text = item.label,
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelSmall,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
         },
@@ -151,28 +159,15 @@ fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationB
 @Composable
 fun BottomBarPreview() {
     DynamicTheme {
-        val coroutineScope = rememberCoroutineScope()
-        val navController = rememberNavController()
-        val currentRoute = Routes.ROUTE_HOME
-
-        val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
-        val navigationItems = listOf(
-            NavigationItem("item1", "type", "Item 1", placeholderIcon, type = "regular"),
-            NavigationItem("item2", "type", "Item 2", placeholderIcon, type = "regular"),
-            NavigationItem("item3", "type", "Item 3", placeholderIcon, type = "regular"),
-            NavigationItem("item4", "type", "Item 4", placeholderIcon, type = "regular")
-        )
-
         BottomBar(
             bottomBarConfig = BottomBarConfig(
                 display = true,
                 background = Constants.BACKGROUND_NEUTRAL,
                 label = Constants.LABEL_ALWAYS
             ),
-            coroutineScope = coroutineScope,
-            navController = navController,
-            currentRoute = currentRoute,
-            navigationItems = navigationItems
+            navController = rememberNavController(),
+            currentRoute = "item1",
+            navigationItems = generateMockNavigationItems(itemCount = 4)
         )
     }
 }

@@ -26,6 +26,7 @@ import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
+import app.mynta.template.android.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -91,10 +92,8 @@ private fun HomeContent(
     Scaffold(
         topBar = {
             if (components.appBar.display) {
-                val navigationActionType = when (currentRoute) {
-                    Routes.ROUTE_ABOUT, Routes.ROUTE_PRIVACY_POLICY, Routes.ROUTE_TERMS_OF_USE -> NavigationActionType.Back
-                    else -> NavigationActionType.Menu(isEnabled = components.sideMenu.display)
-                }
+                val navigationActionType = if (isUtilityScreen(currentRoute)) NavigationActionType.Back
+                else NavigationActionType.Menu(isEnabled = components.sideMenu.display)
 
                 AppBar(
                     appBarConfig = components.appBar,
@@ -125,17 +124,9 @@ private fun HomeContent(
             }
         },
         bottomBar = {
-            val bottomBarConfig = components.bottomBar
-            val shouldHideBottomBar = when (currentRoute) {
-                Routes.ROUTE_ABOUT -> true
-                Routes.ROUTE_PRIVACY_POLICY -> true
-                Routes.ROUTE_TERMS_OF_USE -> true
-                else -> false
-            }
-            if (bottomBarConfig.display && !shouldHideBottomBar) {
+            if (components.bottomBar.display && !isUtilityScreen(currentRoute)) {
                 BottomBar(
-                    bottomBarConfig = bottomBarConfig,
-                    coroutineScope = coroutineScope,
+                    bottomBarConfig = components.bottomBar,
                     navController = navController,
                     currentRoute = currentRoute,
                     navigationItems = navigationItems

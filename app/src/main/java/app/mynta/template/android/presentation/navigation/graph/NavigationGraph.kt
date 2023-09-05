@@ -68,3 +68,11 @@ object Types {
     const val TYPE_CORE = "core"
     const val TYPE_OTHER = "other"
 }
+
+fun isUtilityScreen(currentRoute: String): Boolean {
+    return currentRoute in setOf(
+        Routes.ROUTE_ABOUT,
+        Routes.ROUTE_PRIVACY_POLICY,
+        Routes.ROUTE_TERMS_OF_USE
+    )
+}
