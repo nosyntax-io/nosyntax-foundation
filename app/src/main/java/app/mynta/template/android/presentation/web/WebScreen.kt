@@ -1,14 +1,16 @@
 package app.mynta.template.android.presentation.web
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.MailTo
+import android.net.http.SslError
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
+import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -16,12 +18,13 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -31,7 +34,7 @@ import app.mynta.template.android.core.components.SystemUIControllerComponent
 import app.mynta.template.android.core.components.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Intents.openDial
-import app.mynta.template.android.core.utility.Intents.openEmail
+import app.mynta.template.android.core.utility.Intents.openEmailFromUrl
 import app.mynta.template.android.core.utility.Intents.openPlayStore
 import app.mynta.template.android.core.utility.Intents.openSMS
 import app.mynta.template.android.domain.model.JsDialogState
@@ -40,24 +43,19 @@ import app.mynta.template.android.presentation.web.components.ConfirmDialogCompo
 import app.mynta.template.android.core.components.NoConnectionComponent
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
-@Composable
-fun WebScreen(url: String, isDrawerOpen: Boolean) {
-    WebView(url = url, isDrawerOpen)
-}
-
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebView(url: String, isDrawerOpen: Boolean) {
+fun WebScreen(url: String) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
-    var requestedOrientation by remember { mutableStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
+    var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
-    var canGoBack by remember { mutableStateOf(false) }
-    var noConnectionState by remember { mutableStateOf(false) }
+    var currentUrl by rememberSaveable { mutableStateOf(url) }
     var jsDialogState by remember { mutableStateOf<JsDialogState?>(null) }
     var jsResult by remember { mutableStateOf<JsResult?>(null) }
     var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
     var webCustomView by remember { mutableStateOf<View?>(null) }
     var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
+    var noConnectionState by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -69,6 +67,9 @@ fun WebView(url: String, isDrawerOpen: Boolean) {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
+                isVerticalScrollBarEnabled = false
+                isHorizontalScrollBarEnabled = false
+
                 settings.apply {
                     javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
                     allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
@@ -80,112 +81,59 @@ fun WebView(url: String, isDrawerOpen: Boolean) {
                     supportMultipleWindows()
                     setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
                 }
-                isVerticalScrollBarEnabled = false
-                isHorizontalScrollBarEnabled = false
 
-                webViewClient = object: WebViewClient() {
-                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                        super.onPageStarted(view, url, favicon)
-                        canGoBack = view?.canGoBack() ?: false
-                    }
+                webViewClient = CustomWebViewClient(
+                    context = context,
+                    onUpdateCurrentUrl = { currentUrl = it },
+                    onReceiveError = { noConnectionState = true }
+                )
 
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        super.onPageFinished(view, url)
-                    }
-
-                    override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
-                        val webUrl = request?.url.toString()
-                        webView?.let { view ->
-                            if (webUrl.startsWith("http://") || webUrl.startsWith("https://") || webUrl.startsWith("file://")) {
-                                view.loadUrl(webUrl)
-                                return true
-                            } else {
-                                when {
-                                    webUrl.startsWith("mailto:") -> {
-                                        val mail = MailTo.parse(webUrl)
-                                        val recipient = mail.to
-                                        val subject = mail.subject ?: ""
-                                        val body = mail.body ?: ""
-                                        context.openEmail(recipient = recipient, subject = subject, body = body)
-                                    }
-                                    webUrl.startsWith("tel:") -> {
-                                        context.openDial(url = webUrl)
-                                    }
-                                    webUrl.startsWith("sms:") -> {
-                                        context.openSMS(url = webUrl)
-                                    }
-                                    webUrl.startsWith("market://") -> {
-                                        context.openPlayStore(packageName = context.packageName)
-                                    }
-                                }
-                                return true
-                            }
-                        }
-                        return false
-                    }
-
-                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                        super.onReceivedError(view, request, error)
-                        noConnectionState = true
-                    }
-                }
-
-                webChromeClient = object: WebChromeClient() {
-                    override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                        jsDialogState = JsDialogState(type = "alert", message = message.toString())
+                webChromeClient = CustomWebChromeClient(context = context,
+                    onAlertResult = { message, result ->
+                        jsDialogState = JsDialogState(type = "alert", message = message)
                         jsResult = result
-                        return true
-                    }
-
-                    override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                        jsDialogState = JsDialogState(type = "confirm", message = message.toString())
+                    },
+                    onConfirmResult = { message, result ->
+                        jsDialogState = JsDialogState(type = "confirm", message = message)
                         jsResult = result
-                        return true
-                    }
-
-                    override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                        jsDialogState = JsDialogState(type = "prompt", message = message.toString(), defaultValue = defaultValue.toString())
+                    },
+                    onPromptResult = { message, defaultValue, result ->
+                        jsDialogState = JsDialogState(type = "prompt", message = message, defaultValue = defaultValue)
                         jsPromptResult = result
-                        return true
-                    }
-
-                    override fun getDefaultVideoPoster(): Bitmap? {
-                        if (webCustomView == null) {
-                            return null
-                        }
-                        return BitmapFactory.decodeResource(context.resources, 2130837573)
-                    }
-
-                    override fun onHideCustomView() {
-                        if (webCustomView == null) {
-                            return
-                        }
-                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                        webCustomView = null
-                        webCustomViewCallback?.onCustomViewHidden()
-                        webCustomViewCallback = null
-                    }
-
-                    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                    },
+                    onCustomViewShown = { view, callback ->
                         if (webCustomView != null) {
-                            onHideCustomView()
-                            return
+                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                            webCustomView = null
+                            webCustomViewCallback?.onCustomViewHidden()
+                            webCustomViewCallback = null
+                        } else {
+                            webCustomView = view
+                            webCustomViewCallback = callback
+
+                            systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                         }
-                        webCustomView = view
-                        webCustomViewCallback = callback
+                    },
+                    onCustomViewHidden = {
+                        if (webCustomView != null) {
+                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-                        systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
-                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                            webCustomView = null
+                            webCustomViewCallback?.onCustomViewHidden()
+                            webCustomViewCallback = null
+                        }
                     }
-                }
+                )
 
-                loadUrl(url)
+                loadUrl(currentUrl)
                 webView = this
             }
         }, update = {
-            it.loadUrl(url)
+            it.loadUrl(currentUrl)
         }
     )
 
@@ -249,10 +197,79 @@ fun WebView(url: String, isDrawerOpen: Boolean) {
             }
         }
     }
+}
 
-    BackHandler(enabled = !isDrawerOpen && canGoBack) {
-        if (!isDrawerOpen && canGoBack) {
-            webView?.goBack()
+class CustomWebViewClient(
+    private val context: Context,
+    private val onUpdateCurrentUrl: (String) -> Unit,
+    private val onReceiveError: () -> Unit
+): WebViewClient() {
+    override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
+        val url = request?.url.toString()
+        return if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
+            onUpdateCurrentUrl(url)
+            webView?.loadUrl(url)
+            true
+        } else {
+            context.handleNonHttpUrls(url = url)
+            true
         }
+    }
+
+    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+        super.onReceivedError(view, request, error)
+        onReceiveError()
+    }
+
+    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+        super.onReceivedSslError(view, handler, error)
+        onReceiveError()
+    }
+}
+
+class CustomWebChromeClient(
+    private val context: Context,
+    private val onAlertResult: (String, JsResult) -> Unit = { _, _ -> },
+    private val onConfirmResult: (String, JsResult) -> Unit = { _, _ -> },
+    private val onPromptResult: (String, String, JsPromptResult) -> Unit = { _, _, _ -> },
+    private val onCustomViewShown: (View, CustomViewCallback) -> Unit = { _, _ -> },
+    private val onCustomViewHidden: () -> Unit = { }
+): WebChromeClient() {
+    override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        message?.let { onAlertResult(it, result!!) }
+        return true
+    }
+
+    override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        message?.let { onConfirmResult(it, result!!) }
+        return true
+    }
+
+    override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+        message?.let { onPromptResult(it, defaultValue.toString(), result!!) }
+        return true
+    }
+
+    override fun getDefaultVideoPoster(): Bitmap? {
+        return BitmapFactory.decodeResource(context.resources, 2130837573)
+    }
+
+    override fun onHideCustomView() {
+        onCustomViewHidden()
+    }
+
+    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+        if (view != null && callback != null) {
+            onCustomViewShown(view, callback)
+        }
+    }
+}
+
+private fun Context.handleNonHttpUrls(url: String) {
+    when {
+        url.startsWith("mailto:") -> openEmailFromUrl(url)
+        url.startsWith("tel:") -> openDial(url)
+        url.startsWith("sms:") -> openSMS(url)
+        url.startsWith("market://") -> openPlayStore(packageName)
     }
 }

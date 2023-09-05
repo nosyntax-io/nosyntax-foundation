@@ -3,6 +3,7 @@ package app.mynta.template.android.core.utility
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.MailTo
 import android.net.Uri
 import android.widget.Toast
 import app.mynta.template.android.R
@@ -32,7 +33,12 @@ object Intents {
         }
     }
 
-    fun Context.openEmail(recipient: String, subject: String = "", body: String = "") {
+    fun Context.openEmailFromUrl(url: String) {
+        val mail = MailTo.parse(url)
+        val recipient = mail.to
+        val subject = mail.subject ?: ""
+        val body = mail.body ?: ""
+
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
