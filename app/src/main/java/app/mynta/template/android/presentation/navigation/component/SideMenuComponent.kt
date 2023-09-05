@@ -39,7 +39,7 @@ import app.mynta.template.android.core.components.DynamicImage
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
-import app.mynta.template.android.presentation.navigation.NavigationActions
+import app.mynta.template.android.presentation.navigation.graph.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch

@@ -24,7 +24,7 @@ import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
-import app.mynta.template.android.presentation.navigation.graph.HomeNavigationGraph
+import app.mynta.template.android.presentation.navigation.graph.NavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +115,7 @@ private fun HomeContent(
                     .fillMaxSize()
                     .padding(inlinePadding)
             ) {
-                HomeNavigationGraph(
+                NavigationGraph(
                     appConfig = appConfig,
                     navController = navController,
                     navigationItems = navigationItems,
