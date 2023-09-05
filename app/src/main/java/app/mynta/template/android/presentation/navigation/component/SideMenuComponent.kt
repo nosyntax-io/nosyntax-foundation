@@ -39,6 +39,7 @@ import app.mynta.template.android.core.components.DynamicImage
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
+import app.mynta.template.android.presentation.navigation.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
@@ -120,7 +121,10 @@ fun SideMenuContent(
                                 currentRoute = currentRoute,
                                 item = item,
                                 onClick = {
-                                    navController.navigate(route = item.id)
+                                    NavigationActions(navController).navigateTo(
+                                        currentRoute = currentRoute,
+                                        route = item.id
+                                    )
                                     coroutineScope.launch {
                                         drawerState.close()
                                     }

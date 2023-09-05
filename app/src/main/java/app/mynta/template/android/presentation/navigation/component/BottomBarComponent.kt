@@ -32,6 +32,7 @@ import app.mynta.template.android.core.components.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
+import app.mynta.template.android.presentation.navigation.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.presentation.navigation.graph.Types
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -99,7 +100,10 @@ fun BottomBar(
                 onClick = {
                     when (item.id) {
                         "more" -> isMoreOptionsOpened = true
-                        else -> navController.navigate(route = item.id)
+                        else -> NavigationActions(navController).navigateTo(
+                            currentRoute = currentRoute,
+                            route = item.id
+                        )
                     }
                 }
             )
