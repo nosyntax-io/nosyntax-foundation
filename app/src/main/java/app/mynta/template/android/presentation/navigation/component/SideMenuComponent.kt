@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -134,13 +135,13 @@ fun SideMenuContent(
 }
 
 @Composable
-fun SideMenuHeader(sideMenuConfig: SideMenuConfig) {
+fun SideMenuHeader(sideMenuConfig: SideMenuConfig, headerHeight: Dp = 150.dp) {
     val header = sideMenuConfig.header
     if (header.display) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(headerHeight)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
             content = {
@@ -160,11 +161,12 @@ fun SideMenuItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val contentColor = if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.surface
+    val contentColor = MaterialTheme.colorScheme.let {
+        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else it.surface
     }
+
+    val isSelected = currentRoute == item.id
+    val unselectedColor = contentColor.copy(alpha = 0.8f)
 
     NavigationDrawerItem(
         modifier = Modifier
@@ -178,12 +180,11 @@ fun SideMenuItem(
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = contentColor,
             selectedIconColor = contentColor,
-            unselectedTextColor = contentColor,
-            unselectedIconColor = contentColor,
+            unselectedTextColor = if (isSelected) contentColor else unselectedColor,
+            unselectedIconColor = if (isSelected) contentColor else unselectedColor,
         ),
         label = {
             Text(
-                modifier = Modifier,
                 text = item.label,
                 style = MaterialTheme.typography.bodyMedium
             )
