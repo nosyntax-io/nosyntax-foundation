@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import java.util.concurrent.TimeUnit
 
 interface APIService {
     @FormUrlEncoded
@@ -31,6 +32,8 @@ interface APIService {
         private val okHttpClient by lazy {
             OkHttpClient.Builder()
                 .addInterceptor(ConnectivityInterceptor())
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build()
         }
 
