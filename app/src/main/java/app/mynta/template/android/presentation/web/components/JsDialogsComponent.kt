@@ -2,7 +2,6 @@ package app.mynta.template.android.presentation.web.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,9 +32,14 @@ import app.mynta.template.android.R
 import app.mynta.template.android.core.components.TextFieldComponent
 import app.mynta.template.android.ui.theme.DynamicTheme
 
+sealed class JsDialog {
+    data class Alert(val message: String) : JsDialog()
+    data class Confirm(val message: String) : JsDialog()
+    data class Prompt(val message: String, val defaultValue: String = "") : JsDialog()
+}
+
 @Composable
 fun AlertDialogComponent(
-    title: String,
     message: String,
     onDismiss: () -> Unit
 ) {
@@ -54,15 +58,8 @@ fun AlertDialogComponent(
                         shape = MaterialTheme.shapes.large
                     )
                     .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     modifier = Modifier.alpha(.7f),
                     text = message,
@@ -70,12 +67,9 @@ fun AlertDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .padding(0.dp),
+                    modifier = Modifier.fillMaxWidth().height(40.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     ),
@@ -84,10 +78,9 @@ fun AlertDialogComponent(
                     onClick = onDismiss
                 ) {
                     Text(
-                        text = stringResource(id = R.string.dismiss),
-                        modifier = Modifier.padding(horizontal = 15.dp),
+                        text = stringResource(id = R.string.i_understand),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -96,8 +89,18 @@ fun AlertDialogComponent(
 }
 
 @Composable
+@Preview
+fun AlertDialogPreview() {
+    DynamicTheme {
+        AlertDialogComponent(
+            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            onDismiss = { }
+        )
+    }
+}
+
+@Composable
 fun ConfirmDialogComponent(
-    title: String,
     message: String,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
@@ -117,15 +120,8 @@ fun ConfirmDialogComponent(
                         shape = MaterialTheme.shapes.large
                     )
                     .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     modifier = Modifier.alpha(.7f),
                     text = message,
@@ -133,16 +129,10 @@ fun ConfirmDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+                Spacer(modifier = Modifier.height(15.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(40.dp)
-                            .padding(0.dp),
+                        modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent
                         ),
@@ -160,10 +150,7 @@ fun ConfirmDialogComponent(
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                     Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(40.dp)
-                            .padding(0.dp),
+                        modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
@@ -175,13 +162,25 @@ fun ConfirmDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+@Preview
+fun ConfirmDialogPreview() {
+    DynamicTheme {
+        ConfirmDialogComponent(
+            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            onCancel = { },
+            onConfirm = { }
+        )
+    }
 }
 
 @Composable
@@ -208,15 +207,8 @@ fun PromptDialogComponent(
                         shape = MaterialTheme.shapes.large
                     )
                     .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Prompt!",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     modifier = Modifier.alpha(.7f),
                     text = message,
@@ -224,20 +216,14 @@ fun PromptDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 TextFieldComponent(defaultValue = defaultValue, onValueChange = {
                     promptValue.value = it
                 })
                 Spacer(modifier = Modifier.height(15.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+                Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(40.dp)
-                            .padding(0.dp),
+                        modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent
                         ),
@@ -255,10 +241,7 @@ fun PromptDialogComponent(
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                     Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(40.dp)
-                            .padding(0.dp),
+                        modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
@@ -270,38 +253,13 @@ fun PromptDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
         }
     )
-}
-
-@Composable
-@Preview
-fun AlertDialogPreview() {
-    DynamicTheme {
-        AlertDialogComponent(
-            title = "Dialog Preview",
-            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            onDismiss = { }
-        )
-    }
-}
-
-@Composable
-@Preview
-fun ConfirmDialogPreview() {
-    DynamicTheme {
-        ConfirmDialogComponent(
-            title = "Dialog Preview",
-            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            onCancel = { },
-            onConfirm = { }
-        )
-    }
 }
 
 @Composable
@@ -316,3 +274,4 @@ fun PromptDialogPreview() {
         )
     }
 }
+

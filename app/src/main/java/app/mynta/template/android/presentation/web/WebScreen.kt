@@ -46,10 +46,10 @@ import app.mynta.template.android.core.utility.Intents.openDial
 import app.mynta.template.android.core.utility.Intents.openEmailFromUrl
 import app.mynta.template.android.core.utility.Intents.openPlayStore
 import app.mynta.template.android.core.utility.Intents.openSMS
-import app.mynta.template.android.domain.model.JsDialogState
 import app.mynta.template.android.presentation.web.components.AlertDialogComponent
 import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
 import app.mynta.template.android.core.components.NoConnectionComponent
+import app.mynta.template.android.presentation.web.components.JsDialog
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -60,9 +60,9 @@ fun WebScreen(url: String) {
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var webView by remember { mutableStateOf<WebView?>(null) }
     var currentUrl by rememberSaveable { mutableStateOf(url) }
-    var jsDialogState by remember { mutableStateOf<JsDialogState?>(null) }
-    var jsResult by remember { mutableStateOf<JsResult?>(null) }
-    var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
+
+    var jsDialogState by remember { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
+
     var webCustomView by remember { mutableStateOf<View?>(null) }
     var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by remember { mutableStateOf(false) }
@@ -112,16 +112,13 @@ fun WebScreen(url: String) {
 
                     webChromeClient = CustomWebChromeClient(context = context,
                         onAlertResult = { message, result ->
-                            jsDialogState = JsDialogState(type = "alert", message = message)
-                            jsResult = result
+                            jsDialogState = JsDialog.Alert(message) to result
                         },
                         onConfirmResult = { message, result ->
-                            jsDialogState = JsDialogState(type = "confirm", message = message)
-                            jsResult = result
+                            jsDialogState = JsDialog.Confirm(message) to result
                         },
                         onPromptResult = { message, defaultValue, result ->
-                            jsDialogState = JsDialogState(type = "prompt", message = message, defaultValue = defaultValue)
-                            jsPromptResult = result
+                            jsDialogState = JsDialog.Prompt(message, defaultValue) to result
                         },
                         onCustomViewShown = { view, callback ->
                             if (webCustomView != null) {
@@ -185,47 +182,35 @@ fun WebScreen(url: String) {
         })
     }
 
-    jsDialogState?.let { dialog ->
-        when (dialog.type) {
-            "alert" -> {
-                AlertDialogComponent(title = "Alert", message = dialog.message) {
+    jsDialogState?.let { (dialog, result) ->
+        when(dialog) {
+            is JsDialog.Alert -> {
+                AlertDialogComponent(message = dialog.message, onDismiss = {
                     jsDialogState = null
-                    jsResult?.let {
-                        it.confirm()
-                        jsResult = null
-                    }
-                }
+                    result?.confirm()
+                })
             }
-            "confirm" -> {
-                ConfirmDialogComponent(title = "Confirm", message = dialog.message, onCancel = {
+            is JsDialog.Confirm -> {
+                ConfirmDialogComponent(message = dialog.message, onCancel = {
                     jsDialogState = null
-                    jsResult?.let {
-                        it.cancel()
-                        jsResult = null
-                    }
+                    result?.cancel()
                 }, onConfirm = {
                     jsDialogState = null
-                    jsResult?.let {
-                        it.confirm()
-                        jsResult = null
-                    }
+                    result?.confirm()
                 })
             }
-            "prompt" -> {
+            is JsDialog.Prompt -> {
                 PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
                     jsDialogState = null
-                    jsPromptResult?.let {
-                        it.cancel()
-                        jsPromptResult = null
-                    }
-                }, onConfirm = { result ->
+                    result?.cancel()
+                }, onConfirm = { promptResult ->
                     jsDialogState = null
-                    jsPromptResult?.let {
-                        it.confirm(result)
-                        jsPromptResult = null
+                    if (result is JsPromptResult) {
+                        result.confirm(promptResult)
                     }
                 })
             }
+            else -> { }
         }
     }
 }
