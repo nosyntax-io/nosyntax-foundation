@@ -38,14 +38,12 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier
-                .width(150.dp)
-                .height(150.dp),
+            modifier = Modifier.width(130.dp).height(130.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.inverseOnSurface)
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = stringResource(id = R.string.no_internet_connection),
             style = MaterialTheme.typography.titleLarge,
@@ -61,9 +59,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            modifier = Modifier
-                .height(40.dp)
-                .padding(0.dp),
+            modifier = Modifier.height(40.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
@@ -73,9 +69,9 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         ) {
             Text(
                 text = stringResource(id = R.string.try_again),
-                modifier = Modifier.padding(horizontal = 25.dp),
+                modifier = Modifier.padding(horizontal = 30.dp),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -84,7 +80,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
 @Composable
 @Preview
 fun NoConnectionPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         NoConnectionComponent {
 
         }
