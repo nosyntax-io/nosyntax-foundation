@@ -111,6 +111,7 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
             role = item.role,
             label = item.label,
             icon = item.icon,
+            deeplink = item.deeplink,
             type = item.type
         )
     }

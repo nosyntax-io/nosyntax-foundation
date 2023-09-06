@@ -47,7 +47,7 @@ fun NavigationGraph(
             composable(route = item.id) {
                 when (item.role) {
                     Roles.ROLE_WEB -> {
-                        WebScreen(url = "https://google.com")
+                        WebScreen(url = item.deeplink)
                     }
                     Roles.ROLE_POLICIES -> {
                         PoliciesScreen(request = item.id)

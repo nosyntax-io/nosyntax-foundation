@@ -7,6 +7,7 @@ data class NavigationItem(
     val role: String,
     val label: String = "",
     val icon: Any = "",
+    val deeplink: String = "",
     val type: String = ""
 )
 

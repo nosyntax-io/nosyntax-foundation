@@ -17,6 +17,8 @@ data class NavigationConfigDto(
         val label: String,
         @SerializedName("icon")
         val icon: String,
+        @SerializedName("deeplink")
+        val deeplink: String,
         @SerializedName("type")
         val type: String
     )
