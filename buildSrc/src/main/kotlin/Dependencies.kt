@@ -11,6 +11,7 @@ object Libraries {
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRunTime}",
         "androidx.lifecycle:lifecycle-runtime-compose:${Versions.lifecycleRunTime}",
         "androidx.activity:activity-compose:${Versions.activityCompose}",
+        "androidx.compose.material:material:${Versions.material}",
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",

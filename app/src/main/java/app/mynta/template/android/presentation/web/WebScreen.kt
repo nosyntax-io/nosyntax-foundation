@@ -18,7 +18,15 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
@@ -43,6 +52,7 @@ import app.mynta.template.android.presentation.web.components.ConfirmDialogCompo
 import app.mynta.template.android.core.components.NoConnectionComponent
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(url: String) {
@@ -54,88 +64,113 @@ fun WebScreen(url: String) {
     var jsResult by remember { mutableStateOf<JsResult?>(null) }
     var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
     var webCustomView by remember { mutableStateOf<View?>(null) }
+    var isLoaded by remember { mutableStateOf(false) }
     var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                isVerticalScrollBarEnabled = false
-                isHorizontalScrollBarEnabled = false
-
-                settings.apply {
-                    javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
-                    allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
-                    allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
-                    domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
-                    databaseEnabled = Constants.WEB_DATABASE_ENABLED
-                    javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
-                    cacheMode = WebSettings.LOAD_DEFAULT
-                    supportMultipleWindows()
-                    setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
-                }
-
-                webViewClient = CustomWebViewClient(
-                    context = context,
-                    onUpdateCurrentUrl = { currentUrl = it },
-                    onReceiveError = { noConnectionState = true }
-                )
-
-                webChromeClient = CustomWebChromeClient(context = context,
-                    onAlertResult = { message, result ->
-                        jsDialogState = JsDialogState(type = "alert", message = message)
-                        jsResult = result
-                    },
-                    onConfirmResult = { message, result ->
-                        jsDialogState = JsDialogState(type = "confirm", message = message)
-                        jsResult = result
-                    },
-                    onPromptResult = { message, defaultValue, result ->
-                        jsDialogState = JsDialogState(type = "prompt", message = message, defaultValue = defaultValue)
-                        jsPromptResult = result
-                    },
-                    onCustomViewShown = { view, callback ->
-                        if (webCustomView != null) {
-                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                            webCustomView = null
-                            webCustomViewCallback?.onCustomViewHidden()
-                            webCustomViewCallback = null
-                        } else {
-                            webCustomView = view
-                            webCustomViewCallback = callback
-
-                            systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
-                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        }
-                    },
-                    onCustomViewHidden = {
-                        if (webCustomView != null) {
-                            systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                            webCustomView = null
-                            webCustomViewCallback?.onCustomViewHidden()
-                            webCustomViewCallback = null
-                        }
-                    }
-                )
-
-                loadUrl(currentUrl)
-                webView = this
-            }
-        }, update = {
-            it.loadUrl(currentUrl)
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = !isLoaded,
+        onRefresh = {
+            webView?.reload()
         }
     )
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .pullRefresh(pullRefreshState)
+        .verticalScroll(
+            rememberScrollState()
+        )) {
+        AndroidView(
+            factory = { context ->
+                WebView(context).apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    isVerticalScrollBarEnabled = false
+                    isHorizontalScrollBarEnabled = false
+
+                    settings.apply {
+                        javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
+                        allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
+                        allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
+                        domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
+                        databaseEnabled = Constants.WEB_DATABASE_ENABLED
+                        javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
+                        cacheMode = WebSettings.LOAD_DEFAULT
+                        supportMultipleWindows()
+                        setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+                    }
+
+                    webViewClient = CustomWebViewClient(
+                        context = context,
+                        onPageStarted = { isLoaded = false },
+                        onPageFinished = { isLoaded = true },
+                        onUpdateCurrentUrl = { currentUrl = it },
+                        onReceiveError = { noConnectionState = true }
+                    )
+
+                    webChromeClient = CustomWebChromeClient(context = context,
+                        onAlertResult = { message, result ->
+                            jsDialogState = JsDialogState(type = "alert", message = message)
+                            jsResult = result
+                        },
+                        onConfirmResult = { message, result ->
+                            jsDialogState = JsDialogState(type = "confirm", message = message)
+                            jsResult = result
+                        },
+                        onPromptResult = { message, defaultValue, result ->
+                            jsDialogState = JsDialogState(type = "prompt", message = message, defaultValue = defaultValue)
+                            jsPromptResult = result
+                        },
+                        onCustomViewShown = { view, callback ->
+                            if (webCustomView != null) {
+                                systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                                webCustomView = null
+                                webCustomViewCallback?.onCustomViewHidden()
+                                webCustomViewCallback = null
+                            } else {
+                                webCustomView = view
+                                webCustomViewCallback = callback
+
+                                systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
+                                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                            }
+                        },
+                        onCustomViewHidden = {
+                            if (webCustomView != null) {
+                                systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                                webCustomView = null
+                                webCustomViewCallback?.onCustomViewHidden()
+                                webCustomViewCallback = null
+                            }
+                        }
+                    )
+
+                    loadUrl(currentUrl)
+                    webView = this
+                }
+            }, update = {
+                it.loadUrl(currentUrl)
+            }
+        )
+
+        PullRefreshIndicator(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = pullRefreshState,
+            refreshing = !isLoaded,
+            backgroundColor = MaterialTheme.colors.surface,
+            contentColor = MaterialTheme.colors.primary
+        )
+    }
 
     if (webCustomView != null) {
         AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
@@ -201,9 +236,21 @@ fun WebScreen(url: String) {
 
 class CustomWebViewClient(
     private val context: Context,
+    private val onPageStarted: () -> Unit,
+    private val onPageFinished: () -> Unit,
     private val onUpdateCurrentUrl: (String) -> Unit,
     private val onReceiveError: () -> Unit
 ): WebViewClient() {
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        super.onPageStarted(view, url, favicon)
+        onPageStarted()
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        onPageFinished()
+    }
+
     override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
         val url = request?.url.toString()
         return if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
