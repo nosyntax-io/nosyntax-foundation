@@ -64,19 +64,15 @@ fun WebScreen(url: String) {
     var jsResult by remember { mutableStateOf<JsResult?>(null) }
     var jsPromptResult by remember { mutableStateOf<JsPromptResult?>(null) }
     var webCustomView by remember { mutableStateOf<View?>(null) }
-    var isLoaded by remember { mutableStateOf(false) }
     var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = !isLoaded,
-        onRefresh = {
-            webView?.reload()
-        }
-    )
+    val pullRefreshState = rememberPullRefreshState(refreshing = false, onRefresh = {
+        webView?.reload()
+    })
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -108,8 +104,8 @@ fun WebScreen(url: String) {
 
                     webViewClient = CustomWebViewClient(
                         context = context,
-                        onPageStarted = { isLoaded = false },
-                        onPageFinished = { isLoaded = true },
+                        onPageStarted = {  },
+                        onPageFinished = {  },
                         onUpdateCurrentUrl = { currentUrl = it },
                         onReceiveError = { noConnectionState = true }
                     )
@@ -166,7 +162,7 @@ fun WebScreen(url: String) {
         PullRefreshIndicator(
             modifier = Modifier.align(Alignment.TopCenter),
             state = pullRefreshState,
-            refreshing = !isLoaded,
+            refreshing = false,
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.primary
         )
