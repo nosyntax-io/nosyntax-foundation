@@ -1,8 +1,8 @@
 object Libraries {
     val plugins = listOf(
-        "kotlin-android",
-        "kotlin-kapt",
         "com.android.application",
+        "org.jetbrains.kotlin.android",
+        "com.google.devtools.ksp",
         "dagger.hilt.android.plugin",
         "com.google.gms.google-services"
     )
@@ -27,7 +27,7 @@ object Libraries {
         "com.onesignal:OneSignal:${Versions.oneSignal}",
         "androidx.core:core-splashscreen:${Versions.splashScreen}",
     )
-    val kapts = listOf(
+    val ksps = listOf(
         "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
     )
     val testImplementations = listOf(

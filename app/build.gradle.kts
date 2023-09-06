@@ -59,7 +59,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
     packaging {
         resources {
@@ -70,7 +70,7 @@ android {
 
 dependencies {
     Libraries.implementations.forEach(::implementation)
-    Libraries.kapts.forEach(::kapt)
+    Libraries.ksps.forEach(::ksp)
     Libraries.testImplementations.forEach(::testImplementation)
     Libraries.androidTestImplementations.forEach(::androidTestImplementation)
     Libraries.debugImplementation.forEach(::debugImplementation)

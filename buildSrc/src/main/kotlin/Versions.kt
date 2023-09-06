@@ -6,7 +6,7 @@ object Versions {
     const val navigation = "2.7.1"
     const val googleFonts = "1.4.3"
     const val coilCompose = "2.4.0"
-    const val daggerHilt = "2.44"
+    const val daggerHilt = "2.48"
     const val hiltNavigationCompose = "1.0.0"
     const val retrofit = "2.9.0"
     const val gson = "2.9.1"
