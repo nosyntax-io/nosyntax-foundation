@@ -29,7 +29,7 @@ import app.mynta.template.android.ui.theme.DynamicTheme
 
 sealed class NavigationActionType {
     data class Menu(val isEnabled: Boolean) : NavigationActionType()
-    object Back : NavigationActionType()
+    data object Back : NavigationActionType()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,12 +120,16 @@ fun AppBarTitle(appBarConfig: AppBarConfig, title: String) {
 
 @Composable
 fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
-    DynamicClickableIcon(
-        modifier = Modifier
-            .size(30.dp)
-            .fillMaxHeight(),
-        source = icon,
-        onClick = onClick
+    Box(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.Center,
+        content = {
+            DynamicClickableIcon(
+                modifier = Modifier.size(30.dp),
+                source = icon,
+                onClick = onClick
+            )
+        }
     )
 }
 
@@ -149,7 +153,7 @@ fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
 @Composable
 @Preview
 fun AppBarPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         AppBar(
             appBarConfig = AppBarConfig(
                 display = true,

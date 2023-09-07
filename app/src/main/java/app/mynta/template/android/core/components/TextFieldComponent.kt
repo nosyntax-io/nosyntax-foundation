@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.mynta.template.android.ui.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +40,7 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
                 enabled = true,
                 isError = false,
                 interactionSource = MutableInteractionSource(),
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
@@ -54,13 +55,14 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
         enabled = true,
         singleLine = true
     ) {
-        TextFieldDefaults.TextFieldDecorationBox(
+        TextFieldDefaults.DecorationBox(
             value = inputValue.value,
             innerTextField = it,
             singleLine = true,
             enabled = true,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
@@ -78,7 +80,7 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
                 )
             },
             interactionSource = MutableInteractionSource(),
-            contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(
+            contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(
                 top = 0.dp, bottom = 0.dp
             )
         )
@@ -88,8 +90,10 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
 @Composable
 @Preview
 fun TextFieldPreview() {
-    TextFieldComponent(
-        placeholder = "Enter Text",
-        onValueChange = { }
-    )
+    DynamicTheme(darkTheme = true) {
+        TextFieldComponent(
+            placeholder = "Enter Text",
+            onValueChange = { }
+        )
+    }
 }

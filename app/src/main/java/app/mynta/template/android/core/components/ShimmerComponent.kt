@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import app.mynta.template.android.ui.theme.DynamicTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -58,10 +59,12 @@ private fun shimmerColors(baseColor: Color): List<Color> {
 @Preview
 @Composable
 fun ShimmerPreview() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(170.dp)
-            .shimmerEffect()
-    )
+    DynamicTheme(darkTheme = false) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .shimmerEffect()
+        )
+    }
 }

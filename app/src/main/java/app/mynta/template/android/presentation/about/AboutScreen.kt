@@ -109,7 +109,7 @@ fun SocialIcon(imageUrl: String, onClick: () -> Unit) {
 @Preview
 @Composable
 fun AboutScreenPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val placeholderUrl = "https://example.com"
         val socialLinks = listOf(

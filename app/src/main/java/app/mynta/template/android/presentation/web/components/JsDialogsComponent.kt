@@ -80,7 +80,7 @@ fun AlertDialogComponent(
                     Text(
                         text = stringResource(id = R.string.i_understand),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = Color.White
                     )
                 }
             }
@@ -91,7 +91,7 @@ fun AlertDialogComponent(
 @Composable
 @Preview
 fun AlertDialogPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         AlertDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onConfirm = { }
@@ -162,7 +162,7 @@ fun ConfirmDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = Color.White
                         )
                     }
                 }
@@ -174,7 +174,7 @@ fun ConfirmDialogComponent(
 @Composable
 @Preview
 fun ConfirmDialogPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         ConfirmDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onCancel = { },
@@ -253,7 +253,7 @@ fun PromptDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = Color.White
                         )
                     }
                 }
@@ -265,7 +265,7 @@ fun PromptDialogComponent(
 @Composable
 @Preview
 fun PromptDialogPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         PromptDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             defaultValue = "",
