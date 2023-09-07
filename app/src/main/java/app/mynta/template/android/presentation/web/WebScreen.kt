@@ -2,9 +2,11 @@ package app.mynta.template.android.presentation.web
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.net.http.SslError
 import android.view.View
 import android.view.ViewGroup
@@ -64,6 +66,7 @@ fun WebScreen(url: String, drawerState: DrawerState) {
 
     var webView by remember { mutableStateOf<WebView?>(null) }
     var currentUrl by rememberSaveable { mutableStateOf(url) }
+    // TODO: Replace canGoBack with rememberSaveable.
     var canGoBack by remember { mutableStateOf(false) }
 
     var jsDialogState by remember { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
@@ -156,6 +159,10 @@ fun WebScreen(url: String, drawerState: DrawerState) {
                         }
                     )
 
+                    setDownloadListener { url, _, _, _, _ ->
+                        context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
+                    }
+
                     loadUrl(currentUrl)
                     webView = this
                 }
@@ -201,8 +208,19 @@ fun WebScreen(url: String, drawerState: DrawerState) {
         }
 
         when(dialog) {
-            is JsDialog.Alert -> AlertDialogComponent(message = dialog.message, onConfirm = confirmDialog)
-            is JsDialog.Confirm -> ConfirmDialogComponent(message = dialog.message, onCancel = cancelDialog, onConfirm = confirmDialog)
+            is JsDialog.Alert -> {
+                AlertDialogComponent(
+                    message = dialog.message,
+                    onConfirm = confirmDialog
+                )
+            }
+            is JsDialog.Confirm -> {
+                ConfirmDialogComponent(
+                    message = dialog.message,
+                    onCancel = cancelDialog,
+                    onConfirm = confirmDialog
+                )
+            }
             is JsDialog.Prompt -> {
                 PromptDialogComponent(
                     message = dialog.message,
