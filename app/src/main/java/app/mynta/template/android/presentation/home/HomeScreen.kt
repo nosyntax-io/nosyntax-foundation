@@ -52,7 +52,7 @@ fun HomeScreen(
                 navController = navController,
                 currentRoute = currentRoute,
                 navigationItems = navigationItems,
-                drawerState = drawerState,
+                drawerState = drawerState
             )
         }
 
@@ -70,11 +70,11 @@ fun HomeScreen(
         }
     }
 
-    BackHandler(enabled = drawerState.isOpen) {
+    /*BackHandler(enabled = drawerState.isOpen, onBack = {
         coroutineScope.launch {
             drawerState.close()
         }
-    }
+    })*/
 }
 
 @Composable

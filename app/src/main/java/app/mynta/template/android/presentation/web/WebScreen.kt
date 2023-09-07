@@ -14,10 +14,12 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +29,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,16 +58,18 @@ import app.mynta.template.android.presentation.web.components.PromptDialogCompon
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebScreen(url: String) {
+fun WebScreen(url: String, drawerState: DrawerState) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
+
     var webView by remember { mutableStateOf<WebView?>(null) }
     var currentUrl by rememberSaveable { mutableStateOf(url) }
+    var canGoBack by remember { mutableStateOf(false) }
 
     var jsDialogState by remember { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
-
     var webCustomView by remember { mutableStateOf<View?>(null) }
     var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
+
     var noConnectionState by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
@@ -77,9 +82,8 @@ fun WebScreen(url: String) {
     Box(modifier = Modifier
         .fillMaxSize()
         .pullRefresh(pullRefreshState)
-        .verticalScroll(
-            rememberScrollState()
-        )) {
+        .verticalScroll(rememberScrollState())
+    ) {
         AndroidView(
             factory = { context ->
                 WebView(context).apply {
@@ -102,23 +106,27 @@ fun WebScreen(url: String) {
                         setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
                     }
 
-                    webViewClient = CustomWebViewClient(
-                        context = context,
-                        onPageStarted = {  },
-                        onPageFinished = {  },
-                        onUpdateCurrentUrl = { currentUrl = it },
-                        onReceiveError = { noConnectionState = true }
+                    webViewClient = CustomWebClient(context = context,
+                        onPageLoadingStateChanged = { isLoading ->
+                            when (isLoading) {
+                                true -> canGoBack = webView?.canGoBack() ?: false
+                                else -> {
+
+                                }
+                            }
+                        },
+                        onUrlRequested = { url ->
+                            currentUrl = url
+                            webView?.loadUrl(url)
+                        },
+                        onRequestInterrupted = {
+                            noConnectionState = true
+                        }
                     )
 
                     webChromeClient = CustomWebChromeClient(context = context,
-                        onAlertResult = { message, result ->
-                            jsDialogState = JsDialog.Alert(message) to result
-                        },
-                        onConfirmResult = { message, result ->
-                            jsDialogState = JsDialog.Confirm(message) to result
-                        },
-                        onPromptResult = { message, defaultValue, result ->
-                            jsDialogState = JsDialog.Prompt(message, defaultValue) to result
+                        onJsDialog = { dialog, result ->
+                            jsDialogState = dialog to result
                         },
                         onCustomViewShown = { view, callback ->
                             if (webCustomView != null) {
@@ -183,98 +191,116 @@ fun WebScreen(url: String) {
     }
 
     jsDialogState?.let { (dialog, result) ->
+        val cancelDialog: () -> Unit = {
+            jsDialogState = null
+            result?.cancel()
+        }
+        val confirmDialog: () -> Unit = {
+            jsDialogState = null
+            result?.confirm()
+        }
+
         when(dialog) {
-            is JsDialog.Alert -> {
-                AlertDialogComponent(message = dialog.message, onDismiss = {
-                    jsDialogState = null
-                    result?.confirm()
-                })
-            }
-            is JsDialog.Confirm -> {
-                ConfirmDialogComponent(message = dialog.message, onCancel = {
-                    jsDialogState = null
-                    result?.cancel()
-                }, onConfirm = {
-                    jsDialogState = null
-                    result?.confirm()
-                })
-            }
+            is JsDialog.Alert -> AlertDialogComponent(message = dialog.message, onConfirm = confirmDialog)
+            is JsDialog.Confirm -> ConfirmDialogComponent(message = dialog.message, onCancel = cancelDialog, onConfirm = confirmDialog)
             is JsDialog.Prompt -> {
-                PromptDialogComponent(message = dialog.message, defaultValue = dialog.defaultValue, onCancel = {
-                    jsDialogState = null
-                    result?.cancel()
-                }, onConfirm = { promptResult ->
-                    jsDialogState = null
-                    if (result is JsPromptResult) {
-                        result.confirm(promptResult)
+                PromptDialogComponent(
+                    message = dialog.message,
+                    defaultValue = dialog.defaultValue,
+                    onCancel = cancelDialog,
+                    onConfirm = { promptResult ->
+                        if (result is JsPromptResult) {
+                            result.confirm(promptResult)
+                        }
+                        cancelDialog()
                     }
-                })
+                )
             }
             else -> { }
         }
     }
+
+    BackHandler(enabled = canGoBack && drawerState.isClosed, onBack = {
+        webView?.goBack()
+    })
 }
 
-class CustomWebViewClient(
+class CustomWebClient(
     private val context: Context,
-    private val onPageStarted: () -> Unit,
-    private val onPageFinished: () -> Unit,
-    private val onUpdateCurrentUrl: (String) -> Unit,
-    private val onReceiveError: () -> Unit
+    private val onPageLoadingStateChanged: (isLoading: Boolean) -> Unit,
+    private val onUrlRequested: (url: String) -> Unit,
+    private val onRequestInterrupted: () -> Unit
 ): WebViewClient() {
+
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
-        onPageStarted()
+        onPageLoadingStateChanged(true)
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        onPageFinished()
+        onPageLoadingStateChanged(false)
     }
 
     override fun shouldOverrideUrlLoading(webView: WebView?, request: WebResourceRequest?): Boolean {
         val url = request?.url.toString()
         return if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
-            onUpdateCurrentUrl(url)
-            webView?.loadUrl(url)
+            onUrlRequested(url)
             true
         } else {
-            context.handleNonHttpUrls(url = url)
+            when {
+                url.startsWith("mailto:") -> {
+                    context.openEmailFromUrl(url)
+                }
+                url.startsWith("tel:") -> {
+                    context.openDial(url)
+                }
+                url.startsWith("sms:") -> {
+                    context.openSMS(url)
+                }
+                url.startsWith("market://") -> {
+                    context.openPlayStore(context.packageName)
+                }
+            }
             true
         }
     }
 
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
         super.onReceivedError(view, request, error)
-        onReceiveError()
+        onRequestInterrupted()
     }
 
     override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
         super.onReceivedSslError(view, handler, error)
-        onReceiveError()
+        onRequestInterrupted()
+    }
+
+    override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+        super.onReceivedHttpError(view, request, errorResponse)
+        onRequestInterrupted()
     }
 }
 
 class CustomWebChromeClient(
     private val context: Context,
-    private val onAlertResult: (String, JsResult) -> Unit = { _, _ -> },
-    private val onConfirmResult: (String, JsResult) -> Unit = { _, _ -> },
-    private val onPromptResult: (String, String, JsPromptResult) -> Unit = { _, _, _ -> },
-    private val onCustomViewShown: (View, CustomViewCallback) -> Unit = { _, _ -> },
-    private val onCustomViewHidden: () -> Unit = { }
+    private val onJsDialog: (JsDialog, JsResult) -> Unit,
+    private val onCustomViewShown: (View, CustomViewCallback) -> Unit,
+    private val onCustomViewHidden: () -> Unit
 ): WebChromeClient() {
+
     override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-        message?.let { onAlertResult(it, result!!) }
+        message?.let { onJsDialog(JsDialog.Alert(it), result!!) }
         return true
     }
 
     override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-        message?.let { onConfirmResult(it, result!!) }
+        message?.let { onJsDialog(JsDialog.Confirm(it), result!!) }
         return true
     }
 
     override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-        message?.let { onPromptResult(it, defaultValue.toString(), result!!) }
+        message?.let { onJsDialog(JsDialog.Prompt(it, defaultValue.toString()), result!!) }
         return true
     }
 
@@ -290,14 +316,5 @@ class CustomWebChromeClient(
         if (view != null && callback != null) {
             onCustomViewShown(view, callback)
         }
-    }
-}
-
-private fun Context.handleNonHttpUrls(url: String) {
-    when {
-        url.startsWith("mailto:") -> openEmailFromUrl(url)
-        url.startsWith("tel:") -> openDial(url)
-        url.startsWith("sms:") -> openSMS(url)
-        url.startsWith("market://") -> openPlayStore(packageName)
     }
 }

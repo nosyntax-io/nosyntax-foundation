@@ -41,10 +41,10 @@ sealed class JsDialog {
 @Composable
 fun AlertDialogComponent(
     message: String,
-    onDismiss: () -> Unit
+    onConfirm: () -> Unit
 ) {
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onConfirm,
         properties = DialogProperties(
             dismissOnClickOutside = true,
             dismissOnBackPress = true
@@ -75,7 +75,7 @@ fun AlertDialogComponent(
                     ),
                     shape = MaterialTheme.shapes.medium,
                     contentPadding = PaddingValues(0.dp),
-                    onClick = onDismiss
+                    onClick = onConfirm
                 ) {
                     Text(
                         text = stringResource(id = R.string.i_understand),
@@ -94,7 +94,7 @@ fun AlertDialogPreview() {
     DynamicTheme {
         AlertDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            onDismiss = { }
+            onConfirm = { }
         )
     }
 }

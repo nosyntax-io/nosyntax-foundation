@@ -47,7 +47,10 @@ fun NavigationGraph(
             composable(route = item.id) {
                 when (item.role) {
                     Roles.ROLE_WEB -> {
-                        WebScreen(url = item.deeplink)
+                        WebScreen(
+                            url = item.deeplink,
+                            drawerState = drawerState
+                        )
                     }
                     Roles.ROLE_POLICIES -> {
                         PoliciesScreen(request = item.id)
