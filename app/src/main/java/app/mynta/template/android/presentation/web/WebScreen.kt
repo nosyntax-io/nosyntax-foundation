@@ -54,13 +54,14 @@ import app.mynta.template.android.core.utility.Intents.openSMS
 import app.mynta.template.android.presentation.web.components.AlertDialogComponent
 import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
 import app.mynta.template.android.core.components.NoConnectionComponent
+import app.mynta.template.android.domain.model.app_config.WebKitConfig
 import app.mynta.template.android.presentation.web.components.JsDialog
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebScreen(url: String, drawerState: DrawerState) {
+fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState) {
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
 
@@ -121,6 +122,16 @@ fun WebScreen(url: String, drawerState: DrawerState) {
                         onUrlRequested = { url ->
                             currentUrl = url
                             webView?.loadUrl(url)
+                        },
+                        onResourceLoaded = {
+                            val resourceContainer =
+                                """javascript:(function() { 
+                                    var node = document.createElement('style');
+                                    node.type = 'text/css';
+                                    node.innerHTML = '${webKitConfig.customCss}';
+                                    document.head.appendChild(node);
+                                })()""".trimIndent()
+                            webView?.loadUrl(resourceContainer)
                         },
                         onRequestInterrupted = {
                             noConnectionState = true
@@ -247,6 +258,7 @@ class CustomWebClient(
     private val context: Context,
     private val onPageLoadingStateChanged: (isLoading: Boolean) -> Unit,
     private val onUrlRequested: (url: String) -> Unit,
+    private val onResourceLoaded: () -> Unit,
     private val onRequestInterrupted: () -> Unit
 ): WebViewClient() {
 
@@ -282,6 +294,11 @@ class CustomWebClient(
             }
             true
         }
+    }
+
+    override fun onLoadResource(view: WebView?, url: String?) {
+        super.onLoadResource(view, url)
+        onResourceLoaded()
     }
 
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {

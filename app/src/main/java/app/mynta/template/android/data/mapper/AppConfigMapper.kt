@@ -6,6 +6,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.AppearanceCo
 import app.mynta.template.android.data.source.remote.dto.app_config.BottomBarConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ComponentsConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.NavigationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ThemeColorsConfigDto
@@ -18,9 +19,11 @@ import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.domain.model.app_config.NavigationConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
+import app.mynta.template.android.domain.model.app_config.ModulesConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.app_config.ThemeColorsConfig
+import app.mynta.template.android.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
     val configuration = app.configuration
@@ -28,6 +31,7 @@ fun AppConfigDto.toConfiguration(): AppConfig {
         appId = this.app.appId,
         appearance = configuration.appearance.toAppearance(),
         navigation = configuration.navigation.toNavigation(),
+        modules = configuration.modules.toModules(),
         aboutPage = configuration.aboutPage.toAboutPage()
     )
 }
@@ -119,6 +123,14 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
             }
         )
     }
+}
+
+fun ModulesConfigDto.toModules(): ModulesConfig {
+    return ModulesConfig(
+        webkit = WebKitConfig(
+            customCss = this.webkit.customCss
+        )
+    )
 }
 
 fun AboutPageConfigDto.toAboutPage(): AboutPageConfig {

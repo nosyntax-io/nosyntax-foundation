@@ -48,6 +48,7 @@ fun NavigationGraph(
                 when (item.role) {
                     Roles.ROLE_WEB -> {
                         WebScreen(
+                            webKitConfig = appConfig.modules.webkit,
                             url = item.module?.deeplink ?: "https://example.com",
                             drawerState = drawerState
                         )

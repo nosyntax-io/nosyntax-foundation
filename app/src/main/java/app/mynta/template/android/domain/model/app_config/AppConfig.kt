@@ -4,5 +4,6 @@ data class AppConfig(
     val appId: String,
     val appearance: AppearanceConfig,
     val navigation: NavigationConfig,
+    val modules: ModulesConfig,
     val aboutPage: AboutPageConfig
 )
