@@ -26,10 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.R
 import app.mynta.template.android.core.components.DynamicClickableIcon
 import app.mynta.template.android.core.utility.Intents.openUrl
+import app.mynta.template.android.core.utility.Utilities
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 
@@ -60,14 +60,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                modifier = Modifier.alpha(.7f),
-                text = "v.${BuildConfig.VERSION_NAME}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Text(
                 modifier = Modifier.alpha(.7f),
                 text = aboutPageConfig.introduction,
@@ -92,6 +85,18 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(25.dp))
+            Text(
+                modifier = Modifier.alpha(.7f),
+                text =
+                    "${stringResource(R.string.copyright)} " +
+                    "${Utilities.getCurrentYear()} " +
+                    "${stringResource(R.string.app_name)}.\n" +
+                    stringResource(R.string.all_rights_reserved),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
