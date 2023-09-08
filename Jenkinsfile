@@ -11,8 +11,8 @@ pipeline {
 		string defaultValue: '', name: 'ACCESS_TOKEN'
 		string defaultValue: '', name: 'APP_ID'
 		string defaultValue: '', name: 'APP_NAME'
+		string defaultValue: '', name: 'VERSION_NUMBER'
 		string defaultValue: '', name: 'VERSION_NAME'
-		string defaultValue: '', name: 'VERSION_CODE'
 		string defaultValue: '', name: 'ONESIGNAL_APP_ID'
 		// keystore credentials
 		string defaultValue: '', name: 'KEYSTORE_FILE'
@@ -26,8 +26,8 @@ pipeline {
     ACCESS_TOKEN            = "${params.ACCESS_TOKEN}"
     APP_ID            			= "${params.APP_ID}"
     APP_NAME                = "${params.APP_NAME}"
+    VERSION_NUMBER          = "${params.VERSION_NUMBER}"
     VERSION_NAME            = "${params.VERSION_NAME}"
-    VERSION_CODE            = "${params.VERSION_CODE}"
     ONESIGNAL_APP_ID        = "${params.ONESIGNAL_APP_ID}"
 		KEYSTORE_FILE						= "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD       = "${params.KEYSTORE_PASSWORD}"
@@ -54,8 +54,8 @@ pipeline {
 							def propertyMap = [
 								'PARAMETER_APP_ID': 'APP_ID',
 								'PARAMETER_APP_NAME': 'APP_NAME',
+								'PARAMETER_APP_VERSION_NUMBER': 'VERSION_NUMBER',
 								'PARAMETER_APP_VERSION_NAME': 'VERSION_NAME',
-								'PARAMETER_APP_VERSION_CODE': 'VERSION_CODE',
 								'PARAMETER_APP_ACCESS_TOKEN': 'ACCESS_TOKEN',
 								'PARAMETER_APP_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID'
 							]
