@@ -9,8 +9,6 @@ data class AboutPageConfigDto(
     val socialLinks: List<SocialLink>) {
 
     data class SocialLink(
-        @SerializedName("id")
-        val id: String,
         @SerializedName("label")
         val label: String,
         @SerializedName("icon")

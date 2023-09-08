@@ -3,13 +3,17 @@ package app.mynta.template.android.domain.model
 import app.mynta.template.android.presentation.navigation.graph.Roles
 
 data class NavigationItem(
-    val id: String,
+    val route: String,
     val role: String,
-    val label: String = "",
-    val icon: Any = "",
-    val deeplink: String = "",
-    val type: String = ""
-)
+    val label: String? = null,
+    val icon: Any? = null,
+    val type: String = "",
+    val module: Module? = null) {
+
+    data class Module(
+        val deeplink: String
+    )
+}
 
 fun generateMockNavigationItems(itemCount: Int = 5): List<NavigationItem> {
     val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"

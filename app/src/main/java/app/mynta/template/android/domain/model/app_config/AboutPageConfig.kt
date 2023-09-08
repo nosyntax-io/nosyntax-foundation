@@ -5,7 +5,6 @@ data class AboutPageConfig(
     val socialLinks: List<SocialLink>) {
 
     data class SocialLink(
-        val id: String,
         val label: String,
         val icon: String,
         val url: String

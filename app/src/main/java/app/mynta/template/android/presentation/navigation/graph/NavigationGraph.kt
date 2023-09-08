@@ -41,19 +41,19 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = navigationItems.firstOrNull()?.id ?: ""
+        startDestination = navigationItems.firstOrNull()?.route ?: ""
     ) {
         navigationItems.forEach { item ->
-            composable(route = item.id) {
+            composable(route = item.route) {
                 when (item.role) {
                     Roles.ROLE_WEB -> {
                         WebScreen(
-                            url = item.deeplink,
+                            url = item.module?.deeplink ?: "https://example.com",
                             drawerState = drawerState
                         )
                     }
                     Roles.ROLE_POLICIES -> {
-                        PoliciesScreen(request = item.id)
+                        PoliciesScreen(request = item.route)
                     }
                     Roles.ROLE_ABOUT -> {
                         AboutScreen(aboutPageConfig = appConfig.aboutPage)

@@ -113,9 +113,9 @@ fun AboutScreenPreview() {
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val placeholderUrl = "https://example.com"
         val socialLinks = listOf(
-            AboutPageConfig.SocialLink("1", "Google", placeholderIcon, placeholderUrl),
-            AboutPageConfig.SocialLink("2", "Facebook", placeholderIcon, placeholderUrl),
-            AboutPageConfig.SocialLink("3", "Instagram", placeholderIcon, placeholderUrl),
+            AboutPageConfig.SocialLink("Google", placeholderIcon, placeholderUrl),
+            AboutPageConfig.SocialLink("Facebook", placeholderIcon, placeholderUrl),
+            AboutPageConfig.SocialLink("Instagram", placeholderIcon, placeholderUrl),
         )
 
         AboutScreen(

@@ -86,7 +86,7 @@ private fun HomeContent(
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
-    val selectedItem = navigationItems.find { it.id == currentRoute }
+    val selectedItem = navigationItems.find { it.route == currentRoute }
     val components = appConfig.appearance.components
 
     Scaffold(

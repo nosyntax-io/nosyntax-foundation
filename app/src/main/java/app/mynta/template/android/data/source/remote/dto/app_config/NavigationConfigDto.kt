@@ -9,17 +9,22 @@ data class NavigationConfigDto(
     val items: List<NavigationItem>) {
 
     data class NavigationItem(
-        @SerializedName("id")
-        val id: String,
+        @SerializedName("route")
+        val route: String,
         @SerializedName("role")
         val role: String,
         @SerializedName("label")
-        val label: String,
+        val label: String?,
         @SerializedName("icon")
-        val icon: String,
-        @SerializedName("deeplink")
-        val deeplink: String,
+        val icon: String?,
         @SerializedName("type")
-        val type: String
-    )
+        val type: String,
+        @SerializedName("module")
+        val module: Module?) {
+
+        data class Module(
+            @SerializedName("deeplink")
+            val deeplink: String
+        )
+    }
 }

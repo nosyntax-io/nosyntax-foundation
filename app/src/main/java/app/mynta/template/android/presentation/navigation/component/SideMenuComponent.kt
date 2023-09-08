@@ -123,7 +123,7 @@ fun SideMenuContent(
                                 onClick = {
                                     NavigationActions(navController).navigateTo(
                                         currentRoute = currentRoute,
-                                        route = item.id
+                                        route = item.route
                                     )
                                     coroutineScope.launch {
                                         drawerState.close()
@@ -169,14 +169,14 @@ fun SideMenuItem(
         if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else it.surface
     }
 
-    val isSelected = currentRoute == item.id
+    val isSelected = currentRoute == item.route
     val unselectedColor = contentColor.copy(alpha = 0.8f)
 
     NavigationDrawerItem(
         modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
-        selected = currentRoute == item.id,
+        selected = currentRoute == item.route,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
@@ -188,16 +188,20 @@ fun SideMenuItem(
             unselectedIconColor = if (isSelected) contentColor else unselectedColor,
         ),
         label = {
-            Text(
-                text = item.label,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            if (item.label != null) {
+                Text(
+                    text = item.label,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         },
         icon = {
-            DynamicIcon(
-                modifier = Modifier.size(22.dp),
-                source = item.icon
-            )
+            if (item.icon != null) {
+                DynamicIcon(
+                    modifier = Modifier.size(22.dp),
+                    source = item.icon
+                )
+            }
         }
     )
 }

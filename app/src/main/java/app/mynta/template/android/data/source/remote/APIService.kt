@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 
 interface APIService {
     @FormUrlEncoded
-    @POST("exp_config.inc.php")
+    @POST("request_app_config.inc.php")
     suspend fun appConfig(
         @Field("access_token") accessToken: String = API_ACCESS_TOKEN
     ): AppConfigDto
@@ -26,7 +26,7 @@ interface APIService {
     ): PoliciesDto
 
     companion object {
-        private const val API_BASE_URL = "https://api.mynta.app/v1/service/"
+        private const val API_BASE_URL = "https://api.mynta.app/v1/"
         private const val API_ACCESS_TOKEN = BuildConfig.ACCESS_TOKEN
 
         private val okHttpClient by lazy {

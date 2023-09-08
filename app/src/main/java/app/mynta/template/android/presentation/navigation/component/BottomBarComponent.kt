@@ -87,7 +87,7 @@ fun BottomBar(
     ) {
         navigationItems.filter { it.type == Types.TYPE_REGULAR }.plus(
             NavigationItem(
-                id = "more",
+                route = "more",
                 role = Roles.ROLE_MORE,
                 label = stringResource(id = R.string.more),
                 icon = "https://img.icons8.com/?size=512&id=61873&format=png"
@@ -98,11 +98,11 @@ fun BottomBar(
                 currentRoute = currentRoute,
                 item = item,
                 onClick = {
-                    when (item.id) {
+                    when (item.route) {
                         "more" -> isMoreOptionsOpened = true
                         else -> NavigationActions(navController).navigateTo(
                             currentRoute = currentRoute,
-                            route = item.id
+                            route = item.label?.lowercase() ?: ""
                         )
                     }
                 }
@@ -119,14 +119,14 @@ fun RowScope.BottomBarNavigationItem(
     onClick: () -> Unit
 ) {
     NavigationBarItem(
-        selected = currentRoute == item.id,
+        selected = currentRoute == item.route,
         alwaysShowLabel = bottomBarConfig.label != Constants.LABEL_SELECTED,
         colors = bottomBarNavigationItemColors(bottomBarConfig = bottomBarConfig),
         label = {
             if (bottomBarConfig.label != Constants.LABEL_HIDDEN) {
                 Text(
                     modifier = Modifier,
-                    text = item.label,
+                    text = item.label ?: "",
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
@@ -135,10 +135,12 @@ fun RowScope.BottomBarNavigationItem(
             }
         },
         icon = {
-            DynamicIcon(
-                modifier = Modifier.size(22.dp),
-                source = item.icon
-            )
+            if (item.icon != null) {
+                DynamicIcon(
+                    modifier = Modifier.size(22.dp),
+                    source = item.icon
+                )
+            }
         },
         onClick = onClick
     )

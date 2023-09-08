@@ -107,12 +107,16 @@ fun NavigationConfigDto.toNavigation(): NavigationConfig {
 fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<NavigationItem> {
     return map { item ->
         NavigationItem(
-            id = item.id,
+            route = item.route,
             role = item.role,
             label = item.label,
             icon = item.icon,
-            deeplink = item.deeplink,
-            type = item.type
+            type = item.type,
+            module = item.module?.let {
+                NavigationItem.Module(
+                    deeplink = it.deeplink
+                )
+            }
         )
     }
 }
@@ -127,7 +131,6 @@ fun AboutPageConfigDto.toAboutPage(): AboutPageConfig {
 fun List<AboutPageConfigDto.SocialLink>.toSocialLinks(): List<AboutPageConfig.SocialLink> {
     return map { link ->
         AboutPageConfig.SocialLink(
-            id = link.id,
             label = link.label,
             icon = link.icon,
             url = link.url

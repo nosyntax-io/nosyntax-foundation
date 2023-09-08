@@ -80,7 +80,7 @@ private fun BottomSheetContent(
         items(navigationItems.size) { index ->
             val item = navigationItems[index]
             BottomSheetItem(item = item, onClick = {
-                navController.navigate(route = item.id)
+                navController.navigate(route = item.route)
                 onDismiss()
             })
         }
@@ -98,7 +98,7 @@ private fun BottomSheetItem(item: NavigationItem, onClick: () -> Unit) {
                 .fillMaxWidth()
                 .clickable(onClick = onClick)
                 .padding(10.dp),
-            text = item.label,
+            text = item.label ?: "",
             style = MaterialTheme.typography.bodyMedium
         )
     }
