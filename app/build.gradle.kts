@@ -2,7 +2,7 @@ plugins {
     Libraries.plugins.forEach { id(it) }
 }
 
-val appConfig = Properties().load(rootProject.file("local.properties"))
+val config = Properties().load(rootProject.file("local.properties"))
 val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
@@ -10,20 +10,20 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = appConfig.getProperty(AppConfig.APP_ID)
-        versionCode = appConfig.getProperty(AppConfig.APP_VERSION_NUMBER).toInt()
-        versionName = appConfig.getProperty(AppConfig.APP_VERSION_NAME)
+        applicationId = config.getProperty(AppConfig.APP_ID)
+        versionCode = config.getProperty(AppConfig.APP_VERSION_NUMBER).toInt()
+        versionName = config.getProperty(AppConfig.APP_VERSION_NAME)
         minSdk = 24
         targetSdk = 34
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.APP_NAME))
+            ResourceValue("string", "app_name", config.getProperty(AppConfig.APP_NAME))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
-        buildConfigField("String", "ACCESS_TOKEN", "\"${appConfig.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
-        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${appConfig.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
+        buildConfigField("String", "ACCESS_TOKEN", "\"${config.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
+        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,6 +42,17 @@ android {
 
     buildTypes {
         release {
+            when (config.getProperty(BuildConfig.BUILD_ENVIRONMENT)) {
+                "production" -> {
+                    isMinifyEnabled = true
+                    isShrinkResources = true
+                }
+                "development" -> {
+                    isMinifyEnabled = false
+                    isShrinkResources = false
+                }
+            }
+
             isMinifyEnabled = false
             signingConfig = signingConfigs["release"]
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

@@ -1,3 +1,9 @@
+# Specifies the build environment: 'production' or 'development'.
+# In the 'production' build environment:
+# 1. Minification is enabled to optimize code size.
+# 2. Resource shrinking is enabled to reduce the APK size.
+config.build.environment = PARAMETER_BUILD_ENVIRONMENT
+
 config.app.id = PARAMETER_APP_ID
 config.app.name = PARAMETER_APP_NAME
 config.app.version_number = PARAMETER_APP_VERSION_NUMBER

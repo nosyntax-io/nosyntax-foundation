@@ -7,6 +7,7 @@ pipeline {
 
   parameters {
 		string defaultValue: '', name: 'BUILD_ID'
+		string defaultValue: '', name: 'BUILD_ENVIRONMENT'
 		string defaultValue: '', name: 'USER_TOKEN'
 		string defaultValue: '', name: 'ACCESS_TOKEN'
 		string defaultValue: '', name: 'APP_ID'
@@ -22,6 +23,8 @@ pipeline {
 	}
 
 	environment {
+		BUILD_ID								= "${params.BUILD_ID}"
+		BUILD_ENVIRONMENT				= "${params.BUILD_ENVIRONMENT}"
     USER_TOKEN              = "${params.USER_TOKEN}"
     ACCESS_TOKEN            = "${params.ACCESS_TOKEN}"
     APP_ID            			= "${params.APP_ID}"
@@ -52,6 +55,7 @@ pipeline {
 					steps {
 						script {
 							def propertyMap = [
+								'PARAMETER_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
 								'PARAMETER_APP_ID': 'APP_ID',
 								'PARAMETER_APP_NAME': 'APP_NAME',
 								'PARAMETER_APP_VERSION_NUMBER': 'VERSION_NUMBER',
@@ -120,28 +124,37 @@ pipeline {
 			}
 		}
 
-		stage('Build Release APK and AAB') {
+		stage('Build Release Artifact') {
 			steps {
 				script {
 					try {
-						sh 'chmod +rx gradlew'
-						sh "./gradlew clean assembleRelease bundleRelease"
-
 						def outputsPath = "${WORKSPACE}/app/build/outputs"
-						def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
-            def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
+						def buildEnvironment = env.BUILD_ENVIRONMENT
 
+						sh 'chmod +rx gradlew'
+
+						if (buildEnvironment == "production") {
+							sh "./gradlew clean assembleRelease bundleRelease"
+						} else {
+							sh "./gradlew clean assembleRelease"
+						}
+
+						def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
 						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
-            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
 
 						sh "mv ${apkSourcePath} ${apkDestinationPath}"
 						env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
 
-						sh "mv ${aabSourcePath} ${aabDestinationPath}"
-						env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
+						if (buildEnvironment == "production") {
+							def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
+							def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
+
+							sh "mv ${aabSourcePath} ${aabDestinationPath}"
+							env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
+						}
 					} catch (Exception ex) {
 						currentBuild.result = 'FAILURE'
-						error "Error in Build Release APK and AAB stage: ${ex.getMessage()}"
+						error "Error in Build Release Artifact stage: ${ex.getMessage()}"
 					}
 				}
 			}
