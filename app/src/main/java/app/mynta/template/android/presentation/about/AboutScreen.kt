@@ -51,7 +51,7 @@ fun AboutScreen(aboutPageConfig: AboutPageConfig) {
             Spacer(modifier = Modifier.height(70.dp))
             Image(
                 modifier = Modifier.size(100.dp),
-                painter = painterResource(id = R.drawable.splash_logo),
+                painter = painterResource(id = R.drawable.app_logo),
                 contentDescription = stringResource(id = R.string.app_name)
             )
             Spacer(modifier = Modifier.height(20.dp))
