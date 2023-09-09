@@ -6,6 +6,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.AppearanceCo
 import app.mynta.template.android.data.source.remote.dto.app_config.BottomBarConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ComponentsConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.NavigationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
@@ -19,6 +20,7 @@ import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.domain.model.app_config.NavigationConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
+import app.mynta.template.android.domain.model.app_config.LoadingIndicatorConfig
 import app.mynta.template.android.domain.model.app_config.ModulesConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
@@ -62,12 +64,13 @@ fun TypographyConfigDto.toTypography(): TypographyConfig {
 }
 
 fun ComponentsConfigDto.toComponents(): ComponentsConfig {
-    val (appBar, sideMenu, bottomBar) = this
+    val (appBar, sideMenu, bottomBar, loadingIndicator) = this
 
     return ComponentsConfig(
         appBar = appBar.toAppBar(),
         sideMenu = sideMenu.toSideMenu(),
-        bottomBar = bottomBar.toBottomBar()
+        bottomBar = bottomBar.toBottomBar(),
+        loadingIndicator = loadingIndicator.toLoadingIndicator()
     )
 }
 
@@ -98,6 +101,15 @@ fun BottomBarConfigDto.toBottomBar(): BottomBarConfig {
         display = this.display,
         background = this.background,
         label = this.label
+    )
+}
+
+fun LoadingIndicatorConfigDto.toLoadingIndicator(): LoadingIndicatorConfig {
+    return LoadingIndicatorConfig(
+        display = this.display,
+        animation = this.animation,
+        background = this.background,
+        color = this.color
     )
 }
 
