@@ -54,14 +54,17 @@ import app.mynta.template.android.core.utility.Intents.openSMS
 import app.mynta.template.android.presentation.web.components.AlertDialogComponent
 import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
 import app.mynta.template.android.core.components.NoConnectionComponent
-import app.mynta.template.android.domain.model.app_config.WebKitConfig
+import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.web.components.JsDialog
+import app.mynta.template.android.presentation.web.components.LoadingIndicator
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
 
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState) {
+fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
+    val webKitConfig = appConfig.modules.webkit
+
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
 
@@ -69,6 +72,7 @@ fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState)
     var currentUrl by rememberSaveable { mutableStateOf(url) }
     // TODO: Replace canGoBack with rememberSaveable.
     var canGoBack by remember { mutableStateOf(false) }
+    var isPageLoaded by rememberSaveable { mutableStateOf(false) }
 
     var jsDialogState by remember { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
     var webCustomView by remember { mutableStateOf<View?>(null) }
@@ -117,9 +121,12 @@ fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState)
                     webViewClient = CustomWebClient(context = context,
                         onPageLoadingStateChanged = { isLoading ->
                             when (isLoading) {
-                                true -> canGoBack = webView?.canGoBack() ?: false
+                                true -> {
+                                    isPageLoaded = false
+                                    canGoBack = webView?.canGoBack() ?: false
+                                }
                                 else -> {
-
+                                    isPageLoaded = true
                                 }
                             }
                         },
@@ -201,6 +208,11 @@ fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState)
             frameLayout.addView(webCustomView)
             frameLayout
         })
+    }
+
+    if (!isPageLoaded) {
+        val indicatorConfig = appConfig.appearance.components.loadingIndicator
+        LoadingIndicator(indicatorConfig = indicatorConfig)
     }
 
     if (noConnectionState) {
