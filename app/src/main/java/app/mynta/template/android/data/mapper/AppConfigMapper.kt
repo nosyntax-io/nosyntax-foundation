@@ -128,6 +128,9 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
 fun ModulesConfigDto.toModules(): ModulesConfig {
     return ModulesConfig(
         webkit = WebKitConfig(
+            userAgent = WebKitConfig.UserAgent(
+                android = this.webkit.userAgent.android
+            ),
             customCss = this.webkit.customCss
         )
     )

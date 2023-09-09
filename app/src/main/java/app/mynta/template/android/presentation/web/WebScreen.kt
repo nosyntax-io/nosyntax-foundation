@@ -110,6 +110,10 @@ fun WebScreen(webKitConfig: WebKitConfig, url: String, drawerState: DrawerState)
                         setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
                     }
 
+                    if (webKitConfig.userAgent.android != "") {
+                        settings.userAgentString = webKitConfig.userAgent.android
+                    }
+
                     webViewClient = CustomWebClient(context = context,
                         onPageLoadingStateChanged = { isLoading ->
                             when (isLoading) {
