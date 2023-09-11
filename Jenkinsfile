@@ -89,7 +89,7 @@ pipeline {
 				stage('Generate Launcher Icons') {
 					steps {
 						script {
-							def iconSourcePath = "${REPOSITORY_PATH}/app_icons/${APP_ID}.png"
+							def iconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
 							def resDirectory = "${WORKSPACE}/app/src/main/res"
 
 							generateLauncherIcons(resDirectory, iconSourcePath)
