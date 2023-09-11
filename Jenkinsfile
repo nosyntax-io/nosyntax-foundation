@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    gradle 'Gradle 8.0'
+  }
+
   libraries {
     lib('android-pipeline-library')
   }
