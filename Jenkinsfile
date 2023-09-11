@@ -96,6 +96,17 @@ pipeline {
 						}
 					}
 				}
+
+				stage('Generate Logo Assets') {
+					steps {
+						script {
+							def logoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
+							def resDirectory = "${WORKSPACE}/app/src/main/res"
+
+							generateLogoAssets(resDirectory, logoSourcePath)
+						}
+					}
+				}
 			}
 		}
 
