@@ -42,15 +42,9 @@ android {
 
     buildTypes {
         release {
-            when (config.getProperty(BuildConfig.BUILD_ENVIRONMENT)) {
-                "production" -> {
-                    isMinifyEnabled = true
-                    isShrinkResources = true
-                }
-                "development" -> {
-                    isMinifyEnabled = false
-                    isShrinkResources = false
-                }
+            if (config.getProperty(BuildConfig.BUILD_ENVIRONMENT) == "production") {
+                isMinifyEnabled = true
+                isShrinkResources = true
             }
             signingConfig = signingConfigs["release"]
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
