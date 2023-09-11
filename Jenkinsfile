@@ -93,14 +93,13 @@ pipeline {
         stage('Generate Launcher Icons') {
           steps {
             script {
-              def iconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
+              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
+              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              if (fileExists(iconSourcePath)) {
-                generateLauncherIcons(resDirectory, iconSourcePath)
-              } else {
-                echo "Skipped generating Launcher Icons because the file '${iconSourcePath}' does not exist."
-              }
+              def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
+
+              generateLauncherIcons(resDirectory, iconSourcePath)
             }
           }
         }
@@ -108,14 +107,13 @@ pipeline {
         stage('Generate Logo Assets') {
           steps {
             script {
-              def logoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
+              def defaultLogoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/default.png"
+              def specificLogoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              if (fileExists(logoSourcePath)) {
-                generateLogoAssets(resDirectory, logoSourcePath)
-              } else {
-                echo "Skipped generating Logo Assets because the file '${logoSourcePath}' does not exist."
-              }
+              def logoSourcePath = fileExists(specificLogoSourcePath) ? specificLogoSourcePath : defaultLogoSourcePath
+
+              generateLogoAssets(resDirectory, logoSourcePath)
             }
           }
         }
@@ -184,9 +182,9 @@ pipeline {
     }
   }
 
-	post {
-		unsuccessful {
-			cleanWs()
-  	}
-	}
+  post {
+    unsuccessful {
+      cleanWs()
+    }
+  }
 }
