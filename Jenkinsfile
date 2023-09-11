@@ -157,9 +157,9 @@ pipeline {
             sh 'chmod +rx gradlew'
 
             if (buildEnvironment == "production") {
-              sh "./gradlew clean assembleRelease bundleRelease"
+              sh "./gradlew assembleRelease bundleRelease"
             } else {
-              sh "./gradlew clean assembleRelease"
+              sh "./gradlew assembleRelease"
             }
 
             def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
@@ -183,4 +183,10 @@ pipeline {
       }
     }
   }
+
+	post {
+		unsuccessful {
+			cleanWs()
+  	}
+	}
 }
