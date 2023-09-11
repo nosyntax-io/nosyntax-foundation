@@ -92,83 +92,91 @@ pipeline {
               def iconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              generateLauncherIcons(resDirectory, iconSourcePath)
+              if (fileExists(iconSourcePath) {
+                  generateLauncherIcons(resDirectory, iconSourcePath)
+                } else {
+                  echo "Skipped generating Launcher Icons because the file '${iconSourcePath}' does not exist."
+                }
+              }
+            }
+          }
+
+          stage('Generate Logo Assets') {
+            steps {
+              script {
+                def logoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
+                def resDirectory = "${WORKSPACE}/app/src/main/res"
+
+                if (fileExists(logoSourcePath) {
+                    generateLogoAssets(resDirectory, logoSourcePath)
+                  } else {
+                    echo "Skipped generating Logo Assets because the file '${logoSourcePath}' does not exist."
+                  }
+                }
+              }
             }
           }
         }
 
-        stage('Generate Logo Assets') {
+        stage('Manage Application Signing') {
           steps {
             script {
-              def logoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
-              def resDirectory = "${WORKSPACE}/app/src/main/res"
+              try {
+                def propertyMap = [
+                  'PARAMETER_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
+                  'PARAMETER_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+                  'PARAMETER_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
+                  'PARAMETER_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
+                ]
+                def templateSourcePath = "${WORKSPACE}/signing.properties.template"
+                def outputDestination = "${WORKSPACE}/signing.properties"
 
-              generateLogoAssets(resDirectory, logoSourcePath)
+                setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
+
+                def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${APP_ID}.zip"
+                sh "unzip -o ${keystoreSourcePath} -d ${WORKSPACE}"
+              } catch (Exception ex) {
+                currentBuild.result = 'FAILURE'
+                error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
+              }
+            }
+          }
+        }
+
+        stage('Build Release Artifact') {
+          steps {
+            script {
+              try {
+                def outputsPath = "${WORKSPACE}/app/build/outputs"
+                def buildEnvironment = env.BUILD_ENVIRONMENT
+
+                sh 'chmod +rx gradlew'
+
+                if (buildEnvironment == "production") {
+                  sh "./gradlew clean assembleRelease bundleRelease"
+                } else {
+                  sh "./gradlew clean assembleRelease"
+                }
+
+                def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
+                def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
+
+                sh "mv ${apkSourcePath} ${apkDestinationPath}"
+                env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
+
+                if (buildEnvironment == "production") {
+                  def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
+                  def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
+
+                  sh "mv ${aabSourcePath} ${aabDestinationPath}"
+                  env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
+                }
+              } catch (Exception ex) {
+                currentBuild.result = 'FAILURE'
+                error "Error in Build Release Artifact stage: ${ex.getMessage()}"
+              }
             }
           }
         }
       }
     }
-
-    stage('Manage Application Signing') {
-      steps {
-        script {
-          try {
-            def propertyMap = [
-              'PARAMETER_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
-              'PARAMETER_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
-              'PARAMETER_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
-              'PARAMETER_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
-            ]
-            def templateSourcePath = "${WORKSPACE}/signing.properties.template"
-            def outputDestination = "${WORKSPACE}/signing.properties"
-
-            setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
-
-            def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${APP_ID}.zip"
-            sh "unzip -o ${keystoreSourcePath} -d ${WORKSPACE}"
-          } catch (Exception ex) {
-            currentBuild.result = 'FAILURE'
-            error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
-          }
-        }
-      }
-    }
-
-    stage('Build Release Artifact') {
-      steps {
-        script {
-          try {
-            def outputsPath = "${WORKSPACE}/app/build/outputs"
-            def buildEnvironment = env.BUILD_ENVIRONMENT
-
-            sh 'chmod +rx gradlew'
-
-            if (buildEnvironment == "production") {
-              sh "./gradlew clean assembleRelease bundleRelease"
-            } else {
-              sh "./gradlew clean assembleRelease"
-            }
-
-            def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
-            def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
-
-            sh "mv ${apkSourcePath} ${apkDestinationPath}"
-            env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
-
-            if (buildEnvironment == "production") {
-              def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
-              def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
-
-              sh "mv ${aabSourcePath} ${aabDestinationPath}"
-              env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
-            }
-          } catch (Exception ex) {
-            currentBuild.result = 'FAILURE'
-            error "Error in Build Release Artifact stage: ${ex.getMessage()}"
-          }
-        }
-      }
-    }
-  }
-}
