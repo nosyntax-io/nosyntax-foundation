@@ -70,15 +70,14 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
 
     var webView by remember { mutableStateOf<WebView?>(null) }
     var currentUrl by rememberSaveable { mutableStateOf(url) }
-    // TODO: Replace canGoBack with rememberSaveable.
-    var canGoBack by remember { mutableStateOf(false) }
+    var canGoBack by rememberSaveable { mutableStateOf(false) }
     var isPageLoaded by rememberSaveable { mutableStateOf(false) }
 
-    var jsDialogState by remember { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
-    var webCustomView by remember { mutableStateOf<View?>(null) }
-    var webCustomViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
+    var jsDialogInfo by rememberSaveable { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
+    var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
+    var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
 
-    var noConnectionState by remember { mutableStateOf(false) }
+    var noConnectionState by rememberSaveable { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -151,32 +150,32 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
 
                     webChromeClient = CustomWebChromeClient(context = context,
                         onJsDialog = { dialog, result ->
-                            jsDialogState = dialog to result
+                            jsDialogInfo = dialog to result
                         },
                         onCustomViewShown = { view, callback ->
-                            if (webCustomView != null) {
+                            if (customWebView != null) {
                                 systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
                                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-                                webCustomView = null
-                                webCustomViewCallback?.onCustomViewHidden()
-                                webCustomViewCallback = null
+                                customWebView = null
+                                customWebViewCallback?.onCustomViewHidden()
+                                customWebViewCallback = null
                             } else {
-                                webCustomView = view
-                                webCustomViewCallback = callback
+                                customWebView = view
+                                customWebViewCallback = callback
 
                                 systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
                                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                             }
                         },
                         onCustomViewHidden = {
-                            if (webCustomView != null) {
+                            if (customWebView != null) {
                                 systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
                                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-                                webCustomView = null
-                                webCustomViewCallback?.onCustomViewHidden()
-                                webCustomViewCallback = null
+                                customWebView = null
+                                customWebViewCallback?.onCustomViewHidden()
+                                customWebViewCallback = null
                             }
                         }
                     )
@@ -202,10 +201,10 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
         )
     }
 
-    if (webCustomView != null) {
+    if (customWebView != null) {
         AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
             val frameLayout = FrameLayout(context)
-            frameLayout.addView(webCustomView)
+            frameLayout.addView(customWebView)
             frameLayout
         })
     }
@@ -224,13 +223,13 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
         })
     }
 
-    jsDialogState?.let { (dialog, result) ->
+    jsDialogInfo?.let { (dialog, result) ->
         val cancelDialog: () -> Unit = {
-            jsDialogState = null
+            jsDialogInfo = null
             result?.cancel()
         }
         val confirmDialog: () -> Unit = {
-            jsDialogState = null
+            jsDialogInfo = null
             result?.confirm()
         }
 
