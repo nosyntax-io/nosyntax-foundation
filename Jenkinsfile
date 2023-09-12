@@ -79,8 +79,9 @@ pipeline {
           steps {
             script {
               try {
-                def googleServicesSourcePath = "${REPOSITORY_PATH}/google_services/${APP_ID}.json"
+                def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${APP_ID}.json"
                 def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
+
                 sh "cp -f ${googleServicesSourcePath} ${googleServicesDestination}"
               } catch (Exception ex) {
                 currentBuild.result = 'FAILURE'
