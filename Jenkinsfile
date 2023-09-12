@@ -181,11 +181,61 @@ pipeline {
         }
       }
     }
+
+    stage('Approve Repository Access') {
+      steps {
+        script {
+          approveRepositoryAccess("apk")
+          if (BUILD_ENVIRONMENT == "production") {
+            approveRepositoryAccess("aab")
+          }
+        }
+      }
+    }
   }
 
   post {
     unsuccessful {
       cleanWs()
     }
+  }
+}
+
+def approveRepositoryAccess(fileType) {
+  try {
+    withCredentials([string(credentialsId: 'REPO_BASIC_AUTH', variable: 'REPO_BASIC_AUTH')]) {
+      def url = "https://cloud.mynta.app/repository/request_repository_access_approval.serv.php"
+
+      def authString = "${REPO_BASIC_AUTH}"
+      def authEncoded = authString.getBytes('UTF-8').encodeBase64().toString()
+
+      def targetFile = "${APP_ID}.${fileType}"
+      def postData = [
+        target_file: targetFile,
+        type: fileType
+      ]
+
+      def response = httpRequest(
+        url: url,
+        httpMode: 'POST',
+        contentType: 'APPLICATION_JSON',
+        requestBody: groovy.json.JsonOutput.toJson(postData),
+        validResponseCodes: '200:500',
+        customHeaders: [
+          [name: 'Authorization', value: "Basic ${authEncoded}"]
+        ]
+      )
+
+      if (response.status != 200) {
+        currentBuild.result = 'FAILURE'
+        error "API request failed. Status code: ${response.status}. Response body: ${response.response}"
+      }
+
+      def responseBody = new groovy.json.JsonSlurper().parseText(response.getContent())
+      echo "Result: ${responseBody.token}"
+    }
+  } catch (Exception e) {
+    currentBuild.result = 'FAILURE'
+    error "Failed to approve repository access: ${e.message}"
   }
 }
