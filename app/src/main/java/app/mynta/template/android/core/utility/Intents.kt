@@ -9,6 +9,15 @@ import android.widget.Toast
 import app.mynta.template.android.R
 
 object Intents {
+    fun Context.handleUrlAction(url: String) {
+        when {
+            url.startsWith("mailto:") -> openEmailFromUrl(url)
+            url.startsWith("tel:") -> openDial(url)
+            url.startsWith("sms:") -> openSMS(url)
+            url.startsWith("market://") -> openPlayStore(packageName)
+        }
+    }
+
     fun Context.openUrl(url: String) {
         try {
             Intent(Intent.ACTION_VIEW, Uri.parse(url)).also { intent ->

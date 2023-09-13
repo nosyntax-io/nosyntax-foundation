@@ -1,5 +1,6 @@
 package app.mynta.template.android.presentation.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -69,11 +70,11 @@ fun HomeScreen(
         }
     }
 
-    /*BackHandler(enabled = drawerState.isOpen, onBack = {
+    BackHandler(enabled = drawerState.isOpen, onBack = {
         coroutineScope.launch {
             drawerState.close()
         }
-    })*/
+    })
 }
 
 @Composable

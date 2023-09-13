@@ -13,7 +13,7 @@ object Utilities {
         return SimpleDateFormat("yyyy", Locale.getDefault()).format(calendar)
     }
 
-    fun isValidUrl(url: String): Boolean {
+    fun isUrlValid(url: String): Boolean {
         return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
     }
 
