@@ -1,4 +1,4 @@
-package app.mynta.template.android.core.components
+package app.mynta.template.android.core.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

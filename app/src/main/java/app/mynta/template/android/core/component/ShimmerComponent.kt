@@ -1,4 +1,4 @@
-package app.mynta.template.android.core.components
+package app.mynta.template.android.core.component
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable

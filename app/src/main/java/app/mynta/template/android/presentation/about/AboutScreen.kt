@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.R
-import app.mynta.template.android.core.components.DynamicClickableIcon
+import app.mynta.template.android.core.component.DynamicClickableIcon
 import app.mynta.template.android.core.utility.Intents.openUrl
 import app.mynta.template.android.core.utility.Utilities
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig

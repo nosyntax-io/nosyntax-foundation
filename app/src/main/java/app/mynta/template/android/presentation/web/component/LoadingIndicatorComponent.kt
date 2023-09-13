@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.mynta.template.android.core.components.AnimatedProgressBar
+import app.mynta.template.android.core.component.AnimatedProgressBar
 import app.mynta.template.android.domain.model.app_config.LoadingIndicatorConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 import com.airbnb.lottie.compose.LottieCompositionSpec

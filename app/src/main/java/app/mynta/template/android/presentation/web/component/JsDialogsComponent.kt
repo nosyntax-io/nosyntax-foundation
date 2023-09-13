@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import app.mynta.template.android.R
-import app.mynta.template.android.core.components.TextFieldComponent
+import app.mynta.template.android.core.component.TextFieldComponent
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 sealed class JsDialog {

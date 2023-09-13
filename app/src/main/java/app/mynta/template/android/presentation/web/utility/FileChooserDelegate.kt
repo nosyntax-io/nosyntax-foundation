@@ -8,14 +8,11 @@ import android.provider.MediaStore
 import android.webkit.WebChromeClient
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
-import androidx.documentfile.provider.DocumentFile
+import app.mynta.template.android.core.AppFileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import kotlin.coroutines.CoroutineContext
 
 class FileChooserDelegate(val context: Context, val onReceiveResult: (results: Array<Uri>?) -> Unit): CoroutineScope {
@@ -110,30 +107,8 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
         }
 
         private suspend fun writeToCachedFile(uri: Uri): Uri? {
-            val cacheDir = File(context.cacheDir, "file_uploads")
-            if (!cacheDir.exists()) {
-                cacheDir.mkdir()
-            }
-
-            val fileName = DocumentFile.fromSingleUri(context, uri)?.name
-            val cachedFile = File(cacheDir, fileName!!)
-
-            return try {
-                val inputStream = context.contentResolver.openInputStream(uri) ?: return null
-                val outputStream = withContext(Dispatchers.IO) {
-                    FileOutputStream(cachedFile)
-                }
-
-                inputStream.use { input ->
-                    outputStream.use { output ->
-                        input.copyTo(output)
-                    }
-                }
-
-                Uri.fromFile(cachedFile)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
+            return AppFileProvider.writeUriToFile(context, uri)?.let {
+                AppFileProvider.contentUriForFile(context, it)
             }
         }
     }

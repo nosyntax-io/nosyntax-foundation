@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import app.mynta.template.android.core.components.CircularProgressBar
-import app.mynta.template.android.core.components.NoConnectionComponent
+import app.mynta.template.android.core.component.CircularProgressBar
+import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable

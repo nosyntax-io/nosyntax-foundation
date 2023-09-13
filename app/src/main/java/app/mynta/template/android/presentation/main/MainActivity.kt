@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import app.mynta.template.android.core.components.NoConnectionComponent
+import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Coroutines.collectLatestOnLifecycleStarted
 import app.mynta.template.android.presentation.home.HomeScreen

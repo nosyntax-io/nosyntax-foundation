@@ -1,5 +1,3 @@
 <paths>
-    <external-path name="webkit" path="/"/>
-    <cache-path name="webkit" path="/"/>
-    <external-path name="external_files" path="."/>
+    <cache-path name="cache" path="file_uploads/"/>
 </paths>

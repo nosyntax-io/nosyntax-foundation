@@ -17,8 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.mynta.template.android.core.components.AppBar
-import app.mynta.template.android.core.components.NavigationActionType
+import app.mynta.template.android.core.component.AppBar
+import app.mynta.template.android.core.component.NavigationActionType
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.SideMenu

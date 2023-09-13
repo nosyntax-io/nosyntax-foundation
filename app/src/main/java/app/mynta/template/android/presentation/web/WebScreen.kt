@@ -34,10 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
-import app.mynta.template.android.core.components.ChangeScreenOrientationComponent
-import app.mynta.template.android.core.components.NoConnectionComponent
-import app.mynta.template.android.core.components.SystemUIControllerComponent
-import app.mynta.template.android.core.components.SystemUIState
+import app.mynta.template.android.core.component.ChangeScreenOrientationComponent
+import app.mynta.template.android.core.component.NoConnectionComponent
+import app.mynta.template.android.core.component.SystemUIControllerComponent
+import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Intents.handleUrlAction
 import app.mynta.template.android.core.utility.Utilities.isUrlValid
@@ -289,7 +289,15 @@ fun chromeClient(
                 filePath?.onReceiveValue(null)
                 filePath = filePathCallback
 
-                return fileChooserDelegate.onShowFileChooser(fileChooserParams, fileChooser)
+                val customFileChooserParams = object : FileChooserParams() {
+                    override fun getMode() = 1
+                    override fun getAcceptTypes() = arrayOf("image/*")
+                    override fun isCaptureEnabled() = true
+                    override fun getTitle() = fileChooserParams.title
+                    override fun getFilenameHint() = fileChooserParams.filenameHint
+                    override fun createIntent() = fileChooserParams.createIntent()
+                }
+                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
             }
 
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
