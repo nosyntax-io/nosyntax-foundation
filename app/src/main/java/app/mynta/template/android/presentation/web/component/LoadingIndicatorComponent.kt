@@ -1,4 +1,4 @@
-package app.mynta.template.android.presentation.web.components
+package app.mynta.template.android.presentation.web.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
