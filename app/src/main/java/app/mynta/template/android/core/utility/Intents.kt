@@ -78,6 +78,4 @@ object Intents {
             e.printStackTrace()
         }
     }
-
-
 }

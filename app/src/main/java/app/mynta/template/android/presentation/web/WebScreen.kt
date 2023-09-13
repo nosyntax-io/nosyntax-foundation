@@ -7,16 +7,21 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebChromeClient.FileChooserParams
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
@@ -32,12 +37,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.components.ChangeScreenOrientationComponent
+import app.mynta.template.android.core.components.NoConnectionComponent
 import app.mynta.template.android.core.components.SystemUIControllerComponent
 import app.mynta.template.android.core.components.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
-import app.mynta.template.android.presentation.web.components.AlertDialogComponent
-import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
-import app.mynta.template.android.core.components.NoConnectionComponent
 import app.mynta.template.android.core.utility.Intents.handleUrlAction
 import app.mynta.template.android.core.utility.Utilities.isUrlValid
 import app.mynta.template.android.core.utility.WebKitChromeClient
@@ -46,6 +49,8 @@ import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
 import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.presentation.web.components.AlertDialogComponent
+import app.mynta.template.android.presentation.web.components.ConfirmDialogComponent
 import app.mynta.template.android.presentation.web.components.JsDialog
 import app.mynta.template.android.presentation.web.components.LoadingIndicator
 import app.mynta.template.android.presentation.web.components.PromptDialogComponent
@@ -161,6 +166,7 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
         )
     )
 
+
     if (customWebView != null) {
         AndroidView(modifier = Modifier.fillMaxSize(), factory = { mContext ->
             val frameLayout = FrameLayout(mContext)
@@ -267,8 +273,51 @@ fun chromeClient(
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
     onCustomViewHidden: () -> Unit
 ): WebKitChromeClient {
+    var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
+
+    val fileChooser = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            filePath?.onReceiveValue(FileChooserParams.parseResult(result.resultCode, result.data))
+            filePath = null
+        }
+    )
+
     val chromeClient = remember {
         object: WebKitChromeClient() {
+            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
+                if (filePath != null) {
+                    filePath?.onReceiveValue(null)
+                }
+                filePath = filePathCallback
+
+                val contentSelectionIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                    setDataAndType(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        "image/* video/*"
+                    )
+                }
+                val mimeTypes = arrayOf(
+                    "text/csv",
+                    "text/comma-separated-values",
+                    "application/pdf",
+                    "image/*",
+                    "video/*",
+                    "*/*"
+                )
+                contentSelectionIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+
+                val chooserIntent = Intent(Intent.ACTION_CHOOSER).apply {
+                    putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+                    putExtra(Intent.EXTRA_TITLE, "Upload")
+                }
+                fileChooser.launch(chooserIntent)
+
+                return true
+            }
+
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 message?.let { onJsDialog(JsDialog.Alert(it), result!!) }
                 return true
