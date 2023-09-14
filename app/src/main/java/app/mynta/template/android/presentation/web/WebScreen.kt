@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.ValueCallback
@@ -109,6 +110,8 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
                 if (webKitConfig.userAgent.android != "") {
                     settings.userAgentString = webKitConfig.userAgent.android
                 }
+
+                addJavascriptInterface(JavaScriptInterface(), "app")
 
                 setDownloadListener { url, _, _, _, _ ->
                     context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
@@ -227,6 +230,13 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
             }
             else -> { }
         }
+    }
+}
+
+class JavaScriptInterface {
+    @JavascriptInterface
+    fun injectedFunction() {
+
     }
 }
 
