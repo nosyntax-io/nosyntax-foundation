@@ -271,7 +271,6 @@ fun chromeClient(
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
     onCustomViewHidden: () -> Unit
 ): WebKitChromeClient {
-
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
     val fileChooserDelegate = FileChooserDelegate(context) { uris ->
@@ -285,21 +284,6 @@ fun chromeClient(
 
     val chromeClient = remember {
         object: WebKitChromeClient() {
-            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-                filePath?.onReceiveValue(null)
-                filePath = filePathCallback
-
-                val customFileChooserParams = object : FileChooserParams() {
-                    override fun getMode() = 1
-                    override fun getAcceptTypes() = arrayOf("image/*")
-                    override fun isCaptureEnabled() = true
-                    override fun getTitle() = fileChooserParams.title
-                    override fun getFilenameHint() = fileChooserParams.filenameHint
-                    override fun createIntent() = fileChooserParams.createIntent()
-                }
-                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
-            }
-
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 message?.let { onJsDialog(JsDialog.Alert(it), result!!) }
                 return true
@@ -328,11 +312,23 @@ fun chromeClient(
                     onCustomViewShown(view, callback)
                 }
             }
+
+            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
+                filePath?.onReceiveValue(null)
+                filePath = filePathCallback
+
+                val customFileChooserParams = object : FileChooserParams() {
+                    override fun getMode() = 1
+                    override fun getAcceptTypes() = arrayOf("image/*")
+                    override fun isCaptureEnabled() = true
+                    override fun getTitle() = fileChooserParams.title
+                    override fun getFilenameHint() = fileChooserParams.filenameHint
+                    override fun createIntent() = fileChooserParams.createIntent()
+                }
+                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
+            }
         }
     }
 
     return chromeClient
 }
-
-
-

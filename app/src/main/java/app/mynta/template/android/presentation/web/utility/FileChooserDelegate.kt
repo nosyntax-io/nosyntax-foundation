@@ -8,15 +8,19 @@ import android.provider.MediaStore
 import android.webkit.WebChromeClient
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
+import androidx.core.net.toUri
 import app.mynta.template.android.core.AppFileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
 class FileChooserDelegate(val context: Context, val onReceiveResult: (results: Array<Uri>?) -> Unit): CoroutineScope {
     private val browseFilesDelegate = BrowseFilesDelegate(context)
+    private val cameraCaptureDelegate = CameraCaptureDelegate(context)
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + Job()
@@ -26,20 +30,84 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
         return true
     }
 
-    fun onActivityResult(data: Intent?) {
-        browseFilesDelegate.handleResult(data) { results ->
-            onReceiveResult(results)
+    fun onActivityResult(intent: Intent?) {
+        when (intent.containsFileResult()) {
+            true -> browseFilesDelegate.handleResult(intent) { onReceiveResult(it) }
+            else -> cameraCaptureDelegate.handleResult { onReceiveResult(it) }
         }
     }
 
     private fun openChooser(params: WebChromeClient.FileChooserParams, launcher : ManagedActivityResultLauncher<Intent, ActivityResult>) {
+        val cameraIntent = cameraCaptureDelegate.buildIntent(params)
         val chooserIntent = browseFilesDelegate.buildIntent(params)
+        val extraIntents = listOfNotNull(cameraIntent).toTypedArray()
 
         val intent = Intent(Intent.ACTION_CHOOSER).apply {
             putExtra(Intent.EXTRA_INTENT, chooserIntent)
             putExtra(Intent.EXTRA_TITLE, params.title)
+            putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents)
         }
         launcher.launch(intent)
+    }
+
+    internal class CameraCaptureDelegate(val context: Context) {
+        companion object {
+            private var cameraImagePath: String? = null
+        }
+
+        fun buildIntent(params: WebChromeClient.FileChooserParams): Intent? {
+            if (!params.allowsCameraCapture()) return null
+
+            val file = createEmptyImageFile() ?: return null
+            val uri = AppFileProvider.getUriForFile(context, file.toUri())
+
+            cameraImagePath = file.absolutePath
+
+            return Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                putExtra(MediaStore.EXTRA_OUTPUT, uri)
+            }
+        }
+
+        fun handleResult(onResult: (Array<Uri>?) -> Unit) {
+            val results = buildCameraImageResult()
+
+            onResult(results)
+            cameraImagePath = null
+        }
+
+        private fun buildCameraImageResult(): Array<Uri>? {
+            val filePath = cameraImagePath ?: return null
+            val file = File(filePath)
+            val uri = AppFileProvider.getUriForFile(context, file.toUri()) ?: return null
+
+            return when (file.length()) {
+                0L -> null
+                else -> arrayOf(uri)
+            }
+        }
+
+        private fun createEmptyImageFile(): File? {
+            return try {
+                val directory = File(context.cacheDir, "app_cache")
+                if (!directory.exists()) {
+                    directory.mkdir()
+                }
+                return File.createTempFile("Capture_", ".jpg", directory)
+            } catch (e: IOException) {
+                null
+            }
+        }
+
+        private fun WebChromeClient.FileChooserParams.allowsCameraCapture(): Boolean {
+            val accept = defaultAcceptType()
+            val acceptsAny = accept == "*/*"
+            val acceptsImages = accept == "image/*" || accept == "image/jpg"
+            return isCaptureEnabled && (acceptsAny || acceptsImages)
+        }
+
+        private fun defaultAcceptType(): String {
+            return "image/*"
+        }
     }
 
     internal class BrowseFilesDelegate(val context: Context) : CoroutineScope {
@@ -107,9 +175,20 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
         }
 
         private suspend fun writeToCachedFile(uri: Uri): Uri? {
-            return AppFileProvider.writeUriToFile(context, uri)?.let {
-                AppFileProvider.contentUriForFile(context, it)
+            return AppFileProvider.writeUriToFile(context, File(context.cacheDir, "app_cache"), uri)?.let {
+                AppFileProvider.getUriForFile(context, it)
             }
         }
+    }
+
+    private fun Intent?.containsFileResult(): Boolean {
+        if (this == null) {
+            return false
+        }
+
+        val clipData = this.clipData
+        val dataString = this.dataString
+
+        return clipData != null || dataString != null
     }
 }

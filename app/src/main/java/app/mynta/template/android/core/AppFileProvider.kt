@@ -11,19 +11,31 @@ import java.io.FileOutputStream
 
 class AppFileProvider: FileProvider() {
     companion object {
-        private suspend fun writeToCachedFile(context: Context, uri: Uri): Uri? {
-            val cacheDir = File(context.cacheDir, "file_uploads")
-            if (!cacheDir.exists()) {
-                cacheDir.mkdir()
+        fun getUriForFile(context: Context, uri: Uri): Uri? {
+            return try {
+                val file = File(uri.path ?: return null)
+                val authority = "${context.packageName}.provider"
+                val fileUri = getUriForFile(context, authority, file)
+
+                fileUri
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+
+        suspend fun writeUriToFile(context: Context, directory: File, uri: Uri): Uri? {
+            if (!directory.exists()) {
+                directory.mkdir()
             }
 
             val fileName = DocumentFile.fromSingleUri(context, uri)?.name
-            val cachedFile = File(cacheDir, fileName ?: return null)
+            val outputFile = File(directory, fileName ?: return null)
 
             return try {
                 val inputStream = context.contentResolver.openInputStream(uri) ?: return null
                 val outputStream = withContext(Dispatchers.IO) {
-                    FileOutputStream(cachedFile)
+                    FileOutputStream(outputFile)
                 }
 
                 inputStream.use { input ->
@@ -32,24 +44,7 @@ class AppFileProvider: FileProvider() {
                     }
                 }
 
-                Uri.fromFile(cachedFile)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
-
-        suspend fun writeUriToFile(context: Context, uri: Uri): Uri? {
-            return writeToCachedFile(context, uri)
-        }
-
-        fun contentUriForFile(context: Context, fileUri: Uri): Uri? {
-            return try {
-                val cachedFile = File(fileUri.path ?: return null)
-                val authority = "${context.packageName}.provider"
-                val cachedUri = getUriForFile(context, authority, cachedFile)
-
-                cachedUri
+                Uri.fromFile(outputFile)
             } catch (e: Exception) {
                 e.printStackTrace()
                 null
