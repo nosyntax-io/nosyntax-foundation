@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
@@ -19,6 +20,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -45,6 +48,7 @@ import app.mynta.template.android.core.utility.Utilities.isUrlValid
 import app.mynta.template.android.core.utility.WebKitChromeClient
 import app.mynta.template.android.core.utility.WebKitClient
 import app.mynta.template.android.core.utility.WebView
+import app.mynta.template.android.core.utility.ads.InterstitialAd
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
 import app.mynta.template.android.domain.model.app_config.AppConfig
@@ -54,12 +58,17 @@ import app.mynta.template.android.presentation.web.component.JsDialog
 import app.mynta.template.android.presentation.web.component.LoadingIndicator
 import app.mynta.template.android.presentation.web.component.PromptDialogComponent
 import app.mynta.template.android.presentation.web.utility.FileChooserDelegate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     val context = LocalContext.current
     val webKitConfig = appConfig.modules.webkit
+
+    val coroutineScope = rememberCoroutineScope()
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
@@ -72,12 +81,17 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by rememberSaveable { mutableStateOf(false) }
 
+    val interstitialAd = remember {
+        InterstitialAd(context as ComponentActivity, "ca-app-pub-3940256099942544/1033173712")
+    }
+    interstitialAd.loadInterstitialAd()
+
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
 
     LaunchedEffect(navigator) {
         if (webViewState.viewState == null) {
-            navigator.loadUrl("https://tus.io/demo")
+            navigator.loadUrl("file:///android_asset/index.html")
         }
     }
 
@@ -111,7 +125,13 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
                     settings.userAgentString = webKitConfig.userAgent.android
                 }
 
-                addJavascriptInterface(JavaScriptInterface(), "app")
+                addJavascriptInterface(
+                    JavaScriptInterface(
+                        coroutineScope = coroutineScope,
+                        interstitialAd = interstitialAd
+                    ),
+                    "app"
+                )
 
                 setDownloadListener { url, _, _, _, _ ->
                     context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
@@ -233,10 +253,17 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     }
 }
 
-class JavaScriptInterface {
+class JavaScriptInterface(
+    private val coroutineScope: CoroutineScope,
+    private val interstitialAd: InterstitialAd
+) {
     @JavascriptInterface
-    fun injectedFunction() {
-
+    fun showInterstitialAd() {
+        coroutineScope.launch(Dispatchers.Main) {
+            interstitialAd.showInterstitialAd(onAdDismissed = {
+                Log.d("GoogleAdmob", "Ad Dismissed!")
+            })
+        }
     }
 }
 

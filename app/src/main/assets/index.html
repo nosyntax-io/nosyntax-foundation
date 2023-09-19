@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dialog Example</title>
-    <script>
-        function showAlert() {
-            alert("This is an alert!");
-        }
-
-        function showConfirm() {
-            var result = confirm("Do you confirm?");
-            if (result) {
-                alert("You confirmed!");
-            } else {
-                alert("You canceled!");
-            }
-        }
-
-        function showPrompt() {
-            var userInput = prompt("Please enter something:");
-            if (userInput === null) {
-                alert("You canceled the prompt!");
-            } else {
-                alert("You entered: " + userInput);
-            }
-        }
-    </script>
+    <title>Experimental Example</title>
 </head>
 <body>
-<h1>Dialog Example</h1>
+    <h1>Experimental Example</h1>
 
-<button onclick="showAlert()">Show Alert</button>
-<button onclick="showConfirm()">Show Confirm</button>
-<button onclick="showPrompt()">Show Prompt</button>
+    <button onclick="app.showInterstitialAd();">Show Interstitial Ad</button>
 </body>
 </html>
