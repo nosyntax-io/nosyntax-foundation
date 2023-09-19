@@ -8,24 +8,21 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class App : Application() {
-    companion object {
-        @get:Synchronized
-        lateinit var instance: App
-            private set
-    }
 
     override fun onCreate() {
         super.onCreate()
 
-        instance = this
-
         Connectivity.getInstance().initializeWithApplicationContext(context = this)
 
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+        initializeOneSignal()
+
+        MobileAds.initialize(this)
+    }
+
+    private fun initializeOneSignal() {
+        // OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
         OneSignal.initWithContext(this)
         OneSignal.setAppId(BuildConfig.ONE_SIGNAL_APP_ID)
         OneSignal.promptForPushNotifications()
-
-        MobileAds.initialize(this)
     }
 }
