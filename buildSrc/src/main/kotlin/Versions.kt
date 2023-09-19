@@ -13,6 +13,7 @@ object Versions {
     const val oneSignal = "[4.0.0, 4.99.99]"
     const val splashScreen = "1.0.0"
     const val lottie = "6.1.0"
+    const val playServicesAds = "22.4.0"
     const val junit = "4.13.2"
     const val extJunit = "1.1.5"
     const val espressoCore = "3.5.1"
