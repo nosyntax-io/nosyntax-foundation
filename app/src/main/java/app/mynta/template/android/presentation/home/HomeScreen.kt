@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.component.AppBar
 import app.mynta.template.android.core.component.NavigationActionType
+import app.mynta.template.android.core.component.SnackbarComponent
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.navigation.component.SideMenu
@@ -88,8 +92,15 @@ private fun HomeContent(
 ) {
     val selectedItem = navigationItems.find { it.route == currentRoute }
     val components = appConfig.appearance.components
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { SnackbarComponent(it.visuals.message) }
+            )
+        },
         topBar = {
             if (components.appBar.display) {
                 val navigationActionType = if (isUtilityScreen(currentRoute)) NavigationActionType.Back
