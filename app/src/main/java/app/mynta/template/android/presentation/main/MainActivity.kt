@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
-import app.mynta.template.android.core.utility.Coroutines.collectLatestOnLifecycleStarted
+import app.mynta.template.android.core.utility.collectLatestOnLifecycleStarted
 import app.mynta.template.android.core.utility.monetize.InterstitialAd
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.ui.theme.DynamicTheme

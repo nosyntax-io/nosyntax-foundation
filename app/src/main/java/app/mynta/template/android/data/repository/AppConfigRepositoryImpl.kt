@@ -1,6 +1,6 @@
 package app.mynta.template.android.data.repository
 
-import app.mynta.template.android.core.utility.Exceptions
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.utility.Resource
 import app.mynta.template.android.data.mapper.toConfiguration
 import app.mynta.template.android.data.source.remote.APIService
@@ -23,9 +23,9 @@ class AppConfigRepositoryImpl @Inject constructor(private val service: APIServic
                 emit(Resource.Success(response.toConfiguration()))
             } catch (t: Throwable) {
                 when (t) {
-                    is IOException -> emit(Resource.Error(Exceptions.NETWORK_FAILURE_EXCEPTION))
-                    is HttpException -> emit(Resource.Error(Exceptions.HTTP_RESPONSE_EXCEPTION))
-                    else -> emit(Resource.Error(Exceptions.MALFORMED_REQUEST_EXCEPTION))
+                    is IOException -> emit(Resource.Error(Constants.NETWORK_FAILURE_EXCEPTION))
+                    is HttpException -> emit(Resource.Error(Constants.HTTP_RESPONSE_EXCEPTION))
+                    else -> emit(Resource.Error(Constants.MALFORMED_REQUEST_EXCEPTION))
                 }
             }
         }

@@ -8,12 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-object Coroutines {
-    fun <T> ComponentActivity.collectLatestOnLifecycleStarted(flow: Flow<T>, collect: suspend (T) -> Unit) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collectLatest(collect)
-            }
+fun <T> ComponentActivity.collectLatestOnLifecycleStarted(flow: Flow<T>, collect: suspend (T) -> Unit) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collectLatest(collect)
         }
     }
 }

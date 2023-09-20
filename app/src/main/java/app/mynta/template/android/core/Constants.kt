@@ -1,6 +1,11 @@
 package app.mynta.template.android.core
 
 object Constants {
+    const val INTERNET_CONNECTION_EXCEPTION = "exception:internet_connection"
+    const val NETWORK_FAILURE_EXCEPTION = "exception:network_failure"
+    const val HTTP_RESPONSE_EXCEPTION = "exception:http_response"
+    const val MALFORMED_REQUEST_EXCEPTION = "exception:malformed_request"
+
     const val BACKGROUND_NEUTRAL = "neutral"
     const val BACKGROUND_SOLID = "solid"
     const val BACKGROUND_GRADIENT = "gradient"
@@ -8,7 +13,6 @@ object Constants {
     const val LABEL_HIDDEN = "hidden"
     const val LABEL_ALWAYS = "always"
     const val LABEL_SELECTED = "selected"
-
 
     // data must be retrieved from the server.
     const val WEB_JAVASCRIPT_OPTION = true

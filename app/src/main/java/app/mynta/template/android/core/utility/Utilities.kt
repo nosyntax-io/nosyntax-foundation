@@ -14,7 +14,9 @@ object Utilities {
     }
 
     fun isUrlValid(url: String): Boolean {
-        return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")
+        return url.startsWith("http://")
+            || url.startsWith("https://")
+            || url.startsWith("file://")
     }
 
     fun Context.findActivity(): Activity? = when (this) {
