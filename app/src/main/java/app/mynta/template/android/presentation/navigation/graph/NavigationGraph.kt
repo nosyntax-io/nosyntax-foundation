@@ -28,7 +28,7 @@ object Roles {
 
 object Types {
     const val TYPE_REGULAR = "regular"
-    const val TYPE_CORE = "core"
+    const val TYPE_CORE = "app"
     const val TYPE_OTHER = "other"
 }
 

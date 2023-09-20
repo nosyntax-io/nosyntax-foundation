@@ -26,8 +26,7 @@ object Libraries {
         "com.google.code.gson:gson:${Versions.gson}",
         "com.onesignal:OneSignal:${Versions.oneSignal}",
         "androidx.core:core-splashscreen:${Versions.splashScreen}",
-        "com.airbnb.android:lottie-compose:${Versions.lottie}",
-        "com.google.android.gms:play-services-ads:${Versions.playServicesAds}"
+        "com.airbnb.android:lottie-compose:${Versions.lottie}"
     )
     val ksps = listOf(
         "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"

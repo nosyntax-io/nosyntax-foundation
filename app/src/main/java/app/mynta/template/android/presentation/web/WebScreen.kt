@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
@@ -20,7 +19,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +46,6 @@ import app.mynta.template.android.core.utility.Utilities.isUrlValid
 import app.mynta.template.android.core.utility.WebKitChromeClient
 import app.mynta.template.android.core.utility.WebKitClient
 import app.mynta.template.android.core.utility.WebView
-import app.mynta.template.android.core.utility.ads.InterstitialAd
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
 import app.mynta.template.android.domain.model.app_config.AppConfig
@@ -80,11 +77,6 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
     var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by rememberSaveable { mutableStateOf(false) }
-
-    val interstitialAd = remember {
-        InterstitialAd(context as ComponentActivity, "ca-app-pub-3940256099942544/1033173712")
-    }
-    interstitialAd.loadInterstitialAd()
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -127,8 +119,7 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
 
                 addJavascriptInterface(
                     JavaScriptInterface(
-                        coroutineScope = coroutineScope,
-                        interstitialAd = interstitialAd
+                        coroutineScope = coroutineScope
                     ),
                     "app"
                 )
@@ -255,14 +246,11 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
 
 class JavaScriptInterface(
     private val coroutineScope: CoroutineScope,
-    private val interstitialAd: InterstitialAd
 ) {
     @JavascriptInterface
     fun showInterstitialAd() {
         coroutineScope.launch(Dispatchers.Main) {
-            interstitialAd.showInterstitialAd(onAdDismissed = {
-                Log.d("GoogleAdmob", "Ad Dismissed!")
-            })
+
         }
     }
 }

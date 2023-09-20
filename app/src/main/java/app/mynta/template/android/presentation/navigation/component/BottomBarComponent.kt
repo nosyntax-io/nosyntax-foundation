@@ -50,7 +50,7 @@ fun BottomBar(
         MoreOptionsBottomSheet(
             navController = navController,
             navigationItems = navigationItems.filter { item ->
-                item.type == "core"
+                item.type == "app"
             },
             onDismiss = {
                 isMoreOptionsOpened = false

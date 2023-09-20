@@ -1,4 +1,4 @@
-package app.mynta.template.android.core.utility.ads
+package app.mynta.template.android.core.utility.monetize
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleObserver

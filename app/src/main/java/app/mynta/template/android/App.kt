@@ -2,7 +2,7 @@ package app.mynta.template.android
 
 import android.app.Application
 import app.mynta.template.android.core.utility.Connectivity
-import com.google.android.gms.ads.MobileAds
+import app.mynta.template.android.core.utility.monetize.MonetizationInitializer
 import com.onesignal.OneSignal
 import dagger.hilt.android.HiltAndroidApp
 
@@ -16,7 +16,7 @@ class App : Application() {
 
         initializeOneSignal()
 
-        MobileAds.initialize(this)
+        MonetizationInitializer.initialize(this)
     }
 
     private fun initializeOneSignal() {
