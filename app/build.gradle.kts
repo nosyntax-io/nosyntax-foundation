@@ -40,6 +40,19 @@ android {
         }
     }
 
+    flavorDimensions += "version"
+    productFlavors {
+        create("regular") {
+            dimension = "version"
+        }
+        create("monetize") {
+            dimension = "version"
+            manifestPlaceholders += mapOf(
+                "admob_app_id" to config.getProperty(AppConfig.APP_ADMOB_ID)
+            )
+        }
+    }
+
     buildTypes {
         release {
             if (config.getProperty(BuildConfig.BUILD_ENVIRONMENT) == "production") {
@@ -67,16 +80,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    flavorDimensions += "version"
-    productFlavors {
-        create("regular") {
-            dimension = "version"
-        }
-        create("monetize") {
-            dimension = "version"
         }
     }
 }
