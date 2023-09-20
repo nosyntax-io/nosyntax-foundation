@@ -1,4 +1,29 @@
-object Libraries {
+import org.gradle.kotlin.dsl.DependencyHandlerScope
+
+object Versions {
+    const val core = "1.9.0"
+    const val lifecycleRuntime = "2.6.1"
+    const val activityCompose = "1.7.2"
+    const val composeBom = "2023.06.01"
+    const val googleFonts = "1.4.3"
+    const val material = "1.5.0"
+    const val navigation = "2.7.1"
+    const val hilt = "2.48"
+    const val hiltNavigation = "1.0.0"
+    const val retrofit = "2.9.0"
+    const val gson = "2.9.1"
+    const val firebaseBom = "32.2.3"
+    const val coilCompose = "2.4.0"
+    const val oneSignal = "[4.0.0, 4.99.99]"
+    const val coreSplashScreen = "1.0.0"
+    const val lottie = "6.1.0"
+    const val playServicesAds = "22.4.0"
+    const val junit = "4.13.2"
+    const val extJunit = "1.1.5"
+    const val espressoCore = "3.5.1"
+}
+
+object Dependencies {
     val plugins = listOf(
         "com.android.application",
         "org.jetbrains.kotlin.android",
@@ -6,42 +31,57 @@ object Libraries {
         "dagger.hilt.android.plugin",
         "com.google.gms.google-services"
     )
-    val implementations = listOf(
+    val core = listOf(
         "androidx.core:core-ktx:${Versions.core}",
-        "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRunTime}",
-        "androidx.lifecycle:lifecycle-runtime-compose:${Versions.lifecycleRunTime}",
-        "androidx.activity:activity-compose:${Versions.activityCompose}",
-        "androidx.compose.material:material:${Versions.material}",
+        "androidx.core:core-splashscreen:${Versions.coreSplashScreen}",
+        "platform:androidx.compose:compose-bom:${Versions.composeBom}",
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
-        "androidx.navigation:navigation-compose:${Versions.navigation}",
         "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
         "androidx.compose.material3:material3",
-        "io.coil-kt:coil-compose:${Versions.coilCompose}",
-        "com.google.dagger:hilt-android:${Versions.daggerHilt}",
-        "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}",
+        "androidx.compose.material:material:${Versions.material}",
+        "androidx.navigation:navigation-compose:${Versions.navigation}",
+        "com.google.dagger:hilt-android:${Versions.hilt}",
+        "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}",
         "com.squareup.retrofit2:retrofit:${Versions.retrofit}",
         "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
         "com.google.code.gson:gson:${Versions.gson}",
+        "platform:com.google.firebase:firebase-bom:${Versions.firebaseBom}",
+        "io.coil-kt:coil-compose:${Versions.coilCompose}",
         "com.onesignal:OneSignal:${Versions.oneSignal}",
-        "androidx.core:core-splashscreen:${Versions.splashScreen}",
-        "com.airbnb.android:lottie-compose:${Versions.lottie}"
+        "com.airbnb.android:lottie-compose:${Versions.lottie}",
     )
-    val ksps = listOf(
-        "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
+    val monetize = listOf(
+        "com.google.android.gms:play-services-ads:${Versions.playServicesAds}"
     )
-    val testImplementations = listOf(
+    val ksp = listOf(
+        "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+    )
+    val test = listOf(
         "junit:junit:${Versions.junit}"
     )
-    val androidTestImplementations = listOf(
+    val androidTest = listOf(
+        "platform:androidx.compose:compose-bom:${Versions.composeBom}",
         "androidx.test.ext:junit:${Versions.extJunit}",
         "androidx.test.espresso:espresso-core:${Versions.espressoCore}",
         "androidx.compose.ui:ui-test-junit4"
     )
-    val debugImplementation = listOf(
+    val debug = listOf(
         "androidx.compose.ui:ui-tooling",
         "androidx.compose.ui:ui-test-manifest"
     )
 }
 
+fun DependencyHandlerScope.implementDependencies(configuration: String, dependencies: List<String>) {
+    dependencies.map { dependency ->
+        if (dependency.startsWith("platform:")) {
+            val platformNotation = dependency.removePrefix("platform:")
+            platform(platformNotation)
+        } else {
+            dependency
+        }
+    }.forEach { resolvedDependency ->
+        this.add(configuration, resolvedDependency)
+    }
+}

@@ -1,5 +1,5 @@
 plugins {
-    Libraries.plugins.forEach { id(it) }
+    Dependencies.plugins.forEach { id(it) }
 }
 
 val config = Properties().load(rootProject.file("local.properties"))
@@ -87,15 +87,11 @@ android {
 val monetizeImplementation by configurations
 
 dependencies {
-    Libraries.implementations.forEach(::implementation)
-    Libraries.ksps.forEach(::ksp)
-    Libraries.testImplementations.forEach(::testImplementation)
-    Libraries.androidTestImplementations.forEach(::androidTestImplementation)
-    Libraries.debugImplementation.forEach(::debugImplementation)
-    // platform bom
-    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    // monetize
-    monetizeImplementation("com.google.android.gms:play-services-ads:22.4.0")
+    implementDependencies("implementation", Dependencies.core)
+    implementDependencies("monetizeImplementation", Dependencies.monetize)
+    implementDependencies("testImplementation", Dependencies.test)
+    implementDependencies("androidTestImplementation", Dependencies.androidTest)
+    implementDependencies("debugImplementation", Dependencies.debug)
+    // kotlin symbol processing (KSP)
+    Dependencies.ksp.forEach(::ksp)
 }
