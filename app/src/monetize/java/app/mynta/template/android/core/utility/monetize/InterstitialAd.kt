@@ -8,7 +8,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
-class InterstitialAd(private val activity: ComponentActivity, private val adUnitId: String): LifecycleObserver {
+class InterstitialAd(private val activity: ComponentActivity, private val adUnitId: String = ""): LifecycleObserver {
     private var mInterstitialAd: InterstitialAd? = null
     private var adRequest = AdRequest.Builder().build()
 

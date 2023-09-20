@@ -11,3 +11,4 @@ config.app.version_name = PARAMETER_APP_VERSION_NAME
 config.app.access_token = PARAMETER_APP_ACCESS_TOKEN
 config.app.onesignal_app_id = PARAMETER_APP_ONESIGNAL_APP_ID
 config.app.admob_app_id = PARAMETER_APP_ADMOB_APP_ID
+config.app.admob_interstitial_ad_unit_id = PARAMETER_APP_ADMOB_INTERSTITIAL_AD_UNIT_ID

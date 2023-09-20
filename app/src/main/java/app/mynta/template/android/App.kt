@@ -2,7 +2,7 @@ package app.mynta.template.android
 
 import android.app.Application
 import app.mynta.template.android.core.utility.Connectivity
-import app.mynta.template.android.core.utility.monetize.MonetizationInitializer
+import app.mynta.template.android.core.utility.monetize.MonetizeController
 import com.onesignal.OneSignal
 import dagger.hilt.android.HiltAndroidApp
 
@@ -16,7 +16,7 @@ class App : Application() {
 
         initializeOneSignal()
 
-        MonetizationInitializer.initialize(this)
+        MonetizeController.initialize(this)
     }
 
     private fun initializeOneSignal() {

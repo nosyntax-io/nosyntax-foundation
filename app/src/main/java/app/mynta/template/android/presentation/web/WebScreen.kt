@@ -1,26 +1,17 @@
 package app.mynta.template.android.presentation.web
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
-import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
-import android.webkit.WebView
 import android.widget.FrameLayout
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
@@ -29,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -41,10 +31,6 @@ import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.component.SystemUIControllerComponent
 import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
-import app.mynta.template.android.core.utility.Intents.handleUrlAction
-import app.mynta.template.android.core.utility.Utilities.isUrlValid
-import app.mynta.template.android.core.utility.WebKitChromeClient
-import app.mynta.template.android.core.utility.WebKitClient
 import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
@@ -54,18 +40,14 @@ import app.mynta.template.android.presentation.web.component.ConfirmDialogCompon
 import app.mynta.template.android.presentation.web.component.JsDialog
 import app.mynta.template.android.presentation.web.component.LoadingIndicator
 import app.mynta.template.android.presentation.web.component.PromptDialogComponent
-import app.mynta.template.android.presentation.web.utility.FileChooserDelegate
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import app.mynta.template.android.presentation.web.component.chromeClient
+import app.mynta.template.android.presentation.web.component.webClient
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     val context = LocalContext.current
     val webKitConfig = appConfig.modules.webkit
-
-    val coroutineScope = rememberCoroutineScope()
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
@@ -83,7 +65,7 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
 
     LaunchedEffect(navigator) {
         if (webViewState.viewState == null) {
-            navigator.loadUrl("file:///android_asset/index.html")
+            navigator.loadUrl(url)
         }
     }
 
@@ -117,12 +99,7 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
                     settings.userAgentString = webKitConfig.userAgent.android
                 }
 
-                addJavascriptInterface(
-                    JavaScriptInterface(
-                        coroutineScope = coroutineScope
-                    ),
-                    "app"
-                )
+                addJavascriptInterface(JavaScriptInterface(), "app")
 
                 setDownloadListener { url, _, _, _, _ ->
                     context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
@@ -244,116 +221,9 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     }
 }
 
-class JavaScriptInterface(
-    private val coroutineScope: CoroutineScope,
-) {
+class JavaScriptInterface {
     @JavascriptInterface
     fun showInterstitialAd() {
-        coroutineScope.launch(Dispatchers.Main) {
 
-        }
     }
-}
-
-@Composable
-fun webClient(
-    context: Context,
-    onResourceLoaded: () -> Unit,
-    onRequestInterrupted: () -> Unit
-): WebKitClient {
-    val webClient = remember {
-        object: WebKitClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val url = request?.url.toString()
-                return if (isUrlValid(url)) {
-                    navigator.loadUrl(url)
-                    true
-                } else {
-                    context.handleUrlAction(url)
-                    true
-                }
-            }
-
-            override fun onLoadResource(view: WebView?, url: String?) {
-                super.onLoadResource(view, url)
-                onResourceLoaded()
-            }
-
-            override fun onReceivedError(view: WebView, request: WebResourceRequest?, error: WebResourceError?) {
-                super.onReceivedError(view, request, error)
-                onRequestInterrupted()
-            }
-        }
-    }
-
-    return webClient
-}
-
-@Composable
-fun chromeClient(
-    context: Context,
-    onJsDialog: (JsDialog, JsResult) -> Unit,
-    onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
-    onCustomViewHidden: () -> Unit
-): WebKitChromeClient {
-    var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
-
-    val fileChooserDelegate = FileChooserDelegate(context) { uris ->
-        filePath?.onReceiveValue(uris)
-        filePath = null
-    }
-
-    val fileChooser = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
-        fileChooserDelegate.onActivityResult(result.data)
-    }
-
-    val chromeClient = remember {
-        object: WebKitChromeClient() {
-            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Alert(it), result!!) }
-                return true
-            }
-
-            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Confirm(it), result!!) }
-                return true
-            }
-
-            override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Prompt(it, defaultValue.toString()), result!!) }
-                return true
-            }
-
-            override fun getDefaultVideoPoster(): Bitmap? {
-                return BitmapFactory.decodeResource(context.resources, 2130837573)
-            }
-
-            override fun onHideCustomView() {
-                onCustomViewHidden()
-            }
-
-            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-                if (view != null && callback != null) {
-                    onCustomViewShown(view, callback)
-                }
-            }
-
-            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-                filePath?.onReceiveValue(null)
-                filePath = filePathCallback
-
-                val customFileChooserParams = object : FileChooserParams() {
-                    override fun getMode() = 1
-                    override fun getAcceptTypes() = arrayOf("image/*")
-                    override fun isCaptureEnabled() = true
-                    override fun getTitle() = fileChooserParams.title
-                    override fun getFilenameHint() = fileChooserParams.filenameHint
-                    override fun createIntent() = fileChooserParams.createIntent()
-                }
-                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
-            }
-        }
-    }
-
-    return chromeClient
 }

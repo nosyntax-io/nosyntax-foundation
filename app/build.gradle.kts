@@ -24,6 +24,7 @@ android {
         }
         buildConfigField("String", "ACCESS_TOKEN", "\"${config.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
         buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_AD_UNIT_ID", "\"${config.getProperty(AppConfig.APP_ADMOB_INTERSTITIAL_AD_UNIT_Id)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -40,13 +41,13 @@ android {
         }
     }
 
-    flavorDimensions += "version"
+    flavorDimensions += "default"
     productFlavors {
         create("regular") {
-            dimension = "version"
+            dimension = "default"
         }
         create("monetize") {
-            dimension = "version"
+            dimension = "default"
             manifestPlaceholders += mapOf(
                 "admob_app_id" to config.getProperty(AppConfig.APP_ADMOB_ID)
             )
