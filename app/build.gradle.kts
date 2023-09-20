@@ -10,21 +10,21 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = config.getProperty(AppConfig.APP_ID)
-        versionCode = config.getProperty(AppConfig.APP_VERSION_NUMBER).toInt()
-        versionName = config.getProperty(AppConfig.APP_VERSION_NAME)
+        applicationId = config.getProperty(AppConfig.ID)
+        versionCode = config.getProperty(AppConfig.VERSION_NUMBER).toInt()
+        versionName = config.getProperty(AppConfig.VERSION_NAME)
         minSdk = 24
         targetSdk = 34
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", config.getProperty(AppConfig.APP_NAME))
+            ResourceValue("string", "app_name", config.getProperty(AppConfig.NAME))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
-        buildConfigField("String", "ACCESS_TOKEN", "\"${config.getProperty(AppConfig.APP_ACCESS_TOKEN)}\"")
-        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(AppConfig.APP_ONESIGNAL_ID)}\"")
-        buildConfigField("String", "ADMOB_INTERSTITIAL_AD_UNIT_ID", "\"${config.getProperty(AppConfig.APP_ADMOB_INTERSTITIAL_AD_UNIT_Id)}\"")
+        buildConfigField("String", "ACCESS_TOKEN", "\"${config.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
+        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_AD_UNIT_ID", "\"${config.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -49,14 +49,14 @@ android {
         create("monetize") {
             dimension = "default"
             manifestPlaceholders += mapOf(
-                "admob_app_id" to config.getProperty(AppConfig.APP_ADMOB_ID)
+                "admob_app_id" to config.getProperty(AdmobConfig.APP_ID)
             )
         }
     }
 
     buildTypes {
         release {
-            if (config.getProperty(BuildConfig.BUILD_ENVIRONMENT) == "production") {
+            if (config.getProperty(BuildConfig.ENVIRONMENT) == "production") {
                 isMinifyEnabled = true
                 isShrinkResources = true
             }
@@ -84,8 +84,6 @@ android {
         }
     }
 }
-
-val monetizeImplementation by configurations
 
 dependencies {
     implementDependencies("implementation", Dependencies.core)

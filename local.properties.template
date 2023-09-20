@@ -2,13 +2,20 @@
 # In the 'production' build environment:
 # 1. Minification is enabled to optimize code size.
 # 2. Resource shrinking is enabled to reduce the APK size.
-config.build.environment = PARAMETER_BUILD_ENVIRONMENT
+config.build.environment = PARAM_BUILD_ENVIRONMENT
 
-config.app.id = PARAMETER_APP_ID
-config.app.name = PARAMETER_APP_NAME
-config.app.version_number = PARAMETER_APP_VERSION_NUMBER
-config.app.version_name = PARAMETER_APP_VERSION_NAME
-config.app.access_token = PARAMETER_APP_ACCESS_TOKEN
-config.app.onesignal_app_id = PARAMETER_APP_ONESIGNAL_APP_ID
-config.app.admob_app_id = PARAMETER_APP_ADMOB_APP_ID
-config.app.admob_interstitial_ad_unit_id = PARAMETER_APP_ADMOB_INTERSTITIAL_AD_UNIT_ID
+# Configure app info.
+config.app.id = PARAM_APP_ID
+config.app.name = PARAM_APP_NAME
+config.app.version_number = PARAM_APP_VERSION_NUMBER
+config.app.version_name = PARAM_APP_VERSION_NAME
+
+# Configure server access.
+config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
+
+# Configure onesignal for push notifications.
+config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID
+
+# Configure admob for monetization
+config.admob.app_id = PARAM_ADMOB_APP_ID
+config.admob.interstitial_id = PARAM_ADMOB_INTERSTITIAL_ID

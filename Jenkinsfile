@@ -19,6 +19,8 @@ pipeline {
     string defaultValue: '', name: 'VERSION_NUMBER'
     string defaultValue: '', name: 'VERSION_NAME'
     string defaultValue: '', name: 'ONESIGNAL_APP_ID'
+    string defaultValue: '', name: 'ADMOB_APP_ID'
+    string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
     // keystore credentials
     string defaultValue: '', name: 'KEYSTORE_FILE'
     string defaultValue: '', name: 'KEYSTORE_PASSWORD'
@@ -36,6 +38,8 @@ pipeline {
     VERSION_NUMBER = "${params.VERSION_NUMBER}"
     VERSION_NAME = "${params.VERSION_NAME}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
+    ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
+    ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
     KEYSTORE_FILE = "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD = "${params.KEYSTORE_PASSWORD}"
     KEY_ALIAS = "${params.KEY_ALIAS}"
@@ -59,13 +63,15 @@ pipeline {
           steps {
             script {
               def propertyMap = [
-                'PARAMETER_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
-                'PARAMETER_APP_ID': 'APP_ID',
-                'PARAMETER_APP_NAME': 'APP_NAME',
-                'PARAMETER_APP_VERSION_NUMBER': 'VERSION_NUMBER',
-                'PARAMETER_APP_VERSION_NAME': 'VERSION_NAME',
-                'PARAMETER_APP_ACCESS_TOKEN': 'ACCESS_TOKEN',
-                'PARAMETER_APP_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID'
+                'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
+                'PARAM_APP_ID': 'APP_ID',
+                'PARAM_APP_NAME': 'APP_NAME',
+                'PARAM_APP_VERSION_NUMBER': 'VERSION_NUMBER',
+                'PARAM_APP_VERSION_NAME': 'VERSION_NAME',
+                'PARAM_SERVER_ACCESS_TOKEN': 'ACCESS_TOKEN',
+                'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
+                'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
+                'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
               ]
               def templateSourcePath = "${WORKSPACE}/local.properties.template"
               def outputSourceDestination = "${WORKSPACE}/local.properties"
@@ -126,10 +132,10 @@ pipeline {
         script {
           try {
             def propertyMap = [
-              'PARAMETER_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
-              'PARAMETER_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
-              'PARAMETER_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
-              'PARAMETER_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
+              'PARAM_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
+              'PARAM_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+              'PARAM_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
+              'PARAM_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
             ]
             def templateSourcePath = "${WORKSPACE}/signing.properties.template"
             def outputDestination = "${WORKSPACE}/signing.properties"

@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // TODO: Block interstitial ad when in foreground.
         interstitialAd = InterstitialAd(activity = this, adUnitId = BuildConfig.ADMOB_INTERSTITIAL_AD_UNIT_ID).apply {
             loadInterstitialAd()
         }
