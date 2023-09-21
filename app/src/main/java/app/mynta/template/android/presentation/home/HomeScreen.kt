@@ -45,7 +45,7 @@ fun HomeScreen(
     navController: NavHostController = rememberNavController()
 ) {
     val context = LocalContext.current
-    val appConfig by viewModel.appConfig.collectAsState()
+    val appConfig by viewModel.appConfigUI.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
