@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -20,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -44,11 +44,19 @@ import app.mynta.template.android.presentation.web.component.LoadingIndicator
 import app.mynta.template.android.presentation.web.component.PromptDialogComponent
 import app.mynta.template.android.presentation.web.component.chromeClient
 import app.mynta.template.android.presentation.web.component.webClient
+import app.mynta.template.android.presentation.web.utility.JavaScriptInterface
+import kotlinx.coroutines.CoroutineScope
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
+fun WebScreen(
+    appConfig: AppConfig,
+    url: String,
+    drawerState: DrawerState,
+    coroutineScope: CoroutineScope = rememberCoroutineScope()
+) {
     val context = LocalContext.current
+
     val webKitConfig = appConfig.modules.webkit
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
@@ -103,7 +111,12 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
                     settings.userAgentString = webKitConfig.userAgent.android
                 }
 
-                addJavascriptInterface(JavaScriptInterface(), "app")
+                addJavascriptInterface(
+                    JavaScriptInterface(
+                        context = context,
+                        coroutineScope = coroutineScope
+                    ), "app"
+                )
 
                 setDownloadListener { url, _, _, _, _ ->
                     context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
@@ -230,12 +243,5 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
             }
             else -> { }
         }
-    }
-}
-
-class JavaScriptInterface {
-    @JavascriptInterface
-    fun showInterstitialAd() {
-
     }
 }
