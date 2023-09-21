@@ -12,6 +12,7 @@ config.app.version_name = PARAM_APP_VERSION_NAME
 
 # Configure server access.
 config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
+config.server.envato_token = PARAM_SERVER_ENVATO_TOKEN
 
 # Configure onesignal for push notifications.
 config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID
