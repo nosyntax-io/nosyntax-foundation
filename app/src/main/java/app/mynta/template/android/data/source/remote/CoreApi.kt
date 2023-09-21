@@ -8,26 +8,26 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface CoreApi {
+interface CoreAPI {
     @FormUrlEncoded
     @POST("request_app_config.inc.php")
     suspend fun appConfig(
-        @Field("access_token") accessToken: String = API_ACCESS_TOKEN
+        @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): AppConfigDto
 
     @FormUrlEncoded
     @POST("request_policies.inc.php")
     suspend fun policies(
-        @Field("access_token") accessToken: String = API_ACCESS_TOKEN
+        @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): PoliciesDto
 
     companion object {
-        private const val API_BASE_URL = "https://api.mynta.app/v1/"
-        private const val API_ACCESS_TOKEN = BuildConfig.ACCESS_TOKEN
+        private const val BASE_URL = "https://api.mynta.app/v1/"
+        private const val ACCESS_TOKEN = BuildConfig.ACCESS_TOKEN
 
-        fun getInstance(): CoreApi {
-            return ApiServiceFactory(baseUrl = API_BASE_URL)
-                .create(CoreApi::class.java)
+        fun getInstance(): CoreAPI {
+            return ApiServiceFactory(baseUrl = BASE_URL, timeout = 10)
+                .create(CoreAPI::class.java)
         }
     }
 }

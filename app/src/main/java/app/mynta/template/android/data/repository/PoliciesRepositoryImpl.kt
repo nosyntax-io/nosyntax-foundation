@@ -3,7 +3,7 @@ package app.mynta.template.android.data.repository
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.utility.Resource
 import app.mynta.template.android.data.mapper.toPolicies
-import app.mynta.template.android.data.source.remote.CoreApi
+import app.mynta.template.android.data.source.remote.CoreAPI
 import app.mynta.template.android.domain.model.policies.Policies
 import app.mynta.template.android.domain.repository.PoliciesRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PoliciesRepositoryImpl @Inject constructor(private val service: CoreApi): PoliciesRepository {
+class PoliciesRepositoryImpl @Inject constructor(private val service: CoreAPI): PoliciesRepository {
     override suspend fun getPolicies(): Flow<Resource<Policies>> {
         return flow {
             emit(Resource.Loading(true))

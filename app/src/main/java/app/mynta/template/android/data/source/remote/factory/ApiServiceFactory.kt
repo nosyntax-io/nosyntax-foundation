@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiServiceFactory(private val baseUrl: String, private val timeout: Long = 10) {
+class ApiServiceFactory(private val baseUrl: String, private val timeout: Long) {
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(ConnectivityInterceptor())

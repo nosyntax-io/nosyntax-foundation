@@ -1,6 +1,7 @@
 package app.mynta.template.android.di
 
-import app.mynta.template.android.data.source.remote.CoreApi
+import app.mynta.template.android.data.source.remote.CoreAPI
+import app.mynta.template.android.data.source.remote.EnvatoAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +13,13 @@ import javax.inject.Singleton
 object RemoteModule {
     @Provides
     @Singleton
-    fun provideCoreApi(): CoreApi {
-        return CoreApi.getInstance()
+    fun provideCoreApi(): CoreAPI {
+        return CoreAPI.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnvatoApi(): EnvatoAPI {
+        return EnvatoAPI.getInstance()
     }
 }
