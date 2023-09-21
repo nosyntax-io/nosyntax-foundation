@@ -14,12 +14,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppConfigRepositoryImpl @Inject constructor(private val service: CoreAPI): AppConfigRepository {
+class AppConfigRepositoryImpl @Inject constructor(private val coreApi: CoreAPI): AppConfigRepository {
     override suspend fun getAppConfig(): Flow<Resource<AppConfig>> {
         return flow {
             emit(Resource.Loading(true))
             try {
-                val response = service.appConfig()
+                val response = coreApi.appConfig()
                 emit(Resource.Success(response.toConfiguration()))
             } catch (t: Throwable) {
                 when (t) {

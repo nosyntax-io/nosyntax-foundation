@@ -1,8 +1,8 @@
 package app.mynta.template.android.domain.usecase.main
 
-import app.mynta.template.android.domain.usecase.app_config.GetAppConfigUseCase
+import app.mynta.template.android.domain.usecase.launch.LaunchUseCase
 import javax.inject.Inject
 
 data class MainUseCases @Inject constructor(
-    val getAppConfigUseCase: GetAppConfigUseCase
+    val launchUseCase: LaunchUseCase
 )

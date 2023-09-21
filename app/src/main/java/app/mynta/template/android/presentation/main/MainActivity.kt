@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.collectLatestOnLifecycleStarted
@@ -35,11 +36,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
+        collectLatestOnLifecycleStarted(mainViewModel.launch) { state ->
             setContent {
                 when {
                     state.response != null && state.error == null -> {
-                        val appearance = state.response.appearance
+                        val appConfig = state.response.appConfig
+                        val appearance = appConfig.appearance
                         val themeColors = appearance.themeColors
                         val typography = appearance.typography
 
@@ -58,12 +60,20 @@ class MainActivity : ComponentActivity() {
                     }
                     state.error != null -> {
                         DynamicTheme {
-                            NoConnectionComponent(onRetry = {
-                                if (Connectivity.getInstance().isOnline()) {
-                                    mainViewModel.requestAppConfig()
+                            when (state.error) {
+                                Constants.HTTP_RESPONSE_EXCEPTION -> {
+
                                 }
-                            })
+                                else -> {
+                                    NoConnectionComponent(onRetry = {
+                                        if (Connectivity.getInstance().isOnline()) {
+                                            mainViewModel.requestLaunch()
+                                        }
+                                    })
+                                }
+                            }
                         }
+
                     }
                 }
             }
