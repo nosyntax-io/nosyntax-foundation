@@ -1,5 +1,6 @@
 package app.mynta.template.android.presentation.home
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,8 +25,10 @@ import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.component.AppBar
 import app.mynta.template.android.core.component.NavigationActionType
 import app.mynta.template.android.core.component.SnackbarComponent
+import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.component.BottomBar
@@ -40,6 +44,7 @@ fun HomeScreen(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ) {
+    val context = LocalContext.current
     val appConfig by viewModel.appConfigUI.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
@@ -51,6 +56,7 @@ fun HomeScreen(
 
         val content: @Composable () -> Unit = {
             HomeContent(
+                context = context,
                 appConfig = config,
                 coroutineScope = coroutineScope,
                 navController = navController,
@@ -83,6 +89,7 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
+    context: Context,
     appConfig: AppConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -114,7 +121,9 @@ private fun HomeContent(
                         if (navigationActionType is NavigationActionType.Menu) {
                             coroutineScope.launch { drawerState.open() }
                         } else {
-                            navController.popBackStack()
+                            (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
+                                navController.popBackStack()
+                            })
                         }
                     }
                 )

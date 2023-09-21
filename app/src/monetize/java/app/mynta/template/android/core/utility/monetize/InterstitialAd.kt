@@ -42,10 +42,12 @@ class InterstitialAd(private val activity: ComponentActivity, private val adUnit
                 }
             }
             interstitialAd.show(activity)
+        } ?: run {
+            onAdDismissed()
         }
     }
 
-    fun removeInterstitial() {
+    fun release() {
         mInterstitialAd?.fullScreenContentCallback = null
         mInterstitialAd = null
     }

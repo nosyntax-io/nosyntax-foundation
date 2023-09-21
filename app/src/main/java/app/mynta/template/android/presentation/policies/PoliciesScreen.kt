@@ -1,5 +1,6 @@
 package app.mynta.template.android.presentation.policies
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,15 +16,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.component.CircularProgressBar
 import app.mynta.template.android.core.component.NoConnectionComponent
+import app.mynta.template.android.core.utility.Utilities.findActivity
+import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
-fun PoliciesScreen(viewModel: PoliciesViewModel = hiltViewModel(), request: String) {
+fun PoliciesScreen(
+    viewModel: PoliciesViewModel = hiltViewModel(),
+    navController: NavHostController,
+    request: String
+) {
+    val context = LocalContext.current
     val state by viewModel.policiesState.collectAsState()
 
     Box(modifier = Modifier
@@ -61,6 +72,12 @@ fun PoliciesScreen(viewModel: PoliciesViewModel = hiltViewModel(), request: Stri
             }
         }
     }
+
+    BackHandler(enabled = true) {
+        (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
+            navController.popBackStack()
+        })
+    }
 }
 
 @Preview
@@ -68,6 +85,7 @@ fun PoliciesScreen(viewModel: PoliciesViewModel = hiltViewModel(), request: Stri
 fun PoliciesScreenPreview() {
     DynamicTheme {
         PoliciesScreen(
+            navController = rememberNavController(),
             request = "privacy_policy"
         )
     }

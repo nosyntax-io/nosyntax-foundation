@@ -54,10 +54,16 @@ fun NavigationGraph(
                         )
                     }
                     Roles.ROLE_POLICIES -> {
-                        PoliciesScreen(request = item.route)
+                        PoliciesScreen(
+                            navController = navController,
+                            request = item.route
+                        )
                     }
                     Roles.ROLE_ABOUT -> {
-                        AboutScreen(aboutPageConfig = appConfig.aboutPage)
+                        AboutScreen(
+                            aboutPageConfig = appConfig.aboutPage,
+                            navController = navController
+                        )
                     }
                 }
             }
