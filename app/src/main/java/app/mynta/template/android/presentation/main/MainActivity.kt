@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.collectLatestOnLifecycleStarted
@@ -34,13 +33,6 @@ class MainActivity : ComponentActivity() {
             setKeepOnScreenCondition {
                 !mainViewModel.isInitialized.value
             }
-        }
-
-        interstitialAd = InterstitialAd(
-            activity = this,
-            adUnitId = BuildConfig.ADMOB_INTERSTITIAL_AD_UNIT_ID
-        ).apply {
-            loadInterstitialAd()
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
@@ -76,9 +68,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        interstitialAd = InterstitialAd(this).apply {
+            loadInterstitialAd()
+        }
     }
 
-    fun showInterstitial(onAdDismissed: () -> Unit) {
+    fun showInterstitial(onAdDismissed: () -> Unit = {}) {
         interstitialAd.showInterstitialAd(onAdDismissed = onAdDismissed)
     }
 

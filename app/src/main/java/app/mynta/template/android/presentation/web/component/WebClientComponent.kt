@@ -13,20 +13,24 @@ import app.mynta.template.android.core.utility.WebKitClient
 @Composable
 fun webClient(
     context: Context,
+    onPageLoaded: () -> Unit,
     onResourceLoaded: () -> Unit,
     onRequestInterrupted: () -> Unit
 ): WebKitClient {
     val webClient = remember {
         object: WebKitClient() {
+            override fun onPageFinished(view: WebView, url: String?) {
+                super.onPageFinished(view, url)
+                onPageLoaded()
+            }
+
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url.toString()
-                return if (Utilities.isUrlValid(url)) {
-                    navigator.loadUrl(url)
-                    true
-                } else {
+                if (!Utilities.isUrlValid(url)) {
                     context.handleUrlAction(url)
-                    true
+                    return true
                 }
+                return false
             }
 
             override fun onLoadResource(view: WebView?, url: String?) {

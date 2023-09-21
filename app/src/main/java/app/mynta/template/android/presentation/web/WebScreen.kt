@@ -31,10 +31,12 @@ import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.component.SystemUIControllerComponent
 import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
+import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
 import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.web.component.AlertDialogComponent
 import app.mynta.template.android.presentation.web.component.ConfirmDialogComponent
 import app.mynta.template.android.presentation.web.component.JsDialog
@@ -59,6 +61,8 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
     var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
     var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var noConnectionState by rememberSaveable { mutableStateOf(false) }
+
+    var totalLoadedPages by remember { mutableIntStateOf(0) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -108,6 +112,14 @@ fun WebScreen(appConfig: AppConfig, url: String, drawerState: DrawerState) {
         },
         client = webClient(
             context = context,
+            onPageLoaded = {
+                if (totalLoadedPages < 7) {
+                    totalLoadedPages++
+                } else {
+                    (context.findActivity() as MainActivity).showInterstitial()
+                    totalLoadedPages = 1
+                }
+            },
             onResourceLoaded = {
                 val resourceContainer =
                     """javascript:(function() { 
