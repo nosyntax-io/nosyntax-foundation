@@ -1,6 +1,6 @@
 package app.mynta.template.android.di
 
-import app.mynta.template.android.data.source.remote.APIService
+import app.mynta.template.android.data.source.remote.CoreApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 object RemoteModule {
     @Provides
     @Singleton
-    fun provideApi(): APIService {
-        return APIService.create()
+    fun provideCoreApi(): CoreApi {
+        return CoreApi.getInstance()
     }
 }

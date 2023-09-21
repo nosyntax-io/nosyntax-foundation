@@ -11,6 +11,7 @@ object AppConfig {
 
 object ServerConfig {
     const val ACCESS_TOKEN = "config.server.access_token"
+    const val ENVATO_TOKEN = "config.server.envato_token"
 }
 
 object OneSignalConfig {
