@@ -20,6 +20,7 @@ pipeline {
     string defaultValue: '', name: 'VERSION_NAME'
     string defaultValue: '', name: 'ONESIGNAL_APP_ID'
     string defaultValue: '', name: 'ADMOB_APP_ID'
+    string defaultValue: '', name: 'ADMOB_BANNER_ID'
     string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
     // keystore credentials
     string defaultValue: '', name: 'KEYSTORE_FILE'
@@ -39,6 +40,7 @@ pipeline {
     VERSION_NAME = "${params.VERSION_NAME}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
+    ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
     KEYSTORE_FILE = "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD = "${params.KEYSTORE_PASSWORD}"
@@ -71,6 +73,7 @@ pipeline {
                 'PARAM_SERVER_ACCESS_TOKEN': 'ACCESS_TOKEN',
                 'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
                 'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
+                'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
                 'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
               ]
               def templateSourcePath = "${WORKSPACE}/local.properties.template"
