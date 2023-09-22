@@ -11,7 +11,9 @@ import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.widget.FrameLayout
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,6 +36,7 @@ import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.core.utility.WebView
+import app.mynta.template.android.core.utility.monetize.BannerAd
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
 import app.mynta.template.android.domain.model.app_config.AppConfig
@@ -81,105 +85,112 @@ fun WebScreen(
         }
     }
 
-    WebView(
-        modifier = Modifier.fillMaxSize(),
-        state = webViewState,
-        navigator = navigator,
-        captureBackPresses = !drawerState.isOpen,
-        onCreated = { webView ->
-            webView.apply {
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                isVerticalScrollBarEnabled = false
-                isHorizontalScrollBarEnabled = false
+    Box(modifier = Modifier.fillMaxSize()) {
+        WebView(
+            modifier = Modifier.fillMaxSize(),
+            state = webViewState,
+            navigator = navigator,
+            captureBackPresses = !drawerState.isOpen,
+            onCreated = { webView ->
+                webView.apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    isVerticalScrollBarEnabled = false
+                    isHorizontalScrollBarEnabled = false
 
-                settings.apply {
-                    javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
-                    allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
-                    allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
-                    domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
-                    databaseEnabled = Constants.WEB_DATABASE_ENABLED
-                    javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
-                    cacheMode = WebSettings.LOAD_DEFAULT
-                    supportMultipleWindows()
-                    setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
-                }
+                    settings.apply {
+                        javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
+                        allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
+                        allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
+                        domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
+                        databaseEnabled = Constants.WEB_DATABASE_ENABLED
+                        javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
+                        cacheMode = WebSettings.LOAD_DEFAULT
+                        supportMultipleWindows()
+                        setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+                    }
 
-                if (webKitConfig.userAgent.android != "") {
-                    settings.userAgentString = webKitConfig.userAgent.android
-                }
+                    if (webKitConfig.userAgent.android != "") {
+                        settings.userAgentString = webKitConfig.userAgent.android
+                    }
 
-                addJavascriptInterface(
-                    JavaScriptInterface(
-                        context = context,
-                        coroutineScope = coroutineScope
-                    ), "app"
-                )
+                    addJavascriptInterface(
+                        JavaScriptInterface(
+                            context = context,
+                            coroutineScope = coroutineScope
+                        ), "app"
+                    )
 
-                setDownloadListener { url, _, _, _, _ ->
-                    context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
-                }
-            }
-        },
-        client = webClient(
-            context = context,
-            onPageLoaded = {
-                if (totalLoadedPages < 7) {
-                    totalLoadedPages++
-                } else {
-                    (context.findActivity() as MainActivity).showInterstitial()
-                    totalLoadedPages = 1
+                    setDownloadListener { url, _, _, _, _ ->
+                        context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
+                    }
                 }
             },
-            onResourceLoaded = {
-                val resourceContainer =
-                    """javascript:(function() { 
+            client = webClient(
+                context = context,
+                onPageLoaded = {
+                    if (totalLoadedPages < 7) {
+                        totalLoadedPages++
+                    } else {
+                        (context.findActivity() as MainActivity).showInterstitial()
+                        totalLoadedPages = 1
+                    }
+                },
+                onResourceLoaded = {
+                    val resourceContainer =
+                        """javascript:(function() { 
                         var node = document.createElement('style');
                         node.type = 'text/css';
                         node.innerHTML = '${webKitConfig.customCss}';
                         document.head.appendChild(node);
                     })()""".trimIndent()
-                navigator.loadUrl(resourceContainer)
-            },
-            onRequestInterrupted = {
-                noConnectionState = true
-            }
-        ),
-        chromeClient = chromeClient(
-            context = context,
-            onJsDialog = { dialog, result ->
-                jsDialogInfo = dialog to result
-            },
-            onCustomViewShown = { view, callback ->
-                if (customWebView != null) {
-                    systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                    customWebView = null
-                    customWebViewCallback?.onCustomViewHidden()
-                    customWebViewCallback = null
-                } else {
-                    customWebView = view
-                    customWebViewCallback = callback
-
-                    systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    navigator.loadUrl(resourceContainer)
+                },
+                onRequestInterrupted = {
+                    noConnectionState = true
                 }
-            },
-            onCustomViewHidden = {
-                if (customWebView != null) {
-                    systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            ),
+            chromeClient = chromeClient(
+                context = context,
+                onJsDialog = { dialog, result ->
+                    jsDialogInfo = dialog to result
+                },
+                onCustomViewShown = { view, callback ->
+                    if (customWebView != null) {
+                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-                    customWebView = null
-                    customWebViewCallback?.onCustomViewHidden()
-                    customWebViewCallback = null
+                        customWebView = null
+                        customWebViewCallback?.onCustomViewHidden()
+                        customWebViewCallback = null
+                    } else {
+                        customWebView = view
+                        customWebViewCallback = callback
+
+                        systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
+                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    }
+                },
+                onCustomViewHidden = {
+                    if (customWebView != null) {
+                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
+                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                        customWebView = null
+                        customWebViewCallback?.onCustomViewHidden()
+                        customWebViewCallback = null
+                    }
                 }
-            }
+            )
         )
-    )
+        BannerAd(
+            modifier = Modifier
+                .fillMaxWidth().align(Alignment.BottomCenter),
+            adId = "ca-app-pub-3940256099942544/6300978111"
+        )
+    }
 
     if (customWebView != null) {
         AndroidView(modifier = Modifier.fillMaxSize(), factory = { mContext ->
