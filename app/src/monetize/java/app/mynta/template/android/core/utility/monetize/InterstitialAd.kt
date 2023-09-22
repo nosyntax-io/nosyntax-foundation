@@ -18,7 +18,7 @@ class InterstitialAd(private val activity: ComponentActivity): LifecycleObserver
     }
 
     fun loadInterstitialAd() {
-        InterstitialAd.load(activity.applicationContext, BuildConfig.ADMOB_INTERSTITIAL_AD_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(activity.applicationContext, BuildConfig.ADMOB_INTERSTITIAL_ID, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 super.onAdFailedToLoad(error)
                 mInterstitialAd = null

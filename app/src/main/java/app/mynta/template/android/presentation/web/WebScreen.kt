@@ -186,9 +186,7 @@ fun WebScreen(
             )
         )
         BannerAd(
-            modifier = Modifier
-                .fillMaxWidth().align(Alignment.BottomCenter),
-            adId = "ca-app-pub-3940256099942544/6300978111"
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
         )
     }
 

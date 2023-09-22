@@ -19,6 +19,7 @@ object OneSignalConfig {
 
 object AdmobConfig {
     const val APP_ID = "config.admob.app_id"
+    const val BANNER_ID = "config.admob.banner_id"
     const val INTERSTITIAL_ID = "config.admob.interstitial_id"
 }
 

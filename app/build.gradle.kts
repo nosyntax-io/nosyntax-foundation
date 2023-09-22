@@ -24,7 +24,8 @@ android {
         }
         buildConfigField("String", "ACCESS_TOKEN", "\"${config.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
         buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
-        buildConfigField("String", "ADMOB_INTERSTITIAL_AD_UNIT_ID", "\"${config.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"${config.getProperty(AdmobConfig.BANNER_ID)}\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${config.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

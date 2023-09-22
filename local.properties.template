@@ -18,4 +18,5 @@ config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID
 
 # Configure admob for monetization
 config.admob.app_id = PARAM_ADMOB_APP_ID
+config.admob.banner_id = PARAM_ADMOB_BANNER_ID
 config.admob.interstitial_id = PARAM_ADMOB_INTERSTITIAL_ID
