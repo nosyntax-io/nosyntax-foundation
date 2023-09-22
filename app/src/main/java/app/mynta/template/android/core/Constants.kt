@@ -6,6 +6,8 @@ object Constants {
     const val HTTP_RESPONSE_EXCEPTION = "exception:http_response"
     const val MALFORMED_REQUEST_EXCEPTION = "exception:malformed_request"
 
+    const val DEEPLINK = "deeplink"
+
     const val BACKGROUND_NEUTRAL = "neutral"
     const val BACKGROUND_SOLID = "solid"
     const val BACKGROUND_GRADIENT = "gradient"

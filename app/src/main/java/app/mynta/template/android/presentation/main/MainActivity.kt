@@ -2,6 +2,7 @@ package app.mynta.template.android.presentation.main
 
 import android.graphics.Color.parseColor
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.collectLatestOnLifecycleStarted
@@ -33,6 +35,10 @@ class MainActivity : ComponentActivity() {
             setKeepOnScreenCondition {
                 !mainViewModel.isInitialized.value
             }
+        }
+
+        intent.getStringExtra(Constants.DEEPLINK)?.let { deeplink ->
+            Log.d("notificationData", deeplink)
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
