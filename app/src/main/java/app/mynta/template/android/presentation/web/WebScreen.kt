@@ -39,6 +39,7 @@ import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.monetize.BannerAd
 import app.mynta.template.android.core.utility.rememberSaveableWebViewState
 import app.mynta.template.android.core.utility.rememberWebViewNavigator
+import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.web.component.AlertDialogComponent
@@ -186,7 +187,9 @@ fun WebScreen(
             )
         )
         BannerAd(
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         )
     }
 

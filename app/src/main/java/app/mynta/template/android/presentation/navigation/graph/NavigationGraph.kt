@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.about.AboutScreen
@@ -35,6 +36,7 @@ object Types {
 @Composable
 fun NavigationGraph(
     appConfig: AppConfig,
+    deeplink: Deeplink,
     navController: NavHostController,
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
@@ -45,11 +47,14 @@ fun NavigationGraph(
     ) {
         navigationItems.forEach { item ->
             composable(route = item.route) {
+                val url = deeplink.destination.ifEmpty {
+                    item.module?.deeplink ?: ""
+                }
                 when (item.role) {
                     Roles.ROLE_WEB -> {
                         WebScreen(
                             appConfig = appConfig,
-                            url = item.module?.deeplink ?: "https://example.com",
+                            url = url,
                             drawerState = drawerState
                         )
                     }

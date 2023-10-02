@@ -26,6 +26,7 @@ import app.mynta.template.android.core.component.AppBar
 import app.mynta.template.android.core.component.NavigationActionType
 import app.mynta.template.android.core.component.SnackbarComponent
 import app.mynta.template.android.core.utility.Utilities.findActivity
+import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.main.MainActivity
@@ -46,6 +47,7 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val appConfig by viewModel.appConfigUI.collectAsState()
+    val deeplink by viewModel.deeplink.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -58,6 +60,7 @@ fun HomeScreen(
             HomeContent(
                 context = context,
                 appConfig = config,
+                deeplink = deeplink,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
@@ -91,6 +94,7 @@ fun HomeScreen(
 private fun HomeContent(
     context: Context,
     appConfig: AppConfig,
+    deeplink: Deeplink,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
@@ -137,6 +141,7 @@ private fun HomeContent(
             ) {
                 NavigationGraph(
                     appConfig = appConfig,
+                    deeplink = deeplink,
                     navController = navController,
                     navigationItems = navigationItems,
                     drawerState = drawerState

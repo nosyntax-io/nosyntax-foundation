@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.mynta.template.android.AppConfigState
 import app.mynta.template.android.core.utility.Resource
+import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.domain.usecase.main.MainUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases): ViewModel() {
+    private val _deeplink = MutableStateFlow(Deeplink())
+    val deeplink: StateFlow<Deeplink> = _deeplink
+
+    fun setDeeplink(deeplink: Deeplink) {
+        _deeplink.tryEmit(deeplink)
+    }
+
     private val _isInitialized = MutableStateFlow(false)
     val isInitialized = _isInitialized.asStateFlow()
 

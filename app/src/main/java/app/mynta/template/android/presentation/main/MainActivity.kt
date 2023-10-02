@@ -16,6 +16,7 @@ import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.utility.Connectivity
 import app.mynta.template.android.core.utility.collectLatestOnLifecycleStarted
 import app.mynta.template.android.core.utility.monetize.InterstitialAd
+import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.ui.theme.DynamicTheme
 import app.mynta.template.android.ui.theme.DynamicThemeColors
@@ -38,7 +39,9 @@ class MainActivity : ComponentActivity() {
         }
 
         intent.getStringExtra(Constants.DEEPLINK)?.let { deeplink ->
-            Log.d("notificationData", deeplink)
+            mainViewModel.setDeeplink(Deeplink(
+                destination = deeplink
+            ))
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
