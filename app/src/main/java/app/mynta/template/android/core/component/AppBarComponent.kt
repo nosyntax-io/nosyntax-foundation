@@ -139,7 +139,7 @@ fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
     val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
-        MaterialTheme.colorScheme.surface
+        Color.White
     }
 
     return TopAppBarDefaults.topAppBarColors(
