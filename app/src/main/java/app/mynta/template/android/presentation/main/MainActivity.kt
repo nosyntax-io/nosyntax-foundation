@@ -2,7 +2,6 @@ package app.mynta.template.android.presentation.main
 
 import android.graphics.Color.parseColor
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels

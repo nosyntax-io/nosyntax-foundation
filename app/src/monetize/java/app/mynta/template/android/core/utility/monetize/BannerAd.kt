@@ -11,23 +11,26 @@ import com.google.android.gms.ads.AdView
 
 @Composable
 fun BannerAd(
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     adId: String = BuildConfig.ADMOB_BANNER_ID
 ) {
     val configuration = LocalConfiguration.current
 
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            AdView(context).apply {
-                setAdSize(
-                    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                        context, configuration.screenWidthDp
+    if (enabled) {
+        AndroidView(
+            modifier = modifier,
+            factory = { context ->
+                AdView(context).apply {
+                    setAdSize(
+                        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                            context, configuration.screenWidthDp
+                        )
                     )
-                )
-                adUnitId = adId
-                loadAd(AdRequest.Builder().build())
+                    adUnitId = adId
+                    loadAd(AdRequest.Builder().build())
+                }
             }
-        }
-    )
+        )
+    }
 }

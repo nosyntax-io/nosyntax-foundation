@@ -8,6 +8,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.ComponentsCo
 import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.MonetizationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.NavigationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ThemeColorsConfigDto
@@ -22,6 +23,7 @@ import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.domain.model.app_config.LoadingIndicatorConfig
 import app.mynta.template.android.domain.model.app_config.ModulesConfig
+import app.mynta.template.android.domain.model.app_config.MonetizationConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.app_config.ThemeColorsConfig
@@ -33,6 +35,7 @@ fun AppConfigDto.toConfiguration(): AppConfig {
         appId = this.app.appId,
         appearance = configuration.appearance.toAppearance(),
         navigation = configuration.navigation.toNavigation(),
+        monetization = configuration.monetization.toMonetization(),
         modules = configuration.modules.toModules(),
         aboutPage = configuration.aboutPage.toAboutPage()
     )
@@ -135,6 +138,15 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
             }
         )
     }
+}
+
+fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
+    return MonetizationConfig(
+        ads = MonetizationConfig.Ads(
+            bannerDisplay = this.ads.bannerDisplay,
+            interstitialDisplay = this.ads.interstitialDisplay
+        )
+    )
 }
 
 fun ModulesConfigDto.toModules(): ModulesConfig {

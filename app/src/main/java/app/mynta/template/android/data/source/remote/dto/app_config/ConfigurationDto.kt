@@ -7,6 +7,8 @@ data class ConfigurationDto(
     val appearance: AppearanceConfigDto,
     @SerializedName("navigation")
     val navigation: NavigationConfigDto,
+    @SerializedName("monetization_options")
+    val monetization: MonetizationConfigDto,
     @SerializedName("modules")
     val modules: ModulesConfigDto,
     @SerializedName("about_page")
