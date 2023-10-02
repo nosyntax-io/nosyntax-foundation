@@ -27,6 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var interstitialAd: InterstitialAd
+
+    private var isAdsEnabled = false
     private var isInterstitialAdEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,10 +68,12 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    if (state.response.monetization.ads.interstitialDisplay) {
+                    val ads = state.response.monetization.ads
+                    if (ads.enabled && ads.interstitialDisplay) {
                         interstitialAd = InterstitialAd(this@MainActivity).load()
                     }
-                    isInterstitialAdEnabled = state.response.monetization.ads.interstitialDisplay
+                    isAdsEnabled = ads.enabled && ads.interstitialDisplay
+                    isInterstitialAdEnabled = ads.interstitialDisplay
                 }
                 state.error != null -> {
                     setContent {
@@ -87,7 +91,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun showInterstitial(onAdDismissed: () -> Unit = {}) {
-        if (isInterstitialAdEnabled) {
+        if (isAdsEnabled && isInterstitialAdEnabled) {
             interstitialAd.show(onAdDismissed = onAdDismissed)
         } else {
             onAdDismissed()

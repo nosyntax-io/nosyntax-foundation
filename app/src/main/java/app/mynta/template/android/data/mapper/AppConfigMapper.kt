@@ -143,6 +143,7 @@ fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<Navigatio
 fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
     return MonetizationConfig(
         ads = MonetizationConfig.Ads(
+            enabled = this.ads.enabled,
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay
         )

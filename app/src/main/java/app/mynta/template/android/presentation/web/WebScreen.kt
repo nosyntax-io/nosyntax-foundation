@@ -185,7 +185,8 @@ fun WebScreen(
                 }
             )
         )
-        BannerAd(enabled = appConfig.monetization.ads.bannerDisplay, modifier = Modifier
+        val ads = appConfig.monetization.ads
+        BannerAd(enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
         )

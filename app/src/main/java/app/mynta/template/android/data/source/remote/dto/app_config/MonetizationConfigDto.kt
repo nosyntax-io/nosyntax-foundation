@@ -7,6 +7,8 @@ data class MonetizationConfigDto(
     val ads: Ads) {
 
     data class Ads(
+        @SerializedName("enabled")
+        val enabled: Boolean,
         @SerializedName("banner_display")
         val bannerDisplay: Boolean,
         @SerializedName("interstitial_display")
