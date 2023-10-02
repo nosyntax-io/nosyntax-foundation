@@ -105,8 +105,8 @@ pipeline {
         stage('Generate Launcher Icons') {
           steps {
             script {
-              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
-              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
+              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/default.png"
+              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/${APP_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
               def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
@@ -116,16 +116,16 @@ pipeline {
           }
         }
 
-        stage('Generate Logo Assets') {
+        stage('Generate Icon Assets') {
           steps {
             script {
-              def defaultLogoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/default.png"
-              def specificLogoSourcePath = "${REPOSITORY_PATH}/assets/app_logos/${APP_ID}.png"
+              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
+              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              def logoSourcePath = fileExists(specificLogoSourcePath) ? specificLogoSourcePath : defaultLogoSourcePath
+              def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
 
-              generateLogoAssets(resDirectory, logoSourcePath)
+              generateIconAssets(resDirectory, iconSourcePath)
             }
           }
         }
