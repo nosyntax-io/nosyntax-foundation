@@ -109,10 +109,13 @@ fun SideMenuContent(
                     val item = navigationItems[index]
                     when (item.role) {
                         Roles.ROLE_DIVIDER -> {
+                            val dividerColor = MaterialTheme.colorScheme.let {
+                                if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White.copy(alpha = .6f)
+                            }
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
                                 thickness = 1.dp,
-                                color = MaterialTheme.colorScheme.surfaceVariant
+                                color = dividerColor
                             )
                         }
                         else -> {
@@ -166,7 +169,7 @@ fun SideMenuItem(
     onClick: () -> Unit
 ) {
     val contentColor = MaterialTheme.colorScheme.let {
-        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else it.surface
+        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White
     }
 
     val isSelected = currentRoute == item.route
