@@ -26,8 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
-    private lateinit var interstitialAd: InterstitialAd
 
+    private var interstitialAd: InterstitialAd? = null
     private var isAdsEnabled = false
     private var isInterstitialAdEnabled = false
 
@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
 
     fun showInterstitial(onAdDismissed: () -> Unit = {}) {
         if (isAdsEnabled && isInterstitialAdEnabled) {
-            interstitialAd.show(onAdDismissed = onAdDismissed)
+            interstitialAd?.show(onAdDismissed = onAdDismissed)
         } else {
             onAdDismissed()
         }
@@ -100,6 +100,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        interstitialAd.release()
+        interstitialAd?.release()
     }
 }
