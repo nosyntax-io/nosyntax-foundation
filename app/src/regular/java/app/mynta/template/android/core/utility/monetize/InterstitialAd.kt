@@ -3,15 +3,15 @@ package app.mynta.template.android.core.utility.monetize
 import androidx.activity.ComponentActivity
 
 class InterstitialAd(private val activity: ComponentActivity, private val adUnitId: String = "") {
-    fun loadInterstitialAd() {
-
+    fun load(): InterstitialAd {
+        return this
     }
 
-    fun showInterstitialAd(onAdDismissed: () -> Unit) {
+    fun show(onAdDismissed: () -> Unit) {
         onAdDismissed()
     }
 
-    fun removeInterstitial() {
+    fun release() {
 
     }
 }

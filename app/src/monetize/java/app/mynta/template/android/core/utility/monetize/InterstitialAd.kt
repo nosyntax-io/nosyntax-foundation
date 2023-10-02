@@ -17,7 +17,7 @@ class InterstitialAd(private val activity: ComponentActivity): LifecycleObserver
         activity.lifecycle.addObserver(this)
     }
 
-    fun loadInterstitialAd() {
+    fun load(): app.mynta.template.android.core.utility.monetize.InterstitialAd {
         InterstitialAd.load(activity.applicationContext, BuildConfig.ADMOB_INTERSTITIAL_ID, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 super.onAdFailedToLoad(error)
@@ -29,16 +29,16 @@ class InterstitialAd(private val activity: ComponentActivity): LifecycleObserver
                 mInterstitialAd = interstitialAd
             }
         })
-
+        return this
     }
 
-    fun showInterstitialAd(onAdDismissed: () -> Unit) {
+    fun show(onAdDismissed: () -> Unit) {
         mInterstitialAd?.let { interstitialAd ->
             interstitialAd.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     mInterstitialAd = null
 
-                    loadInterstitialAd()
+                    load()
                     onAdDismissed()
                 }
             }

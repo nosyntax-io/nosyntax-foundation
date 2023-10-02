@@ -27,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var interstitialAd: InterstitialAd
+    private var isInterstitialAdEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,27 +45,34 @@ class MainActivity : ComponentActivity() {
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
-            setContent {
-                when {
-                    state.response != null && state.error == null -> {
-                        val appearance = state.response.appearance
-                        val themeColors = appearance.themeColors
-                        val typography = appearance.typography
+            when {
+                state.response != null && state.error == null -> {
+                    val appearance = state.response.appearance
+                    val themeColors = appearance.themeColors
+                    val typography = appearance.typography
 
-                        val dynamicThemeColors = DynamicThemeColors(
-                            primaryColor = Color(parseColor(themeColors.primary)),
-                            secondaryColor = Color(parseColor(themeColors.secondary)),
-                            primaryContainer = Color(parseColor(themeColors.highlight))
-                        )
-                        val dynamicTypography = DynamicTypography(
-                            headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),
-                            bodyTypeface = FontFamily(Font(GoogleFont(typography.bodyTypeface), googleFontProvider))
-                        )
+                    val dynamicThemeColors = DynamicThemeColors(
+                        primaryColor = Color(parseColor(themeColors.primary)),
+                        secondaryColor = Color(parseColor(themeColors.secondary)),
+                        primaryContainer = Color(parseColor(themeColors.highlight))
+                    )
+                    val dynamicTypography = DynamicTypography(
+                        headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),
+                        bodyTypeface = FontFamily(Font(GoogleFont(typography.bodyTypeface), googleFontProvider))
+                    )
+                    setContent {
                         DynamicTheme(dynamicThemeColors, dynamicTypography) {
                             HomeScreen()
                         }
                     }
-                    state.error != null -> {
+
+                    if (state.response.monetization.ads.interstitialDisplay) {
+                        interstitialAd = InterstitialAd(this@MainActivity).load()
+                    }
+                    isInterstitialAdEnabled = state.response.monetization.ads.interstitialDisplay
+                }
+                state.error != null -> {
+                    setContent {
                         DynamicTheme {
                             NoConnectionComponent(onRetry = {
                                 if (Connectivity.getInstance().isOnline()) {
@@ -76,14 +84,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        interstitialAd = InterstitialAd(this).apply {
-            loadInterstitialAd()
-        }
     }
 
     fun showInterstitial(onAdDismissed: () -> Unit = {}) {
-        interstitialAd.showInterstitialAd(onAdDismissed = onAdDismissed)
+        if (isInterstitialAdEnabled) {
+            interstitialAd.show(onAdDismissed = onAdDismissed)
+        } else {
+            onAdDismissed()
+        }
     }
 
     override fun onDestroy() {
