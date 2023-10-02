@@ -19,6 +19,7 @@ pipeline {
     string defaultValue: '', name: 'VERSION_NUMBER'
     string defaultValue: '', name: 'VERSION_NAME'
     string defaultValue: '', name: 'ONESIGNAL_APP_ID'
+    booleanParam defaultValue: '', name: 'IS_MONETIZE'
     string defaultValue: '', name: 'ADMOB_APP_ID'
     string defaultValue: '', name: 'ADMOB_BANNER_ID'
     string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
@@ -39,6 +40,7 @@ pipeline {
     VERSION_NUMBER = "${params.VERSION_NUMBER}"
     VERSION_NAME = "${params.VERSION_NAME}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
+    IS_MONETIZE = "${params.IS_MONETIZE}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
@@ -159,30 +161,23 @@ pipeline {
       steps {
         script {
           try {
-            def outputsPath = "${WORKSPACE}/app/build/outputs"
-            def buildEnvironment = env.BUILD_ENVIRONMENT
-
             sh 'chmod +rx gradlew'
 
-            if (buildEnvironment == "production") {
-              sh "./gradlew assembleRelease bundleRelease"
-            } else {
-              sh "./gradlew assembleRelease"
-            }
+            def buildFlavor = env.ADS_ENABLED ? "monetize" : "regular"
 
-            def apkSourcePath = "${outputsPath}/apk/release/app-release.apk"
+            def assembleTask = "assemble${buildFlavor.capitalize()}"
+            def bundleTask = "bundle${buildFlavor.capitalize()}"
+
+            sh "./gradlew ${assembleTask} ${bundleTask}"
+
+            def apkSourcePath = "${WORKSPACE}/app/build/outputs/apk/${buildFlavor}/release/app-${buildFlavor}-release.apk"
+            def aabSourcePath = "${WORKSPACE}/app/build/outputs/bundle/${buildFlavor}Release/app-${buildFlavor}-release.aab"
+
             def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
+            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
 
             sh "mv ${apkSourcePath} ${apkDestinationPath}"
-            env.APK_FILE_SIZE = sh(script: "du -sh ${apkDestinationPath} | cut -f1", returnStdout: true).trim()
-
-            if (buildEnvironment == "production") {
-              def aabSourcePath = "${outputsPath}/bundle/release/app-release.aab"
-              def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
-
-              sh "mv ${aabSourcePath} ${aabDestinationPath}"
-              env.AAB_FILE_SIZE = sh(script: "du -sh ${aabDestinationPath} | cut -f1", returnStdout: true).trim()
-            }
+            sh "mv ${aabSourcePath} ${aabDestinationPath}"
           } catch (Exception ex) {
             currentBuild.result = 'FAILURE'
             error "Error in Build Release Artifact stage: ${ex.getMessage()}"
@@ -195,9 +190,7 @@ pipeline {
       steps {
         script {
           approveRepositoryAccess("apk")
-          if (BUILD_ENVIRONMENT == "production") {
-            approveRepositoryAccess("aab")
-          }
+          approveRepositoryAccess("aab")
         }
       }
     }
