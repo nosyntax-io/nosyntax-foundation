@@ -110,7 +110,7 @@ fun SideMenuContent(
                     when (item.role) {
                         Roles.ROLE_DIVIDER -> {
                             val dividerColor = MaterialTheme.colorScheme.let {
-                                if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White.copy(alpha = .6f)
+                                if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.surfaceVariant else Color.White.copy(alpha = .6f)
                             }
                             Divider(
                                 modifier = Modifier.padding(vertical = 7.dp),
