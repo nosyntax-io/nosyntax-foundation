@@ -163,7 +163,7 @@ pipeline {
           try {
             sh 'chmod +rx gradlew'
 
-            def buildFlavor = env.ADS_ENABLED ? "monetize" : "regular"
+            def buildFlavor = env.IS_MONETIZE ? "monetize" : "regular"
 
             def assembleTask = "assemble${buildFlavor.capitalize()}"
             def bundleTask = "bundle${buildFlavor.capitalize()}"
@@ -197,7 +197,11 @@ pipeline {
   }
 
   post {
+    success {
+      addBuildHistory(1)
+    }
     unsuccessful {
+      addBuildHistory(0)
       cleanWs()
     }
   }
@@ -234,10 +238,59 @@ def approveRepositoryAccess(fileType) {
       }
 
       def responseBody = new groovy.json.JsonSlurper().parseText(response.getContent())
-      echo "Result: ${responseBody.token}"
+      switch (fileType) {
+      case "apk":
+        env.APK_FILE_TOKEN = responseBody.token
+        break
+      case "aab":
+        env.AAB_FILE_TOKEN = responseBody.token
+        break
+      default:
+        echo "Unsupported file type: ${fileType}"
+      }
     }
   } catch (Exception e) {
     currentBuild.result = 'FAILURE'
     error "Failed to approve repository access: ${e.message}"
+  }
+}
+
+def addBuildHistory(int buildStatus) {
+  try {
+    withCredentials([string(credentialsId: 'API_SECRET_KEY', variable: 'API_SECRET_KEY')]) {
+      def url = "https://api.mynta.app/cloud/request_add_build_history.inc.php"
+
+      def postData = [
+        api_secret_key: API_SECRET_KEY,
+        user_token: USER_TOKEN,
+        access_token: ACCESS_TOKEN,
+        build_id: BUILD_ID,
+        build_status: buildStatus,
+        version_number: VERSION_NUMBER
+      ]
+
+      if (buildStatus == 1) {
+        postData += [
+          apk_file_token: APK_FILE_TOKEN,
+          aab_file_token: AAB_FILE_TOKEN
+        ]
+      }
+
+      def response = httpRequest(
+        url: url,
+        httpMode: 'POST',
+        contentType: 'APPLICATION_JSON',
+        requestBody: groovy.json.JsonOutput.toJson(postData),
+        validResponseCodes: '200:500'
+      )
+
+      if (response.status != 200) {
+        currentBuild.result = 'FAILURE'
+        error "API request failed with status code: ${response.status}"
+      }
+    }
+  } catch (Exception e) {
+    currentBuild.result = 'FAILURE'
+    error "Failed to send API request: ${e.message}"
   }
 }
