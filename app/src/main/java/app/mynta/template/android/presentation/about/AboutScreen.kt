@@ -59,7 +59,7 @@ fun AboutScreen(
             Spacer(modifier = Modifier.height(70.dp))
             Image(
                 modifier = Modifier.size(100.dp),
-                painter = painterResource(id = R.drawable.app_logo),
+                painter = painterResource(id = R.drawable.app_icon),
                 contentDescription = stringResource(id = R.string.app_name)
             )
             Spacer(modifier = Modifier.height(20.dp))
