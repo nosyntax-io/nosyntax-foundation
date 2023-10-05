@@ -89,14 +89,17 @@ pipeline {
         stage('Copy Google Services Config') {
           steps {
             script {
-              try {
-                def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${APP_ID}.json"
-                def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
+              def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${APP_ID}.json"
+              def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
 
+              if (fileExists(googleServicesSourcePath)) {
                 sh "cp -f ${googleServicesSourcePath} ${googleServicesDestination}"
-              } catch (Exception ex) {
-                currentBuild.result = 'FAILURE'
-                error "Error in Copy Google Services Config stage: ${ex.getMessage()}"
+              } else {
+                def propertyMap = [
+                  'PARAM_PACKAGE_NAME': 'APP_ID'
+                ]
+                def defaultGoogleServicesDefaultPath = "${REPOSITORY_PATH}/assets/google_services/default.json"
+                setTemplateProperties(propertyMap, defaultGoogleServicesDefaultPath, googleServicesDestination)
               }
             }
           }
