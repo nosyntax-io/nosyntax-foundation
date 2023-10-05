@@ -147,8 +147,8 @@ pipeline {
 
             setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
 
-            def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/keystore.${APP_ID}.zip"
-            sh "unzip -o ${keystoreSourcePath} -d ${WORKSPACE}"
+            def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
+            sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
           } catch (Exception ex) {
             currentBuild.result = 'FAILURE'
             error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
