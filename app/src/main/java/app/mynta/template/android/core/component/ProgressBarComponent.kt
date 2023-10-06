@@ -1,6 +1,7 @@
 package app.mynta.template.android.core.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.mynta.template.android.core.utility.Utilities.setTintedIcon
 import app.mynta.template.android.ui.theme.DynamicTheme
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.LottieAnimation
@@ -74,7 +76,10 @@ fun AnimatedProgressBarPreview() {
 @Composable
 fun CircularProgressBar(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant
+    color: Color = setTintedIcon(
+        isDark = isSystemInDarkTheme(),
+        color = MaterialTheme.colorScheme.surface
+    )
 ) {
     CircularProgressIndicator(
         modifier = modifier

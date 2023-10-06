@@ -1,5 +1,6 @@
 package app.mynta.template.android.core.component
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import app.mynta.template.android.R
+import app.mynta.template.android.core.utility.Utilities.setTintedIcon
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 
@@ -81,7 +83,7 @@ private fun IconWithAsyncImage(
         filterQuality = FilterQuality.High
     )
     val iconTint = if (painter.state is AsyncImagePainter.State.Loading) {
-        MaterialTheme.colorScheme.surfaceVariant
+        setTintedIcon(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
     } else {
         tint
     }

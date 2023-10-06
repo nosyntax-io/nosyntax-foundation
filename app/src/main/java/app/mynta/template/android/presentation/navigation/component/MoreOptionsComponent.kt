@@ -2,6 +2,7 @@ package app.mynta.template.android.presentation.navigation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import app.mynta.template.android.core.utility.Utilities
+import app.mynta.template.android.core.utility.Utilities.setTintedIcon
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -64,7 +67,10 @@ fun MoreOptionsBottomSheet(
 private fun BottomSheetDragHandle() {
     Box(
         modifier = Modifier.padding(10.dp).width(40.dp).height(6.dp).background(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+            color = setTintedIcon(
+                isDark = isSystemInDarkTheme(),
+                color = MaterialTheme.colorScheme.surface
+            ),
             shape = MaterialTheme.shapes.large
         )
     )

@@ -3,6 +3,7 @@ package app.mynta.template.android.presentation.about
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import app.mynta.template.android.core.component.DynamicClickableIcon
 import app.mynta.template.android.core.utility.Intents.openUrl
 import app.mynta.template.android.core.utility.Utilities
 import app.mynta.template.android.core.utility.Utilities.findActivity
+import app.mynta.template.android.core.utility.Utilities.setTintedIcon
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -120,7 +122,10 @@ fun SocialIcon(imageUrl: String, onClick: () -> Unit) {
     DynamicClickableIcon(
         modifier = Modifier.size(35.dp),
         source = imageUrl,
-        tint = MaterialTheme.colorScheme.surfaceVariant,
+        tint = setTintedIcon(
+            isDark = isSystemInDarkTheme(),
+            color = MaterialTheme.colorScheme.surface
+        ),
         onClick = onClick
     )
 }
