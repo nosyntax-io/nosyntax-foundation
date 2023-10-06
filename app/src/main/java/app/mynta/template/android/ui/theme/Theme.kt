@@ -53,16 +53,34 @@ fun DynamicTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = dynamicThemeColors.primaryContainer.toArgb()
+            window.statusBarColor = dynamicThemeColors.colorPrimary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
     MaterialTheme(
-        colorScheme = colorScheme.copy(
-            primary = dynamicThemeColors.primaryColor,
-            secondary = dynamicThemeColors.secondaryColor,
-            primaryContainer = dynamicThemeColors.primaryContainer
-        ),
+        colorScheme = if (darkTheme) {
+            colorScheme.copy(
+                primary = dynamicThemeColors.colorPrimary,
+                primaryContainer = dynamicThemeColors.colorPrimaryContainer,
+                secondary = dynamicThemeColors.colorSecondary,
+                secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
+                background = dynamicThemeColors.colorBackgroundDark,
+                onBackground = dynamicThemeColors.colorBackgroundDark,
+                surface = dynamicThemeColors.colorSurfaceDark,
+                onSurface = dynamicThemeColors.colorOnSurfaceDark
+            )
+        } else {
+            colorScheme.copy(
+                primary = dynamicThemeColors.colorPrimary,
+                primaryContainer = dynamicThemeColors.colorPrimaryContainer,
+                secondary = dynamicThemeColors.colorSecondary,
+                secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
+                background = dynamicThemeColors.colorBackgroundLight,
+                onBackground = dynamicThemeColors.colorBackgroundLight,
+                surface = dynamicThemeColors.colorSurfaceLight,
+                onSurface = dynamicThemeColors.colorOnSurfaceLight
+            )
+        },
         typography = Typography.copy(
             titleMedium = Typography.titleMedium.copy(
                 fontFamily = dynamicTypography.headingTypeface

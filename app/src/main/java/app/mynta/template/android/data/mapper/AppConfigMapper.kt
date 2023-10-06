@@ -54,8 +54,17 @@ fun AppearanceConfigDto.toAppearance(): AppearanceConfig {
 fun ThemeColorsConfigDto.toThemeColors(): ThemeColorsConfig {
     return ThemeColorsConfig(
         primary = this.primary,
+        primaryContainer = this.primaryContainer,
         secondary = this.secondary,
-        highlight = this.highlight
+        secondaryContainer = this.secondaryContainer,
+        backgroundLight = this.backgroundLight,
+        onBackgroundLight = this.onBackgroundLight,
+        surfaceLight = this.surfaceLight,
+        onSurfaceLight = this.onSurfaceLight,
+        backgroundDark = this.backgroundDark,
+        onBackgroundDark = this.onBackgroundDark,
+        surfaceDark = this.surfaceDark,
+        onSurfaceDark = this.onSurfaceDark
     )
 }
 

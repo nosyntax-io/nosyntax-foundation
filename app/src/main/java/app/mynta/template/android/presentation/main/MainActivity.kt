@@ -54,9 +54,18 @@ class MainActivity : ComponentActivity() {
                     val typography = appearance.typography
 
                     val dynamicThemeColors = DynamicThemeColors(
-                        primaryColor = Color(parseColor(themeColors.primary)),
-                        secondaryColor = Color(parseColor(themeColors.secondary)),
-                        primaryContainer = Color(parseColor(themeColors.highlight))
+                        colorPrimary = Color(parseColor(themeColors.primary)),
+                        colorPrimaryContainer = Color(parseColor(themeColors.primaryContainer)),
+                        colorSecondary = Color(parseColor(themeColors.secondary)),
+                        colorSecondaryContainer = Color(parseColor(themeColors.secondaryContainer)),
+                        colorBackgroundLight = Color(parseColor(themeColors.backgroundLight)),
+                        colorOnBackgroundLight = Color(parseColor(themeColors.onBackgroundLight)),
+                        colorSurfaceLight = Color(parseColor(themeColors.surfaceLight)),
+                        colorOnSurfaceLight = Color(parseColor(themeColors.onSurfaceLight)),
+                        colorBackgroundDark = Color(parseColor(themeColors.backgroundDark)),
+                        colorOnBackgroundDark = Color(parseColor(themeColors.onBackgroundDark)),
+                        colorSurfaceDark = Color(parseColor(themeColors.surfaceDark)),
+                        colorOnSurfaceDark = Color(parseColor(themeColors.onSurfaceDark))
                     )
                     val dynamicTypography = DynamicTypography(
                         headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),

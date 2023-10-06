@@ -3,14 +3,24 @@ package app.mynta.template.android.ui.theme
 import androidx.compose.ui.graphics.Color
 
 data class DynamicThemeColors(
-    val primaryColor: Color = ColorPrimary,
-    val secondaryColor: Color = ColorSecondary,
-    val primaryContainer: Color = ColorPrimaryContainer
+    val colorPrimary: Color = ColorPrimary,
+    val colorPrimaryContainer: Color = ColorPrimaryContainer,
+    val colorSecondary: Color = ColorSecondary,
+    val colorSecondaryContainer: Color = ColorSecondaryContainer,
+    val colorBackgroundLight: Color = ColorBackgroundLight,
+    val colorOnBackgroundLight: Color = ColorOnBackgroundLight,
+    val colorSurfaceLight: Color = ColorSurfaceLight,
+    val colorOnSurfaceLight: Color = ColorOnSurfaceLight,
+    val colorBackgroundDark: Color = ColorBackgroundDark,
+    val colorOnBackgroundDark: Color = ColorOnBackgroundDark,
+    val colorSurfaceDark: Color = ColorSurfaceDark,
+    val colorOnSurfaceDark: Color = ColorOnSurfaceDark
 )
 
 val ColorPrimary = Color(0xFF8EBBFF)
 val ColorPrimaryContainer = Color(0x338EBBFF)
 val ColorSecondary = Color(0xFF121212)
+val ColorSecondaryContainer = Color(0xFF121212)
 
 val ColorBackgroundLight = Color(0xFFFFFFFF)
 val ColorOnBackgroundLight = Color(0xFF140F1F)
