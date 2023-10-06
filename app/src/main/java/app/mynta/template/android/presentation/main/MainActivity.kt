@@ -2,6 +2,7 @@ package app.mynta.template.android.presentation.main
 
 import android.graphics.Color.parseColor
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -67,6 +68,7 @@ class MainActivity : ComponentActivity() {
                         colorSurfaceDark = Color(parseColor(themeColors.surfaceDark)),
                         colorOnSurfaceDark = Color(parseColor(themeColors.onSurfaceDark))
                     )
+
                     val dynamicTypography = DynamicTypography(
                         headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),
                         bodyTypeface = FontFamily(Font(GoogleFont(typography.bodyTypeface), googleFontProvider))

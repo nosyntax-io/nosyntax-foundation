@@ -65,7 +65,7 @@ fun DynamicTheme(
                 secondary = dynamicThemeColors.colorSecondary,
                 secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
                 background = dynamicThemeColors.colorBackgroundDark,
-                onBackground = dynamicThemeColors.colorBackgroundDark,
+                onBackground = dynamicThemeColors.colorOnBackgroundDark,
                 surface = dynamicThemeColors.colorSurfaceDark,
                 onSurface = dynamicThemeColors.colorOnSurfaceDark
             )
@@ -76,7 +76,7 @@ fun DynamicTheme(
                 secondary = dynamicThemeColors.colorSecondary,
                 secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
                 background = dynamicThemeColors.colorBackgroundLight,
-                onBackground = dynamicThemeColors.colorBackgroundLight,
+                onBackground = dynamicThemeColors.colorOnBackgroundLight,
                 surface = dynamicThemeColors.colorSurfaceLight,
                 onSurface = dynamicThemeColors.colorOnSurfaceLight
             )
