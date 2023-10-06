@@ -23,8 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import app.mynta.template.android.core.utility.Utilities
-import app.mynta.template.android.core.utility.Utilities.setTintedIcon
+import app.mynta.template.android.core.utility.Utilities.setColorContrast
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -67,7 +66,7 @@ fun MoreOptionsBottomSheet(
 private fun BottomSheetDragHandle() {
     Box(
         modifier = Modifier.padding(10.dp).width(40.dp).height(6.dp).background(
-            color = setTintedIcon(
+            color = setColorContrast(
                 isDark = isSystemInDarkTheme(),
                 color = MaterialTheme.colorScheme.surface
             ),

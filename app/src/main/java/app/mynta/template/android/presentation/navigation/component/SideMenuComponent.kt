@@ -37,7 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.DynamicIcon
 import app.mynta.template.android.core.component.DynamicImage
-import app.mynta.template.android.core.utility.Utilities.setTintedIcon
+import app.mynta.template.android.core.utility.Utilities.setColorContrast
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.generateMockNavigationItems
@@ -113,7 +113,7 @@ fun SideMenuContent(
                         Roles.ROLE_DIVIDER -> {
                             val dividerColor = MaterialTheme.colorScheme.let {
                                 if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL)
-                                    setTintedIcon(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
+                                    setColorContrast(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
                                 else Color.White.copy(alpha = .6f)
                             }
                             Divider(

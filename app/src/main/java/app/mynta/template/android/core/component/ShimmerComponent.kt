@@ -24,8 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import app.mynta.template.android.core.utility.Utilities
-import app.mynta.template.android.core.utility.Utilities.setTintedIcon
+import app.mynta.template.android.core.utility.Utilities.setColorContrast
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
@@ -42,7 +41,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
     background(
         brush = Brush.linearGradient(
-            colors = shimmerColors(baseColor = setTintedIcon(
+            colors = shimmerColors(baseColor = setColorContrast(
                 isDark = isSystemInDarkTheme(),
                 color = MaterialTheme.colorScheme.surface
             )),

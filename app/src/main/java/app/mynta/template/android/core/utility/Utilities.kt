@@ -4,19 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 object Utilities {
-    fun setTintedIcon(isDark: Boolean, color: Color): Color {
-        val colorModifier = if (isDark) 0.5f else -0.1f
-        val tintedColor = Color(
-            red = color.red * (1 + colorModifier),
-            green = color.green * (1 + colorModifier),
-            blue = color.blue * (1 + colorModifier)
-        )
-        return tintedColor.copy(alpha = 1f)
+    fun setColorContrast(isDark: Boolean, color: Color): Color {
+        return if (isDark) {
+            Color(ColorUtils.blendARGB(color.toArgb(), Color.White.toArgb(), 0.2f))
+        } else {
+            Color(ColorUtils.blendARGB(color.toArgb(), Color.Black.toArgb(), 0.1f))
+        }
     }
 
     fun getCurrentYear(): String {

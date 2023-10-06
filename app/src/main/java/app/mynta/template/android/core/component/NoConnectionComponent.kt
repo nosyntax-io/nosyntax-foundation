@@ -2,6 +2,7 @@ package app.mynta.template.android.core.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.mynta.template.android.R
+import app.mynta.template.android.core.utility.Utilities.setColorContrast
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
@@ -42,7 +44,10 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
             modifier = Modifier.width(130.dp).height(130.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.inverseOnSurface)
+            colorFilter = ColorFilter.tint(color = setColorContrast(
+                isDark = isSystemInDarkTheme(),
+                color = MaterialTheme.colorScheme.surface)
+            )
         )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
