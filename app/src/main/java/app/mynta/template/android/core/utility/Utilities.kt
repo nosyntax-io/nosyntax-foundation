@@ -15,7 +15,7 @@ object Utilities {
         return if (isDark) {
             Color(ColorUtils.blendARGB(color.toArgb(), Color.White.toArgb(), 0.2f))
         } else {
-            Color(ColorUtils.blendARGB(color.toArgb(), Color.Black.toArgb(), 0.1f))
+            Color(ColorUtils.blendARGB(color.toArgb(), Color.Black.toArgb(), 0.15f))
         }
     }
 
