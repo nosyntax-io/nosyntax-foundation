@@ -19,7 +19,7 @@ pipeline {
     string defaultValue: '', name: 'VERSION_NUMBER'
     string defaultValue: '', name: 'VERSION_NAME'
     string defaultValue: '', name: 'ONESIGNAL_APP_ID'
-    booleanParam defaultValue: '', name: 'IS_MONETIZE'
+    booleanParam defaultValue: false, name: 'IS_MONETIZE'
     string defaultValue: '', name: 'ADMOB_APP_ID'
     string defaultValue: '', name: 'ADMOB_BANNER_ID'
     string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
@@ -40,7 +40,6 @@ pipeline {
     VERSION_NUMBER = "${params.VERSION_NUMBER}"
     VERSION_NAME = "${params.VERSION_NAME}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
-    IS_MONETIZE = "${params.IS_MONETIZE}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
@@ -166,7 +165,7 @@ pipeline {
           try {
             sh 'chmod +rx gradlew'
 
-            def buildFlavor = env.IS_MONETIZE ? "monetize" : "regular"
+            def buildFlavor = params.IS_MONETIZE ? "monetize" : "regular"
 
             def assembleTask = "assemble${buildFlavor.capitalize()}"
             def bundleTask = "bundle${buildFlavor.capitalize()}"
