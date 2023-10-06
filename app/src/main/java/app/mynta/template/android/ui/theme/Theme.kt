@@ -58,37 +58,26 @@ fun DynamicTheme(
         }
     }
     MaterialTheme(
-        colorScheme = if (darkTheme) {
-            colorScheme.copy(
-                primary = dynamicThemeColors.colorPrimary,
-                primaryContainer = dynamicThemeColors.colorPrimaryContainer,
-                secondary = dynamicThemeColors.colorSecondary,
-                secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
-                background = dynamicThemeColors.colorBackgroundDark,
-                onBackground = dynamicThemeColors.colorOnBackgroundDark,
-                surface = dynamicThemeColors.colorSurfaceDark,
-                onSurface = dynamicThemeColors.colorOnSurfaceDark
-            )
-        } else {
-            colorScheme.copy(
-                primary = dynamicThemeColors.colorPrimary,
-                primaryContainer = dynamicThemeColors.colorPrimaryContainer,
-                secondary = dynamicThemeColors.colorSecondary,
-                secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
-                background = dynamicThemeColors.colorBackgroundLight,
-                onBackground = dynamicThemeColors.colorOnBackgroundLight,
-                surface = dynamicThemeColors.colorSurfaceLight,
-                onSurface = dynamicThemeColors.colorOnSurfaceLight
+        colorScheme = colorScheme.copy(
+            primary = dynamicThemeColors.colorPrimary,
+            primaryContainer = dynamicThemeColors.colorPrimaryContainer,
+            secondary = dynamicThemeColors.colorSecondary,
+            secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
+            background = if (darkTheme) dynamicThemeColors.colorBackgroundDark else dynamicThemeColors.colorBackgroundLight,
+            onBackground = if (darkTheme) dynamicThemeColors.colorOnBackgroundDark else dynamicThemeColors.colorOnBackgroundLight,
+            surface = if (darkTheme) dynamicThemeColors.colorSurfaceDark else dynamicThemeColors.colorSurfaceLight,
+            onSurface = if (darkTheme) dynamicThemeColors.colorOnSurfaceDark else dynamicThemeColors.colorOnSurfaceLight
+        ),
+        typography = Typography.run {
+            copy(
+                titleMedium = titleMedium.copy(
+                    fontFamily = dynamicTypography.headingTypeface
+                ),
+                bodyMedium = bodyMedium.copy(
+                    fontFamily = dynamicTypography.bodyTypeface
+                )
             )
         },
-        typography = Typography.copy(
-            titleMedium = Typography.titleMedium.copy(
-                fontFamily = dynamicTypography.headingTypeface
-            ),
-            bodyMedium = Typography.bodyMedium.copy(
-                fontFamily = dynamicTypography.bodyTypeface
-            )
-        ),
         shapes = Shapes,
         content = content
     )
