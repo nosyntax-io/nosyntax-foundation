@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,13 +27,13 @@ fun LoadingIndicator(indicatorConfig: LoadingIndicatorConfig) {
     val resources = context.resources
 
     val backgroundColor = when (indicatorConfig.background) {
-        "neutral" -> MaterialTheme.colors.background
-        "solid" -> MaterialTheme.colors.primary
+        "neutral" -> MaterialTheme.colorScheme.background
+        "solid" -> MaterialTheme.colorScheme.primary
         else -> Color.Transparent
     }
 
-    val defaultProgressColor = if (indicatorConfig.background == "solid") Color.White else MaterialTheme.colors.onBackground
-    val progressColor = if (indicatorConfig.color == "neutral") defaultProgressColor else MaterialTheme.colors.primary
+    val defaultProgressColor = if (indicatorConfig.background == "solid") Color.White else MaterialTheme.colorScheme.onBackground
+    val progressColor = if (indicatorConfig.color == "neutral") defaultProgressColor else MaterialTheme.colorScheme.primary
 
     val animationResource = remember {
         val animationResourceNames = (1..10).map { "loading_indicator_$it" }
