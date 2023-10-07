@@ -23,7 +23,7 @@ interface CoreAPI {
 
     companion object {
         private const val BASE_URL = "https://api.mynta.app/v1/"
-        private const val ACCESS_TOKEN = BuildConfig.ACCESS_TOKEN
+        private const val ACCESS_TOKEN = BuildConfig.SERVER_ACCESS_TOKEN
 
         fun getInstance(): CoreAPI {
             return ApiServiceFactory(baseUrl = BASE_URL, timeout = 10)

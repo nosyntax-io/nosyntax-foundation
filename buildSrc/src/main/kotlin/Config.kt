@@ -10,6 +10,7 @@ object AppConfig {
 }
 
 object ServerConfig {
+    const val ENVIRONMENT = "config.server.environment"
     const val ACCESS_TOKEN = "config.server.access_token"
 }
 
