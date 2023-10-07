@@ -46,17 +46,17 @@ class OneSignalService(private val context: Context) {
      */
     private fun extractNotificationData(notification: OSNotification, additionalData: JSONObject?): Pair<String, String> {
         var deeplink = ""
-        var deeplinkType = "IN_APP_BROWSER"
+        var deeplinkType = ""
 
         if (notification.launchURL != null) {
             deeplink = notification.launchURL
-            deeplinkType = "IN_APP_BROWSER"
+            deeplinkType = "APP_BROWSER"
         }
 
         additionalData?.let {
             val customKeyDeeplink = it.optString("deeplink", "")
             if (customKeyDeeplink.isNotEmpty()) {
-                val customKeyType = it.optString("deeplink_type", "IN_APP_BROWSER")
+                val customKeyType = it.optString("deeplink_type", "")
                 deeplink = customKeyDeeplink
                 deeplinkType = customKeyType
             }
