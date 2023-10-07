@@ -28,9 +28,8 @@ class OneSignalService(private val context: Context) {
                 val notification = result.notification
                 val additionalData = notification.additionalData
 
-                val (notificationUrl, notificationUrlOpenType) = extractNotificationData(notification, additionalData)
-                onNotificationOpened(Pair(notificationUrl, notificationUrlOpenType))
-
+                val (deeplink, deeplinkType) = extractNotificationData(notification, additionalData)
+                onNotificationOpened(Pair(deeplink, deeplinkType))
             } catch (e: JSONException) {
                 Log.e("OneSignalNotifications", "Error parsing notification data: ${e.message}")
             }
@@ -43,26 +42,26 @@ class OneSignalService(private val context: Context) {
      *
      * @param notification The OneSignal notification.
      * @param additionalData Additional data from the notification.
-     * @return A pair containing the URL and open type.
+     * @return A pair containing the deeplink and deeplink type.
      */
     private fun extractNotificationData(notification: OSNotification, additionalData: JSONObject?): Pair<String, String> {
-        var notificationUrl = ""
-        var notificationUrlOpenType = "INSIDE"
+        var deeplink = ""
+        var deeplinkType = "IN_APP_BROWSER"
 
         if (notification.launchURL != null) {
-            notificationUrl = notification.launchURL
-            notificationUrlOpenType = "INSIDE"
+            deeplink = notification.launchURL
+            deeplinkType = "IN_APP_BROWSER"
         }
 
         additionalData?.let {
-            val customKeyUrl = it.optString("url", "")
-            if (customKeyUrl.isNotEmpty()) {
-                val customKeyType = it.optString("url_type", "INSIDE")
-                notificationUrl = customKeyUrl
-                notificationUrlOpenType = customKeyType
+            val customKeyDeeplink = it.optString("deeplink", "")
+            if (customKeyDeeplink.isNotEmpty()) {
+                val customKeyType = it.optString("deeplink_type", "IN_APP_BROWSER")
+                deeplink = customKeyDeeplink
+                deeplinkType = customKeyType
             }
         }
 
-        return Pair(notificationUrl, notificationUrlOpenType)
+        return Pair(deeplink, deeplinkType)
     }
 }

@@ -19,13 +19,13 @@ class App : Application() {
         OneSignalService(this)
             .initialize(appId = BuildConfig.ONE_SIGNAL_APP_ID)
             .handleNotification(onNotificationOpened = { notificationData ->
-                val notificationUrl = notificationData.first
+                val deeplink = notificationData.first
 
                 val intent = Intent(this.applicationContext, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
                 }
-                if (notificationUrl.isNotEmpty()) {
-                    intent.putExtra(Constants.DEEPLINK, notificationUrl)
+                if (deeplink.isNotEmpty()) {
+                    intent.putExtra(Constants.DEEPLINK, deeplink)
                 }
                 startActivity(intent)
             })
