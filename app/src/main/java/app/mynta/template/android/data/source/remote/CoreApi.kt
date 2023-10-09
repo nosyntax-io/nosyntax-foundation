@@ -10,19 +10,19 @@ import retrofit2.http.POST
 
 interface CoreAPI {
     @FormUrlEncoded
-    @POST("request_app_config.inc.php")
+    @POST("app_config.php")
     suspend fun appConfig(
         @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): AppConfigDto
 
     @FormUrlEncoded
-    @POST("request_policies.inc.php")
+    @POST("app_policies.php")
     suspend fun policies(
         @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): PoliciesDto
 
     companion object {
-        private const val BASE_URL = "https://api.mynta.app/v1/"
+        private const val BASE_URL = "https://api.mynta.app/v1.0/"
         private const val ACCESS_TOKEN = BuildConfig.SERVER_ACCESS_TOKEN
 
         fun getInstance(): CoreAPI {
