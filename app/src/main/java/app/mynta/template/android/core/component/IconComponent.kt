@@ -25,7 +25,11 @@ fun DynamicIcon(
 ) {
     when (source) {
         is String -> {
-            IconWithAsyncImage(modifier = modifier, url = source, tint = tint)
+            IconWithAsyncImage(
+                modifier = modifier,
+                url = source,
+                tint = tint
+            )
         }
         is Painter -> {
             Icon(

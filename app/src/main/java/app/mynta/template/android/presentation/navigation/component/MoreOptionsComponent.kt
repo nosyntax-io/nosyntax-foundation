@@ -24,8 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.utility.Utilities.setColorContrast
-import app.mynta.template.android.domain.model.NavigationItem
-import app.mynta.template.android.domain.model.generateMockNavigationItems
+import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
 
@@ -33,7 +32,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MoreOptionsBottomSheet(
     navController: NavHostController,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     onDismiss: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -78,14 +77,14 @@ private fun BottomSheetDragHandle() {
 @Composable
 private fun BottomSheetContent(
     navController: NavHostController,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     onDismiss: () -> Unit
 ) {
     LazyColumn {
         items(navigationItems.size) { index ->
             val item = navigationItems[index]
             BottomSheetItem(item = item, onClick = {
-                navController.navigate(route = item.route)
+                navController.navigate(route = item.route.toString())
                 onDismiss()
             })
         }
@@ -96,7 +95,7 @@ private fun BottomSheetContent(
 }
 
 @Composable
-private fun BottomSheetItem(item: NavigationItem, onClick: () -> Unit) {
+private fun BottomSheetItem(item: SideMenuConfig.Item, onClick: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Text(
             modifier = Modifier
@@ -113,10 +112,10 @@ private fun BottomSheetItem(item: NavigationItem, onClick: () -> Unit) {
 @Composable
 private fun MoreOptionsBottomSheetPreview() {
     DynamicTheme {
-        MoreOptionsBottomSheet(
+        /*MoreOptionsBottomSheet(
             navController = rememberNavController(),
             navigationItems = generateMockNavigationItems(itemCount = 5),
             onDismiss = { }
-        )
+        )*/
     }
 }

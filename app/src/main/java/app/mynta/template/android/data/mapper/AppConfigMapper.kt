@@ -9,7 +9,6 @@ import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.MonetizationConfigDto
-import app.mynta.template.android.data.source.remote.dto.app_config.NavigationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ThemeColorsConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.TypographyConfigDto
@@ -18,8 +17,6 @@ import app.mynta.template.android.domain.model.app_config.AppearanceConfig
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.app_config.ComponentsConfig
 import app.mynta.template.android.domain.model.app_config.AppConfig
-import app.mynta.template.android.domain.model.app_config.NavigationConfig
-import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.domain.model.app_config.LoadingIndicatorConfig
 import app.mynta.template.android.domain.model.app_config.ModulesConfig
@@ -34,7 +31,7 @@ fun AppConfigDto.toConfiguration(): AppConfig {
     return AppConfig(
         appId = this.app.appId,
         appearance = configuration.appearance.toAppearance(),
-        navigation = configuration.navigation.toNavigation(),
+        components = configuration.components.toComponents(),
         monetization = configuration.monetization.toMonetization(),
         modules = configuration.modules.toModules(),
         aboutPage = configuration.aboutPage.toAboutPage()
@@ -42,12 +39,11 @@ fun AppConfigDto.toConfiguration(): AppConfig {
 }
 
 fun AppearanceConfigDto.toAppearance(): AppearanceConfig {
-    val (themeColors, typography, components) = this
+    val (themeColors, typography) = this
 
     return AppearanceConfig(
         themeColors = themeColors.toThemeColors(),
-        typography = typography.toTypography(),
-        components = components.toComponents()
+        typography = typography.toTypography()
     )
 }
 
@@ -104,7 +100,16 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
         header = SideMenuConfig.Header(
             display = this.header.display,
             image = this.header.image
-        )
+        ),
+        items = this.items.map { item ->
+            SideMenuConfig.Item(
+                route = item.route,
+                role = item.role,
+                label = item.label,
+                icon = item.icon,
+                deeplink = item.deeplink
+            )
+        }
     )
 }
 
@@ -123,30 +128,6 @@ fun LoadingIndicatorConfigDto.toLoadingIndicator(): LoadingIndicatorConfig {
         background = this.background,
         color = this.color
     )
-}
-
-fun NavigationConfigDto.toNavigation(): NavigationConfig {
-    return NavigationConfig(
-        default = this.default,
-        items = this.items.toNavigationItems()
-    )
-}
-
-fun List<NavigationConfigDto.NavigationItem>.toNavigationItems(): List<NavigationItem> {
-    return map { item ->
-        NavigationItem(
-            route = item.route,
-            role = item.role,
-            label = item.label,
-            icon = item.icon,
-            type = item.type,
-            module = item.module?.let {
-                NavigationItem.Module(
-                    deeplink = it.deeplink
-                )
-            }
-        )
-    }
 }
 
 fun MonetizationConfigDto.toMonetization(): MonetizationConfig {

@@ -27,12 +27,11 @@ import app.mynta.template.android.core.component.NavigationActionType
 import app.mynta.template.android.core.component.SnackbarComponent
 import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.domain.model.Deeplink
-import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
-import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.NavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.presentation.navigation.graph.isUtilityScreen
@@ -53,8 +52,8 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     appConfig?.let { config ->
-        val components = config.appearance.components
-        val navigationItems = config.navigation.items
+        val components = config.components
+        val navigationItems = config.components.sideMenu.items
 
         val content: @Composable () -> Unit = {
             HomeContent(
@@ -98,12 +97,14 @@ private fun HomeContent(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     drawerState: DrawerState
 ) {
-    val selectedItem = navigationItems.find { it.route == currentRoute }
-    val components = appConfig.appearance.components
+    val components = appConfig.components
     val snackbarHostState = remember { SnackbarHostState() }
+    val selectedItem = navigationItems.find {
+        it.route.toString() == currentRoute
+    }
 
     Scaffold(
         snackbarHost = {
@@ -150,12 +151,12 @@ private fun HomeContent(
         },
         bottomBar = {
             if (components.bottomBar.display && !isUtilityScreen(currentRoute)) {
-                BottomBar(
+                /*BottomBar(
                     bottomBarConfig = components.bottomBar,
                     navController = navController,
                     currentRoute = currentRoute,
                     navigationItems = navigationItems
-                )
+                )*/
             }
         }
     )

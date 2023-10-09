@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class ConfigurationDto(
     @SerializedName("appearance")
     val appearance: AppearanceConfigDto,
-    @SerializedName("navigation")
-    val navigation: NavigationConfigDto,
+    @SerializedName("components")
+    val components: ComponentsConfigDto,
     @SerializedName("monetization_options")
     val monetization: MonetizationConfigDto,
     @SerializedName("modules")

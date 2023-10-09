@@ -22,7 +22,7 @@ interface CoreAPI {
     ): PoliciesDto
 
     companion object {
-        private const val BASE_URL = "https://api.mynta.app/v1.0/"
+        private const val BASE_URL = "https://api.mynta.app/v1.0beta/"
         private const val ACCESS_TOKEN = BuildConfig.SERVER_ACCESS_TOKEN
 
         fun getInstance(): CoreAPI {

@@ -39,8 +39,6 @@ import app.mynta.template.android.core.component.DynamicIcon
 import app.mynta.template.android.core.component.DynamicImage
 import app.mynta.template.android.core.utility.Utilities.setColorContrast
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
-import app.mynta.template.android.domain.model.NavigationItem
-import app.mynta.template.android.domain.model.generateMockNavigationItems
 import app.mynta.template.android.presentation.navigation.graph.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -51,7 +49,7 @@ fun SideMenu(
     sideMenuConfig: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
@@ -76,7 +74,7 @@ fun SideMenuContent(
     sideMenuConfig: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     drawerState: DrawerState
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -130,7 +128,7 @@ fun SideMenuContent(
                                 onClick = {
                                     NavigationActions(navController).navigateTo(
                                         currentRoute = currentRoute,
-                                        route = item.route
+                                        route = item.route.toString()
                                     )
                                     coroutineScope.launch {
                                         drawerState.close()
@@ -169,21 +167,21 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig, headerHeight: Dp = 150.dp) {
 fun SideMenuItem(
     sideMenuConfig: SideMenuConfig,
     currentRoute: String,
-    item: NavigationItem,
+    item: SideMenuConfig.Item,
     onClick: () -> Unit
 ) {
     val contentColor = MaterialTheme.colorScheme.let {
         if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White
     }
 
-    val isSelected = currentRoute == item.route
+    val isSelected = currentRoute == item.route.toString()
     val unselectedColor = contentColor.copy(alpha = 0.8f)
 
     NavigationDrawerItem(
         modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
-        selected = currentRoute == item.route,
+        selected = currentRoute == item.route.toString(),
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
@@ -221,7 +219,7 @@ private fun SideMenuPreview() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
         val currentRoute by remember { mutableStateOf("item1") }
 
-        SideMenu(
+        /*SideMenu(
             sideMenuConfig = SideMenuConfig(
                 display = true,
                 background = Constants.BACKGROUND_NEUTRAL,
@@ -237,6 +235,6 @@ private fun SideMenuPreview() {
             ),
             drawerState = drawerState,
             content = { }
-        )
+        )*/
     }
 }

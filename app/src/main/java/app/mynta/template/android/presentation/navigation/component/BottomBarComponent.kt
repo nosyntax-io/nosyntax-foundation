@@ -30,11 +30,9 @@ import app.mynta.template.android.R
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.DynamicIcon
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
-import app.mynta.template.android.domain.model.NavigationItem
-import app.mynta.template.android.domain.model.generateMockNavigationItems
+import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.navigation.graph.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
-import app.mynta.template.android.presentation.navigation.graph.Types
 import app.mynta.template.android.ui.theme.DynamicTheme
 
 @Composable
@@ -42,11 +40,12 @@ fun BottomBar(
     bottomBarConfig: BottomBarConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>
+    navigationItems: List<SideMenuConfig.Item>
 ) {
     var isMoreOptionsOpened by rememberSaveable { mutableStateOf(false) }
 
-    if (isMoreOptionsOpened) {
+    // TODO: Will be fixed once the nav items are done.
+    /**if (isMoreOptionsOpened) {
         MoreOptionsBottomSheet(
             navController = navController,
             navigationItems = navigationItems.filter { item ->
@@ -56,7 +55,7 @@ fun BottomBar(
                 isMoreOptionsOpened = false
             }
         )
-    }
+    }**/
 
     val containerColor = when (bottomBarConfig.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
@@ -85,7 +84,7 @@ fun BottomBar(
             .padding(horizontal = 15.dp),
         containerColor = Color.Transparent
     ) {
-        navigationItems.filter { it.type == Types.TYPE_REGULAR }.plus(
+        /*navigationItems.filter { it.type == Types.TYPE_REGULAR }.plus(
             NavigationItem(
                 route = "more",
                 role = Roles.ROLE_MORE,
@@ -107,7 +106,7 @@ fun BottomBar(
                     }
                 }
             )
-        }
+        }*/
     }
 }
 
@@ -115,11 +114,11 @@ fun BottomBar(
 fun RowScope.BottomBarNavigationItem(
     bottomBarConfig: BottomBarConfig,
     currentRoute: String,
-    item: NavigationItem,
+    item: SideMenuConfig.Item,
     onClick: () -> Unit
 ) {
     NavigationBarItem(
-        selected = currentRoute == item.route,
+        selected = currentRoute == item.route.toString(),
         alwaysShowLabel = bottomBarConfig.label != Constants.LABEL_SELECTED,
         colors = bottomBarNavigationItemColors(bottomBarConfig = bottomBarConfig),
         label = {
@@ -165,7 +164,7 @@ fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationB
 @Composable
 fun BottomBarPreview() {
     DynamicTheme {
-        BottomBar(
+        /*BottomBar(
             bottomBarConfig = BottomBarConfig(
                 display = true,
                 background = Constants.BACKGROUND_NEUTRAL,
@@ -174,6 +173,6 @@ fun BottomBarPreview() {
             navController = rememberNavController(),
             currentRoute = "item1",
             navigationItems = generateMockNavigationItems(itemCount = 4)
-        )
+        )*/
     }
 }

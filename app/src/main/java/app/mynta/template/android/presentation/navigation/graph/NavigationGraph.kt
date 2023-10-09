@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.mynta.template.android.domain.model.Deeplink
-import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
+import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
@@ -20,17 +20,11 @@ object Routes {
 }
 
 object Roles {
-    const val ROLE_WEB = "web"
+    const val ROLE_WEB = "website"
     const val ROLE_POLICIES = "policies"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
     const val ROLE_MORE = "more"
-}
-
-object Types {
-    const val TYPE_REGULAR = "regular"
-    const val TYPE_CORE = "app"
-    const val TYPE_OTHER = "other"
 }
 
 @Composable
@@ -38,17 +32,17 @@ fun NavigationGraph(
     appConfig: AppConfig,
     deeplink: Deeplink,
     navController: NavHostController,
-    navigationItems: List<NavigationItem>,
+    navigationItems: List<SideMenuConfig.Item>,
     drawerState: DrawerState
 ) {
     NavHost(
         navController = navController,
-        startDestination = navigationItems.firstOrNull()?.route ?: ""
+        startDestination = navigationItems.firstOrNull()?.route.toString()
     ) {
         navigationItems.forEach { item ->
-            composable(route = item.route) {
+            composable(route = item.route.toString()) {
                 val url = deeplink.destination.ifEmpty {
-                    item.module?.deeplink ?: ""
+                    item.deeplink
                 }
                 when (item.role) {
                     Roles.ROLE_WEB -> {
@@ -61,7 +55,7 @@ fun NavigationGraph(
                     Roles.ROLE_POLICIES -> {
                         PoliciesScreen(
                             navController = navController,
-                            request = item.route
+                            request = "privacy_policy"
                         )
                     }
                     Roles.ROLE_ABOUT -> {

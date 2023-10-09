@@ -6,7 +6,5 @@ data class AppearanceConfigDto(
     @SerializedName("theme_colors")
     val themeColors: ThemeColorsConfigDto,
     @SerializedName("typography")
-    val typography: TypographyConfigDto,
-    @SerializedName("components")
-    val components: ComponentsConfigDto
+    val typography: TypographyConfigDto
 )
