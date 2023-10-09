@@ -173,13 +173,13 @@ fun ModulesConfigDto.toModules(): ModulesConfig {
 fun AboutPageConfigDto.toAboutPage(): AboutPageConfig {
     return AboutPageConfig(
         introduction = this.introduction,
-        socialLinks = this.socialLinks.toSocialLinks()
+        connectItems = this.connectItems.toConnectItems()
     )
 }
 
-fun List<AboutPageConfigDto.SocialLink>.toSocialLinks(): List<AboutPageConfig.SocialLink> {
+fun List<AboutPageConfigDto.ConnectItem>.toConnectItems(): List<AboutPageConfig.ConnectItem> {
     return map { link ->
-        AboutPageConfig.SocialLink(
+        AboutPageConfig.ConnectItem(
             label = link.label,
             icon = link.icon,
             url = link.url

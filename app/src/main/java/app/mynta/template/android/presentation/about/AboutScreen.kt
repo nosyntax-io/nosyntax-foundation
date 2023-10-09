@@ -84,12 +84,12 @@ fun AboutScreen(
                 horizontalArrangement = Arrangement.Center,
                 maxItemsInEachRow = 5
             ) {
-                aboutPageConfig.socialLinks.forEach { socialLink ->
+                aboutPageConfig.connectItems.forEach { connectItem ->
                     Box(modifier = Modifier.padding(5.dp)) {
                         SocialIcon(
-                            imageUrl = socialLink.icon,
+                            imageUrl = connectItem.icon,
                             onClick = {
-                                context.openUrl(url = socialLink.url)
+                                context.openUrl(url = connectItem.url)
                             }
                         )
                     }
@@ -136,16 +136,16 @@ fun AboutScreenPreview() {
     DynamicTheme(darkTheme = false) {
         val placeholderIcon = "https://img.icons8.com/?size=512&id=99291&format=png"
         val placeholderUrl = "https://example.com"
-        val socialLinks = listOf(
-            AboutPageConfig.SocialLink("Google", placeholderIcon, placeholderUrl),
-            AboutPageConfig.SocialLink("Facebook", placeholderIcon, placeholderUrl),
-            AboutPageConfig.SocialLink("Instagram", placeholderIcon, placeholderUrl),
+        val connectItems = listOf(
+            AboutPageConfig.ConnectItem("Google", placeholderIcon, placeholderUrl),
+            AboutPageConfig.ConnectItem("Facebook", placeholderIcon, placeholderUrl),
+            AboutPageConfig.ConnectItem("Instagram", placeholderIcon, placeholderUrl),
         )
 
         AboutScreen(
             aboutPageConfig = AboutPageConfig(
                 introduction = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                socialLinks = socialLinks
+                connectItems = connectItems
             ),
             navController = rememberNavController()
         )

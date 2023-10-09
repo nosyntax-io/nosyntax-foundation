@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class AboutPageConfigDto(
     @SerializedName("introduction")
     val introduction: String,
-    @SerializedName("social_links")
-    val socialLinks: List<SocialLink>) {
+    @SerializedName("connect_items")
+    val connectItems: List<ConnectItem>) {
 
-    data class SocialLink(
+    data class ConnectItem(
         @SerializedName("label")
         val label: String,
         @SerializedName("icon")
