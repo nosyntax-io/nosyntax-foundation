@@ -33,7 +33,6 @@ import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
 import app.mynta.template.android.presentation.navigation.graph.NavigationGraph
-import app.mynta.template.android.presentation.navigation.graph.Routes
 import app.mynta.template.android.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,7 +47,7 @@ fun HomeScreen(
     val appConfig by viewModel.appConfigUI.collectAsState()
     val deeplink by viewModel.deeplink.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Routes.ROUTE_HOME
+    val currentRoute = currentNavBackStackEntry?.destination?.route ?: ""
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     appConfig?.let { config ->
@@ -103,7 +102,7 @@ private fun HomeContent(
     val components = appConfig.components
     val snackbarHostState = remember { SnackbarHostState() }
     val selectedItem = navigationItems.find {
-        it.route.toString() == currentRoute
+        it.route == currentRoute
     }
 
     Scaffold(

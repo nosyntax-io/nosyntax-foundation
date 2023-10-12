@@ -12,10 +12,6 @@ import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
-object Routes {
-    const val ROUTE_HOME = "home"
-}
-
 object Roles {
     const val ROLE_WEB = "web"
     const val ROLE_PRIVACY_POLICY = "privacy"
@@ -35,7 +31,7 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = navigationItems.firstOrNull()?.route.toString()
+        startDestination = navigationItems.firstOrNull()?.route ?: ""
     ) {
         navigationItems.forEach { item ->
             composable(route = item.route) {
