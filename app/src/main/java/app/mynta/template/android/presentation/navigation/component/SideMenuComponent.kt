@@ -107,8 +107,8 @@ fun SideMenuContent(
             LazyColumn(content = {
                 items(navigationItems.size) { index ->
                     val item = navigationItems[index]
-                    when (item.role) {
-                        Roles.ROLE_DIVIDER -> {
+                    when {
+                        item.route.startsWith("divider") -> {
                             val dividerColor = MaterialTheme.colorScheme.let {
                                 if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL)
                                     setColorContrast(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
@@ -128,7 +128,7 @@ fun SideMenuContent(
                                 onClick = {
                                     NavigationActions(navController).navigateTo(
                                         currentRoute = currentRoute,
-                                        route = item.route.toString()
+                                        route = item.route
                                     )
                                     coroutineScope.launch {
                                         drawerState.close()
@@ -174,7 +174,7 @@ fun SideMenuItem(
         if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White
     }
 
-    val isSelected = currentRoute == item.route.toString()
+    val isSelected = currentRoute == item.route
     val unselectedColor = contentColor.copy(alpha = 0.8f)
 
     NavigationDrawerItem(

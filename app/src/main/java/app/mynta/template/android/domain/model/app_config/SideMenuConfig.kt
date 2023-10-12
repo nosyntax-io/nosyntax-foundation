@@ -12,8 +12,7 @@ data class SideMenuConfig(
     )
 
     data class Item(
-        val route: Int,
-        val role: String,
+        val route: String,
         val label: String? = null,
         val icon: Any? = null,
         val deeplink: String

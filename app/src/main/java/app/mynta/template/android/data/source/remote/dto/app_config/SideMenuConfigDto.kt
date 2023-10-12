@@ -21,9 +21,7 @@ data class SideMenuConfigDto(
 
     data class Item(
         @SerializedName("route")
-        val route: Int,
-        @SerializedName("role")
-        val role: String,
+        val route: String,
         @SerializedName("label")
         val label: String?,
         @SerializedName("icon")

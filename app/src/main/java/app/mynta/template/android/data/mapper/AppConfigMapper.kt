@@ -104,7 +104,6 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
         items = this.items.map { item ->
             SideMenuConfig.Item(
                 route = item.route,
-                role = item.role,
                 label = item.label,
                 icon = item.icon,
                 deeplink = item.deeplink
