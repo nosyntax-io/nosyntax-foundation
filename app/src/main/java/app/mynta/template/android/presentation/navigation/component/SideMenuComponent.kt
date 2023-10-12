@@ -38,9 +38,9 @@ import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.DynamicIcon
 import app.mynta.template.android.core.component.DynamicImage
 import app.mynta.template.android.core.utility.Utilities.setColorContrast
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.navigation.graph.NavigationActions
-import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
 
@@ -49,7 +49,7 @@ fun SideMenu(
     sideMenuConfig: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
@@ -74,7 +74,7 @@ fun SideMenuContent(
     sideMenuConfig: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -167,7 +167,7 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig, headerHeight: Dp = 150.dp) {
 fun SideMenuItem(
     sideMenuConfig: SideMenuConfig,
     currentRoute: String,
-    item: SideMenuConfig.Item,
+    item: NavigationItem,
     onClick: () -> Unit
 ) {
     val contentColor = MaterialTheme.colorScheme.let {

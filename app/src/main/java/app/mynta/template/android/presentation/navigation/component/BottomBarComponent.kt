@@ -29,8 +29,8 @@ import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.R
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.DynamicIcon
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
-import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.navigation.graph.NavigationActions
 import app.mynta.template.android.presentation.navigation.graph.Roles
 import app.mynta.template.android.ui.theme.DynamicTheme
@@ -40,7 +40,7 @@ fun BottomBar(
     bottomBarConfig: BottomBarConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<SideMenuConfig.Item>
+    navigationItems: List<NavigationItem>
 ) {
     var isMoreOptionsOpened by rememberSaveable { mutableStateOf(false) }
 
@@ -114,7 +114,7 @@ fun BottomBar(
 fun RowScope.BottomBarNavigationItem(
     bottomBarConfig: BottomBarConfig,
     currentRoute: String,
-    item: SideMenuConfig.Item,
+    item: NavigationItem,
     onClick: () -> Unit
 ) {
     NavigationBarItem(

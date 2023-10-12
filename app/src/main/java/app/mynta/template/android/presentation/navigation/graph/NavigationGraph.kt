@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.mynta.template.android.domain.model.Deeplink
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
-import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.web.WebScreen
@@ -30,7 +30,7 @@ fun NavigationGraph(
     appConfig: AppConfig,
     deeplink: Deeplink,
     navController: NavHostController,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     NavHost(
@@ -54,7 +54,7 @@ fun NavigationGraph(
 @Composable
 fun NavigationHandler(
     navController: NavHostController,
-    item: SideMenuConfig.Item,
+    item: NavigationItem,
     appConfig: AppConfig,
     deeplink: Deeplink,
     drawerState: DrawerState

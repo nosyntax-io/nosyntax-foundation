@@ -27,8 +27,8 @@ import app.mynta.template.android.core.component.NavigationActionType
 import app.mynta.template.android.core.component.SnackbarComponent
 import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.domain.model.Deeplink
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
-import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
@@ -97,7 +97,7 @@ private fun HomeContent(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     val components = appConfig.components

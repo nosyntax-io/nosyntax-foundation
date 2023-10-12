@@ -12,6 +12,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.Monetization
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ThemeColorsConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.TypographyConfigDto
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
 import app.mynta.template.android.domain.model.app_config.AppearanceConfig
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
@@ -102,7 +103,7 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
             image = this.header.image
         ),
         items = this.items.map { item ->
-            SideMenuConfig.Item(
+            NavigationItem(
                 route = item.route,
                 label = item.label,
                 icon = item.icon,

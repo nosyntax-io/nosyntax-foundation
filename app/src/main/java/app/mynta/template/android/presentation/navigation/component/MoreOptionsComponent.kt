@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.core.utility.Utilities.setColorContrast
-import app.mynta.template.android.domain.model.app_config.SideMenuConfig
+import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MoreOptionsBottomSheet(
     navController: NavHostController,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     onDismiss: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -77,7 +77,7 @@ private fun BottomSheetDragHandle() {
 @Composable
 private fun BottomSheetContent(
     navController: NavHostController,
-    navigationItems: List<SideMenuConfig.Item>,
+    navigationItems: List<NavigationItem>,
     onDismiss: () -> Unit
 ) {
     LazyColumn {
@@ -95,7 +95,7 @@ private fun BottomSheetContent(
 }
 
 @Composable
-private fun BottomSheetItem(item: SideMenuConfig.Item, onClick: () -> Unit) {
+private fun BottomSheetItem(item: NavigationItem, onClick: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Text(
             modifier = Modifier
