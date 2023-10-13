@@ -38,6 +38,7 @@ private val darkColorScheme = darkColorScheme(
 fun DynamicTheme(
     dynamicThemeColors: DynamicThemeColors = DynamicThemeColors(),
     dynamicTypography: DynamicTypography = DynamicTypography(),
+    statusBarColor: String = "neutral",
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -49,8 +50,19 @@ fun DynamicTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = dynamicThemeColors.colorPrimary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+
+            if (window != null) {
+                val statusBarColorToSet = if (statusBarColor == "neutral") {
+                    if (darkTheme) dynamicThemeColors.colorSurfaceDark else dynamicThemeColors.colorSurfaceLight
+                } else {
+                    dynamicThemeColors.colorPrimary
+                }
+                window.statusBarColor = statusBarColorToSet.toArgb()
+
+                if (statusBarColor != "solid") {
+                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+                }
+            }
         }
     }
     MaterialTheme(
