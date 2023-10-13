@@ -2,9 +2,10 @@
 .gradle/
 build/
 
-# configuration files
+# Configuration Files
 local.properties
 signing.properties
+app_config.json
 
 # Log/OS Files
 *.log

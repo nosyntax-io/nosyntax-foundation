@@ -6,6 +6,9 @@ import android.content.ContextWrapper
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
+import com.google.gson.Gson
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -34,5 +37,21 @@ object Utilities {
         is Activity -> this
         is ContextWrapper -> baseContext.findActivity()
         else -> null
+    }
+
+    fun <T> getDtoFromJson(context: Context, path: String, clazz: Class<T>): T? {
+        val json: String
+        try {
+            context.assets.open(path).use { inputStream ->
+                val size = inputStream.available()
+                val buffer = ByteArray(size)
+                inputStream.read(buffer)
+                json = String(buffer, StandardCharsets.UTF_8)
+                return Gson().fromJson(json, clazz)
+            }
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
+        return null
     }
 }
