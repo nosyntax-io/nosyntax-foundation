@@ -12,41 +12,59 @@ pipeline {
   parameters {
     string defaultValue: '', name: 'BUILD_ID'
     string defaultValue: '', name: 'BUILD_ENVIRONMENT'
+
     string defaultValue: '', name: 'USER_TOKEN'
-    string defaultValue: '', name: 'ACCESS_TOKEN'
+
+    string defaultValue: '', name: 'SERVER_ENVIRONMENT'
+    string defaultValue: '', name: 'SERVER_ACCESS_TOKEN'
+
     string defaultValue: '', name: 'APP_ID'
     string defaultValue: '', name: 'APP_NAME'
-    string defaultValue: '', name: 'VERSION_NUMBER'
-    string defaultValue: '', name: 'VERSION_NAME'
+    string defaultValue: '', name: 'APP_VERSION_NUMBER'
+    string defaultValue: '', name: 'APP_VERSION_NAME'
+
     string defaultValue: '', name: 'ONESIGNAL_APP_ID'
+
     booleanParam defaultValue: false, name: 'IS_MONETIZE'
+
     string defaultValue: '', name: 'ADMOB_APP_ID'
     string defaultValue: '', name: 'ADMOB_BANNER_ID'
     string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
-    // keystore credentials
+
     string defaultValue: '', name: 'KEYSTORE_FILE'
     string defaultValue: '', name: 'KEYSTORE_PASSWORD'
     string defaultValue: '', name: 'KEY_ALIAS'
     string defaultValue: '', name: 'KEY_PASSWORD'
+
+    text defaultValue: '', name: 'LOCAL_APP_CONFIG'
   }
 
   environment {
     BUILD_ID = "${params.BUILD_ID}"
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
+
     USER_TOKEN = "${params.USER_TOKEN}"
-    ACCESS_TOKEN = "${params.ACCESS_TOKEN}"
+
+    SERVER_ENVIRONMENT = "${params.SERVER_ENVIRONMENT}"
+    SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
+
     APP_ID = "${params.APP_ID}"
     APP_NAME = "${params.APP_NAME}"
-    VERSION_NUMBER = "${params.VERSION_NUMBER}"
-    VERSION_NAME = "${params.VERSION_NAME}"
+    APP_VERSION_NUMBER = "${params.APP_VERSION_NUMBER}"
+    APP_VERSION_NAME = "${params.APP_VERSION_NAME}"
+
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
+    
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
+    
     KEYSTORE_FILE = "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD = "${params.KEYSTORE_PASSWORD}"
     KEY_ALIAS = "${params.KEY_ALIAS}"
     KEY_PASSWORD = "${params.KEY_PASSWORD}"
+
+    LOCAL_APP_CONFIG = "${params.LOCAL_APP_CONFIG}"
 
     REPOSITORY_PATH = '/var/www/cloud.mynta.app/repository'
   }
@@ -66,17 +84,18 @@ pipeline {
           steps {
             script {
               def propertyMap = [
-                'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
-                'PARAM_APP_ID': 'APP_ID',
-                'PARAM_APP_NAME': 'APP_NAME',
-                'PARAM_APP_VERSION_NUMBER': 'VERSION_NUMBER',
-                'PARAM_APP_VERSION_NAME': 'VERSION_NAME',
-                'PARAM_SERVER_ACCESS_TOKEN': 'ACCESS_TOKEN',
-                'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
-                'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
-                'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
-                'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
-              ]
+								'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
+								'PARAM_APP_ID': 'APP_ID',
+								'PARAM_APP_NAME': 'APP_NAME',
+								'PARAM_APP_VERSION_NUMBER': 'APP_VERSION_NUMBER',
+								'PARAM_APP_VERSION_NAME': 'APP_VERSION_NAME',
+								'PARAM_SERVER_ENVIRONMENT': 'SERVER_ENVIRONMENT',
+								'PARAM_SERVER_ACCESS_TOKEN': 'SERVER_ACCESS_TOKEN',
+								'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
+								'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
+								'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
+								'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
+							]
               def templateSourcePath = "${WORKSPACE}/local.properties.template"
               def outputSourceDestination = "${WORKSPACE}/local.properties"
 
@@ -84,6 +103,19 @@ pipeline {
             }
           }
         }
+
+				stage('Manage Local Configuration') {
+					steps {
+						script {
+							if (env.SERVER_ENVIRONMENT == "inactive") {
+								def appConfigPath = "${WORKSPACE}/app/src/main/assets/local/app_config.json"
+								writeFile file: appConfigPath, text: env.LOCAL_APP_CONFIG
+							} else {
+								echo "SERVER_ENVIRONMENT is not 'inactive'. Skipping local app configuration update."
+							}
+						}
+					}
+				}
 
         stage('Copy Google Services Config') {
           steps {
@@ -268,7 +300,7 @@ def addBuildHistory(int buildStatus) {
         access_token: ACCESS_TOKEN,
         build_id: BUILD_ID,
         build_status: buildStatus,
-        version_number: VERSION_NUMBER
+        version_number: APP_VERSION_NUMBER
       ]
 
       if (buildStatus == 1) {
