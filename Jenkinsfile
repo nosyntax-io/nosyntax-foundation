@@ -299,7 +299,7 @@ def addBuildHistory(int buildStatus) {
       def postData = [
         api_secret_key: API_SECRET_KEY,
         user_token: USER_TOKEN,
-        access_token: ACCESS_TOKEN,
+        access_token: SERVER_ACCESS_TOKEN,
         build_id: BUILD_ID,
         build_status: buildStatus,
         version_number: APP_VERSION_NUMBER
