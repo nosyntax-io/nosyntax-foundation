@@ -80,7 +80,7 @@ pipeline {
 
     stage('Configure Application') {
       parallel {
-        stage('Set Application Properties') {
+        stage('Set App Properties') {
           steps {
             script {
               def propertyMap = [
@@ -104,15 +104,17 @@ pipeline {
           }
         }
 
-				stage('Manage Local Configuration') {
+				stage('Manage App Local Config') {
 					steps {
 						script {
-							if (env.SERVER_ENVIRONMENT == "inactive") {
-								def appConfigPath = "${WORKSPACE}/app/src/main/assets/local/app_config.json"
-								writeFile file: appConfigPath, text: env.LOCAL_APP_CONFIG
-							} else {
-								echo "SERVER_ENVIRONMENT is not 'inactive'. Skipping local app configuration update."
-							}
+              def appConfigDirectory = "${WORKSPACE}/app/src/main/assets/local"
+              def appConfigPath = "${appConfigDirectory}/app_config.json"
+
+              if (!fileExists(appConfigDirectory)) {
+                sh "mkdir -p ${appConfigDirectory}"
+              }
+              writeFile file: appConfigPath,
+                text: env.SERVER_ENVIRONMENT == "inactive" ? env.LOCAL_APP_CONFIG : ''
 						}
 					}
 				}
