@@ -261,7 +261,9 @@ def approveRepositoryAccess(fileType) {
         url: url,
         httpMode: 'POST',
         contentType: 'APPLICATION_JSON',
-        requestBody: groovy.json.JsonOutput.toJson(postData),
+        requestBody: writeJSON(
+          returnText: true, json: postData
+        ),
         validResponseCodes: '200:500',
         customHeaders: [
           [name: 'Authorization', value: "Basic ${authEncoded}"]
@@ -273,16 +275,16 @@ def approveRepositoryAccess(fileType) {
         error "API request failed. Status code: ${response.status}. Response body: ${response.response}"
       }
 
-      def responseBody = new groovy.json.JsonSlurper().parseText(response.getContent())
+      def responseBody = readJSON text: response.getContent()
       switch (fileType) {
-      case "apk":
-        env.APK_FILE_TOKEN = responseBody.token
-        break
-      case "aab":
-        env.AAB_FILE_TOKEN = responseBody.token
-        break
-      default:
-        echo "Unsupported file type: ${fileType}"
+        case "apk":
+          env.APK_FILE_TOKEN = responseBody.token
+          break
+        case "aab":
+          env.AAB_FILE_TOKEN = responseBody.token
+          break
+        default:
+          echo "Unsupported file type: ${fileType}"
       }
     }
   } catch (Exception e) {
@@ -316,7 +318,9 @@ def addBuildHistory(int buildStatus) {
         url: url,
         httpMode: 'POST',
         contentType: 'APPLICATION_JSON',
-        requestBody: groovy.json.JsonOutput.toJson(postData),
+        requestBody: writeJSON(
+          returnText: true, json: postData
+        ),
         validResponseCodes: '200:500'
       )
 
