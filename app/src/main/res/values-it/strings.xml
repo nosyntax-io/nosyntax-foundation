@@ -9,6 +9,6 @@
     <string name="no_internet_connection">Nessuna connessione Internet</string>
     <string name="no_internet_connection_description">Ops! Sembra che tu non sia connesso a Internet. Controlla la tua connessione di rete e riprova.</string>
     <string name="more">Di più</string>
-    <string name="copyright">Diritto d'autore</string>
+    <string name="copyright">Diritto d\'autore</string>
     <string name="all_rights_reserved">Tutti i diritti riservati.</string>
 </resources>
