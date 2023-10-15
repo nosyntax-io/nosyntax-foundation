@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">Ik begrijp</string>
+    <string name="cancel">Annuleren</string>
+    <string name="confirm">Bevestigen</string>
+    <string name="no_apps_handle">Helaas zijn er op dit moment geen beschikbare apps die deze aanvraag kunnen verwerken.</string>
+    <string name="try_again">Opnieuw proberen</string>
+    <string name="no_internet_connection">Geen internetverbinding</string>
+    <string name="no_internet_connection_description">Oeps! Het lijkt erop dat je niet bent verbonden met het internet. Controleer je netwerkverbinding en probeer het opnieuw.</string>
+    <string name="more">Meer</string>
+    <string name="copyright">Auteursrecht</string>
+    <string name="all_rights_reserved">Alle rechten voorbehouden.</string>
+</resources>

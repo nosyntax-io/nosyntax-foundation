@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">이해합니다</string>
+    <string name="cancel">취소</string>
+    <string name="confirm">확인</string>
+    <string name="no_apps_handle">아쉽게도, 현재 이 요청을 처리할 수 있는 앱이 없습니다.</string>
+    <string name="try_again">다시 시도</string>
+    <string name="no_internet_connection">인터넷 연결 없음</string>
+    <string name="no_internet_connection_description">이런! 인터넷에 연결되지 않은 것 같습니다. 네트워크 연결을 확인하고 다시 시도해주세요.</string>
+    <string name="more">더 보기</string>
+    <string name="copyright">저작권</string>
+    <string name="all_rights_reserved">모든 권리 보유.</string>
+</resources>

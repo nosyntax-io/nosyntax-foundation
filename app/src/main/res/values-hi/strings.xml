@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">मुझे समझ में आया</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="confirm">पुष्टि करें</string>
+    <string name="no_apps_handle">दुखद, वर्तमान में इस अनुरोध को संभालने के लिए कोई उपलब्ध ऐप्स नहीं हैं।</string>
+    <string name="try_again">पुनः प्रयास करें</string>
+    <string name="no_internet_connection">कोई इंटरनेट कनेक्शन नहीं है</string>
+    <string name="no_internet_connection_description">ओह! ऐसा लगता है कि आप इंटरनेट से जुड़े नहीं हैं। कृपया अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="more">अधिक</string>
+    <string name="copyright">कॉपीराइट</string>
+    <string name="all_rights_reserved">सभी अधिकार सुरक्षित हैं।</string>
+</resources>

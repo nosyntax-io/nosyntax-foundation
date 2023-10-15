@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">Tôi hiểu</string>
+    <string name="cancel">Hủy bỏ</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="no_apps_handle">Rất tiếc, hiện tại không có ứng dụng nào có khả năng xử lý yêu cầu này.</string>
+    <string name="try_again">Thử lại</string>
+    <string name="no_internet_connection">Không có kết nối Internet</string>
+    <string name="no_internet_connection_description">Ồ! Có vẻ như bạn không kết nối với Internet. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.</string>
+    <string name="more">Thêm</string>
+    <string name="copyright">Bản quyền</string>
+    <string name="all_rights_reserved">Tất cả các quyền đã được bảo hộ.</string>
+</resources>

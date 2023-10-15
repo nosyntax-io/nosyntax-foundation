@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">Entiendo</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="no_apps_handle">Lamentablemente, no hay aplicaciones disponibles capaces de manejar esta solicitud en este momento.</string>
+    <string name="try_again">Intentar de nuevo</string>
+    <string name="no_internet_connection">Sin conexión a Internet</string>
+    <string name="no_internet_connection_description">¡Vaya! Parece que no estás conectado a Internet. Por favor, verifica tu conexión de red e inténtalo de nuevo.</string>
+    <string name="more">Más</string>
+    <string name="copyright">Derechos de autor</string>
+    <string name="all_rights_reserved">Todos los derechos reservados.</string>
+</resources>
