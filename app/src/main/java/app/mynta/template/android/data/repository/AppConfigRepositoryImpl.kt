@@ -22,7 +22,7 @@ class AppConfigRepositoryImpl @Inject constructor(private val context: Context, 
     override suspend fun getAppConfig(): Flow<Resource<AppConfig>> {
         return flow {
             emit(Resource.Loading(true))
-            if (BuildConfig.SERVER_ENVIRONMENT == "online") {
+            if (BuildConfig.APP_REMOTE_CONFIG == "enabled") {
                 try {
                     val response = coreApi.appConfig()
                     emit(Resource.Success(response.toConfiguration()))

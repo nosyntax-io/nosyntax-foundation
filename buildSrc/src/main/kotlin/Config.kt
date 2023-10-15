@@ -7,10 +7,10 @@ object AppConfig {
     const val NAME = "config.app.name"
     const val VERSION_NUMBER = "config.app.version_number"
     const val VERSION_NAME = "config.app.version_name"
+    const val REMOTE_CONFIG = "config.app.remote_config"
 }
 
 object ServerConfig {
-    const val ENVIRONMENT = "config.server.environment"
     const val ACCESS_TOKEN = "config.server.access_token"
 }
 

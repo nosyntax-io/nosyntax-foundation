@@ -10,60 +10,45 @@ pipeline {
   }
 
   parameters {
-    string defaultValue: '', name: 'BUILD_ID'
-    string defaultValue: '', name: 'BUILD_ENVIRONMENT'
-
-    string defaultValue: '', name: 'USER_TOKEN'
-
-    string defaultValue: '', name: 'SERVER_ENVIRONMENT'
-    string defaultValue: '', name: 'SERVER_ACCESS_TOKEN'
-
-    string defaultValue: '', name: 'APP_ID'
-    string defaultValue: '', name: 'APP_NAME'
-    string defaultValue: '', name: 'APP_VERSION_NUMBER'
-    string defaultValue: '', name: 'APP_VERSION_NAME'
-
-    string defaultValue: '', name: 'ONESIGNAL_APP_ID'
-
-    booleanParam defaultValue: false, name: 'IS_MONETIZE'
-
-    string defaultValue: '', name: 'ADMOB_APP_ID'
-    string defaultValue: '', name: 'ADMOB_BANNER_ID'
-    string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
-
-    string defaultValue: '', name: 'KEYSTORE_FILE'
-    string defaultValue: '', name: 'KEYSTORE_PASSWORD'
-    string defaultValue: '', name: 'KEY_ALIAS'
-    string defaultValue: '', name: 'KEY_PASSWORD'
-
-    text defaultValue: '', name: 'LOCAL_APP_CONFIG'
+    string(defaultValue: '', name: 'BUILD_ID')
+    string(defaultValue: '', name: 'BUILD_ENVIRONMENT')
+    string(defaultValue: '', name: 'USER_TOKEN')
+    string(defaultValue: '', name: 'SERVER_ACCESS_TOKEN')
+    string(defaultValue: '', name: 'APP_ID')
+    string(defaultValue: '', name: 'APP_NAME')
+    string(defaultValue: '', name: 'APP_VERSION_NUMBER')
+    string(defaultValue: '', name: 'APP_VERSION_NAME')
+    string(defaultValue: '', name: 'APP_REMOTE_CONFIG')
+    string(defaultValue: '', name: 'ONESIGNAL_APP_ID')
+    booleanParam(defaultValue: false, name: 'IS_MONETIZE')
+    string(defaultValue: '', name: 'ADMOB_APP_ID')
+    string(defaultValue: '', name: 'ADMOB_BANNER_ID')
+    string(defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID')
+    string(defaultValue: '', name: 'KEYSTORE_FILE')
+    string(defaultValue: '', name: 'KEYSTORE_PASSWORD')
+    string(defaultValue: '', name: 'KEY_ALIAS')
+    string(defaultValue: '', name: 'KEY_PASSWORD')
+    string(defaultValue: '', name: 'LOCAL_APP_CONFIG')
   }
 
   environment {
     BUILD_ID = "${params.BUILD_ID}"
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
-
     USER_TOKEN = "${params.USER_TOKEN}"
-
-    SERVER_ENVIRONMENT = "${params.SERVER_ENVIRONMENT}"
     SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
-
     APP_ID = "${params.APP_ID}"
     APP_NAME = "${params.APP_NAME}"
     APP_VERSION_NUMBER = "${params.APP_VERSION_NUMBER}"
     APP_VERSION_NAME = "${params.APP_VERSION_NAME}"
-
+    APP_REMOTE_CONFIG = "${params.APP_REMOTE_CONFIG}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
-    
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
-    
     KEYSTORE_FILE = "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD = "${params.KEYSTORE_PASSWORD}"
     KEY_ALIAS = "${params.KEY_ALIAS}"
     KEY_PASSWORD = "${params.KEY_PASSWORD}"
-
     LOCAL_APP_CONFIG = "${params.LOCAL_APP_CONFIG}"
 
     REPOSITORY_PATH = '/var/www/cloud.mynta.app/repository'
@@ -84,18 +69,18 @@ pipeline {
           steps {
             script {
               def propertyMap = [
-								'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
-								'PARAM_APP_ID': 'APP_ID',
-								'PARAM_APP_NAME': 'APP_NAME',
-								'PARAM_APP_VERSION_NUMBER': 'APP_VERSION_NUMBER',
-								'PARAM_APP_VERSION_NAME': 'APP_VERSION_NAME',
-								'PARAM_SERVER_ENVIRONMENT': 'SERVER_ENVIRONMENT',
-								'PARAM_SERVER_ACCESS_TOKEN': 'SERVER_ACCESS_TOKEN',
-								'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
-								'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
-								'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
-								'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
-							]
+                'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
+                'PARAM_APP_ID': 'APP_ID',
+                'PARAM_APP_NAME': 'APP_NAME',
+                'PARAM_APP_VERSION_NUMBER': 'APP_VERSION_NUMBER',
+                'PARAM_APP_VERSION_NAME': 'APP_VERSION_NAME',
+                'PARAM_APP_REMOTE_CONFIG': 'APP_REMOTE_CONFIG',
+                'PARAM_SERVER_ACCESS_TOKEN': 'SERVER_ACCESS_TOKEN',
+                'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
+                'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
+                'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
+                'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
+              ]
               def templateSourcePath = "${WORKSPACE}/local.properties.template"
               def outputSourceDestination = "${WORKSPACE}/local.properties"
 
@@ -104,20 +89,19 @@ pipeline {
           }
         }
 
-				stage('Manage App Local Config') {
-					steps {
-						script {
+        stage('Manage App Local Config') {
+          steps {
+            script {
               def appConfigDirectory = "${WORKSPACE}/app/src/main/assets/local"
               def appConfigPath = "${appConfigDirectory}/app_config.json"
 
               if (!fileExists(appConfigDirectory)) {
                 sh "mkdir -p ${appConfigDirectory}"
               }
-              writeFile file: appConfigPath,
-                text: env.SERVER_ENVIRONMENT == "inactive" ? env.LOCAL_APP_CONFIG : ''
-						}
-					}
-				}
+              writeFile file: appConfigPath, text: env.APP_REMOTE_CONFIG ? env.LOCAL_APP_CONFIG : ''
+            }
+          }
+        }
 
         stage('Copy Google Services Config') {
           steps {
@@ -238,7 +222,6 @@ pipeline {
     }
     unsuccessful {
       addBuildHistory(0)
-      cleanWs()
     }
   }
 }
@@ -277,15 +260,15 @@ def approveRepositoryAccess(fileType) {
 
       def responseBody = readJSON text: response.getContent()
       switch (fileType) {
-        case "apk":
-          env.APK_FILE_TOKEN = responseBody.token
-          break
-        case "aab":
-          env.AAB_FILE_TOKEN = responseBody.token
-          break
-        default:
-          echo "Unsupported file type: ${fileType}"
-      }
+				case "apk":
+					env.APK_FILE_TOKEN = responseBody.token
+					break
+				case "aab":
+					env.AAB_FILE_TOKEN = responseBody.token
+					break
+				default:
+					echo "Unsupported file type: ${fileType}"
+			}
     }
   } catch (Exception e) {
     currentBuild.result = 'FAILURE'

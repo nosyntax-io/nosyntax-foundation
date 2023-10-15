@@ -9,9 +9,9 @@ config.app.id = PARAM_APP_ID
 config.app.name = PARAM_APP_NAME
 config.app.version_number = PARAM_APP_VERSION_NUMBER
 config.app.version_name = PARAM_APP_VERSION_NAME
+config.app.remote_config = PARAM_APP_REMOTE_CONFIG
 
 # Configure server access.
-config.server.environment = PARAM_SERVER_ENVIRONMENT
 config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
 
 # Configure onesignal for push notifications.
