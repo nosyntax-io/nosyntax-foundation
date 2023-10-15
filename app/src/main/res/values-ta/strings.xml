@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">நான் புரிகிறேன்</string>
+    <string name="cancel">ரத்து செய்</string>
+    <string name="confirm">உறுதிப்படுத்து</string>
+    <string name="no_apps_handle">அந்தரங்கத்தில் இந்த கோரிக்கையை செய்ய உள்ள பயன்பாடுகள் இல்லை.</string>
+    <string name="try_again">மீண்டும் முயற்சி செய்</string>
+    <string name="no_internet_connection">இணைய இணைப்பு இல்லை</string>
+    <string name="no_internet_connection_description">அஹ்! இணையத்துடன் இணைந்திருக்கவில்லை என்று காண்பிக்கின்றது. உங்கள் பிணைப்பு இணைந்திருந்தால் மீண்டும் முயற்சி செய்க.</string>
+    <string name="more">மேலும்</string>
+    <string name="copyright">பதிப்புரிமை</string>
+    <string name="all_rights_reserved">அனைத்து உரிமைகள் பாதுகாக்கப்பட்டுது.</string>
+</resources>

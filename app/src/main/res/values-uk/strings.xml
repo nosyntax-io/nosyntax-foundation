@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mynta Template</string>
+    <string name="i_understand">Розумію</string>
+    <string name="cancel">Скасувати</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="no_apps_handle">На жаль, на даний момент немає доступних додатків, які б могли обробити цей запит.</string>
+    <string name="try_again">Спробувати ще раз</string>
+    <string name="no_internet_connection">Немає підключення до Інтернету</string>
+    <string name="no_internet_connection_description">Ой! Схоже, що ви не підключені до Інтернету. Перевірте ваше мережеве підключення та спробуйте ще раз.</string>
+    <string name="more">Більше</string>
+    <string name="copyright">Авторське право</string>
+    <string name="all_rights_reserved">Всі права захищені.</string>
+</resources>
