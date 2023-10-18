@@ -159,14 +159,13 @@ pipeline {
               def signingKeyPath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
 
               if (!fileExists(signingKeyPath)) {
-                build job: 'AppSigningExperimental', parameters: [
+                build job: 'AppSigning', parameters: [
                   string(name: 'ACCESS_TOKEN', value: env.SERVER_ACCESS_TOKEN),
                   string(name: 'APP_ID', value: env.APP_ID),
                   string(name: 'APP_NAME', value: env.APP_NAME)
                 ]
               } else {
-                def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
-                sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
+                sh "cp -f ${signingKeyPath} ${WORKSPACE}/signing.keystore"
               }
             }
           }
