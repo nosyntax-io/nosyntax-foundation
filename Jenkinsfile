@@ -50,7 +50,6 @@ pipeline {
     KEY_ALIAS = "${params.KEY_ALIAS}"
     KEY_PASSWORD = "${params.KEY_PASSWORD}"
     LOCAL_APP_CONFIG = "${params.LOCAL_APP_CONFIG}"
-
     REPOSITORY_PATH = '/var/www/cloud.mynta.app/repository'
   }
 
@@ -153,25 +152,45 @@ pipeline {
     }
 
     stage('Manage Application Signing') {
-      steps {
-        script {
-          try {
-            def propertyMap = [
-              'PARAM_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
-              'PARAM_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
-              'PARAM_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
-              'PARAM_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
-            ]
-            def templateSourcePath = "${WORKSPACE}/signing.properties.template"
-            def outputDestination = "${WORKSPACE}/signing.properties"
+      stages {
+        stage('Obtain Signing Key') {
+          steps {
+            script {
+              def signingKeyPath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
 
-            setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
+              if (!fileExists(signingKeyPath)) {
+                build job: 'AppSigningExperimental', parameters: [
+                  string(name: 'ACCESS_TOKEN', value: env.SERVER_ACCESS_TOKEN),
+                  string(name: 'APP_ID', value: env.APP_ID),
+                  string(name: 'APP_NAME', value: env.APP_NAME)
+                ]
+              }
+            }
+          }
+        }
 
-            def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
-            sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
-          } catch (Exception ex) {
-            currentBuild.result = 'FAILURE'
-            error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
+        stage('Configure Signing Settings') {
+          steps {
+            script {
+              try {
+                def propertyMap = [
+                  'PARAM_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
+                  'PARAM_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+                  'PARAM_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
+                  'PARAM_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
+                ]
+                def templateSourcePath = "${WORKSPACE}/signing.properties.template"
+                def outputDestination = "${WORKSPACE}/signing.properties"
+
+                setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
+
+                def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
+                sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
+              } catch (Exception ex) {
+                currentBuild.result = 'FAILURE'
+                error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
+              }
+            }
           }
         }
       }
@@ -260,15 +279,15 @@ def approveRepositoryAccess(fileType) {
 
       def responseBody = readJSON text: response.getContent()
       switch (fileType) {
-				case "apk":
-					env.APK_FILE_TOKEN = responseBody.token
-					break
-				case "aab":
-					env.AAB_FILE_TOKEN = responseBody.token
-					break
-				default:
-					echo "Unsupported file type: ${fileType}"
-			}
+      case "apk":
+        env.APK_FILE_TOKEN = responseBody.token
+        break
+      case "aab":
+        env.AAB_FILE_TOKEN = responseBody.token
+        break
+      default:
+        echo "Unsupported file type: ${fileType}"
+      }
     }
   } catch (Exception e) {
     currentBuild.result = 'FAILURE'
