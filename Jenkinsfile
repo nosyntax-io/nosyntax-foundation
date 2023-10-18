@@ -240,7 +240,7 @@ pipeline {
       addBuildHistory(1)
     }
     unsuccessful {
-      addBuildHistory(0)
+      addBuildHistory(-1)
     }
   }
 }
