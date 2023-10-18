@@ -164,12 +164,15 @@ pipeline {
                   string(name: 'APP_ID', value: env.APP_ID),
                   string(name: 'APP_NAME', value: env.APP_NAME)
                 ]
+              } else {
+                def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
+                sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
               }
             }
           }
         }
 
-        stage('Configure Signing Settings') {
+        stage('Set Signing Properties') {
           steps {
             script {
               try {
@@ -183,12 +186,9 @@ pipeline {
                 def outputDestination = "${WORKSPACE}/signing.properties"
 
                 setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
-
-                def keystoreSourcePath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
-                sh "cp -f ${keystoreSourcePath} ${WORKSPACE}/signing.keystore"
               } catch (Exception ex) {
                 currentBuild.result = 'FAILURE'
-                error "Error in Manage Signing Configuration stage: ${ex.getMessage()}"
+                error "Error in Set Signing Properties stage: ${ex.getMessage()}"
               }
             }
           }
