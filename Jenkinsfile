@@ -14,6 +14,7 @@ pipeline {
     string(defaultValue: '', name: 'BUILD_ENVIRONMENT')
     string(defaultValue: '', name: 'USER_TOKEN')
     string(defaultValue: '', name: 'SERVER_ACCESS_TOKEN')
+    string(defaultValue: '', name: 'PROJECT_ID')
     string(defaultValue: '', name: 'APP_ID')
     string(defaultValue: '', name: 'APP_NAME')
     string(defaultValue: '', name: 'APP_VERSION_NUMBER')
@@ -36,6 +37,7 @@ pipeline {
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
     USER_TOKEN = "${params.USER_TOKEN}"
     SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
+    PROJECT_ID = "${params.PROJECT_ID}"
     APP_ID = "${params.APP_ID}"
     APP_NAME = "${params.APP_NAME}"
     APP_VERSION_NUMBER = "${params.APP_VERSION_NUMBER}"
@@ -105,7 +107,7 @@ pipeline {
         stage('Copy Google Services Config') {
           steps {
             script {
-              def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${APP_ID}.json"
+              def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${PROJECT_ID}.json"
               def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
 
               if (fileExists(googleServicesSourcePath)) {
@@ -125,7 +127,7 @@ pipeline {
           steps {
             script {
               def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/default.png"
-              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/${APP_ID}.png"
+              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/${PROJECT_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
               def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
@@ -139,7 +141,7 @@ pipeline {
           steps {
             script {
               def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
-              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${APP_ID}.png"
+              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${PROJECT_ID}.png"
               def resDirectory = "${WORKSPACE}/app/src/main/res"
 
               def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
@@ -156,12 +158,12 @@ pipeline {
         stage('Obtain Signing Key') {
           steps {
             script {
-              def signingKeyPath = "${REPOSITORY_PATH}/keystores/${APP_ID}.keystore"
+              def signingKeyPath = "${REPOSITORY_PATH}/keystores/${PROJECT_ID}.keystore"
 
               if (!fileExists(signingKeyPath)) {
                 build job: 'AppSigning', parameters: [
                   string(name: 'ACCESS_TOKEN', value: env.SERVER_ACCESS_TOKEN),
-                  string(name: 'APP_ID', value: env.APP_ID),
+                  string(name: 'PROJECT_ID', value: env.PROJECT_ID),
                   string(name: 'APP_NAME', value: env.APP_NAME)
                 ]
               } else {
@@ -211,8 +213,8 @@ pipeline {
             def apkSourcePath = "${WORKSPACE}/app/build/outputs/apk/${buildFlavor}/release/app-${buildFlavor}-release.apk"
             def aabSourcePath = "${WORKSPACE}/app/build/outputs/bundle/${buildFlavor}Release/app-${buildFlavor}-release.aab"
 
-            def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${APP_ID}.apk"
-            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${APP_ID}.aab"
+            def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PROJECT_ID}.apk"
+            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${PROJECT_ID}.aab"
 
             sh "mv ${apkSourcePath} ${apkDestinationPath}"
             sh "mv ${aabSourcePath} ${aabDestinationPath}"
