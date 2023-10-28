@@ -153,11 +153,9 @@ pipeline {
       }
     }
 
-    stage('Manage Application Source Code') {
+    stage('Manage Application Sourcecode') {
       steps {
         script {
-          def sourceDir = ${WORKSPACE}
-
           def excludes = [
             '*.gitignore',
             '*.template',
@@ -175,14 +173,10 @@ pipeline {
             '**/build/'
           ]
 
-          def excludeString = excludes.join(',')
-
-          zip zipFile: 'source.zip',
-            dir: sourceDir,
-            exclude: excludeString,
+          zip zipFile: "${REPOSITORY_PATH}/assets/app_icons/source.zip",
+            dir: WORKSPACE,
+            exclude: excludes.join(','),
             overwrite: true
-
-          sh "mv ${WORKSPACE}/source.zip ${REPOSITORY_PATH}/sources/${PROJECT_ID}.zip"
         }
       }
     }
