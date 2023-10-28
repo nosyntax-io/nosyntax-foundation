@@ -153,6 +153,40 @@ pipeline {
       }
     }
 
+    stage('Manage Application Source Code') {
+      steps {
+        script {
+          def sourceDir = ${WORKSPACE}
+
+          def excludes = [
+            '*.gitignore',
+            '*.template',
+            '*.keystore',
+            '*.jks',
+            '*.hprof',
+            '*.md',
+            '*.log',
+            '*.apk',
+            '*.iml',
+            '.git/',
+            '.gradle/',
+            '.idea/',
+            'Jenkinsfile',
+            '**/build/'
+          ]
+
+          def excludeString = excludes.join(',')
+
+          zip zipFile: 'source.zip',
+            dir: sourceDir,
+            exclude: excludeString,
+            overwrite: true
+
+          sh "mv ${WORKSPACE}/source.zip ${REPOSITORY_PATH}/sources/${PROJECT_ID}.zip"
+        }
+      }
+    }
+
     stage('Manage Application Signing') {
       stages {
         stage('Obtain Signing Key') {
