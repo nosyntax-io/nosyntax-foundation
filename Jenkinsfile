@@ -156,27 +156,26 @@ pipeline {
     stage('Manage Application Sourcecode') {
       steps {
         script {
-          def excludes = [
-            '*.gitignore',
-            '*.template',
-            '*.keystore',
-            '*.jks',
-            '*.hprof',
-            '*.md',
-            '*.log',
-            '*.apk',
-            '*.iml',
-            '.git/',
-            '.gradle/',
-            '.idea/',
-            'Jenkinsfile',
-            '**/build/'
-          ]
-
-          zip zipFile: "${REPOSITORY_PATH}/assets/app_icons/source.zip",
-            dir: WORKSPACE,
-            exclude: excludes.join(','),
-            overwrite: true
+          archiveArtifacts(
+						artifacts: '**/*',
+						allowEmptyArchive: true,
+						excludes: '''
+								**/*.gitignore,
+								**/*.template,
+								**/*.keystore,
+								**/*.jks,
+								**/*.hprof,
+								**/*.md,
+								**/*.log,
+								**/*.apk,
+								**/*.iml,
+								**/.git/,
+								**/.gradle/,
+								**/.idea/,
+								**/Jenkinsfile,
+								**/build/
+						'''
+					)
         }
       }
     }
