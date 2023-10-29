@@ -157,25 +157,21 @@ pipeline {
       steps {
         script {
           archiveArtifacts(
-						artifacts: '**/*',
-						allowEmptyArchive: true,
-						excludes: '''
-								**/*.gitignore,
-								**/*.template,
-								**/*.keystore,
-								**/*.jks,
-								**/*.hprof,
-								**/*.md,
-								**/*.log,
-								**/*.apk,
-								**/*.iml,
-								**/.git/,
-								**/.gradle/,
-								**/.idea/,
-								**/Jenkinsfile,
-								**/build/
-						'''
-					)
+            artifacts: '**/*',
+            allowEmptyArchive: true,
+            excludes: '''
+              **/.apk,
+              **/.git/,
+              **/.gradle/,
+              **/*.jks,
+              **/*.keystore,
+              **/*.log,
+              **/*.md,
+              **/*.template,
+              **/build/,
+              **/pipeline/
+            '''
+          )
         }
       }
     }
