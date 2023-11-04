@@ -10,12 +10,14 @@ import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.about.AboutScreen
 import app.mynta.template.android.presentation.policies.PoliciesScreen
+import app.mynta.template.android.presentation.settings.SettingsScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
 object Roles {
     const val ROLE_WEB = "web"
     const val ROLE_PRIVACY_POLICY = "privacy"
     const val ROLE_TERMS_OF_USE = "terms"
+    const val ROLE_SETTINGS = "settings"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
     const val ROLE_MORE = "more"
@@ -75,6 +77,11 @@ fun NavigationHandler(
                 request = "terms_of_use"
             )
         }
+        item.route.startsWith(Roles.ROLE_SETTINGS) -> {
+            SettingsScreen(
+                navController = navController
+            )
+        }
         item.route.startsWith(Roles.ROLE_ABOUT) -> {
             AboutScreen(
                 aboutPageConfig = appConfig.aboutPage,
@@ -104,6 +111,7 @@ fun isUtilityScreen(route: String): Boolean {
     val roles = setOf(
         Roles.ROLE_PRIVACY_POLICY,
         Roles.ROLE_TERMS_OF_USE,
+        Roles.ROLE_SETTINGS,
         Roles.ROLE_ABOUT
     )
     return roles.any { route.startsWith(it) }

@@ -42,6 +42,18 @@ object Intents {
         }
     }
 
+    fun Context.openEmail(email: String, subject: String = "", body: String = "") {
+        try {
+            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email")).apply {
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, body)
+            }
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
     fun Context.openEmailFromUrl(url: String) {
         val mail = MailTo.parse(url)
         val recipient = mail.to
