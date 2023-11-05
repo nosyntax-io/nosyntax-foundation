@@ -1,6 +1,5 @@
 package app.mynta.template.android.data.mapper
 
-import app.mynta.template.android.data.source.remote.dto.app_config.AboutPageConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppBarConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ThemeConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.BottomBarConfigDto
@@ -18,7 +17,6 @@ import app.mynta.template.android.domain.model.app_config.ThemeConfig
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.app_config.ComponentsConfig
 import app.mynta.template.android.domain.model.app_config.AppConfig
-import app.mynta.template.android.domain.model.app_config.AboutPageConfig
 import app.mynta.template.android.domain.model.app_config.LoadingIndicatorConfig
 import app.mynta.template.android.domain.model.app_config.ModulesConfig
 import app.mynta.template.android.domain.model.app_config.MonetizationConfig
@@ -34,8 +32,7 @@ fun AppConfigDto.toConfiguration(): AppConfig {
         theme = configuration.theme.toTheme(),
         components = configuration.components.toComponents(),
         monetization = configuration.monetization.toMonetization(),
-        modules = configuration.modules.toModules(),
-        aboutPage = configuration.aboutPage.toAboutPage()
+        modules = configuration.modules.toModules()
     )
 }
 
@@ -156,21 +153,4 @@ fun ModulesConfigDto.toModules(): ModulesConfig {
             customCss = this.webkit.customCss
         )
     )
-}
-
-fun AboutPageConfigDto.toAboutPage(): AboutPageConfig {
-    return AboutPageConfig(
-        introduction = this.introduction,
-        connectItems = this.connectItems.toConnectItems()
-    )
-}
-
-fun List<AboutPageConfigDto.ConnectItem>.toConnectItems(): List<AboutPageConfig.ConnectItem> {
-    return map { link ->
-        AboutPageConfig.ConnectItem(
-            label = link.label,
-            icon = link.icon,
-            url = link.url
-        )
-    }
 }

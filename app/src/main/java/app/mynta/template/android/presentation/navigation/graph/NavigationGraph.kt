@@ -69,7 +69,7 @@ fun NavigationHandler(
         }
         item.route.startsWith(Roles.ROLE_ABOUT) -> {
             AboutScreen(
-                aboutPageConfig = appConfig.aboutPage,
+                appConfig = appConfig,
                 navController = navController
             )
         }
