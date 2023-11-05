@@ -36,7 +36,7 @@ private val darkColorScheme = darkColorScheme(
 
 @Composable
 fun DynamicTheme(
-    dynamicThemeColors: DynamicThemeColors = DynamicThemeColors(),
+    dynamicColorScheme: DynamicColorScheme = DynamicColorScheme(),
     dynamicTypography: DynamicTypography = DynamicTypography(),
     statusBarColor: String = "neutral",
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -53,9 +53,9 @@ fun DynamicTheme(
 
             if (window != null) {
                 val statusBarColorToSet = if (statusBarColor == "neutral") {
-                    if (darkTheme) dynamicThemeColors.colorSurfaceDark else dynamicThemeColors.colorSurfaceLight
+                    if (darkTheme) dynamicColorScheme.colorSurfaceDark else dynamicColorScheme.colorSurfaceLight
                 } else {
-                    dynamicThemeColors.colorPrimary
+                    dynamicColorScheme.colorPrimary
                 }
                 window.statusBarColor = statusBarColorToSet.toArgb()
 
@@ -67,14 +67,14 @@ fun DynamicTheme(
     }
     MaterialTheme(
         colorScheme = colorScheme.copy(
-            primary = dynamicThemeColors.colorPrimary,
-            primaryContainer = dynamicThemeColors.colorPrimaryContainer,
-            secondary = dynamicThemeColors.colorSecondary,
-            secondaryContainer = dynamicThemeColors.colorSecondaryContainer,
-            background = if (darkTheme) dynamicThemeColors.colorBackgroundDark else dynamicThemeColors.colorBackgroundLight,
-            onBackground = if (darkTheme) dynamicThemeColors.colorOnBackgroundDark else dynamicThemeColors.colorOnBackgroundLight,
-            surface = if (darkTheme) dynamicThemeColors.colorSurfaceDark else dynamicThemeColors.colorSurfaceLight,
-            onSurface = if (darkTheme) dynamicThemeColors.colorOnSurfaceDark else dynamicThemeColors.colorOnSurfaceLight
+            primary = dynamicColorScheme.colorPrimary,
+            primaryContainer = dynamicColorScheme.colorPrimaryContainer,
+            secondary = dynamicColorScheme.colorSecondary,
+            secondaryContainer = dynamicColorScheme.colorSecondaryContainer,
+            background = if (darkTheme) dynamicColorScheme.colorBackgroundDark else dynamicColorScheme.colorBackgroundLight,
+            onBackground = if (darkTheme) dynamicColorScheme.colorOnBackgroundDark else dynamicColorScheme.colorOnBackgroundLight,
+            surface = if (darkTheme) dynamicColorScheme.colorSurfaceDark else dynamicColorScheme.colorSurfaceLight,
+            onSurface = if (darkTheme) dynamicColorScheme.colorOnSurfaceDark else dynamicColorScheme.colorOnSurfaceLight
         ),
         typography = Typography.run {
             copy(

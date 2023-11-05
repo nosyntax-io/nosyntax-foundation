@@ -18,7 +18,7 @@ import app.mynta.template.android.core.utility.monetize.InterstitialAd
 import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.presentation.home.HomeScreen
 import app.mynta.template.android.ui.theme.DynamicTheme
-import app.mynta.template.android.ui.theme.DynamicThemeColors
+import app.mynta.template.android.ui.theme.DynamicColorScheme
 import app.mynta.template.android.ui.theme.DynamicTypography
 import app.mynta.template.android.ui.theme.googleFontProvider
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,24 +49,24 @@ class MainActivity : ComponentActivity() {
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             when {
                 state.response != null && state.error == null -> {
-                    val appearance = state.response.appearance
+                    val theme = state.response.theme
+                    val colorScheme = theme.colorScheme
+                    val typography = theme.typography
                     val components = state.response.components
-                    val themeColors = appearance.themeColors
-                    val typography = appearance.typography
 
-                    val dynamicThemeColors = DynamicThemeColors(
-                        colorPrimary = Color(parseColor(themeColors.primary)),
-                        colorPrimaryContainer = Color(parseColor(themeColors.primaryContainer)),
-                        colorSecondary = Color(parseColor(themeColors.secondary)),
-                        colorSecondaryContainer = Color(parseColor(themeColors.secondaryContainer)),
-                        colorBackgroundLight = Color(parseColor(themeColors.backgroundLight)),
-                        colorOnBackgroundLight = Color(parseColor(themeColors.onBackgroundLight)),
-                        colorSurfaceLight = Color(parseColor(themeColors.surfaceLight)),
-                        colorOnSurfaceLight = Color(parseColor(themeColors.onSurfaceLight)),
-                        colorBackgroundDark = Color(parseColor(themeColors.backgroundDark)),
-                        colorOnBackgroundDark = Color(parseColor(themeColors.onBackgroundDark)),
-                        colorSurfaceDark = Color(parseColor(themeColors.surfaceDark)),
-                        colorOnSurfaceDark = Color(parseColor(themeColors.onSurfaceDark))
+                    val dynamicColorScheme = DynamicColorScheme(
+                        colorPrimary = Color(parseColor(colorScheme.primary)),
+                        colorPrimaryContainer = Color(parseColor(colorScheme.primaryContainer)),
+                        colorSecondary = Color(parseColor(colorScheme.secondary)),
+                        colorSecondaryContainer = Color(parseColor(colorScheme.secondaryContainer)),
+                        colorBackgroundLight = Color(parseColor(colorScheme.backgroundLight)),
+                        colorOnBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
+                        colorSurfaceLight = Color(parseColor(colorScheme.surfaceLight)),
+                        colorOnSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
+                        colorBackgroundDark = Color(parseColor(colorScheme.backgroundDark)),
+                        colorOnBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
+                        colorSurfaceDark = Color(parseColor(colorScheme.surfaceDark)),
+                        colorOnSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark))
                     )
                     val dynamicTypography = DynamicTypography(
                         headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),
@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
 
                     setContent {
                         DynamicTheme(
-                            dynamicThemeColors = dynamicThemeColors,
+                            dynamicColorScheme = dynamicColorScheme,
                             dynamicTypography = dynamicTypography,
                             statusBarColor = statusBarColor
                         ) {

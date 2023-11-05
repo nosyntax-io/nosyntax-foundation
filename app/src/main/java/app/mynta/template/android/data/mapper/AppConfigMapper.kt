@@ -2,7 +2,7 @@ package app.mynta.template.android.data.mapper
 
 import app.mynta.template.android.data.source.remote.dto.app_config.AboutPageConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppBarConfigDto
-import app.mynta.template.android.data.source.remote.dto.app_config.AppearanceConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.ThemeConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.BottomBarConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ComponentsConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
@@ -10,11 +10,11 @@ import app.mynta.template.android.data.source.remote.dto.app_config.LoadingIndic
 import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.MonetizationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
-import app.mynta.template.android.data.source.remote.dto.app_config.ThemeColorsConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.ColorSchemeConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.TypographyConfigDto
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
-import app.mynta.template.android.domain.model.app_config.AppearanceConfig
+import app.mynta.template.android.domain.model.app_config.ThemeConfig
 import app.mynta.template.android.domain.model.app_config.BottomBarConfig
 import app.mynta.template.android.domain.model.app_config.ComponentsConfig
 import app.mynta.template.android.domain.model.app_config.AppConfig
@@ -24,14 +24,14 @@ import app.mynta.template.android.domain.model.app_config.ModulesConfig
 import app.mynta.template.android.domain.model.app_config.MonetizationConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
-import app.mynta.template.android.domain.model.app_config.ThemeColorsConfig
+import app.mynta.template.android.domain.model.app_config.ColorSchemeConfig
 import app.mynta.template.android.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
     val configuration = app.configuration
     return AppConfig(
         appId = this.app.appId,
-        appearance = configuration.appearance.toAppearance(),
+        theme = configuration.theme.toTheme(),
         components = configuration.components.toComponents(),
         monetization = configuration.monetization.toMonetization(),
         modules = configuration.modules.toModules(),
@@ -39,17 +39,17 @@ fun AppConfigDto.toConfiguration(): AppConfig {
     )
 }
 
-fun AppearanceConfigDto.toAppearance(): AppearanceConfig {
-    val (themeColors, typography) = this
+fun ThemeConfigDto.toTheme(): ThemeConfig {
+    val (colorScheme, typography) = this
 
-    return AppearanceConfig(
-        themeColors = themeColors.toThemeColors(),
+    return ThemeConfig(
+        colorScheme = colorScheme.toColorScheme(),
         typography = typography.toTypography()
     )
 }
 
-fun ThemeColorsConfigDto.toThemeColors(): ThemeColorsConfig {
-    return ThemeColorsConfig(
+fun ColorSchemeConfigDto.toColorScheme(): ColorSchemeConfig {
+    return ColorSchemeConfig(
         primary = this.primary,
         primaryContainer = this.primaryContainer,
         secondary = this.secondary,
