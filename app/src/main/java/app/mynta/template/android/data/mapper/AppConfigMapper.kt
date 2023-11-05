@@ -28,7 +28,9 @@ import app.mynta.template.android.domain.model.app_config.WebKitConfig
 fun AppConfigDto.toConfiguration(): AppConfig {
     val configuration = app.configuration
     return AppConfig(
-        appId = this.app.appId,
+        id = this.app.id,
+        name = this.app.name,
+        description = this.app.description,
         theme = configuration.theme.toTheme(),
         components = configuration.components.toComponents(),
         monetization = configuration.monetization.toMonetization(),

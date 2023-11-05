@@ -7,8 +7,12 @@ data class AppConfigDto(
     val app: App) {
 
     data class App(
-        @SerializedName("app_id")
-        val appId: String,
+        @SerializedName("id")
+        val id: String,
+        @SerializedName("name")
+        val name: String,
+        @SerializedName("description")
+        val description: String,
         @SerializedName("configuration")
         val configuration: ConfigurationDto
     )
