@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import app.mynta.template.android.R
 import app.mynta.template.android.core.utility.Intents.openEmail
 import app.mynta.template.android.core.utility.Intents.openPlayStore
@@ -40,22 +41,6 @@ fun SettingsScreen(
         .verticalScroll(rememberScrollState())
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { }
-                    .padding(horizontal = 20.dp, vertical = 15.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dark_mode),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.surface
-            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -130,6 +115,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenPreview() {
     DynamicTheme(darkTheme = false) {
-
+        val navController = rememberNavController()
+        SettingsScreen(navController = navController)
     }
 }
