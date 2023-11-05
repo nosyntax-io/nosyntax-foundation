@@ -2,7 +2,6 @@ package app.mynta.template.android.data.source.remote
 
 import app.mynta.template.android.BuildConfig
 import app.mynta.template.android.data.source.remote.dto.app_config.AppConfigDto
-import app.mynta.template.android.data.source.remote.dto.policies.PoliciesDto
 import app.mynta.template.android.data.source.remote.factory.ApiServiceFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -14,12 +13,6 @@ interface CoreAPI {
     suspend fun appConfig(
         @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): AppConfigDto
-
-    @FormUrlEncoded
-    @POST("app_policies.php")
-    suspend fun policies(
-        @Field("access_token") accessToken: String = ACCESS_TOKEN
-    ): PoliciesDto
 
     companion object {
         private const val BASE_URL = "https://api.mynta.app/v1.3beta/"

@@ -2,10 +2,8 @@ package app.mynta.template.android.di
 
 import android.content.Context
 import app.mynta.template.android.data.repository.AppConfigRepositoryImpl
-import app.mynta.template.android.data.repository.PoliciesRepositoryImpl
 import app.mynta.template.android.data.source.remote.CoreAPI
 import app.mynta.template.android.domain.repository.AppConfigRepository
-import app.mynta.template.android.domain.repository.PoliciesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,11 +18,5 @@ object RepositoryModule {
     @Singleton
     fun providesAppConfigRepository(@ApplicationContext context: Context, coreApi: CoreAPI): AppConfigRepository {
         return AppConfigRepositoryImpl(context, coreApi)
-    }
-
-    @Provides
-    @Singleton
-    fun providesPoliciesRepository(coreApi: CoreAPI): PoliciesRepository {
-        return PoliciesRepositoryImpl(coreApi)
     }
 }

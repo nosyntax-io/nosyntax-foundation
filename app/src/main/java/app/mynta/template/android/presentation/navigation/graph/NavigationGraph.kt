@@ -9,14 +9,11 @@ import app.mynta.template.android.domain.model.Deeplink
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.about.AboutScreen
-import app.mynta.template.android.presentation.policies.PoliciesScreen
 import app.mynta.template.android.presentation.settings.SettingsScreen
 import app.mynta.template.android.presentation.web.WebScreen
 
 object Roles {
     const val ROLE_WEB = "web"
-    const val ROLE_PRIVACY_POLICY = "privacy"
-    const val ROLE_TERMS_OF_USE = "terms"
     const val ROLE_SETTINGS = "settings"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
@@ -65,18 +62,6 @@ fun NavigationHandler(
                 drawerState = drawerState
             )
         }
-        item.route.startsWith(Roles.ROLE_PRIVACY_POLICY) -> {
-            PoliciesScreen(
-                navController = navController,
-                request = "privacy_policy"
-            )
-        }
-        item.route.startsWith(Roles.ROLE_TERMS_OF_USE) -> {
-            PoliciesScreen(
-                navController = navController,
-                request = "terms_of_use"
-            )
-        }
         item.route.startsWith(Roles.ROLE_SETTINGS) -> {
             SettingsScreen(
                 navController = navController
@@ -109,8 +94,6 @@ class NavigationActions(private val navController: NavHostController) {
 
 fun isUtilityScreen(route: String): Boolean {
     val roles = setOf(
-        Roles.ROLE_PRIVACY_POLICY,
-        Roles.ROLE_TERMS_OF_USE,
         Roles.ROLE_SETTINGS,
         Roles.ROLE_ABOUT
     )
