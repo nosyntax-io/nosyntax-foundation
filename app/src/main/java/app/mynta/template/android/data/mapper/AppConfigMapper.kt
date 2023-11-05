@@ -40,11 +40,12 @@ fun AppConfigDto.toConfiguration(): AppConfig {
 }
 
 fun ThemeConfigDto.toTheme(): ThemeConfig {
-    val (colorScheme, typography) = this
+    val (colorScheme, typography, settings) = this
 
     return ThemeConfig(
         colorScheme = colorScheme.toColorScheme(),
-        typography = typography.toTypography()
+        typography = typography.toTypography(),
+        settings = settings.toSettings()
     )
 }
 
@@ -69,6 +70,12 @@ fun TypographyConfigDto.toTypography(): TypographyConfig {
     return TypographyConfig(
         headingTypeface = this.headingTypeface,
         bodyTypeface = this.bodyTypeface
+    )
+}
+
+fun ThemeConfigDto.SettingsConfigDto.toSettings(): ThemeConfig.SettingsConfig {
+    return ThemeConfig.SettingsConfig(
+        darkMode = this.darkMode
     )
 }
 

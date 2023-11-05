@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
@@ -75,10 +76,17 @@ class MainActivity : ComponentActivity() {
                     val statusBarColor = components.appBar.background
 
                     setContent {
+                        val darkTheme = if (theme.settings.darkMode) {
+                            isSystemInDarkTheme()
+                        } else {
+                            false
+                        }
+
                         DynamicTheme(
                             dynamicColorScheme = dynamicColorScheme,
                             dynamicTypography = dynamicTypography,
-                            statusBarColor = statusBarColor
+                            statusBarColor = statusBarColor,
+                            darkTheme = darkTheme
                         ) {
                             HomeScreen()
                         }
