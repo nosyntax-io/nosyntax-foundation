@@ -23,6 +23,8 @@ android {
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
         buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${config.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
+        buildConfigField("String", "SERVER_BASIC_AUTH_USERNAME", "\"${config.getProperty(ServerConfig.BASIC_AUTH_USERNAME)}\"")
+        buildConfigField("String", "SERVER_BASIC_AUTH_PASSWORD", "\"${config.getProperty(ServerConfig.BASIC_AUTH_PASSWORD)}\"")
         buildConfigField("String", "APP_REMOTE_CONFIG", "\"${config.getProperty(AppConfig.REMOTE_CONFIG)}\"")
         buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
         buildConfigField("String", "ADMOB_BANNER_ID", "\"${config.getProperty(AdmobConfig.BANNER_ID)}\"")

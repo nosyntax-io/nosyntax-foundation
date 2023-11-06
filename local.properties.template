@@ -13,6 +13,8 @@ config.app.remote_config = PARAM_APP_REMOTE_CONFIG
 
 # Configure server access.
 config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
+config.server.basic_auth_username = PARAM_SERVER_BASIC_AUTH_USERNAME
+config.server.basic_auth_password = PARAM_SERVER_BASIC_AUTH_PASSWORD
 
 # Configure onesignal for push notifications.
 config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID

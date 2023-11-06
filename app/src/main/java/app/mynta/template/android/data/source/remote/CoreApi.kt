@@ -23,8 +23,8 @@ interface CoreAPI {
             return ApiServiceFactory(
                 baseUrl = BASE_URL,
                 basicAuth = BasicAuthCredentials(
-                    username = "username",
-                    password = "password"
+                    username = BuildConfig.SERVER_BASIC_AUTH_USERNAME,
+                    password = BuildConfig.SERVER_BASIC_AUTH_PASSWORD
                 ),
                 timeout = 10
             ).create(CoreAPI::class.java)
