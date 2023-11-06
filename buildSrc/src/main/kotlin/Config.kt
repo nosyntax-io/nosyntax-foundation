@@ -11,9 +11,8 @@ object AppConfig {
 }
 
 object ServerConfig {
+    const val AUTH_TOKEN = "config.server.auth_token"
     const val ACCESS_TOKEN = "config.server.access_token"
-    const val BASIC_AUTH_USERNAME = "config.server.basic_auth_username"
-    const val BASIC_AUTH_PASSWORD = "config.server.basic_auth_password"
 }
 
 object OneSignalConfig {
