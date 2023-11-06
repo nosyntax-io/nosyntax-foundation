@@ -67,8 +67,8 @@ fun ColorSchemeConfigDto.toColorScheme(): ColorSchemeConfig {
 
 fun TypographyConfigDto.toTypography(): TypographyConfig {
     return TypographyConfig(
-        headingTypeface = this.headingTypeface,
-        bodyTypeface = this.bodyTypeface
+        primaryFontFamily = this.primaryFontFamily,
+        secondaryFontFamily = this.secondaryFontFamily
     )
 }
 

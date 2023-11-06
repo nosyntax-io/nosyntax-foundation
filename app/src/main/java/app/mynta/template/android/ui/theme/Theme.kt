@@ -79,10 +79,10 @@ fun DynamicTheme(
         typography = Typography.run {
             copy(
                 titleMedium = titleMedium.copy(
-                    fontFamily = dynamicTypography.headingTypeface
+                    fontFamily = dynamicTypography.primaryFontFamily
                 ),
                 bodyMedium = bodyMedium.copy(
-                    fontFamily = dynamicTypography.bodyTypeface
+                    fontFamily = dynamicTypography.secondaryFontFamily
                 )
             )
         },

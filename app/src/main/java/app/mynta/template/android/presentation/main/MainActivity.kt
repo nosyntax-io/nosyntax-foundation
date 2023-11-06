@@ -70,8 +70,8 @@ class MainActivity : ComponentActivity() {
                         colorOnSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark))
                     )
                     val dynamicTypography = DynamicTypography(
-                        headingTypeface = FontFamily(Font(GoogleFont(typography.headingTypeface), googleFontProvider)),
-                        bodyTypeface = FontFamily(Font(GoogleFont(typography.bodyTypeface), googleFontProvider))
+                        primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),
+                        secondaryFontFamily = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
                     )
                     val statusBarColor = components.appBar.background
 

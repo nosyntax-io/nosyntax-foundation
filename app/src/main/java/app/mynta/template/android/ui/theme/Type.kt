@@ -17,8 +17,8 @@ val googleFontProvider = GoogleFont.Provider(
 )
 
 data class DynamicTypography(
-    val headingTypeface: FontFamily = TemplateFont,
-    val bodyTypeface: FontFamily = TemplateFont
+    val primaryFontFamily: FontFamily = TemplateFont,
+    val secondaryFontFamily: FontFamily = TemplateFont
 )
 
 val TemplateFont = FontFamily(
