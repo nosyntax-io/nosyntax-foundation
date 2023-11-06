@@ -2,20 +2,19 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 object Versions {
     const val core = "1.12.0"
-    const val composeBom = "2023.10.00"
-    const val googleFonts = "1.5.2"
-    const val material = "1.5.3"
-    const val navigation = "2.7.1"
+    const val composeBom = "2023.10.01"
+    const val googleFonts = "1.5.4"
+    const val navigation = "2.7.5"
     const val hilt = "2.48"
-    const val hiltNavigation = "1.0.0"
+    const val hiltNavigation = "1.1.0"
     const val retrofit = "2.9.0"
     const val gson = "2.10.1"
-    const val firebaseBom = "32.3.1"
-    const val coilCompose = "2.4.0"
+    const val firebaseBom = "32.5.0"
+    const val coil = "2.5.0"
     const val oneSignal = "[4.0.0, 4.99.99]"
     const val coreSplashScreen = "1.0.0"
     const val lottie = "6.1.0"
-    const val playServicesAds = "22.4.0"
+    const val playServicesAds = "22.5.0"
     const val junit = "4.13.2"
     const val extJunit = "1.1.5"
     const val espressoCore = "3.5.1"
@@ -33,12 +32,11 @@ object Dependencies {
         "androidx.core:core-ktx:${Versions.core}",
         "androidx.core:core-splashscreen:${Versions.coreSplashScreen}",
         "platform:androidx.compose:compose-bom:${Versions.composeBom}",
+        "androidx.compose.material3:material3",
         "androidx.compose.ui:ui",
         "androidx.compose.ui:ui-graphics",
         "androidx.compose.ui:ui-tooling-preview",
-        "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFonts}",
-        "androidx.compose.material3:material3",
-        "androidx.compose.material:material:${Versions.material}",
+        "androidx.compose.ui:ui-text-google-fonts",
         "androidx.navigation:navigation-compose:${Versions.navigation}",
         "com.google.dagger:hilt-android:${Versions.hilt}",
         "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}",
@@ -46,7 +44,7 @@ object Dependencies {
         "com.squareup.retrofit2:converter-gson:${Versions.retrofit}",
         "com.google.code.gson:gson:${Versions.gson}",
         "platform:com.google.firebase:firebase-bom:${Versions.firebaseBom}",
-        "io.coil-kt:coil-compose:${Versions.coilCompose}",
+        "io.coil-kt:coil-compose:${Versions.coil}",
         "com.onesignal:OneSignal:${Versions.oneSignal}",
         "com.airbnb.android:lottie-compose:${Versions.lottie}",
     )
