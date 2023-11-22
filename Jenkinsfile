@@ -147,35 +147,6 @@ pipeline {
       }
     }
 
-    stage('Manage Application Sourcecode') {
-			steps {
-				script {
-					def excludes = [
-						'*.apk',
-						'*.jks',
-						'*.keystore',
-						'*.log',
-						'*.md',
-						'*.template',
-						'.gradle/',
-						'pipeline/',
-						'**/build/'
-					]
-
-					zip zipFile: "source.zip",
-							exclude: excludes.join(','),
-							overwrite: true
-
-					archiveArtifacts(
-						artifacts: 'source.zip',
-						fingerprint: true,
-						allowEmptyArchive: true,
-						onlyIfSuccessful: true
-					)
-				}
-			}
-		}
-
     stage('Manage Application Signing') {
       stages {
         stage('Obtain Signing Key') {
@@ -219,6 +190,35 @@ pipeline {
         }
       }
     }
+
+    stage('Manage Application Sourcecode') {
+			steps {
+				script {
+					def excludes = [
+						'*.apk',
+						'*.jks',
+						'*.keystore',
+						'*.log',
+						'*.md',
+						'*.template',
+						'.gradle/',
+						'pipeline/',
+						'**/build/'
+					]
+
+					zip zipFile: "source.zip",
+							exclude: excludes.join(','),
+							overwrite: true
+
+					archiveArtifacts(
+						artifacts: 'source.zip',
+						fingerprint: true,
+						allowEmptyArchive: true,
+						onlyIfSuccessful: true
+					)
+				}
+			}
+		}
 
     stage('Build Release Artifact') {
       steps {
