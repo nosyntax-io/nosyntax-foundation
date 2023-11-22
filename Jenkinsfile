@@ -58,14 +58,6 @@ pipeline {
   }
 
   stages {
-    stage('Checkout Source Code') {
-      steps {
-        script {
-          checkout scm
-        }
-      }
-    }
-
     stage('Configure Application') {
       parallel {
         stage('Set App Properties') {
