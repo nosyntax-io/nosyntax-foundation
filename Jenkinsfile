@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    label 'core'
+  }
 
   tools {
     gradle 'Gradle 8.0'
