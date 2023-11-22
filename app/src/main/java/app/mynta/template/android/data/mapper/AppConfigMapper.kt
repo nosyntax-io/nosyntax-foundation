@@ -10,6 +10,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.ModulesConfi
 import app.mynta.template.android.data.source.remote.dto.app_config.MonetizationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ColorSchemeConfigDto
+import app.mynta.template.android.data.source.remote.dto.app_config.ConfigurationDto
 import app.mynta.template.android.data.source.remote.dto.app_config.TypographyConfigDto
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
@@ -26,15 +27,31 @@ import app.mynta.template.android.domain.model.app_config.ColorSchemeConfig
 import app.mynta.template.android.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
-    val configuration = app.configuration
+    val (app, configuration) = this
+
     return AppConfig(
-        id = this.app.id,
-        name = this.app.name,
-        description = this.app.description,
-        theme = configuration.theme.toTheme(),
-        components = configuration.components.toComponents(),
-        monetization = configuration.monetization.toMonetization(),
-        modules = configuration.modules.toModules()
+        app = app.toApp(),
+        configuration = configuration.toConfiguration()
+    )
+}
+
+fun AppConfigDto.App.toApp(): AppConfig.App {
+    return AppConfig.App(
+        id = this.id,
+        name = this.name,
+        category = this.category,
+        description = this.description
+    )
+}
+
+fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
+    val (theme, components, monetization, modules) = this
+
+    return AppConfig.Configuration(
+        theme = theme.toTheme(),
+        components = components.toComponents(),
+        monetization = monetization.toMonetization(),
+        modules = modules.toModules()
     )
 }
 

@@ -62,7 +62,7 @@ fun WebScreen(
 ) {
     val context = LocalContext.current
 
-    val webKitConfig = appConfig.modules.webkit
+    val webKitConfig = appConfig.configuration.modules.webkit
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
@@ -186,7 +186,7 @@ fun WebScreen(
                 }
             )
         )
-        val ads = appConfig.monetization.ads
+        val ads = appConfig.configuration.monetization.ads
         BannerAd(enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
@@ -202,7 +202,7 @@ fun WebScreen(
     }
 
     if (webViewState.isLoading) {
-        val indicatorConfig = appConfig.components.loadingIndicator
+        val indicatorConfig = appConfig.configuration.components.loadingIndicator
         LoadingIndicator(indicatorConfig = indicatorConfig)
     }
 

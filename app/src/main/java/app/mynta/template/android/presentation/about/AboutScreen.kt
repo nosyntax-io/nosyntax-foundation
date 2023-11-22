@@ -64,7 +64,7 @@ fun AboutScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Text(
                 modifier = Modifier.alpha(.7f),
-                text = appConfig.description,
+                text = appConfig.app.description,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
