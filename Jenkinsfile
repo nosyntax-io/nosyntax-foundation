@@ -228,19 +228,11 @@ pipeline {
 
             def buildFlavor = params.IS_MONETIZE ? "monetize" : "regular"
 
-            def assembleTask = "assemble${buildFlavor.capitalize()}"
-            def bundleTask = "bundle${buildFlavor.capitalize()}"
-
-            sh "./gradlew ${assembleTask} ${bundleTask}"
+            sh "./gradlew assemble${buildFlavor.capitalize()}"
 
             def apkSourcePath = "${WORKSPACE}/app/build/outputs/apk/${buildFlavor}/release/app-${buildFlavor}-release.apk"
-            def aabSourcePath = "${WORKSPACE}/app/build/outputs/bundle/${buildFlavor}Release/app-${buildFlavor}-release.aab"
-
-            def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PROJECT_ID}.apk"
-            def aabDestinationPath = "${REPOSITORY_PATH}/outputs/aab/${PROJECT_ID}.aab"
-
-            sh "mv ${apkSourcePath} ${apkDestinationPath}"
-            sh "mv ${aabSourcePath} ${aabDestinationPath}"
+						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PROJECT_ID}.apk"
+						sh "mv ${apkSourcePath} ${apkDestinationPath}"
           } catch (Exception ex) {
             currentBuild.result = 'FAILURE'
             error "Error in Build Release Artifact stage: ${ex.getMessage()}"
@@ -253,7 +245,6 @@ pipeline {
       steps {
         script {
           approveRepositoryAccess("apk")
-          approveRepositoryAccess("aab")
         }
       }
     }
@@ -306,9 +297,6 @@ def approveRepositoryAccess(fileType) {
       case "apk":
         env.APK_FILE_TOKEN = responseBody.token
         break
-      case "aab":
-        env.AAB_FILE_TOKEN = responseBody.token
-        break
       default:
         echo "Unsupported file type: ${fileType}"
       }
@@ -335,8 +323,7 @@ def addBuildHistory(int buildStatus) {
 
       if (buildStatus == 1) {
         postData += [
-          apk_file_token: APK_FILE_TOKEN,
-          aab_file_token: AAB_FILE_TOKEN
+          apk_file_token: APK_FILE_TOKEN
         ]
       }
 
