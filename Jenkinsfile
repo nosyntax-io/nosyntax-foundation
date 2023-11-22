@@ -228,7 +228,7 @@ pipeline {
 
             def buildFlavor = params.IS_MONETIZE ? "monetize" : "regular"
 
-            sh "./gradlew assemble${buildFlavor.capitalize()}"
+            sh "./gradlew assemble${buildFlavor.capitalize()}Release"
 
             def apkSourcePath = "${WORKSPACE}/app/build/outputs/apk/${buildFlavor}/release/app-${buildFlavor}-release.apk"
 						def apkDestinationPath = "${REPOSITORY_PATH}/outputs/apk/${PROJECT_ID}.apk"
