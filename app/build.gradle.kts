@@ -50,9 +50,7 @@ android {
             dimension = "default"
         }
         create("monetize") {
-            manifestPlaceholders += mapOf(
-                "admob_app_id" to config.getProperty(AdmobConfig.APP_ID)
-            )
+            manifestPlaceholders += mapOf("admob_app_id" to "config.getProperty(AdmobConfig.APP_ID)")
             dimension = "default"
         }
     }
