@@ -203,7 +203,9 @@ fun WebScreen(
 
     if (webViewState.isLoading) {
         val indicatorConfig = appConfig.configuration.components.loadingIndicator
-        LoadingIndicator(indicatorConfig = indicatorConfig)
+        if (indicatorConfig.display) {
+            LoadingIndicator(indicatorConfig = indicatorConfig)
+        }
     }
 
     // TODO: Reset connection state when update navigate.
