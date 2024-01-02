@@ -63,7 +63,7 @@ pipeline {
       }
     }
 
-    stage('Send API Request') {
+    stage('Update Project Signing Config') {
       steps {
         script {
           try {
@@ -89,7 +89,7 @@ pipeline {
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Failed to send API request: ${e.message}"
+            error "Failed to update project signing configuration: ${e.message}"
           }
         }
       }
