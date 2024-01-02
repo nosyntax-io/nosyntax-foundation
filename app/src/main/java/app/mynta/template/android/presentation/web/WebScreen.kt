@@ -1,17 +1,19 @@
 package app.mynta.template.android.presentation.web
 
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.DownloadManager
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.util.Log
+import android.os.Environment
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
+import android.webkit.URLUtil
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -124,8 +126,20 @@ fun WebScreen(
                         ), "app"
                     )
 
-                    setDownloadListener { url, _, _, _, _ ->
-                        context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
+                    setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+                        val request = DownloadManager.Request(Uri.parse(url))
+                        request.apply {
+                            setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
+                            setDescription("Downloading file...")
+                            setMimeType(mimeType)
+                            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                            setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType))
+                        }
+
+                        val downloadManager = context.getSystemService(DownloadManager::class.java)
+                        downloadManager.enqueue(request)
+
+                        Toast.makeText(context, "Download Started", Toast.LENGTH_LONG).show()
                     }
                 }
             },

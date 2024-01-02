@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -38,6 +39,13 @@
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
+        <receiver
+            android:name=".presentation.broadcast.DownloadCompletedReceiver"
+            android:exported="true" >
+                <intent-filter>
+                    <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
