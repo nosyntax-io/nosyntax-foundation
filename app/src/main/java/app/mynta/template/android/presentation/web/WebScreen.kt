@@ -1,10 +1,7 @@
 package app.mynta.template.android.presentation.web
 
 import android.annotation.SuppressLint
-import android.app.DownloadManager
 import android.content.pm.ActivityInfo
-import android.net.Uri
-import android.os.Environment
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
@@ -37,6 +34,7 @@ import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.component.SystemUIControllerComponent
 import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
+import app.mynta.template.android.core.utility.Download
 import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.monetize.BannerAd
@@ -84,7 +82,7 @@ fun WebScreen(
 
     LaunchedEffect(navigator) {
         if (webViewState.viewState == null) {
-            navigator.loadUrl(url)
+            navigator.loadUrl("https://google.com")
         }
     }
 
@@ -126,19 +124,12 @@ fun WebScreen(
                         ), "app"
                     )
 
-                    setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-                        val request = DownloadManager.Request(Uri.parse(url))
-                        request.apply {
-                            setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
-                            setDescription("Downloading file...")
-                            setMimeType(mimeType)
-                            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                            setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType))
-                        }
-
-                        val downloadManager = context.getSystemService(DownloadManager::class.java)
-                        downloadManager.enqueue(request)
-
+                    setDownloadListener { url, _, contentDisposition, mimeType, _ ->
+                        Download(context).downloadFile(
+                            fileName = URLUtil.guessFileName(url, contentDisposition, mimeType),
+                            url = url,
+                            mimeType = mimeType
+                        )
                         Toast.makeText(context, "Download Started", Toast.LENGTH_LONG).show()
                     }
                 }
