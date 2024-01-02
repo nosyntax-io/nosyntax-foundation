@@ -2,9 +2,9 @@ package app.mynta.template.android.domain.model.app_config
 
 data class ColorSchemeConfig(
     val primary: String,
-    val primaryContainer: String,
+    val primaryVariant: String,
     val secondary: String,
-    val secondaryContainer: String,
+    val secondaryVariant: String,
     val backgroundLight: String,
     val onBackgroundLight: String,
     val surfaceLight: String,
