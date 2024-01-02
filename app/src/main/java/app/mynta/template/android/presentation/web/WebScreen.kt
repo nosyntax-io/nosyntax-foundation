@@ -124,10 +124,11 @@ fun WebScreen(
                         ), "app"
                     )
 
-                    setDownloadListener { url, _, contentDisposition, mimeType, _ ->
+                    setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
                         Download(context).downloadFile(
                             fileName = URLUtil.guessFileName(url, contentDisposition, mimeType),
                             url = url,
+                            userAgent = userAgent,
                             mimeType = mimeType
                         )
                         Toast.makeText(context, "Download Started", Toast.LENGTH_LONG).show()
