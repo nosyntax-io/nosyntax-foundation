@@ -25,10 +25,11 @@ pipeline {
     stage('Generate Keystore') {
       steps {
         script {
+          def signingKeyAlias = APP_NAME.replaceAll('[^a-zA-Z0-9 ]', '').replaceAll(' ', '_').toLowerCase()
           def signingKeyPassword = sh(script: 'openssl rand -base64 16', returnStdout: true).trim()
 
           env.KEYSTORE_PASSWORD = signingKeyPassword
-          env.KEY_ALIAS = APP_NAME.toLowerCase()
+          env.KEY_ALIAS = signingKeyAlias
           env.KEY_PASSWORD = signingKeyPassword
 
           sh """
