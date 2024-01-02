@@ -25,7 +25,7 @@ android {
         buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${config.getProperty(ServerConfig.AUTH_TOKEN)}\"")
         buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${config.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
         buildConfigField("String", "APP_REMOTE_CONFIG", "\"${config.getProperty(AppConfig.REMOTE_CONFIG)}\"")
-        buildConfigField("String", "ONE_SIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
+        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
         buildConfigField("String", "ADMOB_BANNER_ID", "\"${config.getProperty(AdmobConfig.BANNER_ID)}\"")
         buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${config.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
 

@@ -18,7 +18,7 @@ class App : Application() {
         Connectivity.getInstance().initializeWithApplicationContext(context = this)
 
         OneSignalService(this)
-            .initialize(appId = BuildConfig.ONE_SIGNAL_APP_ID)
+            .initialize(appId = BuildConfig.ONESIGNAL_APP_ID)
             .handleNotification(onNotificationOpened = { notificationData ->
                 val deeplink = notificationData.first
                 when (notificationData.second) {
