@@ -34,7 +34,7 @@ import app.mynta.template.android.core.component.NoConnectionComponent
 import app.mynta.template.android.core.component.SystemUIControllerComponent
 import app.mynta.template.android.core.component.SystemUIState
 import app.mynta.template.android.core.utility.Connectivity
-import app.mynta.template.android.core.utility.Download
+import app.mynta.template.android.core.utility.Downloader
 import app.mynta.template.android.core.utility.Utilities.findActivity
 import app.mynta.template.android.core.utility.WebView
 import app.mynta.template.android.core.utility.monetize.BannerAd
@@ -125,7 +125,7 @@ fun WebScreen(
                     )
 
                     setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
-                        Download(context).downloadFile(
+                        Downloader(context).downloadFile(
                             fileName = URLUtil.guessFileName(url, contentDisposition, mimeType),
                             url = url,
                             userAgent = userAgent,
