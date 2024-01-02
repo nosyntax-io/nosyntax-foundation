@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import app.mynta.template.android.R
 import app.mynta.template.android.core.Constants
 import app.mynta.template.android.core.component.ChangeScreenOrientationComponent
 import app.mynta.template.android.core.component.NoConnectionComponent
@@ -125,13 +126,14 @@ fun WebScreen(
                     )
 
                     setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
+                        val fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
                         Downloader(context).downloadFile(
-                            fileName = URLUtil.guessFileName(url, contentDisposition, mimeType),
+                            fileName = fileName,
                             url = url,
                             userAgent = userAgent,
                             mimeType = mimeType
                         )
-                        Toast.makeText(context, "Download Started", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "${context.getString(R.string.download_started)} $fileName", Toast.LENGTH_LONG).show()
                     }
                 }
             },

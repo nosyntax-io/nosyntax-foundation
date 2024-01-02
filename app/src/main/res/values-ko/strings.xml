@@ -11,4 +11,6 @@
     <string name="more">더 보기</string>
     <string name="copyright">저작권</string>
     <string name="all_rights_reserved">모든 권리 보유.</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

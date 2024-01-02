@@ -15,4 +15,6 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="send_feedback">Send Feadback</string>
     <string name="rate_us">Rate Us</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

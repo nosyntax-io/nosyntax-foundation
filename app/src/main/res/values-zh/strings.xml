@@ -11,4 +11,6 @@
     <string name="more">更多</string>
     <string name="copyright">版权</string>
     <string name="all_rights_reserved">版权所有。</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

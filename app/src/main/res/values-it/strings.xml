@@ -11,4 +11,6 @@
     <string name="more">Di più</string>
     <string name="copyright">Diritto d\'autore</string>
     <string name="all_rights_reserved">Tutti i diritti riservati.</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

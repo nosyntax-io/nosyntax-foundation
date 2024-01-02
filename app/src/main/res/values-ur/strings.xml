@@ -11,4 +11,6 @@
     <string name="more">مزید</string>
     <string name="copyright">کاپی رائٹ</string>
     <string name="all_rights_reserved">تمام حقوق محفوظ ہیں۔</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

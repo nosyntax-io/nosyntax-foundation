@@ -11,4 +11,6 @@
     <string name="more">Thêm</string>
     <string name="copyright">Bản quyền</string>
     <string name="all_rights_reserved">Tất cả các quyền đã được bảo hộ.</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>

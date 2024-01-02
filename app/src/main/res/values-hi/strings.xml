@@ -11,4 +11,6 @@
     <string name="more">अधिक</string>
     <string name="copyright">कॉपीराइट</string>
     <string name="all_rights_reserved">सभी अधिकार सुरक्षित हैं।</string>
+    <string name="file_is_downloading">File is downloading...</string>
+    <string name="download_started">Download Started:</string>
 </resources>
