@@ -16,12 +16,6 @@ pipeline {
   }
 
   stages {
-    stage('Prepare Workspace') {
-      steps {
-        cleanWs()
-      }
-    }
-
     stage('Generate Keystore') {
       steps {
         script {
