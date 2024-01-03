@@ -14,6 +14,8 @@ pipeline {
   parameters {
     string(defaultValue: '', name: 'BUILD_ID')
     string(defaultValue: '', name: 'BUILD_ENVIRONMENT')
+    string(defaultValue: '', name: 'BUILD_OUTPUT')
+
     string(defaultValue: '', name: 'USER_TOKEN')
     string(defaultValue: '', name: 'SERVER_ACCESS_TOKEN')
     string(defaultValue: '', name: 'PROJECT_ID')
@@ -37,6 +39,8 @@ pipeline {
   environment {
     BUILD_ID = "${params.BUILD_ID}"
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
+    BUILD_OUTPUT = "${params.BUILD_OUTPUT}"
+
     USER_TOKEN = "${params.USER_TOKEN}"
     SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
     PROJECT_ID = "${params.PROJECT_ID}"
@@ -192,6 +196,9 @@ pipeline {
     }
 
     stage('Manage Application Sourcecode') {
+      when {
+        expression { BUILD_OUTPUT =~ /(source)/ }
+      }
 			steps {
 				script {
 					def excludes = [
@@ -221,6 +228,9 @@ pipeline {
 		}
 
     stage('Build Release Artifact') {
+      when {
+        expression { BUILD_OUTPUT =~ /(apk|aab)/ }
+      }
       steps {
         script {
           try {
