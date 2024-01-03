@@ -16,7 +16,6 @@ pipeline {
     string(defaultValue: '', name: 'BUILD_ENVIRONMENT')
     string(defaultValue: '', name: 'BUILD_OUTPUT')
 
-    string(defaultValue: '', name: 'USER_TOKEN')
     string(defaultValue: '', name: 'SERVER_ACCESS_TOKEN')
     string(defaultValue: '', name: 'PROJECT_ID')
     string(defaultValue: '', name: 'APP_ID')
@@ -41,7 +40,6 @@ pipeline {
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
     BUILD_OUTPUT = "${params.BUILD_OUTPUT}"
 
-    USER_TOKEN = "${params.USER_TOKEN}"
     SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
     PROJECT_ID = "${params.PROJECT_ID}"
     APP_ID = "${params.APP_ID}"
@@ -324,7 +322,6 @@ def addBuildHistory(int buildStatus) {
 
       def postData = [
         api_secret_key: API_SECRET_KEY,
-        user_token: USER_TOKEN,
         access_token: SERVER_ACCESS_TOKEN,
         build_id: BUILD_ID,
         build_status: buildStatus,
