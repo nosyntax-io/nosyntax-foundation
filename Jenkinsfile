@@ -4,7 +4,7 @@ pipeline {
   }
 
   tools {
-    gradle 'Gradle 8.0'
+    gradle 'Gradle 8.2'
   }
 
   libraries {
@@ -16,22 +16,28 @@ pipeline {
     string(defaultValue: '', name: 'BUILD_ENVIRONMENT')
     string(defaultValue: '', name: 'BUILD_OUTPUT')
 
-    string(defaultValue: '', name: 'SERVER_ACCESS_TOKEN')
     string(defaultValue: '', name: 'PROJECT_ID')
+    string(defaultValue: '', name: 'ACCESS_TOKEN')
+
     string(defaultValue: '', name: 'APP_ID')
     string(defaultValue: '', name: 'APP_NAME')
     string(defaultValue: '', name: 'APP_VERSION_NUMBER')
     string(defaultValue: '', name: 'APP_VERSION_NAME')
     string(defaultValue: '', name: 'APP_REMOTE_CONFIG')
+
     string(defaultValue: '', name: 'ONESIGNAL_APP_ID')
+
     booleanParam(defaultValue: false, name: 'IS_MONETIZE')
+
     string(defaultValue: '', name: 'ADMOB_APP_ID')
     string(defaultValue: '', name: 'ADMOB_BANNER_ID')
     string(defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID')
+
     string(defaultValue: '', name: 'KEYSTORE_FILE')
     string(defaultValue: '', name: 'KEYSTORE_PASSWORD')
     string(defaultValue: '', name: 'KEY_ALIAS')
     string(defaultValue: '', name: 'KEY_PASSWORD')
+
     string(defaultValue: '', name: 'LOCAL_APP_CONFIG')
   }
 
@@ -40,22 +46,28 @@ pipeline {
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
     BUILD_OUTPUT = "${params.BUILD_OUTPUT}"
 
-    SERVER_ACCESS_TOKEN = "${params.SERVER_ACCESS_TOKEN}"
     PROJECT_ID = "${params.PROJECT_ID}"
+    ACCESS_TOKEN = "${params.ACCESS_TOKEN}"
+
     APP_ID = "${params.APP_ID}"
     APP_NAME = "${params.APP_NAME}"
     APP_VERSION_NUMBER = "${params.APP_VERSION_NUMBER}"
     APP_VERSION_NAME = "${params.APP_VERSION_NAME}"
     APP_REMOTE_CONFIG = "${params.APP_REMOTE_CONFIG}"
+
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
+    
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
+
     KEYSTORE_FILE = "${params.KEYSTORE_FILE}"
     KEYSTORE_PASSWORD = "${params.KEYSTORE_PASSWORD}"
     KEY_ALIAS = "${params.KEY_ALIAS}"
     KEY_PASSWORD = "${params.KEY_PASSWORD}"
+
     LOCAL_APP_CONFIG = "${params.LOCAL_APP_CONFIG}"
+
     REPOSITORY_PATH = '/var/www/cloud.mynta.app/repository'
   }
 
@@ -72,7 +84,7 @@ pipeline {
                 'PARAM_APP_VERSION_NUMBER': 'APP_VERSION_NUMBER',
                 'PARAM_APP_VERSION_NAME': 'APP_VERSION_NAME',
                 'PARAM_APP_REMOTE_CONFIG': 'APP_REMOTE_CONFIG',
-                'PARAM_SERVER_ACCESS_TOKEN': 'SERVER_ACCESS_TOKEN',
+                'PARAM_SERVER_ACCESS_TOKEN': 'ACCESS_TOKEN',
                 'PARAM_ONESIGNAL_APP_ID': 'ONESIGNAL_APP_ID',
                 'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
                 'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
@@ -158,7 +170,7 @@ pipeline {
 
               if (!fileExists(signingKeyPath)) {
                 build job: 'AppSigning', parameters: [
-                  string(name: 'ACCESS_TOKEN', value: env.SERVER_ACCESS_TOKEN),
+                  string(name: 'ACCESS_TOKEN', value: env.ACCESS_TOKEN),
                   string(name: 'PROJECT_ID', value: env.PROJECT_ID),
                   string(name: 'APP_NAME', value: env.APP_NAME)
                 ]
@@ -322,7 +334,7 @@ def addBuildHistory(int buildStatus) {
 
       def postData = [
         api_secret_key: API_SECRET_KEY,
-        access_token: SERVER_ACCESS_TOKEN,
+        access_token: ACCESS_TOKEN,
         build_id: BUILD_ID,
         build_status: buildStatus,
         version_number: APP_VERSION_NUMBER
