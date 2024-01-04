@@ -27,8 +27,7 @@ pipeline {
 
     string(defaultValue: '', name: 'ONESIGNAL_APP_ID')
 
-    booleanParam(defaultValue: false, name: 'IS_MONETIZE')
-
+    string(defaultValue: '', name: 'IS_MONETIZE')
     string(defaultValue: '', name: 'ADMOB_APP_ID')
     string(defaultValue: '', name: 'ADMOB_BANNER_ID')
     string(defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID')
@@ -57,6 +56,7 @@ pipeline {
 
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
     
+    IS_MONETIZE = "${params.IS_MONETIZE}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
     ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
     ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
@@ -246,7 +246,7 @@ pipeline {
           try {
             sh 'chmod +rx gradlew'
 
-            def buildFlavor = params.IS_MONETIZE ? "monetize" : "regular"
+            def buildFlavor = isMonetize == 'enabled' ? 'monetize' : 'regular'
 
             sh "./gradlew assemble${buildFlavor.capitalize()}Release"
 
