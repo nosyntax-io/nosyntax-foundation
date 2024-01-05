@@ -10,5 +10,7 @@ data class ConfigurationDto(
     @SerializedName("monetization_options")
     val monetization: MonetizationConfigDto,
     @SerializedName("modules")
-    val modules: ModulesConfigDto
+    val modules: ModulesConfigDto,
+    @SerializedName("navigation")
+    val navigation: NavigationConfigDto
 )

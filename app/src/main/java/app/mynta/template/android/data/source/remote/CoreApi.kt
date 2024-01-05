@@ -16,7 +16,7 @@ interface CoreAPI {
     ): AppConfigDto
 
     companion object {
-        private const val BASE_URL = "https://api.mynta.app/v1.4beta/"
+        private const val BASE_URL = "https://api.mynta.app/v1.5beta/"
         private const val AUTH_TOKEN = BuildConfig.SERVER_AUTH_TOKEN
         private const val ACCESS_TOKEN = BuildConfig.SERVER_ACCESS_TOKEN
 

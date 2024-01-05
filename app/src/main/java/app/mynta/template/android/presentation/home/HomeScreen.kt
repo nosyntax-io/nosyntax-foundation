@@ -52,7 +52,7 @@ fun HomeScreen(
 
     appConfig?.let { config ->
         val components = config.configuration.components
-        val navigationItems = config.configuration.components.sideMenu.items
+        val navigationItems = config.configuration.navigation.items
 
         val content: @Composable () -> Unit = {
             HomeContent(

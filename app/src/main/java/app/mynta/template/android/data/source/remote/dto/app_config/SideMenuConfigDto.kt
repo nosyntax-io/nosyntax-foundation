@@ -8,25 +8,12 @@ data class SideMenuConfigDto(
     @SerializedName("background")
     val background: String,
     @SerializedName("header")
-    val header: Header,
-    @SerializedName("items")
-    val items: List<Item>) {
+    val header: Header) {
 
     data class Header(
         @SerializedName("display")
         val display: Boolean,
         @SerializedName("image")
         val image: String
-    )
-
-    data class Item(
-        @SerializedName("route")
-        val route: String,
-        @SerializedName("label")
-        val label: String?,
-        @SerializedName("icon")
-        val icon: String?,
-        @SerializedName("deeplink")
-        val deeplink: String,
     )
 }

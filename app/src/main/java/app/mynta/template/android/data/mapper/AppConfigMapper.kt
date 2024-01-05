@@ -11,6 +11,7 @@ import app.mynta.template.android.data.source.remote.dto.app_config.Monetization
 import app.mynta.template.android.data.source.remote.dto.app_config.SideMenuConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ColorSchemeConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.ConfigurationDto
+import app.mynta.template.android.data.source.remote.dto.app_config.NavigationConfigDto
 import app.mynta.template.android.data.source.remote.dto.app_config.TypographyConfigDto
 import app.mynta.template.android.domain.model.NavigationItem
 import app.mynta.template.android.domain.model.app_config.AppBarConfig
@@ -24,6 +25,7 @@ import app.mynta.template.android.domain.model.app_config.MonetizationConfig
 import app.mynta.template.android.domain.model.app_config.TypographyConfig
 import app.mynta.template.android.domain.model.app_config.SideMenuConfig
 import app.mynta.template.android.domain.model.app_config.ColorSchemeConfig
+import app.mynta.template.android.domain.model.app_config.NavigationConfig
 import app.mynta.template.android.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
@@ -45,13 +47,14 @@ fun AppConfigDto.App.toApp(): AppConfig.App {
 }
 
 fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
-    val (theme, components, monetization, modules) = this
+    val (theme, components, monetization, modules, navigation) = this
 
     return AppConfig.Configuration(
         theme = theme.toTheme(),
         components = components.toComponents(),
         monetization = monetization.toMonetization(),
-        modules = modules.toModules()
+        modules = modules.toModules(),
+        navigation = navigation.toNavigation()
     )
 }
 
@@ -124,15 +127,7 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
         header = SideMenuConfig.Header(
             display = this.header.display,
             image = this.header.image
-        ),
-        items = this.items.map { item ->
-            NavigationItem(
-                route = item.route,
-                label = item.label,
-                icon = item.icon,
-                deeplink = item.deeplink
-            )
-        }
+        )
     )
 }
 
@@ -171,5 +166,19 @@ fun ModulesConfigDto.toModules(): ModulesConfig {
             ),
             customCss = this.webkit.customCss
         )
+    )
+}
+
+fun NavigationConfigDto.toNavigation(): NavigationConfig {
+    return NavigationConfig(
+        default = this.default,
+        items = this.items.map { item ->
+            NavigationItem(
+                route = item.route,
+                label = item.label,
+                icon = item.icon,
+                deeplink = item.deeplink
+            )
+        }
     )
 }

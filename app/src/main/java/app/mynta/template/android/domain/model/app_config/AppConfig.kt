@@ -15,6 +15,7 @@ data class AppConfig(
         val theme: ThemeConfig,
         val components: ComponentsConfig,
         val monetization: MonetizationConfig,
-        val modules: ModulesConfig
+        val modules: ModulesConfig,
+        val navigation: NavigationConfig
     )
 }
