@@ -32,6 +32,7 @@ import app.mynta.template.android.domain.model.app_config.AppConfig
 import app.mynta.template.android.presentation.main.MainActivity
 import app.mynta.template.android.presentation.navigation.component.SideMenu
 import app.mynta.template.android.presentation.main.MainViewModel
+import app.mynta.template.android.presentation.navigation.component.BottomBar
 import app.mynta.template.android.presentation.navigation.graph.NavigationGraph
 import app.mynta.template.android.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
@@ -150,12 +151,12 @@ private fun HomeContent(
         },
         bottomBar = {
             if (components.bottomBar.display && !isUtilityScreen(currentRoute)) {
-                /*BottomBar(
+                BottomBar(
                     bottomBarConfig = components.bottomBar,
                     navController = navController,
                     currentRoute = currentRoute,
                     navigationItems = navigationItems
-                )*/
+                )
             }
         }
     )

@@ -17,7 +17,6 @@ object Roles {
     const val ROLE_SETTINGS = "settings"
     const val ROLE_ABOUT = "about"
     const val ROLE_DIVIDER = "divider"
-    const val ROLE_MORE = "more"
 }
 
 @Composable
