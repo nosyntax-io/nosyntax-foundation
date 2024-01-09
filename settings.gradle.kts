@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Mynta Template"
+rootProject.name = "NoSyntax Template"
 include(":app")

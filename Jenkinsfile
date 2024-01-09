@@ -68,7 +68,7 @@ pipeline {
 
     LOCAL_APP_CONFIG = "${params.LOCAL_APP_CONFIG}"
 
-    REPOSITORY_PATH = '/var/www/cloud.mynta.app/repository'
+    REPOSITORY_PATH = '/var/www/cloud.nosyntax.io/repository'
   }
 
   stages {
@@ -246,7 +246,7 @@ pipeline {
           try {
             sh 'chmod +rx gradlew'
 
-            def buildFlavor = isMonetize == 'enabled' ? 'monetize' : 'regular'
+            def buildFlavor = env.IS_MONETIZE == 'enabled' ? 'monetize' : 'regular'
 
             sh "./gradlew assemble${buildFlavor.capitalize()}Release"
 
@@ -283,12 +283,12 @@ pipeline {
 def approveRepositoryAccess(fileType) {
   try {
     withCredentials([string(credentialsId: 'REPO_BASIC_AUTH', variable: 'REPO_BASIC_AUTH')]) {
-      def url = "https://cloud.mynta.app/repository/request_repository_access_approval.serv.php"
+      def url = "https://cloud.nosyntax.io/repository/request_repository_access.serv.php"
 
       def authString = "${REPO_BASIC_AUTH}"
       def authEncoded = authString.getBytes('UTF-8').encodeBase64().toString()
 
-      def targetFile = "${APP_ID}.${fileType}"
+      def targetFile = "${PROJECT_ID}.${fileType}"
       def postData = [
         target_file: targetFile,
         type: fileType
@@ -330,7 +330,7 @@ def approveRepositoryAccess(fileType) {
 def addBuildHistory(int buildStatus) {
   try {
     withCredentials([string(credentialsId: 'API_SECRET_KEY', variable: 'API_SECRET_KEY')]) {
-      def url = "https://api.mynta.app/cloud/request_add_build_history.inc.php"
+      def url = "https://api.nosyntax.io/cloud/request_add_build_history.inc.php"
 
       def postData = [
         api_secret_key: API_SECRET_KEY,

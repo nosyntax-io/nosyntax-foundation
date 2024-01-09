@@ -6,7 +6,7 @@ val config = Properties().load(rootProject.file("local.properties"))
 val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
-    namespace = "app.mynta.template.android"
+    namespace = "io.nosyntax.template.android"
     compileSdk = 34
 
     defaultConfig {
