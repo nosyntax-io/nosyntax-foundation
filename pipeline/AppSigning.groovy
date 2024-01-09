@@ -57,7 +57,7 @@ pipeline {
     stage('Package Keystore') {
       steps {
         script {
-          def destinationDirectory = '/var/www/cloud.mynta.app/repository/keystores'
+          def destinationDirectory = '/var/www/cloud.nosyntax.io/repository/keystores'
           sh "mv signing.keystore ${destinationDirectory}/${PROJECT_ID}.keystore"
         }
       }
@@ -68,7 +68,7 @@ pipeline {
         script {
           try {
             withCredentials([string(credentialsId: 'API_SECRET_KEY', variable: 'API_SECRET_KEY')]) {
-              def url = 'https://api.mynta.app/cloud/request_update_project_signing_config.inc.php'
+              def url = 'https://api.nosyntax.io/cloud/request_update_project_signing_config.inc.php'
 
               def postData = [
                 api_secret_key    : API_SECRET_KEY,
