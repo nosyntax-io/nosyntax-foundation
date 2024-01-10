@@ -1,5 +1,3 @@
-<a name="readme-top"></a>
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -20,8 +18,6 @@ Here's why:
 * **Quick Prototyping:** Rapidly prototype and iterate with NoSyntax's modular architecture and pre-integrated features.
 * **Seamless Integration:** Benefit from pre-built modules and libraries for added functionality without the complexity.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Built With
 
 Our template is made with care, using the newest tech to boost development effectiveness.
@@ -32,14 +28,38 @@ Our template is made with care, using the newest tech to boost development effec
 [![Apache Groovy][groovy-badge]][groovy-url]
 [![Jenkins][jenkins-badge]][jenkins-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- GETTING STARTED -->
+## Getting Started
+
+Why waste time in manual tasks when everything is automated? You can download the pre-configured source code from the project dashboard, complete with configured APIs, and more. If you desire to add extra features or customize the code beyond our builder's capabilities, just follow the steps below.
+
+### Prerequisites
+
+* Java 17+
+* The latest stable Android Studio (for easy install use JetBrains Toolbox)
+
+### Installation
+
+1. Fork and Clone the Repository:
+   
+   ```sh
+   git clone https://github.com/aelrahmanashraf/nosyntax-android-template/
+   ```
+   
+2. Open the Project with Android Studio:
+   * Launch Android Studio.
+   * Select "Open an existing Android Studio project."
+   * Navigate to the directory where you cloned the repository and choose the project folder.
+3. Synchronization:
+   * Allow Android Studio to sync the project files.
+   * Ensure any required dependencies are downloaded.
+     
+Once these steps are completed, you'll have the template ready for use in Android Studio.
 
 <!-- CONTACT -->
 ## Contact
 
 If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io](support@nosyntax.io).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -48,14 +68,10 @@ Join us in shaping the future of no-code app development. If you have any sugges
 
 Don't forget to give the project a star! Thanks again!
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
