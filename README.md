@@ -31,6 +31,8 @@ Our template is made with care, using the newest tech to boost development effec
 <!-- GETTING STARTED -->
 ## Getting Started
 
+[![Product Name Screen Shot](https://mynta.app/demo1.png)](https://example.com)
+
 Why waste time in manual tasks when everything is automated? You can download the pre-configured source code from the project dashboard, complete with configured APIs, and more. If you desire to add extra features or customize the code beyond our builder's capabilities, just follow the steps below.
 
 ### Prerequisites
