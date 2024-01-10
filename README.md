@@ -24,19 +24,28 @@ Here's why:
 
 ### Built With
 
-We carefully built this template using the latest technologies to improve the power of development.
+Our template is made with care, using the newest tech to boost development effectiveness.
 
 [![Android Studio][android-studio-badge]][android-studio-url]
 [![Kotlin][kotlin-badge]][kotlin-url]
 [![Gradle][gradle-badge]][gradle-url]
+[![Apache Groovy][groovy-badge]][groovy-url]
 [![Jenkins][jenkins-badge]][jenkins-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+## Contact
+
+If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io](support@nosyntax.io).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Join us in shaping the future of no-code app development. If you have a suggestion that would make this template better, you can simply open an issue with the tag **"enhancement"**.
+Join us in shaping the future of no-code app development. If you have any suggestions to make this template better, please open an issue with the tag "enhancement".
+
 Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -45,13 +54,6 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-
-If you have any questions or need assistance, feel free to contact us at: [support@nosyntax.io](support@nosyntax.io)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -65,3 +67,5 @@ If you have any questions or need assistance, feel free to contact us at: [suppo
 [kotlin-url]: https://kotlinlang.org/
 [gradle-badge]: https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white
 [gradle-url]: https://gradle.org/
+[groovy-badge]: https://img.shields.io/badge/Apache%20Groovy-4298B8.svg?style=for-the-badge&logo=Apache+Groovy&logoColor=white
+[groovy-url]: https://groovy-lang.org/
