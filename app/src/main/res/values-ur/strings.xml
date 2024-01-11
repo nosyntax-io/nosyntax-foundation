@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mynta Template</string>
     <string name="i_understand">میں سمجھتا ہوں</string>
     <string name="cancel">منسوخ کریں</string>
     <string name="confirm">تصدیق کریں</string>

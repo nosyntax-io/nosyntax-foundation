@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mynta Template</string>
     <string name="i_understand">Ho capito</string>
     <string name="cancel">Annulla</string>
     <string name="confirm">Conferma</string>

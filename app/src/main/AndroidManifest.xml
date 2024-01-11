@@ -17,14 +17,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyntaTemplate.Splash"
+        android:theme="@style/Theme.FoundationTheme.Splash"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name="io.nosyntax.foundation.presentation.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
-            android:theme="@style/Theme.MyntaTemplate.Splash">
+            android:theme="@style/Theme.FoundationTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

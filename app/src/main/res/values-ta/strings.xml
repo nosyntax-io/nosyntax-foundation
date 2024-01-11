@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mynta Template</string>
     <string name="i_understand">நான் புரிகிறேன்</string>
     <string name="cancel">ரத்து செய்</string>
     <string name="confirm">உறுதிப்படுத்து</string>

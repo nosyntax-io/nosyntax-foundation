@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mynta Template</string>
     <string name="i_understand">Jag förstår</string>
     <string name="cancel">Avbryt</string>
     <string name="confirm">Bekräfta</string>
