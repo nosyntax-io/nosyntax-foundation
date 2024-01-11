@@ -7,7 +7,7 @@ template=$(<local.properties.template)
 
 # Replace placeholders with playground details
 template=${template/PARAM_BUILD_ENVIRONMENT/development}
-template=${template/PARAM_APP_ID/io.nosyntax.core.playground}
+template=${template/PARAM_APP_ID/com.example.android}
 template=${template/PARAM_APP_NAME/Playground}
 template=${template/PARAM_APP_VERSION_NUMBER/1}
 template=${template/PARAM_APP_VERSION_NAME/1.0}

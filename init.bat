@@ -5,7 +5,7 @@ REM This is the manual initialization script; it is not utilized by Jenkins.
 
 REM Set Playground parameter values
 set "PARAM_BUILD_ENVIRONMENT=development"
-set "PARAM_APP_ID=io.nosyntax.core.playground"
+set "PARAM_APP_ID=com.example.android"
 set "PARAM_APP_NAME=Playground"
 set "PARAM_APP_VERSION_NUMBER=1"
 set "PARAM_APP_VERSION_NAME=1.0"
