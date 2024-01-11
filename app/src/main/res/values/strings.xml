@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Mynta Template</string>
+    <string name="app_name" translatable="false">Foundation</string>
     <string name="i_understand">I Understand</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>

@@ -6,7 +6,7 @@ val config = Properties().load(rootProject.file("local.properties"))
 val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
-    namespace = "io.nosyntax.template.android"
+    namespace = "io.nosyntax.foundation"
     compileSdk = 34
 
     defaultConfig {
@@ -47,6 +47,7 @@ android {
     flavorDimensions += "default"
     productFlavors {
         create("regular") {
+            isDefault = true
             dimension = "default"
         }
         create("monetize") {

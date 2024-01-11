@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NoSyntax Template"
+rootProject.name = "Foundation"
 include(":app")

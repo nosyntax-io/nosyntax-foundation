@@ -9,7 +9,7 @@
         android:maxSdkVersion="28" />
 
     <application
-        android:name=".App"
+        android:name="io.nosyntax.foundation.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name="io.nosyntax.foundation.presentation.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
             android:theme="@style/Theme.MyntaTemplate.Splash">
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:name=".core.AppFileProvider"
+            android:name="io.nosyntax.foundation.core.AppFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -43,7 +43,7 @@
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
         <receiver
-            android:name=".presentation.broadcast.DownloadCompletedReceiver"
+            android:name="io.nosyntax.foundation.presentation.broadcast.DownloadCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

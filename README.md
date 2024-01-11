@@ -1,16 +1,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">NoSyntax Core For Android</h3>
+  <h3 align="center">NoSyntax Foundation For Android</h3>
   <p align="center">
-    Core Template Used by NoSyntax App Builder
+    Foundation Used by NoSyntax App Builder
+    <br />
+    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template"><strong>Explore Demo »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template/issues">Request Feature</a>
   </p>
 </div>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Core template in Android designed for nosyntax.io, a no-code app builder. If you're a seasoned developer curious about the technical workings of this service, feel free to dive in. For non-technical enthusiasts, give our builder a try and save valuable time.
+Foundation template in Android designed for [nosyntax.io][nosyntax-url], a no-code app builder. If you're a seasoned developer curious about the technical workings of this service, feel free to dive in. For non-technical enthusiasts, give our builder a try and save valuable time.
 
 Here are the reasons to use the nosyntax's builder:
 * **No-Code Development:** Create apps effortlessly with nosyntax, no coding required.
@@ -20,7 +27,7 @@ Here are the reasons to use the nosyntax's builder:
 
 ### Built With
 
-We crafted the core template with care, using the newest tech to improve the development process.
+We crafted the nosyntax foundation with care, using the newest tech to improve the development process.
 
 [![Android Studio][android-studio-badge]][android-studio-url]
 [![Kotlin][kotlin-badge]][kotlin-url]
@@ -47,12 +54,12 @@ This section is for tech enthusiasts who want to learn how our service works or 
    ```
 
 2. Open the Project with Android Studio:
-   * Launch Android Studio.
-   * Select "Open an existing Android Studio project."
-   * Navigate to the directory where you cloned the repository and choose the project folder.
+    * Launch Android Studio.
+    * Select "Open an existing Android Studio project."
+    * Navigate to the directory where you cloned the repository and choose the project folder.
 3. Synchronization:
-   * Allow Android Studio to sync the project files.
-   * Ensure any required dependencies are downloaded.
+    * Allow Android Studio to sync the project files.
+    * Ensure any required dependencies are downloaded.
 
 Once these steps are completed, you'll have the template ready for use in Android Studio.
 
@@ -107,51 +114,48 @@ Example using cURL:
 
 ```bash
 curl -X POST https://api.nosyntax.io/v1.0/app_config \
-     -H "Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+     -H "Authorization: Bearer AUTH_TOKEN" \
      -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "access_token=your_access_token"
+     -d "access_token=PROJECT_ACCESS_TOKEN"
 ```
 
-**Sample Response Body**
+**Sample Response**
 
-```json
+```
 {
-    "app": {
-        "id": "io.nosyntax.core.playground",
-        "name": "Playground",
-        "category": "Playground Demo",
-        "description": "That's just a playground."
-    }
+  "app": {
+    "id": "io.nosyntax.core.playground",
+    "name": "Playground",
+    "category": "Playground Demo",
+    "description": "That's just a playground."
+  }
 }
 ```
 
 ### Responses
 
-NoSyntax API calls return HTTP status codes.
+HTTP status codes returned by the NoSyntax REST API
 
 **Successful requests**
 
-For successful requests, API returns HTTP 2XX status codes.
-
-| Status Code | Description              |
-|:------------|:-------------------------|
-| 200         | `The request succeeded.` |
+| Status Code | Description                                        |
+|:------------|:---------------------------------------------------|
+| 200         | `SUCCESS. The request was processed successfully.` |
 
 **Failed requests**
 
-For failed requests, API returns HTTP 4XX status codes if something passed in the request has an error or 5XX status codes when something is wrong on our end.
-
-| Status Code | Description                                                                                 |
-|:------------|:--------------------------------------------------------------------------------------------|
-| 400         | `INVALID_REQUEST. Request is not well-formed, syntactically incorrect, or violates schema.` |
-| 401         | `INVALID_CLIENT. Client authentication failed.`                                             |
-| 404         | `NOT FOUND`                                                                                 |
-| 500         | `INTERNAL SERVER ERROR`                                                                     |
+| Status Code | Description                                                                                         |
+|:------------|:----------------------------------------------------------------------------------------------------|
+| 400         | `BAD REQUEST. Incorrect syntax or schema violation. Review and correct your request payload.`       |
+| 401         | `AUTHENTICATION FAILED. Missing or invalid Bearer token. Provide a valid token for authentication.` |
+|             | `AUTHENTICATION FAILED. Missing or invalid access token. Provide a valid token for authentication.` |
+| 404         | `NOT FOUND. The requested resource is not on the server. Verify the path or identifier.`            |
+| 500         | `INTERNAL SERVER ERROR. Unexpected server error. The issue will be addressed by the server team.`   |
 
 <!-- CONTACT -->
 ## Contact
 
-If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io](support@nosyntax.io).
+If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io](mailto:support@nosyntax.io).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -177,4 +181,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [gradle-url]: https://gradle.org/
 [groovy-badge]: https://img.shields.io/badge/Apache%20Groovy-4298B8.svg?style=for-the-badge&logo=Apache+Groovy&logoColor=white
 [groovy-url]: https://groovy-lang.org/
+[nosyntax-url]: https://nosyntax.io
 [jetbrains-toolbox-url]: https://www.jetbrains.com/toolbox-app/
