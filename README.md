@@ -3,23 +3,23 @@
 <div align="center">
   <h3 align="center">NoSyntax Foundation For Android</h3>
   <p align="center">
-    Foundation Used by NoSyntax App Builder
+    Template used as a foundation in the NoSyntax app builder.
     <br />
-    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template"><strong>Explore Demo »</strong></a>
+    <a href="https://github.com/aelrahmanashraf/nosyntax-foundation-android"><strong>Explore Demo »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template/issues">Report Bug</a>
+    <a href="https://github.com/aelrahmanashraf/nosyntax-foundation-android/issues">Report Bug</a>
     ·
-    <a href="https://github.com/aelrahmanashraf/nosyntax-android-template/issues">Request Feature</a>
+    <a href="https://github.com/aelrahmanashraf/nosyntax-foundation-android/issues">Request Feature</a>
   </p>
 </div>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Foundation template in Android designed for [nosyntax.io][nosyntax-url], a no-code app builder. If you're a seasoned developer curious about the technical workings of this service, feel free to dive in. For non-technical enthusiasts, give our builder a try and save valuable time.
+Foundation Android template designed for [nosyntax.io][nosyntax-url], a no-code app builder. If you're a seasoned developer curious about the technical workings of this service, feel free to dive in. For non-technical enthusiasts, give our builder a try and save valuable time.
 
-Here are the reasons to use the nosyntax's builder:
+Reasons to use nosyntax's builder:
 * **No-Code Development:** Create apps effortlessly with nosyntax, no coding required.
 * **Easy Customization:** Personalize your app easily with an intuitive interface.
 * **Quick Prototyping:** Swiftly prototype and iterate using nosyntax's modular architecture.
@@ -31,6 +31,7 @@ We crafted the nosyntax foundation with care, using the newest tech to improve t
 
 [![Android Studio][android-studio-badge]][android-studio-url]
 [![Kotlin][kotlin-badge]][kotlin-url]
+[![Jetpack Compose][jetpack-compose-badge]][jetpack-compose-url]
 [![Gradle][gradle-badge]][gradle-url]
 [![Apache Groovy][groovy-badge]][groovy-url]
 [![Jenkins][jenkins-badge]][jenkins-url]
@@ -65,7 +66,7 @@ Once these steps are completed, you'll have the template ready for use in Androi
 
 ### Usage
 
-Before you build and run the template, run this command to set it up first.
+Before you build and run the template, execute this command to set it up first.
 * For Linux and macOS:
 
   ```sh
@@ -116,7 +117,7 @@ Example using cURL:
 curl -X POST https://api.nosyntax.io/v1.0/app_config \
      -H "Authorization: Bearer AUTH_TOKEN" \
      -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "access_token=PROJECT_ACCESS_TOKEN"
+     -d "access_token=ACCESS_TOKEN"
 ```
 
 **Sample Response**
@@ -124,38 +125,39 @@ curl -X POST https://api.nosyntax.io/v1.0/app_config \
 ```
 {
   "app": {
-    "id": "io.nosyntax.core.playground",
+    "id": "com.example.android",
     "name": "Playground",
-    "category": "Playground Demo",
-    "description": "That's just a playground."
+    "category": "Demo",
+    "description": "Lorem Ipsum is simply dummy text."
   }
 }
 ```
 
 ### Responses
 
-HTTP status codes returned by the NoSyntax REST API
+HTTP status codes returned by the nosyntax REST API.
 
 **Successful requests**
 
-| Status Code | Description                                        |
-|:------------|:---------------------------------------------------|
-| 200         | `SUCCESS. The request was processed successfully.` |
+| Status Code | Description                                       |
+|:------------|:--------------------------------------------------|
+| 200         | `SUCCESS. The request succeeded.`                 |
 
 **Failed requests**
 
-| Status Code | Description                                                                                         |
-|:------------|:----------------------------------------------------------------------------------------------------|
-| 400         | `BAD REQUEST. Incorrect syntax or schema violation. Review and correct your request payload.`       |
-| 401         | `AUTHENTICATION FAILED. Missing or invalid Bearer token. Provide a valid token for authentication.` |
-|             | `AUTHENTICATION FAILED. Missing or invalid access token. Provide a valid token for authentication.` |
-| 404         | `NOT FOUND. The requested resource is not on the server. Verify the path or identifier.`            |
-| 500         | `INTERNAL SERVER ERROR. Unexpected server error. The issue will be addressed by the server team.`   |
+| Status Code | Description                                                     |
+|:------------|:----------------------------------------------------------------|
+| 400         | `INVALID_REQUEST. Invalid scope requested.`                     |
+| 401         | `INVALID_TOKEN. Missing or invalid bearer authorization.`       |
+|             | `INVALID_TOKEN. Missing or invalid access token.`               |
+| 404         | `RESOURCE_NOT_FOUND. The specified resource does not exist.`    |
+| 500         | `INTERNAL_SERVER_ERROR. An internal server error has occurred.` |
+| 503         | `SERVICE_UNAVAILABLE. Service Unavailable.`                     |
 
 <!-- CONTACT -->
 ## Contact
 
-If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io](mailto:support@nosyntax.io).
+If you have any questions or need assistance, please feel free to contact us at [support@nosyntax.io][nosyntax-email].
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -171,15 +173,18 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[nosyntax-url]: https://nosyntax.io
+[nosyntax-email]: mailto:support@nosyntax.io
 [android-studio-badge]: https://img.shields.io/badge/Android%20Studio-3DDC84.svg?style=for-the-badge&logo=android-studio&logoColor=white
 [android-studio-url]: https://img.shields.io/badge/Android%20Studio-3DDC84.svg?style=for-the-badge&logo=android-studio&logoColor=white
-[jenkins-badge]: https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white
-[jenkins-url]: https://www.jenkins.io/
-[kotlin-badge]: https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white
+[kotlin-badge]: https://img.shields.io/badge/Kotlin-7f6ee3?style=for-the-badge&logo=kotlin&logoColor=white
 [kotlin-url]: https://kotlinlang.org/
+[jetpack-compose-badge]: https://img.shields.io/badge/Jetpack%20Compose-3a83f9?style=for-the-badge&logo=jetpack-compose&logoColor=white
+[jetpack-compose-url]: https://developer.android.com/jetpack/compose
 [gradle-badge]: https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white
 [gradle-url]: https://gradle.org/
 [groovy-badge]: https://img.shields.io/badge/Apache%20Groovy-4298B8.svg?style=for-the-badge&logo=Apache+Groovy&logoColor=white
 [groovy-url]: https://groovy-lang.org/
-[nosyntax-url]: https://nosyntax.io
+[jenkins-badge]: https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white
+[jenkins-url]: https://www.jenkins.io/
 [jetbrains-toolbox-url]: https://www.jetbrains.com/toolbox-app/
