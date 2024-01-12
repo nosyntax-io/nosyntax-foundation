@@ -39,7 +39,7 @@ We crafted the nosyntax foundation with care, using the newest tech to improve t
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This section is for tech enthusiasts who want to learn how our service works or are interested in an educational guide.
+This section is for tech enthusiasts who want to learn how nosyntax works or are interested in an educational guide.
 
 ### Prerequisites
 
@@ -51,7 +51,7 @@ This section is for tech enthusiasts who want to learn how our service works or 
 1. Fork and Clone the Repository:
 
    ```sh
-   git clone https://github.com/aelrahmanashraf/nosyntax-android-template/
+   git clone https://github.com/aelrahmanashraf/nosyntax-foundation-android/
    ```
 
 2. Open the Project with Android Studio:
@@ -95,7 +95,7 @@ POST https://api.nosyntax.io/
 
 ### Versioning
 
-Our API version is included at the end of the API endpoint. Currently, the latest version is v1.0.
+REST API version is included at the end of the API endpoint. Currently, the latest version is v1.0.
 
 The constructed URL looks like:
 
