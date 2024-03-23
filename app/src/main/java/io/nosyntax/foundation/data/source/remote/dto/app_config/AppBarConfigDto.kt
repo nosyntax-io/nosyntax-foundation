@@ -10,7 +10,6 @@ data class AppBarConfigDto(
     @SerializedName("title")
     val title: Title
 ) {
-
     data class Title(
         @SerializedName("display")
         val display: Boolean,

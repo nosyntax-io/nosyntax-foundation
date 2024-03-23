@@ -10,7 +10,6 @@ data class SideMenuConfigDto(
     @SerializedName("header")
     val header: Header
 ) {
-
     data class Header(
         @SerializedName("display")
         val display: Boolean,

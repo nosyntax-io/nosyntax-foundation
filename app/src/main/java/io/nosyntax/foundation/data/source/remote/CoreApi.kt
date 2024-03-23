@@ -10,7 +10,7 @@ import retrofit2.http.POST
 
 interface CoreAPI {
     @FormUrlEncoded
-    @POST("app_config.php")
+    @POST("app_config")
     suspend fun appConfig(
         @Field("access_token") accessToken: String = ACCESS_TOKEN
     ): AppConfigDto

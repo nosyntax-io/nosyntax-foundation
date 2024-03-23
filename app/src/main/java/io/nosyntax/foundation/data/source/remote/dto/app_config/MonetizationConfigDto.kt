@@ -6,7 +6,6 @@ data class MonetizationConfigDto(
     @SerializedName("ads")
     val ads: Ads
 ) {
-
     data class Ads(
         @SerializedName("enabled")
         val enabled: Boolean,
