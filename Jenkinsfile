@@ -113,95 +113,95 @@ pipeline {
         }
 
         stage('Copy Google Services Config') {
-          steps {
-            script {
-              def googleServicesSourcePath = "${REPOSITORY_PATH}/assets/google_services/${PROJECT_ID}.json"
-              def googleServicesDestination = "${WORKSPACE}/app/google-services.json"
+					steps {
+						script {
+							def configPath = "${REPOSITORY_PATH}/assets/google_services/${PROJECT_ID}.json"
+							def destinationConfigPath = "${WORKSPACE}/app/google-services.json"
 
-              if (fileExists(googleServicesSourcePath)) {
-                sh "cp -f ${googleServicesSourcePath} ${googleServicesDestination}"
-              } else {
-                def propertyMap = [
-                  'PARAM_PACKAGE_NAME': 'APP_ID'
-                ]
-                def defaultGoogleServicesDefaultPath = "${REPOSITORY_PATH}/assets/google_services/default.json"
-                setTemplateProperties(propertyMap, defaultGoogleServicesDefaultPath, googleServicesDestination)
-              }
-            }
-          }
-        }
+							if (fileExists(configPath)) {
+								sh "cp -f ${configPath} ${destinationConfigPath}"
+							} else {
+								def propertyMap = [
+									'PARAM_PACKAGE_NAME': 'APP_ID'
+								]
+								def defaultConfigPath = "${REPOSITORY_PATH}/assets/google_services/default.json"
+								setTemplateProperties(propertyMap, defaultConfigPath, destinationConfigPath)
+							}
+						}
+					}
+				}
 
         stage('Generate Launcher Icons') {
-          steps {
-            script {
-              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/default.png"
-              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/launcher_icons/${PROJECT_ID}.png"
-              def resDirectory = "${WORKSPACE}/app/src/main/res"
+					steps {
+						script {
+							def defaultIconPath = "${REPOSITORY_PATH}/assets/launcher_icons/default.png"
+							def projectIconPath = "${REPOSITORY_PATH}/assets/launcher_icons/${PROJECT_ID}.png"
+							def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
+							def icon = fileExists(projectIconPath) ? projectIconPath : defaultIconPath
 
-              generateLauncherIcons(resDirectory, iconSourcePath)
-            }
-          }
-        }
+							generateLauncherIcons(resDirectory, icon)
+						}
+					}
+				}
 
         stage('Generate Icon Assets') {
-          steps {
-            script {
-              def defaultIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
-              def specificIconSourcePath = "${REPOSITORY_PATH}/assets/app_icons/${PROJECT_ID}.png"
-              def resDirectory = "${WORKSPACE}/app/src/main/res"
+					steps {
+						script {
+							def defaultIconPath = "${REPOSITORY_PATH}/assets/app_icons/default.png"
+							def projectIconPath = "${REPOSITORY_PATH}/assets/app_icons/${PROJECT_ID}.png"
+							def resDirectory = "${WORKSPACE}/app/src/main/res"
 
-              def iconSourcePath = fileExists(specificIconSourcePath) ? specificIconSourcePath : defaultIconSourcePath
+							def icon = fileExists(projectIconPath) ? projectIconPath : defaultIconPath
 
-              generateIconAssets(resDirectory, iconSourcePath)
-            }
-          }
-        }
+							generateIconAssets(resDirectory, icon)
+						}
+					}
+				}
       }
     }
 
     stage('Manage Application Signing') {
       stages {
         stage('Obtain Signing Key') {
-          steps {
-            script {
-              def signingKeyPath = "${REPOSITORY_PATH}/keystores/${PROJECT_ID}.keystore"
+					steps {
+						script {
+							def keystoreFilePath = "${REPOSITORY_PATH}/keystores/${PROJECT_ID}.keystore"
 
-              if (!fileExists(signingKeyPath)) {
-                build job: 'AppSigning', parameters: [
-                  string(name: 'ACCESS_TOKEN', value: env.ACCESS_TOKEN),
-                  string(name: 'PROJECT_ID', value: env.PROJECT_ID),
-                  string(name: 'APP_NAME', value: env.APP_NAME)
-                ]
-              } else {
-                sh "cp -f ${signingKeyPath} ${WORKSPACE}/signing.keystore"
-              }
-            }
-          }
-        }
+							if (!fileExists(keystoreFilePath)) {
+								build job: 'AppSigning', parameters: [
+									string(name: 'ACCESS_TOKEN', value: env.ACCESS_TOKEN),
+									string(name: 'PROJECT_ID', value: env.PROJECT_ID),
+									string(name: 'APP_NAME', value: env.APP_NAME)
+								]
+							} else {
+								sh "cp -f ${keystoreFilePath} ${WORKSPACE}/${KEYSTORE_FILE}"
+							}
+						}
+					}
+				}
 
         stage('Set Signing Properties') {
-          steps {
-            script {
-              try {
-                def propertyMap = [
-                  'PARAM_SIGNING_KEYSTORE_FILE': 'KEYSTORE_FILE',
-                  'PARAM_SIGNING_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
-                  'PARAM_SIGNING_KEY_ALIAS': 'KEY_ALIAS',
-                  'PARAM_SIGNING_KEY_PASSWORD': 'KEY_PASSWORD'
-                ]
-                def templateSourcePath = "${WORKSPACE}/signing.properties.template"
-                def outputDestination = "${WORKSPACE}/signing.properties"
+					steps {
+						script {
+							try {
+								def propertyMap = [
+									'PARAM_KEYSTORE_FILE': 'KEYSTORE_FILE',
+									'PARAM_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+									'PARAM_KEY_ALIAS': 'KEY_ALIAS',
+									'PARAM_KEY_PASSWORD': 'KEY_PASSWORD'
+								]
+								def templateFilePath = "${WORKSPACE}/signing.properties.template"
+								def destinationFilePath = "${WORKSPACE}/signing.properties"
 
-                setTemplateProperties(propertyMap, templateSourcePath, outputDestination)
-              } catch (Exception ex) {
-                currentBuild.result = 'FAILURE'
-                error "Error in Set Signing Properties stage: ${ex.getMessage()}"
-              }
-            }
-          }
-        }
+								setTemplateProperties(propertyMap, templateFilePath, destinationFilePath)
+							} catch (Exception ex) {
+								currentBuild.result = 'FAILURE'
+								error "Error in Set Signing Properties stage: ${ex.getMessage()}"
+							}
+						}
+					}
+				}
       }
     }
 
