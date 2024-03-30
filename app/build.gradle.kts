@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId = config.getProperty(AppConfig.ID)
-        versionCode = config.getProperty(AppConfig.VERSION_NUMBER).toInt()
-        versionName = config.getProperty(AppConfig.VERSION_NAME)
+        versionCode = config.getProperty(AppConfig.BUILD_NUMBER).toInt()
+        versionName = config.getProperty(AppConfig.BUILD_NAME)
         minSdk = 24
         targetSdk = 34
 

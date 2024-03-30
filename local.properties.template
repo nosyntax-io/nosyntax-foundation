@@ -1,24 +1,31 @@
-# Specifies the build environment: 'production' or 'development'.
-# In the 'production' build environment:
-# 1. Minification is enabled to optimize code size.
-# 2. Resource shrinking is enabled to reduce the APK size.
+# BUILD_ENVIRONMENT: Specifies the build environment: 'production' or 'development'.
+# 	- In the 'production' environment:
+#   1. Minification is enabled to optimize code size.
+#   2. Resource shrinking is enabled to reduce the APK size.
 config.build.environment = PARAM_BUILD_ENVIRONMENT
 
-# Configure app info.
+# APP_ID: Unique identifier assigned to the application package.
+# APP_NAME: The human-readable name of the application.
+# APP_BUILD_NUMBER: Numeric identifier for the specific build version.
+# APP_BUILD_NAME: Name or label for the specific build version.
+# APP_REMOTE_CONFIG: URL or path to the remote configuration file.
 config.app.id = PARAM_APP_ID
 config.app.name = PARAM_APP_NAME
-config.app.version_number = PARAM_APP_VERSION_NUMBER
-config.app.version_name = PARAM_APP_VERSION_NAME
+config.app.build_number = PARAM_APP_BUILD_NUMBER
+config.app.build_name = PARAM_APP_BUILD_NAME
 config.app.remote_config = PARAM_APP_REMOTE_CONFIG
 
-# Configure server access.
+# AUTH_TOKEN: Authentication token for server access.
+# ACCESS_TOKEN: Access token for authenticating server access.
 config.server.auth_token = PARAM_SERVER_AUTH_TOKEN
 config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
 
-# Configure onesignal for push notifications.
+# ONESIGNAL_APP_ID: Application ID for OneSignal push notifications.
 config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID
 
-# Configure admob for monetization.
+# ADMOB_APP_ID: Application ID used for AdMob integration.
+# ADMOB_BANNER_ID: Banner ad unit ID for AdMob integration.
+# ADMOB_INTERSTITIAL_ID: Interstitial ad unit ID for AdMob integration.
 config.admob.app_id = PARAM_ADMOB_APP_ID
 config.admob.banner_id = PARAM_ADMOB_BANNER_ID
 config.admob.interstitial_id = PARAM_ADMOB_INTERSTITIAL_ID
