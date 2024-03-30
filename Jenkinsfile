@@ -206,33 +206,29 @@ pipeline {
     }
 
     stage('Manage Application Sourcecode') {
-      when {
-        expression { BUILD_OUTPUT =~ /(source)/ }
-      }
+			when {
+				expression { BUILD_OUTPUT =~ /(source)/ }
+			}
 			steps {
 				script {
 					def excludes = [
 						'*.apk',
+						'*.aab',
+						'*.aar',
 						'*.jks',
 						'*.keystore',
 						'*.log',
 						'*.md',
 						'*.template',
-						'.gradle/',
+						'**/build/',
+						'**/.gradle/',
 						'pipeline/',
-						'**/build/'
+						'Jenkinsfile',
+						'init.*'
 					]
 
-					zip zipFile: "source.zip",
-							exclude: excludes.join(','),
-							overwrite: true
-
-					archiveArtifacts(
-						artifacts: 'source.zip',
-						fingerprint: true,
-						allowEmptyArchive: true,
-						onlyIfSuccessful: true
-					)
+					zip zipFile: "source.zip", exclude: excludes.join(','), overwrite: true
+					archiveArtifacts artifacts: 'source.zip', fingerprint: true, onlyIfSuccessful: true
 				}
 			}
 		}
