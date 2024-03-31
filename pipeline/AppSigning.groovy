@@ -4,14 +4,14 @@ pipeline {
   }
 
   parameters {
-    string defaultValue: '', name: 'ACCESS_TOKEN'
     string defaultValue: '', name: 'PROJECT_ID'
+    string defaultValue: '', name: 'ACCESS_TOKEN'
     string defaultValue: '', name: 'APP_NAME'
   }
 
   environment {
-    ACCESS_TOKEN = "${params.ACCESS_TOKEN}"
     PROJECT_ID = "${params.PROJECT_ID}"
+    ACCESS_TOKEN = "${params.ACCESS_TOKEN}"
     APP_NAME = "${params.APP_NAME}"
   }
 
@@ -19,15 +19,16 @@ pipeline {
     stage('Generate Keystore') {
       steps {
         script {
-          def signingKeyAlias = APP_NAME.replaceAll('[^a-zA-Z0-9 ]', '').replaceAll(' ', '_').toLowerCase()
-          def signingKeyPassword = sh(script: 'openssl rand -base64 16', returnStdout: true).trim()
+          def keyAlias = APP_NAME.replaceAll('[^a-zA-Z0-9 ]', '').replaceAll(' ', '_').toLowerCase()
+          def keyPassword = sh(script: 'openssl rand -base64 16', returnStdout: true).trim()
 
-          env.KEYSTORE_PASSWORD = signingKeyPassword
-          env.KEY_ALIAS = signingKeyAlias
-          env.KEY_PASSWORD = signingKeyPassword
+          env.KEYSTORE_FILE = 'signing.keystore'
+          env.KEYSTORE_PASSWORD = keyPassword
+          env.KEY_ALIAS = keyAlias
+          env.KEY_PASSWORD = keyPassword
 
           sh """
-            keytool -genkey -v -keystore signing.keystore -alias ${KEY_ALIAS} \\
+            keytool -genkey -v -keystore ${KEYSTORE_FILE} -alias ${KEY_ALIAS} \\
               -keyalg RSA -keysize 2048 -validity 10000 \\
               -storepass ${KEYSTORE_PASSWORD} -keypass ${KEY_PASSWORD} \\
               -dname \"O=${APP_NAME}\"
@@ -39,7 +40,11 @@ pipeline {
     stage('Extract Certificate Fingerprints') {
       steps {
         script {
-          def keystoreOutput = sh(script: "keytool -list -v -keystore signing.keystore -alias ${KEY_ALIAS} -storepass ${KEYSTORE_PASSWORD}", returnStdout: true).trim()
+          def keystoreOutput = sh(
+            script: "keytool -list -v -keystore ${KEYSTORE_FILE} -alias ${KEY_ALIAS} -storepass ${KEYSTORE_PASSWORD}",
+            returnStdout: true
+          ).trim()
+
           try {
             def sha1Fingerprint = (keystoreOutput =~ /SHA1: ([A-F0-9:]+)/)[0][1]
             env.SHA1_FINGERPRINT = sha1Fingerprint
@@ -57,39 +62,46 @@ pipeline {
     stage('Package Keystore') {
       steps {
         script {
-          def destinationDirectory = '/var/www/cloud.nosyntax.io/repository/keystores'
-          sh "mv signing.keystore ${destinationDirectory}/${PROJECT_ID}.keystore"
+          def keystoreDirectory = '/var/www/cloud.nosyntax.io/repository/keystores'
+          sh "mv ${KEYSTORE_FILE} ${keystoreDirectory}/${PROJECT_ID}.keystore"
         }
       }
     }
 
-    stage('Update Project Signing Config') {
+    stage('Update Signing Config') {
       steps {
         script {
           try {
-            withCredentials([string(credentialsId: 'API_SECRET_KEY', variable: 'API_SECRET_KEY')]) {
-              def url = 'https://api.nosyntax.io/cloud/request_update_project_signing_config.inc.php'
+            withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')]) {
+              def url = 'https://api.nosyntax.io/cloud/update_signing_config.inc.php'
 
               def postData = [
-                api_secret_key    : API_SECRET_KEY,
                 access_token      : ACCESS_TOKEN,
-                sha1_fingerprint  : SHA1_FINGERPRINT,
-                sha256_fingerprint: SHA256_FINGERPRINT,
+                keystore_file     : KEYSTORE_FILE,
                 keystore_password : KEYSTORE_PASSWORD,
                 key_alias         : KEY_ALIAS,
-                key_password      : KEY_PASSWORD
+                key_password      : KEY_PASSWORD,
+                sha1_fingerprint  : SHA1_FINGERPRINT,
+                sha256_fingerprint: SHA256_FINGERPRINT
               ]
+              def encodedData = postData.collect { k, v ->
+                "${URLEncoder.encode(k.toString(), 'UTF-8')}=${URLEncoder.encode(v.toString(), 'UTF-8')}"
+              }.join('&')
 
-              def response = httpRequest(
+              httpRequest(
                 url: url,
                 httpMode: 'POST',
-                contentType: 'APPLICATION_JSON',
-                requestBody: groovy.json.JsonOutput.toJson(postData)
+                contentType: 'APPLICATION_FORM',
+                requestBody: encodedData,
+                validResponseCodes: '200:500',
+                customHeaders: [
+                  [name: 'API-KEY', value: API_KEY, maskValue: true]
+                ]
               )
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Failed to update project signing configuration: ${e.message}"
+            error "Failed to update signing configuration: ${e.message}"
           }
         }
       }
