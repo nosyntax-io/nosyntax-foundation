@@ -59,9 +59,9 @@ class MainActivity : ComponentActivity() {
 
                     val dynamicColorScheme = DynamicColorScheme(
                         colorPrimary = Color(parseColor(colorScheme.primary)),
-                        colorPrimaryVariant = Color(parseColor(colorScheme.primaryVariant)),
+                        colorOnPrimary = Color(parseColor(colorScheme.onPrimary)),
                         colorSecondary = Color(parseColor(colorScheme.secondary)),
-                        colorSecondaryVariant = Color(parseColor(colorScheme.secondaryVariant)),
+                        colorOnSecondary = Color(parseColor(colorScheme.onSecondary)),
                         colorBackgroundLight = Color(parseColor(colorScheme.backgroundLight)),
                         colorOnBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
                         colorSurfaceLight = Color(parseColor(colorScheme.surfaceLight)),

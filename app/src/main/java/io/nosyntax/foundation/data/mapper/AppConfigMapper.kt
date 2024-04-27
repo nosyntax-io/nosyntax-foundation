@@ -71,9 +71,9 @@ fun ThemeConfigDto.toTheme(): ThemeConfig {
 fun ColorSchemeConfigDto.toColorScheme(): ColorSchemeConfig {
     return ColorSchemeConfig(
         primary = this.primary,
-        primaryVariant = this.primaryVariant,
+        onPrimary = this.onPrimary,
         secondary = this.secondary,
-        secondaryVariant = this.secondaryVariant,
+        onSecondary = this.onSecondary,
         backgroundLight = this.backgroundLight,
         onBackgroundLight = this.onBackgroundLight,
         surfaceLight = this.surfaceLight,

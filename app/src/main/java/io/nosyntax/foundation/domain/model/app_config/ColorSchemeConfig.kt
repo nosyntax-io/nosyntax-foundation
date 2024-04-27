@@ -2,9 +2,9 @@ package io.nosyntax.foundation.domain.model.app_config
 
 data class ColorSchemeConfig(
     val primary: String,
-    val primaryVariant: String,
+    val onPrimary: String,
     val secondary: String,
-    val secondaryVariant: String,
+    val onSecondary: String,
     val backgroundLight: String,
     val onBackgroundLight: String,
     val surfaceLight: String,

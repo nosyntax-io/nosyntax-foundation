@@ -14,9 +14,9 @@ import androidx.core.view.WindowCompat
 
 private val lightColorScheme = lightColorScheme(
     primary = ColorPrimary,
-    primaryContainer = ColorPrimaryVariant,
+    onPrimary = ColorOnPrimary,
     secondary = ColorSecondary,
-    onPrimaryContainer = Color.Transparent,
+    onSecondary = ColorOnSecondary,
     background = ColorBackgroundLight,
     onBackground = ColorOnBackgroundLight,
     surface = ColorSurfaceLight,
@@ -25,9 +25,9 @@ private val lightColorScheme = lightColorScheme(
 
 private val darkColorScheme = darkColorScheme(
     primary = ColorPrimary,
-    primaryContainer = ColorPrimaryVariant,
+    onPrimary = ColorOnPrimary,
     secondary = ColorSecondary,
-    onPrimaryContainer = Color.Transparent,
+    onSecondary = ColorOnSecondary,
     background = ColorBackgroundDark,
     onBackground = ColorOnBackgroundDark,
     surface = ColorSurfaceDark,
@@ -68,9 +68,9 @@ fun DynamicTheme(
     MaterialTheme(
         colorScheme = colorScheme.copy(
             primary = dynamicColorScheme.colorPrimary,
-            primaryContainer = dynamicColorScheme.colorPrimaryVariant,
+            onPrimary = dynamicColorScheme.colorOnPrimary,
             secondary = dynamicColorScheme.colorSecondary,
-            secondaryContainer = dynamicColorScheme.colorSecondaryVariant,
+            onSecondary = dynamicColorScheme.colorOnSecondary,
             background = if (darkTheme) dynamicColorScheme.colorBackgroundDark else dynamicColorScheme.colorBackgroundLight,
             onBackground = if (darkTheme) dynamicColorScheme.colorOnBackgroundDark else dynamicColorScheme.colorOnBackgroundLight,
             surface = if (darkTheme) dynamicColorScheme.colorSurfaceDark else dynamicColorScheme.colorSurfaceLight,

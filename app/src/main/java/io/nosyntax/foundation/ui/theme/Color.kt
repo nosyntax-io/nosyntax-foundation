@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.Color
 
 data class DynamicColorScheme(
     val colorPrimary: Color = ColorPrimary,
-    val colorPrimaryVariant: Color = ColorPrimaryVariant,
+    val colorOnPrimary: Color = ColorOnPrimary,
     val colorSecondary: Color = ColorSecondary,
-    val colorSecondaryVariant: Color = ColorSecondaryVariant,
+    val colorOnSecondary: Color = ColorOnSecondary,
     val colorBackgroundLight: Color = ColorBackgroundLight,
     val colorOnBackgroundLight: Color = ColorOnBackgroundLight,
     val colorSurfaceLight: Color = ColorSurfaceLight,
@@ -18,9 +18,9 @@ data class DynamicColorScheme(
 )
 
 val ColorPrimary = Color(0xFF8EBBFF)
-val ColorPrimaryVariant = Color(0x338EBBFF)
+val ColorOnPrimary = Color(0xFFFFFFFF)
 val ColorSecondary = Color(0xFF121212)
-val ColorSecondaryVariant = Color(0xFF121212)
+val ColorOnSecondary = Color(0xFFFFFFFF)
 val ColorBackgroundLight = Color(0xFFF5F5F5)
 val ColorOnBackgroundLight = Color(0xFF140F1F)
 val ColorSurfaceLight = Color(0xFFECEDF1)

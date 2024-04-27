@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName
 data class ColorSchemeConfigDto(
     @SerializedName("primary")
     val primary: String,
-    @SerializedName("primary_variant")
-    val primaryVariant: String,
+    @SerializedName("on_primary")
+    val onPrimary: String,
     @SerializedName("secondary")
     val secondary: String,
-    @SerializedName("secondary_variant")
-    val secondaryVariant: String,
+    @SerializedName("on_secondary")
+    val onSecondary: String,
     @SerializedName("background_light")
     val backgroundLight: String,
     @SerializedName("on_background_light")
