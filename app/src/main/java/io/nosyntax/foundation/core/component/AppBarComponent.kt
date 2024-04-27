@@ -41,8 +41,12 @@ fun AppBar(
     onNavigationActionClick: () -> Unit
 ) {
     val backgroundModifier = when (appBarConfig.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+            color = MaterialTheme.colorScheme.surface
+        )
+        Constants.BACKGROUND_SOLID -> Modifier.background(
+            color = MaterialTheme.colorScheme.primary
+        )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             Brush.horizontalGradient(
                 colors = listOf(
@@ -139,7 +143,7 @@ fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
     val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
-        Color.White
+        MaterialTheme.colorScheme.onPrimary
     }
 
     return TopAppBarDefaults.topAppBarColors(
@@ -157,14 +161,16 @@ fun AppBarPreview() {
         AppBar(
             appBarConfig = AppBarConfig(
                 display = true,
-                background = Constants.BACKGROUND_NEUTRAL,
+                background = Constants.BACKGROUND_SOLID,
                 title = AppBarConfig.Title(
                     display = true,
                     position = Constants.POSITION_CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            navigationActionType = NavigationActionType.Menu(isEnabled = true),
+            navigationActionType = NavigationActionType.Menu(
+                isEnabled = true
+            ),
             onNavigationActionClick = { }
         )
     }

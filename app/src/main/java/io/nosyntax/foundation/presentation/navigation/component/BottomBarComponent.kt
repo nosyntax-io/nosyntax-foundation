@@ -35,8 +35,12 @@ fun BottomBar(
     navigationItems: List<NavigationItem>
 ) {
     val containerColor = when (bottomBarConfig.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+            color = MaterialTheme.colorScheme.surface
+        )
+        Constants.BACKGROUND_SOLID -> Modifier.background(
+            color = MaterialTheme.colorScheme.primary
+        )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             Brush.horizontalGradient(
                 colors = listOf(
@@ -116,7 +120,7 @@ fun RowScope.BottomBarNavigationItem(
 fun bottomBarNavigationItemColors(bottomBarConfig: BottomBarConfig): NavigationBarItemColors {
     val contentColor = when (bottomBarConfig.background) {
         Constants.BACKGROUND_NEUTRAL -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.surface
+        else -> MaterialTheme.colorScheme.onPrimary
     }
     return NavigationBarItemDefaults.colors(
         selectedTextColor = contentColor,

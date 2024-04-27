@@ -80,8 +80,12 @@ fun SideMenuContent(
     val coroutineScope = rememberCoroutineScope()
 
     val containerColor = when (sideMenuConfig.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(color = MaterialTheme.colorScheme.surface)
-        Constants.BACKGROUND_SOLID -> Modifier.background(color = MaterialTheme.colorScheme.primary)
+        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+            color = MaterialTheme.colorScheme.surface
+        )
+        Constants.BACKGROUND_SOLID -> Modifier.background(
+            color = MaterialTheme.colorScheme.primary
+        )
         Constants.BACKGROUND_GRADIENT -> {
             Modifier.background(
                 Brush.verticalGradient(
@@ -171,7 +175,8 @@ fun SideMenuItem(
     onClick: () -> Unit
 ) {
     val contentColor = MaterialTheme.colorScheme.let {
-        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL) it.onSurface else Color.White
+        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL)
+            it.onSurface else it.onPrimary
     }
 
     val isSelected = currentRoute == item.route
