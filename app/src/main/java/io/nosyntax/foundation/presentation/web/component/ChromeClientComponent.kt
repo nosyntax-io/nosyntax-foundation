@@ -73,7 +73,7 @@ fun chromeClient(
                 filePath?.onReceiveValue(null)
                 filePath = filePathCallback
 
-                val customFileChooserParams = object : FileChooserParams() {
+                val customFileChooserParams = object: FileChooserParams() {
                     override fun getMode() = 1
                     override fun getAcceptTypes() = arrayOf("image/*")
                     override fun isCaptureEnabled() = true
