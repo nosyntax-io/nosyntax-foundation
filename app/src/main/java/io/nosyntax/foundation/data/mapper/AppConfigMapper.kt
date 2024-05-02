@@ -29,27 +29,27 @@ import io.nosyntax.foundation.domain.model.app_config.NavigationConfig
 import io.nosyntax.foundation.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
-    val (app, configuration) = this
+    val (app) = this
 
     return AppConfig(
         app = app.toApp(),
-        configuration = configuration.toConfiguration()
     )
 }
 
 fun AppConfigDto.App.toApp(): AppConfig.App {
-    return io.nosyntax.foundation.domain.model.app_config.AppConfig.App(
+    return AppConfig.App(
         id = this.id,
         name = this.name,
         category = this.category,
-        description = this.description
+        description = this.description,
+        configuration = this.configuration.toConfiguration(),
     )
 }
 
 fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
     val (theme, components, monetization, modules, navigation) = this
 
-    return io.nosyntax.foundation.domain.model.app_config.AppConfig.Configuration(
+    return AppConfig.Configuration(
         theme = theme.toTheme(),
         components = components.toComponents(),
         monetization = monetization.toMonetization(),

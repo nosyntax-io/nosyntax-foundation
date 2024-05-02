@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class AppConfigDto(
     @SerializedName("app")
     val app: App,
-    @SerializedName("configuration")
-    val configuration: ConfigurationDto
 ) {
 
     data class App(
@@ -18,5 +16,7 @@ data class AppConfigDto(
         val category: String,
         @SerializedName("description")
         val description: String,
+        @SerializedName("configuration")
+        val configuration: ConfigurationDto
     )
 }

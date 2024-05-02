@@ -2,14 +2,14 @@ package io.nosyntax.foundation.domain.model.app_config
 
 data class AppConfig(
     val app: App,
-    val configuration: Configuration
 ) {
 
     data class App(
         val id: String,
         val name: String,
         val category: String,
-        val description: String
+        val description: String,
+        val configuration: Configuration,
     )
 
     data class Configuration(
