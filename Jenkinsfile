@@ -4,7 +4,7 @@ pipeline {
   }
 
   tools {
-    gradle 'Gradle 8.5'
+    gradle 'Gradle 8.8'
   }
 
   libraries {
