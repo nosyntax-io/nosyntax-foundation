@@ -111,21 +111,21 @@ fun ComponentsConfigDto.toComponents(): ComponentsConfig {
 
 fun AppBarConfigDto.toAppBar(): AppBarConfig {
     return AppBarConfig(
-        display = this.display,
+        display = this.visible,
         background = this.background,
         title = io.nosyntax.foundation.domain.model.app_config.AppBarConfig.Title(
-            display = this.title.display,
-            position = this.title.position
+            display = this.title.visible,
+            position = this.title.alignment
         )
     )
 }
 
 fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
     return SideMenuConfig(
-        display = this.display,
+        display = this.visible,
         background = this.background,
         header = io.nosyntax.foundation.domain.model.app_config.SideMenuConfig.Header(
-            display = this.header.display,
+            display = this.header.visible,
             image = this.header.image
         )
     )
@@ -133,7 +133,7 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
 
 fun BottomBarConfigDto.toBottomBar(): BottomBarConfig {
     return BottomBarConfig(
-        display = this.display,
+        display = this.visible,
         background = this.background,
         label = this.label
     )
@@ -141,7 +141,7 @@ fun BottomBarConfigDto.toBottomBar(): BottomBarConfig {
 
 fun LoadingIndicatorConfigDto.toLoadingIndicator(): LoadingIndicatorConfig {
     return LoadingIndicatorConfig(
-        display = this.display,
+        display = this.visible,
         animation = this.animation,
         background = this.background,
         color = this.color

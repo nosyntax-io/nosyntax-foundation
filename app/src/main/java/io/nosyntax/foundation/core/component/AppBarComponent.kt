@@ -89,7 +89,7 @@ fun AppBar(
         }
     }
 
-    if (appBarConfig.title.position == Constants.POSITION_CENTER) {
+    if (appBarConfig.title.position == Constants.ALIGNMENT_CENTER) {
         CenterAlignedTopAppBar(
             modifier = appBarModifier,
             colors = appBarColors(appBarConfig),
@@ -164,7 +164,7 @@ fun AppBarPreview() {
                 background = Constants.BACKGROUND_SOLID,
                 title = AppBarConfig.Title(
                     display = true,
-                    position = Constants.POSITION_CENTER
+                    position = Constants.ALIGNMENT_CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),
