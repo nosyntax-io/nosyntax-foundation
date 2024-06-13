@@ -4,15 +4,15 @@
 #   2. Resource shrinking is enabled to reduce the APK size.
 config.build.environment = PARAM_BUILD_ENVIRONMENT
 
-# APP_ID: Unique identifier assigned to the application package.
-# APP_NAME: The human-readable name of the application.
-# APP_BUILD_NUMBER: Numeric identifier for the specific build version.
-# APP_BUILD_NAME: Name or label for the specific build version.
+# APP_ID: Unique identifier for the application package.
+# APP_NAME: Human-readable name of the application.
+# APP_VERSION: Version number of the application
+# APP_BUILD_NUMBER: Numeric identifier for the build version.
 # APP_REMOTE_CONFIG: URL or path to the remote configuration file.
 config.app.id = PARAM_APP_ID
 config.app.name = PARAM_APP_NAME
+config.app.version = PARAM_APP_VERSION
 config.app.build_number = PARAM_APP_BUILD_NUMBER
-config.app.build_name = PARAM_APP_BUILD_NAME
 config.app.remote_config = PARAM_APP_REMOTE_CONFIG
 
 # AUTH_TOKEN: Authentication token for server access.

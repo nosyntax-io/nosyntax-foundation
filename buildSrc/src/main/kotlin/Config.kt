@@ -5,8 +5,8 @@ object BuildConfig {
 object AppConfig {
     const val ID = "config.app.id"
     const val NAME = "config.app.name"
+    const val VERSION = "config.app.version"
     const val BUILD_NUMBER = "config.app.build_number"
-    const val BUILD_NAME = "config.app.build_name"
     const val REMOTE_CONFIG = "config.app.remote_config"
 }
 

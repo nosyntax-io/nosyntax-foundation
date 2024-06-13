@@ -31,15 +31,15 @@ pipeline {
     string defaultValue: '', name: 'PROJECT_ACCESS_TOKEN'
 
     /**
-     * APP_ID: Unique identifier assigned to the application package.
-     * APP_NAME: The human-readable name of the application.
-     * APP_BUILD_NUMBER: Numeric identifier for the specific build version.
-     * APP_BUILD_NAME: Name or label for the specific build version.
-     */
-    string defaultValue: '', name: 'APP_ID'
-    string defaultValue: '', name: 'APP_NAME'
-    string defaultValue: '', name: 'APP_BUILD_NUMBER'
-    string defaultValue: '', name: 'APP_BUILD_NAME'
+		 * APP_ID: Unique identifier for the application package.
+		 * APP_NAME: Human-readable name of the application.
+		 * APP_VERSION: version number of the application
+		 * APP_BUILD_NUMBER: Numeric identifier for the build version.
+		 */
+		string defaultValue: '', name: 'APP_ID'
+		string defaultValue: '', name: 'APP_NAME'
+		string defaultValue: '', name: 'APP_VERSION'
+		string defaultValue: '', name: 'APP_BUILD_NUMBER'
 
     /**
      * ONESIGNAL_APP_ID: Application ID for integrating OneSignal push notification service.
@@ -81,11 +81,11 @@ pipeline {
     BUILD_ENVIRONMENT = "${params.BUILD_ENVIRONMENT}"
     BUILD_OUTPUT = "${params.BUILD_OUTPUT}"
     PROJECT_ID = "${params.PROJECT_ID}"
-    PROJECT_ACCESS_TOKEN = "${params.PROJECTACCESS_TOKEN}"
+    PROJECT_ACCESS_TOKEN = "${params.PROJECT_ACCESS_TOKEN}"
     APP_ID = "${params.APP_ID}"
-    APP_NAME = "${params.APP_NAME}"
-    APP_BUILD_NUMBER = "${params.APP_BUILD_NUMBER}"
-    APP_BUILD_NAME = "${params.APP_BUILD_NAME}"
+		APP_NAME = "${params.APP_NAME}"
+		APP_VERSION = "${params.APP_VERSION}"
+		APP_BUILD_NUMBER = "${params.APP_BUILD_NUMBER}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
     IS_MONETIZE = "${params.IS_MONETIZE}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
@@ -111,9 +111,9 @@ pipeline {
                 def propertyMap = [
                   'PARAM_BUILD_ENVIRONMENT': 'BUILD_ENVIRONMENT',
                   'PARAM_APP_ID': 'APP_ID',
-                  'PARAM_APP_NAME': 'APP_NAME',
-                  'PARAM_APP_BUILD_NUMBER': 'APP_BUILD_NUMBER',
-                  'PARAM_APP_BUILD_NAME': 'APP_BUILD_NAME',
+									'PARAM_APP_NAME': 'APP_NAME',
+									'PARAM_APP_VERSION': 'APP_VERSION',
+									'PARAM_APP_BUILD_NUMBER': 'APP_BUILD_NUMBER',
                   'PARAM_APP_REMOTE_CONFIG': 'IS_REMOTE_CONFIG',
                   'PARAM_AUTH_TOKEN': 'AUTH_TOKEN',
                   'PARAM_ACCESS_TOKEN': 'PROJECT_ACCESS_TOKEN',
