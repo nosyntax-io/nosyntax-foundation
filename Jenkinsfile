@@ -191,15 +191,13 @@ pipeline {
             script {
               def keystoreFilePath = "${REPOSITORY_PATH}/keystores/${PROJECT_ID}.keystore"
 
-              if (!fileExists(keystoreFilePath)) {
-                build job: 'AppSigning', parameters: [
-                  string(name: 'ACCESS_TOKEN', value: env.PROJECT_ACCESS_TOKEN),
-                  string(name: 'PROJECT_ID', value: env.PROJECT_ID),
-                  string(name: 'APP_NAME', value: env.APP_NAME)
-                ]
-              } else {
-                sh "cp -f ${keystoreFilePath} ${WORKSPACE}/${KEYSTORE_FILE}"
-              }
+							if (!fileExists(keystoreFilePath)) {
+								build job: 'AppSigning', parameters: [
+									string(name: 'PROJECT_ID', value: env.PROJECT_ID)
+								], waitForStart: true
+							} else {
+								sh "cp -f ${keystoreFilePath} ${WORKSPACE}/${KEYSTORE_FILE}"
+							}
             }
           }
         }
@@ -209,15 +207,15 @@ pipeline {
             script {
               try {
                 def propertyMap = [
-                  'PARAM_KEYSTORE_FILE': 'KEYSTORE_FILE',
-                  'PARAM_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
-                  'PARAM_KEY_ALIAS': 'KEY_ALIAS',
-                  'PARAM_KEY_PASSWORD': 'KEY_PASSWORD'
-                ]
-                def templateFilePath = "${WORKSPACE}/signing.properties.template"
-                def destinationFilePath = "${WORKSPACE}/signing.properties"
+									'PARAM_KEYSTORE_FILE': 'KEYSTORE_FILE',
+									'PARAM_KEYSTORE_PASSWORD': 'KEYSTORE_PASSWORD',
+									'PARAM_KEY_ALIAS': 'KEY_ALIAS',
+									'PARAM_KEY_PASSWORD': 'KEY_PASSWORD'
+								]
+								def templateFilePath = "${WORKSPACE}/signing.properties.template"
+								def destinationFilePath = "${WORKSPACE}/signing.properties"
 
-                setTemplateProperties(propertyMap, templateFilePath, destinationFilePath)
+								setTemplateProperties(propertyMap, templateFilePath, destinationFilePath)
               } catch (Exception ex) {
                 currentBuild.result = 'FAILURE'
                 error "Error in Set Signing Properties stage: ${ex.getMessage()}"

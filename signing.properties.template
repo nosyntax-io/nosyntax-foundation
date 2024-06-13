@@ -1,4 +1,4 @@
-config.signing.keystore_file = PARAM_SIGNING_KEYSTORE_FILE
-config.signing.keystore_password = PARAM_SIGNING_KEYSTORE_PASSWORD
-config.signing.key_alias = PARAM_SIGNING_KEY_ALIAS
-config.signing.key_password = PARAM_SIGNING_KEY_PASSWORD
+config.signing.keystore_file = PARAM_KEYSTORE_FILE
+config.signing.keystore_password = PARAM_KEYSTORE_PASSWORD
+config.signing.key_alias = PARAM_KEY_ALIAS
+config.signing.key_password = PARAM_KEY_PASSWORD
