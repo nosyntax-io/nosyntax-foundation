@@ -41,6 +41,11 @@ pipeline {
 		string defaultValue: '', name: 'APP_VERSION'
 		string defaultValue: '', name: 'APP_BUILD_NUMBER'
 
+		/**
+		 * GOOGLE_SERVICES_CONFIG: Configuration file for Google services.
+		 */
+		string defaultValue: '', name: 'GOOGLE_SERVICES_CONFIG'
+
     /**
      * ONESIGNAL_APP_ID: Application ID for integrating OneSignal push notification service.
      */
@@ -86,6 +91,7 @@ pipeline {
 		APP_NAME = "${params.APP_NAME}"
 		APP_VERSION = "${params.APP_VERSION}"
 		APP_BUILD_NUMBER = "${params.APP_BUILD_NUMBER}"
+    GOOGLE_SERVICES_CONFIG = "${params.GOOGLE_SERVICES_CONFIG}"
     ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
     IS_MONETIZE = "${params.IS_MONETIZE}"
     ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
@@ -131,21 +137,19 @@ pipeline {
           }
         }
 
-        stage('Copy Google Services Config') {
+        stage('Set Google Services Config') {
           steps {
             script {
-              def configPath = "${REPOSITORY_PATH}/assets/google_services/${PROJECT_ID}.json"
-              def destinationConfigPath = "${WORKSPACE}/app/google-services.json"
+            	def googleServicesConfig = readJSON text: env.GOOGLE_SERVICES_CONFIG
+							def clientPackageName = googleServicesConfig.client[0].client_info.android_client_info.package_name
 
-              if (fileExists(configPath)) {
-                sh "cp -f ${configPath} ${destinationConfigPath}"
-              } else {
-                def propertyMap = [
-                  'PARAM_PACKAGE_NAME': 'APP_ID'
-                ]
-                def defaultConfigPath = "${REPOSITORY_PATH}/assets/google_services/default.json"
-                setTemplateProperties(propertyMap, defaultConfigPath, destinationConfigPath)
-              }
+							if (clientPackageName == env.APP_ID) {
+								def destinationFilePath = "${WORKSPACE}/app/google-services.json"
+								writeFile(file: destinationFilePath, text: env.GOOGLE_SERVICES_CONFIG)
+							} else {
+								currentBuild.result = 'FAILURE'
+								error "The package name in the Google Services Config does not match the APP_ID. Expected: ${env.APP_ID}, Found: ${clientPackageName}"
+							}
             }
           }
         }
