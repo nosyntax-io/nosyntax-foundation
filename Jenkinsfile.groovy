@@ -52,12 +52,12 @@ pipeline {
 		string defaultValue: '', name: 'ONESIGNAL_APP_ID'
 
 		/**
-		 * IS_MONETIZE: Flag indicating whether monetization features are enabled.
+		 * ADS_ENABLED: Flag indicating if advertisements are enabled.
 		 * ADMOB_APP_ID: Application ID for AdMob integration.
 		 * ADMOB_BANNER_ID: Banner ad unit ID for AdMob integration.
 		 * ADMOB_INTERSTITIAL_ID: Interstitial ad unit ID for AdMob integration.
 		 */
-		string defaultValue: '', name: 'IS_MONETIZE'
+		string defaultValue: '', name: 'ADS_ENABLED'
 		string defaultValue: '', name: 'ADMOB_APP_ID'
 		string defaultValue: '', name: 'ADMOB_BANNER_ID'
 		string defaultValue: '', name: 'ADMOB_INTERSTITIAL_ID'
@@ -93,7 +93,7 @@ pipeline {
 		APP_BUILD_NUMBER = "${params.APP_BUILD_NUMBER}"
 		GOOGLE_SERVICES_CONFIG = "${params.GOOGLE_SERVICES_CONFIG}"
 		ONESIGNAL_APP_ID = "${params.ONESIGNAL_APP_ID}"
-		IS_MONETIZE = "${params.IS_MONETIZE}"
+		ADS_ENABLED = "${params.ADS_ENABLED}"
 		ADMOB_APP_ID = "${params.ADMOB_APP_ID}"
 		ADMOB_BANNER_ID = "${params.ADMOB_BANNER_ID}"
 		ADMOB_INTERSTITIAL_ID = "${params.ADMOB_INTERSTITIAL_ID}"
@@ -128,6 +128,14 @@ pipeline {
 										'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
 										'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
 									]
+
+									if (env.ADS_ENABLED == 'enabled') {
+										propertyMap.putAll([
+											'PARAM_ADMOB_APP_ID': 'ADMOB_APP_ID',
+											'PARAM_ADMOB_BANNER_ID': 'ADMOB_BANNER_ID',
+											'PARAM_ADMOB_INTERSTITIAL_ID': 'ADMOB_INTERSTITIAL_ID'
+										])
+									}
 									def templateFile = "${WORKSPACE}/local.properties.template"
 									def outputPropertiesFile = "${WORKSPACE}/local.properties"
 
@@ -291,7 +299,7 @@ pipeline {
 					try {
 						sh 'chmod +rx gradlew'
 
-						def buildFlavor = env.IS_MONETIZE == 'enabled' ? 'monetize' : 'regular'
+						def buildFlavor = env.ADS_ENABLED == 'enabled' ? 'monetize' : 'regular'
 
 						sh "./gradlew assemble${buildFlavor.capitalize()}Release"
 
