@@ -2,30 +2,30 @@
 # 	- In the 'production' environment:
 #   1. Minification is enabled to optimize code size.
 #   2. Resource shrinking is enabled to reduce the APK size.
-config.build.environment = PARAM_BUILD_ENVIRONMENT
+config.build.environment = {{BUILD_ENVIRONMENT}}
 
-# APP_ID: Unique identifier for the application package.
-# APP_NAME: Human-readable name of the application.
-# APP_VERSION: Version number of the application
-# APP_BUILD_NUMBER: Numeric identifier for the build version.
+# APP_ID: Unique identifier assigned to the application package.
+# APP_NAME: The human-readable name of the application.
+# APP_VERSION: The version number of the application
+# APP_BUILD_NUMBER: Numeric identifier for the specific build version
 # APP_REMOTE_CONFIG: URL or path to the remote configuration file.
-config.app.id = PARAM_APP_ID
-config.app.name = PARAM_APP_NAME
-config.app.version = PARAM_APP_VERSION
-config.app.build_number = PARAM_APP_BUILD_NUMBER
-config.app.remote_config = PARAM_APP_REMOTE_CONFIG
+config.app.id = {{APP_ID}}
+config.app.name = {{APP_NAME}}
+config.app.version = {{APP_VERSION}}
+config.app.build_number = {{APP_BUILD_NUMBER}}
+config.app.remote_config = {{APP_REMOTE_CONFIG}}
 
 # AUTH_TOKEN: Authentication token for server access.
 # ACCESS_TOKEN: Access token for authenticating server access.
-config.server.auth_token = PARAM_SERVER_AUTH_TOKEN
-config.server.access_token = PARAM_SERVER_ACCESS_TOKEN
+config.server.auth_token = {{SERVER_AUTH_TOKEN}}
+config.server.access_token = {{SERVER_ACCESS_TOKEN}}
 
 # ONESIGNAL_APP_ID: Application ID for OneSignal push notifications.
-config.onesignal.app_id = PARAM_ONESIGNAL_APP_ID
+config.onesignal.app_id = {{ONESIGNAL_APP_ID}}
 
 # ADMOB_APP_ID: Application ID used for AdMob integration.
 # ADMOB_BANNER_ID: Banner ad unit ID for AdMob integration.
 # ADMOB_INTERSTITIAL_ID: Interstitial ad unit ID for AdMob integration.
-config.admob.app_id = PARAM_ADMOB_APP_ID
-config.admob.banner_id = PARAM_ADMOB_BANNER_ID
-config.admob.interstitial_id = PARAM_ADMOB_INTERSTITIAL_ID
+config.admob.app_id = {{ADMOB_APP_ID}}
+config.admob.banner_id = {{ADMOB_BANNER_ID}}
+config.admob.interstitial_id = {{ADMOB_INTERSTITIAL_ID}}
