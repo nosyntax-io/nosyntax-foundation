@@ -52,8 +52,8 @@ jobs:
       - name: Set App Properties
         run: |
           python .github/scripts/render_properties_template.py \
-            --template-file "local.properties.template" \
-            --output-file "local.properties" \
+            --template-file "app.properties.template" \
+            --output-file "app.properties" \
             --context \
               "APP_ID=${{ env.APP_ID }}" \
               "APP_NAME=${{ env.APP_NAME }}" \

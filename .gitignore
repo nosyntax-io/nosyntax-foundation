@@ -4,6 +4,7 @@ build/
 
 # Configuration Files
 local.properties
+app.properties
 signing.properties
 app_config.json
 

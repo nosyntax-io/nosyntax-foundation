@@ -2,7 +2,7 @@ plugins {
     Dependencies.plugins.forEach { id(it) }
 }
 
-val config = Properties().load(rootProject.file("local.properties"))
+val appConfig = Properties().load(rootProject.file("app.properties"))
 val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
@@ -10,24 +10,24 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = config.getProperty(AppConfig.ID)
-        versionCode = config.getProperty(AppConfig.BUILD_NUMBER).toInt()
-        versionName = config.getProperty(AppConfig.VERSION)
+        applicationId = appConfig.getProperty(AppConfig.ID)
+        versionCode = appConfig.getProperty(AppConfig.BUILD_NUMBER).toInt()
+        versionName = appConfig.getProperty(AppConfig.VERSION)
         minSdk = 24
         targetSdk = 34
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", config.getProperty(AppConfig.NAME))
+            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.NAME))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
-        buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${config.getProperty(ServerConfig.AUTH_TOKEN)}\"")
-        buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${config.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
-        buildConfigField("String", "APP_REMOTE_CONFIG", "\"${config.getProperty(AppConfig.REMOTE_CONFIG)}\"")
-        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${config.getProperty(OneSignalConfig.APP_ID)}\"")
-        buildConfigField("String", "ADMOB_BANNER_ID", "\"${config.getProperty(AdmobConfig.BANNER_ID)}\"")
-        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${config.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
+        buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${appConfig.getProperty(ServerConfig.AUTH_TOKEN)}\"")
+        buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${appConfig.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
+        buildConfigField("String", "APP_REMOTE_CONFIG", "\"${appConfig.getProperty(AppConfig.REMOTE_CONFIG)}\"")
+        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${appConfig.getProperty(OneSignalConfig.APP_ID)}\"")
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"${appConfig.getProperty(AdmobConfig.BANNER_ID)}\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${appConfig.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -58,7 +58,7 @@ android {
 
     buildTypes {
         release {
-            if (config.getProperty(BuildConfig.ENVIRONMENT) == "production") {
+            if (appConfig.getProperty(BuildConfig.ENVIRONMENT) == "production") {
                 isMinifyEnabled = true
                 isShrinkResources = true
             }
