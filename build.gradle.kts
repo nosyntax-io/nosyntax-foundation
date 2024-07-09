@@ -9,5 +9,6 @@ plugins {
 buildscript {
     dependencies {
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.48.1")
+        classpath("org.yaml:snakeyaml:1.29")
     }
 }

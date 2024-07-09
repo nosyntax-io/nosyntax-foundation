@@ -1,33 +1,33 @@
+import org.yaml.snakeyaml.Yaml
+import java.nio.file.Files
+
 plugins {
     Dependencies.plugins.forEach { id(it) }
 }
-
-val appConfig = Properties().load(rootProject.file("app.properties"))
-val signingConfig = Properties().load(rootProject.file("signing.properties"))
 
 android {
     namespace = "io.nosyntax.foundation"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = appConfig.getProperty(AppConfig.ID)
-        versionCode = appConfig.getProperty(AppConfig.BUILD_NUMBER).toInt()
-        versionName = appConfig.getProperty(AppConfig.VERSION)
+        applicationId = getConfig("app.id")
+        versionName = getConfig("app.version")
+        versionCode = getConfig("app.build_number")
         minSdk = 24
         targetSdk = 34
 
         val resourceValues = listOf(
-            ResourceValue("string", "app_name", appConfig.getProperty(AppConfig.NAME))
+            ResourceValue("string", "app_name", getConfig("app.name"))
         )
         resourceValues.forEach { resourceValue ->
             resValue(resourceValue.type, resourceValue.name, resourceValue.value)
         }
-        buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${appConfig.getProperty(ServerConfig.AUTH_TOKEN)}\"")
-        buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${appConfig.getProperty(ServerConfig.ACCESS_TOKEN)}\"")
-        buildConfigField("String", "APP_REMOTE_CONFIG", "\"${appConfig.getProperty(AppConfig.REMOTE_CONFIG)}\"")
-        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${appConfig.getProperty(OneSignalConfig.APP_ID)}\"")
-        buildConfigField("String", "ADMOB_BANNER_ID", "\"${appConfig.getProperty(AdmobConfig.BANNER_ID)}\"")
-        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${appConfig.getProperty(AdmobConfig.INTERSTITIAL_ID)}\"")
+        buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${getConfig("server.auth_token") as String}\"")
+        buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${getConfig("server.access_token") as String}\"")
+        buildConfigField("String", "APP_REMOTE_CONFIG", "\"enabled\"")
+        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${getConfig("integrations.onesignal.app_id") as String}\"")
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"${getConfig("integrations.admob.banner_id") as String}\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${getConfig("integrations.admob.interstitial_id") as String}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -37,6 +37,7 @@ android {
 
     signingConfigs {
         create("release") {
+            val signingConfig = Properties().load(rootProject.file("signing.properties"))
             storeFile = rootProject.file(signingConfig.getProperty(SigningConfig.KEYSTORE_FILE))
             storePassword = signingConfig.getProperty(SigningConfig.KEYSTORE_PASSWORD)
             keyAlias = signingConfig.getProperty(SigningConfig.KEY_ALIAS)
@@ -51,14 +52,14 @@ android {
             dimension = "default"
         }
         create("monetize") {
-            manifestPlaceholders += mapOf("admob_app_id" to "config.getProperty(AdmobConfig.APP_ID)")
+            manifestPlaceholders += mapOf("admob_app_id" to getConfig("integrations.admob.app_id") as String)
             dimension = "default"
         }
     }
 
     buildTypes {
         release {
-            if (appConfig.getProperty(BuildConfig.ENVIRONMENT) == "production") {
+            if (getConfig("build.environment") as String == "production") {
                 isMinifyEnabled = true
                 isShrinkResources = true
             }
@@ -95,4 +96,20 @@ dependencies {
     implementDependencies("debugImplementation", Dependencies.debug)
     // kotlin symbol processing (KSP)
     Dependencies.ksp.forEach(::ksp)
+}
+
+inline fun <reified T> getConfig(path: String, file: String = "app-config.yml"): T {
+    val configContent = Files.readString(rootProject.file(file).toPath())
+    val config = Yaml().load<Map<String, Any>>(configContent)
+
+    val value = path.split(".").fold(config as Any?) { current, key ->
+        (current as? Map<*, *>)?.get(key)
+    }
+
+    return (value as? T) ?: when (T::class) {
+        String::class -> "" as T
+        Int::class -> 0 as T
+        Boolean::class -> false as T
+        else -> throw IllegalArgumentException("Unsupported type")
+    }
 }

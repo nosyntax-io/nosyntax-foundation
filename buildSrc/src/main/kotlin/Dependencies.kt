@@ -17,6 +17,7 @@ object Versions {
     const val junit = "4.13.2"
     const val extJunit = "1.1.5"
     const val espressoCore = "3.5.1"
+    const val snakeYaml = "1.29"
 }
 
 object Dependencies {
@@ -46,6 +47,7 @@ object Dependencies {
         "io.coil-kt:coil-compose:${Versions.coil}",
         "com.onesignal:OneSignal:${Versions.oneSignal}",
         "com.airbnb.android:lottie-compose:${Versions.lottie}",
+        "org.yaml:snakeyaml:${Versions.snakeYaml}"
     )
     val monetize = listOf(
         "com.google.android.gms:play-services-ads:${Versions.playServicesAds}"

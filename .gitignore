@@ -2,13 +2,13 @@
 .gradle/
 build/
 
-# Configuration Files
+# Config files
+app-config.yml
 local.properties
-app.properties
 signing.properties
 app_config.json
 
-# Log/OS Files
+# Log/OS files
 *.log
 
 # Android Studio generated files and folders
