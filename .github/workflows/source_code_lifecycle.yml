@@ -9,6 +9,9 @@ on:
       project-details:
         description: "Project Details"
         required: true
+      app-config:
+        description: "App Config"
+        required: true
 
 jobs:
   configure:
@@ -19,24 +22,17 @@ jobs:
       BUILD_ID: ${{ fromJson(inputs['build-details'])['build_id'] }}
       BUILD_ENVIRONMENT: ${{ fromJson(inputs['build-details'])['build_environment'] }}
       BUILD_OUTPUT: ${{ fromJson(inputs['build-details'])['build_output'] }}
+
+      APP_CONFIG: ${{ inputs['app-config'] }}
+
       PROJECT_ID: ${{ fromJson(inputs['project-details'])['project_id'] }}
       PROJECT_ACCESS_TOKEN: ${{ fromJson(inputs['project-details'])['project_access_token'] }}
-      APP_ID: ${{ fromJson(inputs['project-details'])['app_id'] }}
-      APP_NAME: ${{ fromJson(inputs['project-details'])['app_name'] }}
-      APP_VERSION: ${{ fromJson(inputs['project-details'])['app_version'] }}
-      APP_BUILD_NUMBER: ${{ fromJson(inputs['project-details'])['app_build_number'] }}
-      APP_REMOTE_CONFIG: ${{ fromJson(inputs['project-details'])['app_remote_config'] }}
-      GOOGLE_SERVICES_CONFIG: ${{ fromJson(inputs['project-details'])['google_services_config'] }}
-      ONESIGNAL_APP_ID: ${{ fromJson(inputs['project-details'])['onesignal_app_id'] }}
       ADS_ENABLED: ${{ fromJson(inputs['project-details'])['ads_enabled'] }}
-      ADMOB_APP_ID: ${{ fromJson(inputs['project-details'])['admob_app_id'] }}
-      ADMOB_BANNER_ID: ${{ fromJson(inputs['project-details'])['admob_banner_id'] }}
-      ADMOB_INTERSTITIAL_ID: ${{ fromJson(inputs['project-details'])['admob_interstitial_id'] }}
+
       KEYSTORE_FILE: ${{ fromJson(inputs['project-details'])['keystore_file'] }}
       KEYSTORE_PASSWORD: ${{ fromJson(inputs['project-details'])['keystore_password'] }}
       KEY_ALIAS: ${{ fromJson(inputs['project-details'])['key_alias'] }}
       KEY_PASSWORD: ${{ fromJson(inputs['project-details'])['key_password'] }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -49,23 +45,12 @@ jobs:
       - name: Install Dependencies
         run: pip install -r .github/requirements.txt
 
-      - name: Set App Properties
+      - name: Set App Configuration
         run: |
-          python .github/scripts/render_properties_template.py \
-            --template-file "app.properties.template" \
-            --output-file "app.properties" \
-            --context \
-              "APP_ID=${{ env.APP_ID }}" \
-              "APP_NAME=${{ env.APP_NAME }}" \
-              "APP_VERSION=${{ env.APP_VERSION }}" \
-              "APP_BUILD_NUMBER=${{ env.APP_BUILD_NUMBER }}" \
-              "APP_REMOTE_CONFIG=${{ env.APP_REMOTE_CONFIG }}" \
-              "SERVER_AUTH_TOKEN=${{ secrets.API_AUTH_TOKEN }}" \
-              "SERVER_ACCESS_TOKEN=${{ env.PROJECT_ACCESS_TOKEN }}" \
-              "ONESIGNAL_APP_ID=${{ env.ONESIGNAL_APP_ID }}" \
-              "ADMOB_APP_ID=${{ env.ADMOB_APP_ID }}" \
-              "ADMOB_BANNER_ID=${{ env.ADMOB_BANNER_ID }}" \
-              "ADMOB_INTERSTITIAL_ID=${{ env.ADMOB_INTERSTITIAL_ID }}"
+          python .github/scripts/render_template.py \
+            --template-file "app-config.yml.template" \
+            --output-file "app-config.yml" \
+            --data '${{ env.APP_CONFIG }}'
 
       - name: Generate Launcher Icons
         run: |
