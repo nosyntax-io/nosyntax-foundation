@@ -44,9 +44,9 @@ jobs:
           cache: 'pip'
 
       - name: Install Dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r .github/requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r .github/requirements.txt
 
       - name: Set App Configuration
         run: |
@@ -55,12 +55,15 @@ jobs:
             --output-file "app-config.yml" \
             --data '${{ env.APP_CONFIG }}'
 
-      - name: Generate Launcher Icons
+      - name: Generate Icon Assets
         run: |
-          python .github/scripts/generate_launcher_icons.py \
+          base_url="https://appstatic.nosyntax.io/icons"
+          python .github/scripts/generate_icon_assets.py \
             --res-directory app/src/main/res \
-            --icon-url "https://appstatic.nosyntax.io/icons/launcher/${{ env.PROJECT_ID }}.png" \
-            --fallback-url "https://appstatic.nosyntax.io/icons/launcher/fallback_icon.png" \
+            --launcher-icon-url "${base_url}/launcher/${{ env.PROJECT_ID }}.png" \
+            --splash-icon-url "${base_url}/splash/${{ env.PROJECT_ID }}.png" \
+            --app-icon-url "${base_url}/app/${{ env.PROJECT_ID }}.png" \
+            --fallback-icon-url "${base_url}/fallback_icon.png" \
             --auth-username "${{ secrets.APPSTATIC_AUTH_USERNAME }}" \
             --auth-password "${{ secrets.APPSTATIC_AUTH_PASSWORD }}"
 
