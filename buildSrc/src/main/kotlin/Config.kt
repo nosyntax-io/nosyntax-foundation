@@ -1,33 +1,24 @@
-object BuildConfig {
-    const val ENVIRONMENT = "config.build.environment"
-}
+import org.yaml.snakeyaml.Yaml
+import java.nio.file.Files
+import java.nio.file.Path
 
-object AppConfig {
-    const val ID = "config.app.id"
-    const val NAME = "config.app.name"
-    const val VERSION = "config.app.version"
-    const val BUILD_NUMBER = "config.app.build_number"
-    const val REMOTE_CONFIG = "config.app.remote_config"
-}
+class AppConfig(path: Path) {
+    val config: Map<String, Any>
 
-object ServerConfig {
-    const val AUTH_TOKEN = "config.server.auth_token"
-    const val ACCESS_TOKEN = "config.server.access_token"
-}
+    init {
+        val configContent = Files.readString(path)
+        config = Yaml().load(configContent)
+    }
 
-object OneSignalConfig {
-    const val APP_ID = "config.onesignal.app_id"
-}
-
-object AdmobConfig {
-    const val APP_ID = "config.admob.app_id"
-    const val BANNER_ID = "config.admob.banner_id"
-    const val INTERSTITIAL_ID = "config.admob.interstitial_id"
-}
-
-object SigningConfig {
-    const val KEYSTORE_FILE = "config.signing.keystore_file"
-    const val KEYSTORE_PASSWORD = "config.signing.keystore_password"
-    const val KEY_ALIAS = "config.signing.key_alias"
-    const val KEY_PASSWORD = "config.signing.key_password"
+    inline fun <reified T> get(path: String): T {
+        val value = path.split(".").fold(config as Any?) { current, key ->
+            (current as? Map<*, *>)?.get(key)
+        }
+        return (value as? T) ?: when (T::class) {
+            String::class -> "" as T
+            Int::class -> 0 as T
+            Boolean::class -> false as T
+            else -> throw IllegalArgumentException("Unsupported type")
+        }
+    }
 }

@@ -7,16 +7,12 @@ app:
 build:
   environment: {{ BUILD_ENVIRONMENT }}
 
-server:
-  auth_token: {{ SERVER_AUTH_TOKEN }}
-  access_token: {{ SERVER_ACCESS_TOKEN }}
-
 integrations:
   onesignal:
-    enabled: true
+    enabled: {{ ONESIGNAL_ENABLED | lower }}
     app_id: {{ ONESIGNAL_APP_ID }}
   admob:
-    enabled: true
+    enabled: {{ ADMOB_ENABLED | lower }}
     app_id: {{ ADMOB_APP_ID }}
     banner_id: {{ ADMOB_BANNER_ID }}
     interstitial_id: {{ ADMOB_INTERSTITIAL_ID }}
