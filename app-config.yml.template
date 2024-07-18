@@ -7,6 +7,11 @@ app:
 build:
   environment: {{ BUILD_ENVIRONMENT }}
 
+permissions:
+{%- for PERMISSION in PERMISSIONS %}
+  - {{ PERMISSION }}
+{%- endfor %}
+
 integrations:
   onesignal:
     enabled: {{ ONESIGNAL_ENABLED | lower }}

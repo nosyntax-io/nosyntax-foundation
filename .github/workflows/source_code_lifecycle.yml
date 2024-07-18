@@ -112,6 +112,11 @@ jobs:
           gradle-version: wrapper
           cache-read-only: false
 
+      - name: Set App Permissions
+        run: |
+          chmod +x gradlew
+          ./gradlew setPermissions
+
       - name: Build Release
         run: |
           chmod +x gradlew
