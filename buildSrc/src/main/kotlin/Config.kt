@@ -21,4 +21,20 @@ class AppConfig(path: Path) {
             else -> throw IllegalArgumentException("Unsupported type")
         }
     }
+
+    fun getPermissions(): List<String> {
+        val permissionMapping = mapOf(
+            "internet" to "android.permission.INTERNET",
+            "network_state" to "android.permission.ACCESS_NETWORK_STATE",
+            "storage" to "android.permission.WRITE_EXTERNAL_STORAGE",
+            "geolocation" to "android.permission.ACCESS_COARSE_LOCATION",
+            "camera" to "android.permission.CAMERA",
+            "contacts" to "android.permission.READ_CONTACTS"
+        )
+
+        val permissionsList = (config["permissions"] as? List<*> ?: emptyList<String>()).mapNotNull {
+            permissionMapping[it as? String ?: ""]
+        }
+        return permissionsList
+    }
 }

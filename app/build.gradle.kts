@@ -96,3 +96,18 @@ dependencies {
     // kotlin symbol processing (KSP)
     Dependencies.ksp.forEach(::ksp)
 }
+
+tasks.register("setPermissions") {
+    doLast {
+        val permissions = appConfig.getPermissions()
+        val manifestFile = file("src/main/AndroidManifest.xml")
+
+        if (!manifestFile.exists() || !manifestFile.canRead() || !manifestFile.canWrite()) {
+            throw IllegalStateException("Manifest file is not accessible")
+        }
+
+        val permissionDeclarations = permissions.joinToString("\n") { "    <uses-permission android:name=\"$it\" />" }
+        val updatedManifestContent = manifestFile.readText().replace("<application", "$permissionDeclarations\n\n    <application")
+        manifestFile.writeText(updatedManifestContent)
+    }
+}
