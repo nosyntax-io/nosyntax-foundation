@@ -12,6 +12,9 @@ on:
       app-config:
         description: "App Config"
         required: true
+      signing-config:
+        description: "Signing Config"
+        required: true
 
 jobs:
   configure:
@@ -24,15 +27,11 @@ jobs:
       BUILD_OUTPUT: ${{ fromJson(inputs['build-details'])['build_output'] }}
 
       APP_CONFIG: ${{ inputs['app-config'] }}
+      SIGNING_CONFIG: ${{ inputs['signing-config'] }}
 
       PROJECT_ID: ${{ fromJson(inputs['project-details'])['project_id'] }}
       PROJECT_ACCESS_TOKEN: ${{ fromJson(inputs['project-details'])['project_access_token'] }}
       ADS_ENABLED: ${{ fromJson(inputs['project-details'])['ads_enabled'] }}
-
-      KEYSTORE_FILE: ${{ fromJson(inputs['project-details'])['keystore_file'] }}
-      KEYSTORE_PASSWORD: ${{ fromJson(inputs['project-details'])['keystore_password'] }}
-      KEY_ALIAS: ${{ fromJson(inputs['project-details'])['key_alias'] }}
-      KEY_PASSWORD: ${{ fromJson(inputs['project-details'])['key_password'] }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -69,18 +68,16 @@ jobs:
 
       - name: Obtain Signing Key
         run: |
-          echo "${{ env.KEYSTORE_FILE }}" | base64 -d > "signing.keystore"
+          KEYSTORE_FILE_CONTENT=$(echo "${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE_CONTENT }}")
+          KEYSTORE_FILE="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE }}"
+          echo "$KEYSTORE_FILE_CONTENT" | base64 -d > "$KEYSTORE_FILE"
 
       - name: Set Signing Properties
         run: |
-          python .github/scripts/render_properties_template.py \
+          python .github/scripts/render_template.py \
             --template-file "signing.properties.template" \
             --output-file "signing.properties" \
-            --context \
-              "KEYSTORE_FILE=signing.keystore" \
-              "KEYSTORE_PASSWORD=${{ env.KEYSTORE_PASSWORD }}" \
-              "KEY_ALIAS=${{ env.KEY_ALIAS }}" \
-              "KEY_PASSWORD=${{ env.KEY_PASSWORD }}"
+            --data '${{ env.SIGNING_CONFIG }}'
 
       - name: Archive Source Code
         uses: actions/upload-artifact@v4

@@ -1,4 +1,4 @@
-config.signing.keystore_file = {{KEYSTORE_FILE}}
-config.signing.keystore_password = {{KEYSTORE_PASSWORD}}
-config.signing.key_alias = {{KEY_ALIAS}}
-config.signing.key_password = {{KEY_PASSWORD}}
+signing.keystore_file = {{ KEYSTORE_FILE }}
+signing.keystore_password = {{ KEYSTORE_PASSWORD }}
+signing.key_alias = {{ KEY_ALIAS }}
+signing.key_password = {{ KEY_PASSWORD }}

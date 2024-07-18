@@ -7,13 +7,13 @@ import os
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def render_template(template_path, output_path, data_content):
+def render_template(template_path, output_path, data):
   """
-  Render a template file using data from a JSON file or JSON string.
+  Render a template file using JSON data.
 
   :param template_path: Path to the template file
-  :param output_path: Path to the rendered output file
-  :param data_content: JSON data content as a dictionary
+  :param output_path: Path to save the rendered output file
+  :param data: JSON data as a dictionary
   """
   try:
     env = Environment(
@@ -23,10 +23,8 @@ def render_template(template_path, output_path, data_content):
 
     template = env.get_template(os.path.basename(template_path))
 
-    rendered_content = template.render(**data_content)
-
     with open(output_path, 'w') as f:
-      f.write(rendered_content)
+      f.write(template.render(**data))
 
     logging.info(f"Template rendered successfully. Output saved to {output_path}")
 
@@ -54,9 +52,9 @@ def parse_data(data):
 def main():
   logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-  parser = argparse.ArgumentParser(description="Render a template using data from a JSON file or JSON string")
+  parser = argparse.ArgumentParser(description="Render a template file using JSON data.")
   parser.add_argument("--template-file", "-t", required=True, help="Path to the template file")
-  parser.add_argument("--output-file", "-o", required=True, help="Path to the rendered output file")
+  parser.add_argument("--output-file", "-o", required=True, help="Path to save the rendered output file")
   parser.add_argument("--data", "-d", required=True, help="Path to the JSON data file or JSON string")
   args = parser.parse_args()
 
