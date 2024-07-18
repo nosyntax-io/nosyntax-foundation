@@ -21,6 +21,8 @@ def render_template(template_path, output_path, data):
       autoescape=select_autoescape()
     )
 
+    env.filters['lower'] = lambda b: str(b).lower()
+
     template = env.get_template(os.path.basename(template_path))
 
     with open(output_path, 'w') as f:
