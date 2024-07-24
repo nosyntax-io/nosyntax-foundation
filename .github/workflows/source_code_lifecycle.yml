@@ -3,11 +3,11 @@ name: Source Code Lifecycle
 on:
   workflow_dispatch:
     inputs:
-      build-details:
-        description: "Build Details"
+      build-info:
+        description: "Build Info"
         required: true
-      project-details:
-        description: "Project Details"
+      project-info:
+        description: "Project Info"
         required: true
       app-config:
         description: "App Config"
@@ -22,16 +22,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUILD_ID: ${{ fromJson(inputs['build-details'])['build_id'] }}
-      BUILD_ENVIRONMENT: ${{ fromJson(inputs['build-details'])['build_environment'] }}
-      BUILD_OUTPUT: ${{ fromJson(inputs['build-details'])['build_output'] }}
-
+      BUILD_INFO: ${{ inputs['build-info'] }}
+      PROJECT_INFO: ${{ inputs['project-info'] }}
       APP_CONFIG: ${{ inputs['app-config'] }}
       SIGNING_CONFIG: ${{ inputs['signing-config'] }}
 
-      PROJECT_ID: ${{ fromJson(inputs['project-details'])['project_id'] }}
-      PROJECT_ACCESS_TOKEN: ${{ fromJson(inputs['project-details'])['project_access_token'] }}
-      ADS_ENABLED: ${{ fromJson(inputs['project-details'])['ads_enabled'] }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -57,11 +52,12 @@ jobs:
       - name: Generate Icon Assets
         run: |
           base_url="https://appstatic.nosyntax.io/icons"
+          project_id="${{ fromJson(env.PROJECT_INFO).PROJECT_ID }}"
           python .github/scripts/generate_icon_assets.py \
-            --res-directory app/src/main/res \
-            --launcher-icon-url "${base_url}/launcher/${{ env.PROJECT_ID }}.png" \
-            --splash-icon-url "${base_url}/splash/${{ env.PROJECT_ID }}.png" \
-            --app-icon-url "${base_url}/app/${{ env.PROJECT_ID }}.png" \
+            --res-directory "app/src/main/res" \
+            --launcher-icon-url "${base_url}/launcher/${project_id}.png" \
+            --splash-icon-url "${base_url}/splash/${project_id}.png" \
+            --app-icon-url "${base_url}/app/${project_id}.png" \
             --fallback-icon-url "${base_url}/fallback_icon.png" \
             --auth-username "${{ secrets.APPSTATIC_AUTH_USERNAME }}" \
             --auth-password "${{ secrets.APPSTATIC_AUTH_PASSWORD }}"
@@ -81,20 +77,23 @@ jobs:
 
       - name: Archive Source Code
         uses: actions/upload-artifact@v4
-        if: ${{ contains(env.BUILD_OUTPUT, 'source') }}
+        if: ${{ fromJson(env.BUILD_INFO).BUILD_OUTPUT == "source" }}
         with:
           name: sourcecode
-          path: |
-            .
+          path: .
 
   build:
-    name: Build Release Artifact
+    name: Build Release
     needs: configure
+    if: ${{ fromJson(inputs['build-info']).BUILD_OUTPUT == 'app' }}
     runs-on: ubuntu-latest
-    if: ${{ contains(fromJson(inputs['build-details'])['build_output'], 'apk') }}
+
+    env:
+      BUILD_INFO: ${{ inputs['build-info'] }}
+      PROJECT_INFO: ${{ inputs['project-info'] }}
 
     steps:
-      - name: Download Source Code
+      - name: Retrieve Source Code
         uses: actions/download-artifact@v4
         with:
           name: sourcecode
@@ -105,23 +104,18 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'gradle'
 
-      - name: Setup Gradle
+      - name: Set Up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: wrapper
-          cache-read-only: false
 
       - name: Set App Permissions
         run: |
-          chmod +x gradlew
           ./gradlew setPermissions
 
-      - name: Build Release
+      - name: Generate Release Artifacts
         run: |
-          chmod +x gradlew
-          if [ "${{ fromJson(inputs['project-details'])['ads_enabled'] }}" == "enabled" ]; then
-            ./gradlew assembleMonetizeRelease
-          else
-            ./gradlew assembleRegularRelease
-          fi
+          ./gradlew assembleRegularRelease
+          ./gradlew bundleRegularRelease
