@@ -68,9 +68,9 @@ jobs:
 
       - name: Obtain Signing Key
         run: |
-          KEYSTORE_FILE_CONTENT=$(echo "${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE_CONTENT }}")
-          KEYSTORE_FILE="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE }}"
-          echo "$KEYSTORE_FILE_CONTENT" | base64 -d > "$KEYSTORE_FILE"
+          keystore_file="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE }}"
+          keystore_filename="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILENAME }}"
+          echo "$keystore_file" | base64 -d > "$keystore_filename"
 
       - name: Set Signing Properties
         run: |
