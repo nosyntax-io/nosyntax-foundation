@@ -12,10 +12,13 @@ jobs:
     name: Signing Setup
     runs-on: ubuntu-latest
 
-    env:
-      PROJECT_ID: ${{ inputs.project-id }}
-
     steps:
+      - name: Set Up Environments
+        run: |
+          PROJECT_ID=$(jq -r '.inputs["project-id"]' $GITHUB_EVENT_PATH)
+          echo ::add-mask::$PROJECT_ID
+          echo PROJECT_ID=$PROJECT_ID >> $GITHUB_ENV
+
       - name: Set Up JDK
         uses: actions/setup-java@v4
         with:
@@ -24,10 +27,9 @@ jobs:
 
       - name: Generate Keystore
         run: |
-          # Generate store and key passwords
-          PASSWORD=$(openssl rand -base64 16 | tr -d '\n')
+          PASSWORD=$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9')
+          echo "::add-mask::$PASSWORD"
 
-          # Generate keystore
           keytool -genkey -v \
             -keystore signing.keystore \
             -alias $PROJECT_ID \
@@ -38,10 +40,9 @@ jobs:
             -keypass $PASSWORD \
             -dname "O=$PROJECT_ID"
 
-          # Encode keystore file to base64 format
           base64Keystore=$(base64 -w 0 signing.keystore)
-          
-          # Export keystore details as environment variables
+          echo "::add-mask::$base64Keystore"
+
           echo "KEYSTORE_FILE=$base64Keystore" >> $GITHUB_ENV
           echo "KEYSTORE_PASSWORD=$PASSWORD" >> $GITHUB_ENV
           echo "KEY_ALIAS=$PROJECT_ID" >> $GITHUB_ENV
@@ -49,16 +50,13 @@ jobs:
 
       - name: Extract Certificate Fingerprints
         run: |
-          # Retrieve keystore information to extract fingerprints
           keystoreOutput=$(keytool -list -v -keystore signing.keystore -alias $KEY_ALIAS -storepass $KEYSTORE_PASSWORD)
 
-          # Extract SHA1 and SHA256 fingerprints
-          sha1Fingerprint=$(echo "$keystoreOutput" | awk '/SHA1:/ {print $2}')
-          sha256Fingerprint=$(echo "$keystoreOutput" | awk '/SHA256:/ {print $2}')
-          
-          # Export fingerprints as environment variables
-          echo "SHA1_FINGERPRINT=$sha1Fingerprint" >> $GITHUB_ENV
-          echo "SHA256_FINGERPRINT=$sha256Fingerprint" >> $GITHUB_ENV
+          for type in SHA1 SHA256; do
+            fingerprint=$(echo "$keystoreOutput" | awk -v type="$type" '/'"$type"':/ {print $2}')
+            echo "::add-mask::$fingerprint"
+            echo "${type}_FINGERPRINT=$fingerprint" >> $GITHUB_ENV
+          done
 
       - name: Update Signing Settings
         run: |
