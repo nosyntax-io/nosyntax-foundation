@@ -61,19 +61,14 @@ jobs:
           echo "SHA256_FINGERPRINT=$sha256Fingerprint" >> $GITHUB_ENV
 
       - name: Update Signing Settings
-        uses: fjogeleit/http-request-action@v1.16.1
-        with:
-          url: 'https://api.nosyntax.io/actions/update_signing_settings'
-          method: 'POST'
-          contentType: 'application/x-www-form-urlencoded'
-          customHeaders: '{"API-KEY": "${{ secrets.API_KEY }}"}'
-          data: |
-            {
-              "project_id": "${{ env.PROJECT_ID }}",
-              "keystore_file": "${{ env.KEYSTORE_FILE }}",
-              "keystore_password": "${{ env.KEYSTORE_PASSWORD }}",
-              "key_alias": "${{ env.KEY_ALIAS }}",
-              "key_password": "${{ env.KEYSTORE_PASSWORD }}",
-              "sha1_fingerprint": "${{ env.SHA1_FINGERPRINT }}",
-              "sha256_fingerprint": "${{ env.SHA256_FINGERPRINT }}"
-            }
+        run: |
+          curl -s -f -X POST "https://api.nosyntax.io/actions/update_signing_settings" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "API-KEY: ${{ secrets.API_KEY }}" \
+            -d "project_id=${{ env.PROJECT_ID }}" \
+            -d "keystore_file=${{ env.KEYSTORE_FILE }}" \
+            -d "keystore_password=${{ env.KEYSTORE_PASSWORD }}" \
+            -d "key_alias=${{ env.KEY_ALIAS }}" \
+            -d "key_password=${{ env.KEY_PASSWORD }}" \
+            -d "sha1_fingerprint=${{ env.SHA1_FINGERPRINT }}" \
+            -d "sha256_fingerprint=${{ env.SHA256_FINGERPRINT }}"
