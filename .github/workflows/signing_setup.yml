@@ -1,4 +1,4 @@
-name: Generate Android Keystore
+name: Signing Setup
 
 on:
   workflow_dispatch:
@@ -8,14 +8,15 @@ on:
         required: true
 
 jobs:
-  generate-keystore:
+  signing-setup:
+    name: Signing Setup
     runs-on: ubuntu-latest
 
     env:
       PROJECT_ID: ${{ inputs.project-id }}
 
     steps:
-      - name: Setup JDK
+      - name: Set Up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
