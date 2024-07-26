@@ -1,5 +1,10 @@
 plugins {
-    Dependencies.plugins.forEach { id(it) }
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.google.services)
 }
 
 val appConfig = AppConfig(rootProject.file("app-config.yml").toPath())
@@ -77,9 +82,6 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -88,13 +90,40 @@ android {
 }
 
 dependencies {
-    implementDependencies("implementation", Dependencies.core)
-    implementDependencies("monetizeImplementation", Dependencies.monetize)
-    implementDependencies("testImplementation", Dependencies.test)
-    implementDependencies("androidTestImplementation", Dependencies.androidTest)
-    implementDependencies("debugImplementation", Dependencies.debug)
-    // kotlin symbol processing (KSP)
-    Dependencies.ksp.forEach(::ksp)
+    implementation(libs.core.ktx)
+    implementation(libs.core.splashscreen)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.ui.text.google.fonts)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.gson)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.onesignal)
+    implementation(libs.coil.compose)
+    implementation(libs.lottie.compose)
+    "monetizeImplementation"(libs.play.services.ads)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.navigation.testing)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.test.manifest)
+    ksp(libs.hilt.compiler)
 }
 
 tasks.register("setPermissions") {
