@@ -107,7 +107,11 @@ tasks.register("setPermissions") {
         }
 
         val permissionDeclarations = permissions.joinToString("\n") { "    <uses-permission android:name=\"$it\" />" }
-        val updatedManifestContent = manifestFile.readText().replace("<application", "$permissionDeclarations\n\n    <application")
-        manifestFile.writeText(updatedManifestContent)
+        val manifestContent = manifestFile.readText()
+            .replace("""<uses-permission[^>]*>\s*""".toRegex(), "")
+            .replace("""(\r?\n\s*)+<application""".toRegex(), "\n\n<application")
+            .replace("<application", "$permissionDeclarations\n\n    <application")
+
+        manifestFile.writeText(manifestContent)
     }
 }
