@@ -22,12 +22,9 @@ android {
         minSdk = 24
         targetSdk = 34
 
-        val resourceValues = listOf(
-            ResourceValue("string", "app_name", appConfig.get("app.name"))
-        )
-        resourceValues.forEach { resourceValue ->
-            resValue(resourceValue.type, resourceValue.name, resourceValue.value)
-        }
+        resValue("string", "app_name", appConfig.get("app.name"))
+
+
         buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${appConfig.get("server.auth_token") as String}\"")
         buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${appConfig.get("server.access_token") as String}\"")
         buildConfigField("String", "APP_REMOTE_CONFIG", "\"enabled\"")
@@ -51,6 +48,17 @@ android {
         }
     }
 
+    buildTypes {
+        release {
+            if (appConfig.get("build.environment") as String == "production") {
+                isMinifyEnabled = true
+                isShrinkResources = true
+            }
+            signingConfig = signingConfigs["release"]
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
     flavorDimensions += "default"
     productFlavors {
         create("regular") {
@@ -63,16 +71,7 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            if (appConfig.get("build.environment") as String == "production") {
-                isMinifyEnabled = true
-                isShrinkResources = true
-            }
-            signingConfig = signingConfigs["release"]
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
