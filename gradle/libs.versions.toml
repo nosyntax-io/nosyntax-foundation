@@ -2,6 +2,8 @@
 agp = "8.5.1"
 kotlin = "2.0.0"
 devtools-ksp = "2.0.0-1.0.23"
+gradle-versions = "0.51.0"
+version-catalog-update = "0.8.4"
 dagger-hilt-android = "2.44"
 google-services = "4.4.2"
 core-ktx = "1.13.1"
@@ -67,5 +69,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtools-ksp" }
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt-android" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
