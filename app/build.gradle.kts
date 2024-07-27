@@ -1,3 +1,5 @@
+import tasks.SetPermissionsTask
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -127,21 +129,6 @@ dependencies {
     ksp(libs.hilt.compiler)
 }
 
-tasks.register("setPermissions") {
-    doLast {
-        val permissions = appConfig.getPermissions()
-        val manifestFile = file("src/main/AndroidManifest.xml")
-
-        if (!manifestFile.exists() || !manifestFile.canRead() || !manifestFile.canWrite()) {
-            throw IllegalStateException("Manifest file is not accessible")
-        }
-
-        val permissionDeclarations = permissions.joinToString("\n") { "    <uses-permission android:name=\"$it\" />" }
-        val manifestContent = manifestFile.readText()
-            .replace("""<uses-permission[^>]*>\s*""".toRegex(), "")
-            .replace("""(\r?\n\s*)+<application""".toRegex(), "\n\n<application")
-            .replace("<application", "$permissionDeclarations\n\n    <application")
-
-        manifestFile.writeText(manifestContent)
-    }
+tasks.register<SetPermissionsTask>("setPermissions") {
+    this.config = appConfig
 }
