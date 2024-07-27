@@ -19,25 +19,21 @@ class App : Application() {
 
         OneSignalService(this)
             .initialize(appId = BuildConfig.ONESIGNAL_APP_ID)
-            .handleNotification(onNotificationOpened = { notificationData ->
-                val deeplink = notificationData.first
-                when (notificationData.second) {
-                    "APP_BROWSER" -> {
-                        val intent = Intent(this, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
-                            if (deeplink.isNotEmpty()) {
-                                putExtra(Constants.DEEPLINK, deeplink)
-                            }
-                        }
-                        startActivity(intent)
+            .registerOnNotificationClick { deeplinkData ->
+                val (destination, type) = deeplinkData
+
+                val intent = when (type) {
+                    "IN_APP_WEBVIEW" -> Intent(this, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
+                        putExtra(Constants.DEEPLINK, destination.takeIf { it.isNotEmpty() })
                     }
-                    "EXTERNAL_BROWSER" -> {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(deeplink)).apply {
-                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
-                        })
+                    "EXTERNAL_BROWSER" -> Intent(Intent.ACTION_VIEW, Uri.parse(destination)).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
                     }
+                    else -> null
                 }
-            })
+                intent?.let { startActivity(it) }
+            }
 
         MonetizeController.initialize(this)
     }

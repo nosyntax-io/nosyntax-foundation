@@ -11,6 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+data class DeeplinkData(
+    val destination: String,
+    val type: String
+)
+
 class OneSignalService(private val context: Context) {
     /**
      * Initialize OneSignal with the provided app ID and logging level.
@@ -29,49 +34,45 @@ class OneSignalService(private val context: Context) {
     }
 
     /**
-     * Sets up a click listener for notifications.
+     * Set up a click listener for notifications.
      *
      * @param onNotificationOpened A callback invoked when a notification is clicked.
      * @return The current instance of OneSignalService.
      */
-    fun handleNotification(onNotificationOpened: (Pair<String, String>) -> Unit): OneSignalService {
+    fun registerOnNotificationClick(onNotificationOpened: (DeeplinkData) -> Unit): OneSignalService {
         OneSignal.Notifications.addClickListener(object: INotificationClickListener {
             override fun onClick(event: INotificationClickEvent) {
                 val notification = event.notification
                 val additionalData = notification.additionalData
 
-                val (deeplink, deeplinkType) = extractNotificationData(notification, additionalData)
-                onNotificationOpened(Pair(deeplink, deeplinkType))
+                val deeplinkData = extractDeeplinkData(notification, additionalData)
+                onNotificationOpened(deeplinkData)
             }
         })
         return this
     }
 
     /**
-     * Extracts deeplink and type from the notification.
+     * Extract deeplink data from the notification.
      *
      * @param notification The OneSignal notification object.
      * @param additionalData JSON object containing additional notification data.
-     * @return A pair where the first element is the deeplink and the second element is the deeplink type.
+     * @return A DeeplinkData object containing the extracted destination and type.
      */
-    private fun extractNotificationData(notification: INotification, additionalData: JSONObject?): Pair<String, String> {
-        var deeplink = ""
-        var deeplinkType = ""
+    private fun extractDeeplinkData(notification: INotification, additionalData: JSONObject?): DeeplinkData {
+        var destination = ""
+        var type = ""
 
-        if (notification.launchURL != null) {
-            deeplink = notification.launchURL ?: ""
-            deeplinkType = "APP_BROWSER"
+        if (!notification.launchURL.isNullOrEmpty()) {
+            destination = notification.launchURL!!
+            type = "IN_APP_WEBVIEW"
         }
 
         additionalData?.let {
-            val customKeyDeeplink = it.optString("deeplink", "")
-            if (customKeyDeeplink.isNotEmpty()) {
-                val customKeyType = it.optString("deeplink_type", "")
-                deeplink = customKeyDeeplink
-                deeplinkType = customKeyType
-            }
+            destination = it.optString("deeplink_destination", destination)
+            type = it.optString("deeplink_type", type)
         }
 
-        return Pair(deeplink, deeplinkType)
+        return DeeplinkData(destination, type)
     }
 }
