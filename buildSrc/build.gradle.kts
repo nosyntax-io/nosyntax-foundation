@@ -7,5 +7,5 @@ repositories {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.29")
+    implementation(libs.snakeyaml)
 }
