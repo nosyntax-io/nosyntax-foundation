@@ -20,9 +20,9 @@ class App : Application() {
         OneSignalService(this)
             .initialize(appId = BuildConfig.ONESIGNAL_APP_ID)
             .registerOnNotificationClick { deeplinkData ->
-                val (destination, type) = deeplinkData
+                val (destination, action) = deeplinkData
 
-                val intent = when (type) {
+                val intent = when (action) {
                     "IN_APP_WEBVIEW" -> Intent(this, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK
                         putExtra(Constants.DEEPLINK, destination.takeIf { it.isNotEmpty() })

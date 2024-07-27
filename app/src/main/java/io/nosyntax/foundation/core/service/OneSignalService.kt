@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 data class DeeplinkData(
     val destination: String,
-    val type: String
+    val action: String
 )
 
 class OneSignalService(private val context: Context) {
@@ -61,18 +61,18 @@ class OneSignalService(private val context: Context) {
      */
     private fun extractDeeplinkData(notification: INotification, additionalData: JSONObject?): DeeplinkData {
         var destination = ""
-        var type = ""
+        var action = ""
 
         if (!notification.launchURL.isNullOrEmpty()) {
             destination = notification.launchURL!!
-            type = "IN_APP_WEBVIEW"
+            action = "IN_APP_WEBVIEW"
         }
 
         additionalData?.let {
             destination = it.optString("deeplink_destination", destination)
-            type = it.optString("deeplink_type", type)
+            action = it.optString("deeplink_action", action)
         }
 
-        return DeeplinkData(destination, type)
+        return DeeplinkData(destination, action)
     }
 }
