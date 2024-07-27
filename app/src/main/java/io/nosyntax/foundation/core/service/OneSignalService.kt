@@ -1,55 +1,65 @@
 package io.nosyntax.foundation.core.service
 
 import android.content.Context
-import android.util.Log
-import com.onesignal.OSNotification
 import com.onesignal.OneSignal
-import org.json.JSONException
+import com.onesignal.debug.LogLevel
+import com.onesignal.notifications.INotification
+import com.onesignal.notifications.INotificationClickEvent
+import com.onesignal.notifications.INotificationClickListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class OneSignalService(private val context: Context) {
     /**
-     * Initialize OneSignal with the provided app ID and configure logging.
+     * Initialize OneSignal with the provided app ID and logging level.
      *
-     * @param appId The OneSignal app id.
-     * @param logLevel The log level to set
+     * @param appId The OneSignal application ID.
+     * @param logLevel The logging level for debugging.
+     * @return The current instance of OneSignalService.
      */
-    fun initialize(appId: String, logLevel: OneSignal.LOG_LEVEL = OneSignal.LOG_LEVEL.NONE): OneSignalService {
-        OneSignal.setLogLevel(logLevel, OneSignal.LOG_LEVEL.NONE)
-        OneSignal.initWithContext(context)
-        OneSignal.setAppId(appId)
-        OneSignal.promptForPushNotifications()
-        return this
-    }
-
-    fun handleNotification(onNotificationOpened: (Pair<String, String>) -> Unit): OneSignalService {
-        OneSignal.setNotificationOpenedHandler { result ->
-            try {
-                val notification = result.notification
-                val additionalData = notification.additionalData
-
-                val (deeplink, deeplinkType) = extractNotificationData(notification, additionalData)
-                onNotificationOpened(Pair(deeplink, deeplinkType))
-            } catch (e: JSONException) {
-                Log.e("OneSignalNotifications", "Error parsing notification data: ${e.message}")
-            }
+    fun initialize(appId: String, logLevel: LogLevel = LogLevel.NONE): OneSignalService {
+        OneSignal.Debug.logLevel = logLevel
+        OneSignal.initWithContext(context, appId)
+        CoroutineScope(Dispatchers.IO).launch {
+            OneSignal.Notifications.requestPermission(false)
         }
         return this
     }
 
     /**
-     * Extract notification data.
+     * Sets up a click listener for notifications.
      *
-     * @param notification The OneSignal notification.
-     * @param additionalData Additional data from the notification.
-     * @return A pair containing the deeplink and deeplink type.
+     * @param onNotificationOpened A callback invoked when a notification is clicked.
+     * @return The current instance of OneSignalService.
      */
-    private fun extractNotificationData(notification: OSNotification, additionalData: JSONObject?): Pair<String, String> {
+    fun handleNotification(onNotificationOpened: (Pair<String, String>) -> Unit): OneSignalService {
+        OneSignal.Notifications.addClickListener(object: INotificationClickListener {
+            override fun onClick(event: INotificationClickEvent) {
+                val notification = event.notification
+                val additionalData = notification.additionalData
+
+                val (deeplink, deeplinkType) = extractNotificationData(notification, additionalData)
+                onNotificationOpened(Pair(deeplink, deeplinkType))
+            }
+        })
+        return this
+    }
+
+    /**
+     * Extracts deeplink and type from the notification.
+     *
+     * @param notification The OneSignal notification object.
+     * @param additionalData JSON object containing additional notification data.
+     * @return A pair where the first element is the deeplink and the second element is the deeplink type.
+     */
+    private fun extractNotificationData(notification: INotification, additionalData: JSONObject?): Pair<String, String> {
         var deeplink = ""
         var deeplinkType = ""
 
         if (notification.launchURL != null) {
-            deeplink = notification.launchURL
+            deeplink = notification.launchURL ?: ""
             deeplinkType = "APP_BROWSER"
         }
 
