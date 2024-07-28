@@ -24,12 +24,9 @@ android {
 
         resValue("string", "app_name", appConfig.get("app.name"))
 
-        buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${appConfig.get("server.auth_token") as String}\"")
-        buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${appConfig.get("server.access_token") as String}\"")
-        buildConfigField("String", "APP_REMOTE_CONFIG", "\"enabled\"")
-        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${appConfig.get("integrations.onesignal.app_id") as String}\"")
-        buildConfigField("String", "ADMOB_BANNER_ID", "\"${appConfig.get("integrations.admob.banner_id") as String}\"")
-        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${appConfig.get("integrations.admob.interstitial_id") as String}\"")
+        appConfig.getBuildConfigFields().forEach { (field, value) ->
+            buildConfigField("String", field, "\"$value\"")
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
