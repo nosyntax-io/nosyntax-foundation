@@ -1,4 +1,10 @@
 [versions]
+# @keep
+compile-sdk = "34"
+# @keep
+min-sdk = "24"
+# @keep
+target-sdk = "34"
 agp = "8.5.1"
 kotlin = "2.0.0"
 devtools-ksp = "2.0.0-1.0.23"

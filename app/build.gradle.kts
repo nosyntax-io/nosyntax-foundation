@@ -13,17 +13,16 @@ val appConfig = AppConfig(rootProject.file("app-config.yml").toPath())
 
 android {
     namespace = "io.nosyntax.foundation"
-    compileSdk = 34
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
         applicationId = appConfig.get("app.id")
-        versionName = appConfig.get("app.version")
+        minSdk = libs.versions.min.sdk.get().toInt()
+        targetSdk = libs.versions.target.sdk.get().toInt()
         versionCode = appConfig.get("app.build_number")
-        minSdk = 24
-        targetSdk = 34
+        versionName = appConfig.get("app.version")
 
         resValue("string", "app_name", appConfig.get("app.name"))
-
 
         buildConfigField("String", "SERVER_AUTH_TOKEN", "\"${appConfig.get("server.auth_token") as String}\"")
         buildConfigField("String", "SERVER_ACCESS_TOKEN", "\"${appConfig.get("server.access_token") as String}\"")
@@ -58,6 +57,22 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 
     flavorDimensions += "default"
     productFlavors {
@@ -68,24 +83,6 @@ android {
         create("monetize") {
             manifestPlaceholders += mapOf("admob_app_id" to appConfig.get("integrations.admob.app_id") as String)
             dimension = "default"
-        }
-    }
-
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        buildConfig = true
-        compose = true
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
