@@ -62,13 +62,13 @@ jobs:
             --auth-username "${{ secrets.APPSTATIC_AUTH_USERNAME }}" \
             --auth-password "${{ secrets.APPSTATIC_AUTH_PASSWORD }}"
 
-      - name: Obtain Signing Key
+      - name: Obtain Signing Keystore
         run: |
-          keystore_file="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILE }}"
-          keystore_filename="${{ fromJson(env.SIGNING_CONFIG).KEYSTORE_FILENAME }}"
-          echo "$keystore_file" | base64 -d > "$keystore_filename"
+          store_file="${{ fromJson(env.SIGNING_CONFIG).STORE_FILE }}"
+          store_filename="${{ fromJson(env.SIGNING_CONFIG).STORE_FILENAME }}"
+          echo "$store_file" | base64 -d > "$store_filename"
 
-      - name: Set Signing Properties
+      - name: Set Signing Configuration
         run: |
           python .github/scripts/render_template.py \
             --template-file "signing.properties.template" \
