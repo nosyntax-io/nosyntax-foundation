@@ -60,7 +60,7 @@ jobs:
 
       - name: Update Signing Settings
         run: |
-          curl -s -f -X POST "https://api.nosyntax.io/actions/update_signing_settings" \
+          curl -s -i -X POST "https://api.nosyntax.io/actions/update_signing_settings" \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "API-KEY: ${{ secrets.API_KEY }}" \
             -d "project_id=${{ env.PROJECT_ID }}" \
