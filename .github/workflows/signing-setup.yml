@@ -8,12 +8,12 @@ on:
         required: true
 
 jobs:
-  signing-setup:
-    name: Signing Setup
+  setup:
+    name: Setup Signing
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set Up Environments
+      - name: Set Up Environment Variables
         run: |
           PROJECT_ID=$(jq -r '.inputs["project-id"]' $GITHUB_EVENT_PATH)
           echo ::add-mask::$PROJECT_ID
