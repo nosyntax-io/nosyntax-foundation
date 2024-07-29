@@ -19,6 +19,16 @@ buildscript {
     }
 }
 
+versionCatalogUpdate {
+    sortByKey.set(true)
+
+    keep {
+        keepUnusedVersions.set(true)
+        keepUnusedLibraries.set(true)
+        keepUnusedPlugins.set(true)
+    }
+}
+
 fun isNonStable(version: String): Boolean {
     val regex = """^[0-9,.v-]+(-r)?$""".toRegex()
     return !regex.matches(version)
