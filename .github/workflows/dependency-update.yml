@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set Up JDK
@@ -34,8 +34,8 @@ jobs:
           delete-branch: true
           title: 🤖 Update Dependencies
           body: |
-            📦 Dependencies updated!
+            🚀 Dependencies Updated!
 
-            Hey team, I’ve updated our app dependencies. Please verify everything before merging.
+            I’ve handled the dependency updates for you. Give everything a quick check and make sure it’s all good before merging.
 
-            Cheers! ☕
+            Happy coding! 🤖🎉
