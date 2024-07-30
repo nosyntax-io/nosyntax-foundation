@@ -3,7 +3,7 @@ activity-compose = "1.9.1"
 agp = "8.5.1"
 coil = "2.7.0"
 # @keep
-compile-sdk = "34"
+compile-sdk = "35"
 compose-bom = "2024.06.00"
 core-ktx = "1.13.1"
 core-splashscreen = "1.0.1"
@@ -31,7 +31,7 @@ play-services-ads = "23.2.0"
 retrofit = "2.11.0"
 snakeyaml = "2.2"
 # @keep
-target-sdk = "34"
+target-sdk = "35"
 version-catalog-update = "0.8.4"
 
 [libraries]
