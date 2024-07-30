@@ -17,7 +17,7 @@ data class DynamicColorScheme(
     val onSurfaceDark: Color = ColorOnSurfaceDark
 )
 
-val ColorPrimary = Color(0xFF8EBBFF)
+val ColorPrimary = Color(0xFF653ff5)
 val ColorOnPrimary = Color(0xFFFFFFFF)
 val ColorSecondary = Color(0xFF121212)
 val ColorOnSecondary = Color(0xFFFFFFFF)

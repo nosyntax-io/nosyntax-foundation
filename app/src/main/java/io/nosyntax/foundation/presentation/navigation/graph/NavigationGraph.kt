@@ -69,7 +69,7 @@ fun NavigationHandler(
 
         Roles.ROLE_ABOUT -> {
             AboutScreen(
-                appConfig = appConfig,
+                appDescription = appConfig.app.description,
                 navController = navController
             )
         }
