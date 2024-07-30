@@ -30,7 +30,7 @@ jobs:
           commit-message: 🤖 Update Dependencies
           committer: nosyntax-bot <github-bot@nosyntax.io>
           author: nosyntax-bot <github-bot@nosyntax.io>
-          branch: update-dependencies
+          branch: bot-update-dependencies
           delete-branch: true
           title: 🤖 Update Dependencies
           body: |
