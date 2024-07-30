@@ -3,14 +3,13 @@ package io.nosyntax.foundation.presentation.settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,73 +34,31 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background)
-        .verticalScroll(rememberScrollState())
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { context.openPlayStore(context.packageName) }
-                    .padding(horizontal = 20.dp, vertical = 15.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.rate_us),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.surface
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { context.openEmail(email = "example@example.com") }
-                    .padding(horizontal = 20.dp, vertical = 15.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.send_feedback),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.surface
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { context.openUrl("https://example.com") }
-                    .padding(horizontal = 20.dp, vertical = 15.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.privacy_policy),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.surface
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { context.openUrl("https://example.com") }
-                    .padding(horizontal = 20.dp, vertical = 15.dp)
-            ) {
-                Text(
-                    text = "About Us",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+        SettingItem(
+            text = stringResource(id = R.string.rate_us),
+            onClick = { context.openPlayStore(context.packageName) }
+        )
+        SettingDivider()
+        SettingItem(
+            text = stringResource(id = R.string.send_feedback),
+            onClick = { context.openEmail(email = "example@example.com") }
+        )
+        SettingDivider()
+        SettingItem(
+            text = stringResource(id = R.string.privacy_policy),
+            onClick = { context.openUrl("https://example.com") }
+        )
+        SettingDivider()
+        SettingItem(
+            text = stringResource(id = R.string.about_us),
+            onClick = { navController.navigate(route = "about") }
+        )
     }
 
     BackHandler(enabled = true) {
@@ -111,11 +68,34 @@ fun SettingsScreen(
     }
 }
 
+@Composable
+fun SettingItem(text: String, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 15.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+@Composable
+fun SettingDivider() {
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = MaterialTheme.colorScheme.surface
+    )
+}
+
 @Preview
 @Composable
 fun SettingsScreenPreview() {
-    DynamicTheme(darkTheme = false) {
-        val navController = rememberNavController()
-        SettingsScreen(navController = navController)
+    DynamicTheme(darkTheme = true) {
+        SettingsScreen(navController = rememberNavController())
     }
 }
