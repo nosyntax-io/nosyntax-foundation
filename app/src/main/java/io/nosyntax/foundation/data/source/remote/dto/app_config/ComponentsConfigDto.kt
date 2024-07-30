@@ -7,8 +7,6 @@ data class ComponentsConfigDto(
     val appBar: AppBarConfigDto,
     @SerializedName("side_menu")
     val sideMenu: SideMenuConfigDto,
-    @SerializedName("bottom_bar")
-    val bottomBar: BottomBarConfigDto,
     @SerializedName("loading_indicator")
     val loadingIndicator: LoadingIndicatorConfigDto
 )

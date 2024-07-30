@@ -6,7 +6,7 @@ build/
 app-config.yml
 local.properties
 signing.properties
-app_config.json
+app-config.json
 
 # Log/OS files
 *.log

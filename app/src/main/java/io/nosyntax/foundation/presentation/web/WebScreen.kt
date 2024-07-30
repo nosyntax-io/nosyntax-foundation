@@ -210,7 +210,7 @@ fun WebScreen(
     }
 
     if (webViewState.isLoading) {
-        val indicatorConfig = appConfig.app.configuration.components.loadingIndicator
+        val indicatorConfig = appConfig.app.components.loadingIndicator
         if (indicatorConfig.display) {
             LoadingIndicator(indicatorConfig = indicatorConfig)
         }
