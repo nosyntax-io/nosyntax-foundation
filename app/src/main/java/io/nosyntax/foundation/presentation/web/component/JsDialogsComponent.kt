@@ -66,7 +66,7 @@ fun AlertDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth().height(40.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -79,23 +79,12 @@ fun AlertDialogComponent(
                     Text(
                         text = stringResource(id = R.string.i_understand),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
         }
     )
-}
-
-@Composable
-@Preview
-fun AlertDialogPreview() {
-    DynamicTheme(darkTheme = false) {
-        AlertDialogComponent(
-            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            onConfirm = { }
-        )
-    }
 }
 
 @Composable
@@ -127,7 +116,7 @@ fun ConfirmDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         modifier = Modifier.weight(1f).height(40.dp),
@@ -146,7 +135,7 @@ fun ConfirmDialogComponent(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -160,25 +149,13 @@ fun ConfirmDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
         }
     )
-}
-
-@Composable
-@Preview
-fun ConfirmDialogPreview() {
-    DynamicTheme(darkTheme = false) {
-        ConfirmDialogComponent(
-            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            onCancel = { },
-            onConfirm = { }
-        )
-    }
 }
 
 @Composable
@@ -213,11 +190,11 @@ fun PromptDialogComponent(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 TextFieldComponent(defaultValue = defaultValue, onValueChange = {
                     promptValue.value = it
                 })
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         modifier = Modifier.weight(1f).height(40.dp),
@@ -236,7 +213,7 @@ fun PromptDialogComponent(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -250,13 +227,36 @@ fun PromptDialogComponent(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+@Preview
+fun AlertDialogPreview() {
+    DynamicTheme(darkTheme = false) {
+        AlertDialogComponent(
+            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            onConfirm = { }
+        )
+    }
+}
+
+@Composable
+@Preview
+fun ConfirmDialogPreview() {
+    DynamicTheme(darkTheme = false) {
+        ConfirmDialogComponent(
+            message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            onCancel = { },
+            onConfirm = { }
+        )
+    }
 }
 
 @Composable
