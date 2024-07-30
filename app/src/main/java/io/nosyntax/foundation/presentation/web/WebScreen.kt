@@ -147,16 +147,7 @@ fun WebScreen(
                         totalLoadedPages = 1
                     }
                 },
-                onResourceLoaded = {
-                    val resourceContainer =
-                        """javascript:(function() { 
-                        var node = document.createElement('style');
-                        node.type = 'text/css';
-                        node.innerHTML = '${webKitConfig.customCss}';
-                        document.head.appendChild(node);
-                    })()""".trimIndent()
-                    navigator.loadUrl(resourceContainer)
-                },
+                onResourceLoaded = { },
                 onRequestInterrupted = {
                     noConnectionState = true
                 }

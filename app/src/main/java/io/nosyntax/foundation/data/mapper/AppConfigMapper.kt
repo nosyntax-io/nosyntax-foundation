@@ -152,8 +152,7 @@ fun ModulesConfigDto.toModules(): ModulesConfig {
         webkit = WebKitConfig(
             userAgent = WebKitConfig.UserAgent(
                 android = this.webkit.userAgent.android
-            ),
-            customCss = this.webkit.customCss
+            )
         )
     )
 }

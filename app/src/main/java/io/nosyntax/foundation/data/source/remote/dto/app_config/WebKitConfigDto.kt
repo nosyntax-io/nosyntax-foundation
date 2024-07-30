@@ -4,9 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class WebKitConfigDto(
     @SerializedName("user_agent")
-    val userAgent: UserAgent,
-    @SerializedName("custom_css")
-    val customCss: String) {
+    val userAgent: UserAgent) {
 
     data class UserAgent(
         @SerializedName("android")
