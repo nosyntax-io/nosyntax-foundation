@@ -16,7 +16,6 @@ data class AppConfig(
     )
 
     data class Configuration(
-        val monetization: MonetizationConfig,
-        val modules: ModulesConfig,
+        val monetization: MonetizationConfig
     )
 }

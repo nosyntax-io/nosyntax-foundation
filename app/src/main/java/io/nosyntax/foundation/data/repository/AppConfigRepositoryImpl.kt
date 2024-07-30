@@ -35,7 +35,7 @@ class AppConfigRepositoryImpl @Inject constructor(private val context: Context, 
                     }
                 }
             } else {
-                getDtoFromJson(context, "local/app_config.json", AppConfigDto::class.java)?.let { localConfig ->
+                getDtoFromJson(context, "local/app-config.json", AppConfigDto::class.java)?.let { localConfig ->
                     emit(Resource.Success(localConfig.toConfiguration()))
                 } ?: run {
                     emit(Resource.Error(Constants.LOADING_LOCAL_JSON_EXCEPTION))
