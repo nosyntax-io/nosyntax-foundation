@@ -28,7 +28,8 @@ fun DynamicTheme(
             background = dynamicColorScheme.backgroundDark,
             onBackground = dynamicColorScheme.onBackgroundDark,
             surface = dynamicColorScheme.surfaceDark,
-            onSurface = dynamicColorScheme.onSurfaceDark
+            onSurface = dynamicColorScheme.onSurfaceDark,
+            outline = dynamicColorScheme.outlineDark
         )
     } else {
         lightColorScheme(
@@ -39,7 +40,8 @@ fun DynamicTheme(
             background = dynamicColorScheme.backgroundLight,
             onBackground = dynamicColorScheme.onBackgroundLight,
             surface = dynamicColorScheme.surfaceLight,
-            onSurface = dynamicColorScheme.onSurfaceLight
+            onSurface = dynamicColorScheme.onSurfaceLight,
+            outline = dynamicColorScheme.outlineLight
         )
     }
 

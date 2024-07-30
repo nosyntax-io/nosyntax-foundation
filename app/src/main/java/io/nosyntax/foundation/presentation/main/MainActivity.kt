@@ -66,10 +66,12 @@ class MainActivity : ComponentActivity() {
                         onBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
                         surfaceLight = Color(parseColor(colorScheme.surfaceLight)),
                         onSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
+                        outlineLight = Color(parseColor(colorScheme.outlineLight)),
                         backgroundDark = Color(parseColor(colorScheme.backgroundDark)),
                         onBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
                         surfaceDark = Color(parseColor(colorScheme.surfaceDark)),
-                        onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark))
+                        onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark)),
+                        outlineDark = Color(parseColor(colorScheme.outlineDark))
                     )
                     val dynamicTypography = DynamicTypography(
                         primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),

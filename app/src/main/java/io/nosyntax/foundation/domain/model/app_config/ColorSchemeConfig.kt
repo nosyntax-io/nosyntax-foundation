@@ -9,8 +9,10 @@ data class ColorSchemeConfig(
     val onBackgroundLight: String,
     val surfaceLight: String,
     val onSurfaceLight: String,
+    val outlineLight: String,
     val backgroundDark: String,
     val onBackgroundDark: String,
     val surfaceDark: String,
-    val onSurfaceDark: String
+    val onSurfaceDark: String,
+    val outlineDark: String
 )

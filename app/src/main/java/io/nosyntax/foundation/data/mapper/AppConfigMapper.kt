@@ -72,10 +72,12 @@ fun ColorSchemeConfigDto.toColorScheme(): ColorSchemeConfig {
         onBackgroundLight = this.onBackgroundLight,
         surfaceLight = this.surfaceLight,
         onSurfaceLight = this.onSurfaceLight,
+        outlineLight = this.outlineLight,
         backgroundDark = this.backgroundDark,
         onBackgroundDark = this.onBackgroundDark,
         surfaceDark = this.surfaceDark,
-        onSurfaceDark = this.onSurfaceDark
+        onSurfaceDark = this.onSurfaceDark,
+        outlineDark = this.outlineDark
     )
 }
 

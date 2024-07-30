@@ -19,6 +19,8 @@ data class ColorSchemeConfigDto(
     val surfaceLight: String,
     @SerializedName("on_surface_light")
     val onSurfaceLight: String,
+    @SerializedName("outline_light")
+    val outlineLight: String,
     @SerializedName("background_dark")
     val backgroundDark: String,
     @SerializedName("on_background_dark")
@@ -26,5 +28,7 @@ data class ColorSchemeConfigDto(
     @SerializedName("surface_dark")
     val surfaceDark: String,
     @SerializedName("on_surface_dark")
-    val onSurfaceDark: String
+    val onSurfaceDark: String,
+    @SerializedName("outline_dark")
+    val outlineDark: String
 )

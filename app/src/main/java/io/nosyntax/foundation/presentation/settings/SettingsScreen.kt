@@ -88,7 +88,7 @@ fun SettingItem(text: String, onClick: () -> Unit) {
 fun SettingDivider() {
     HorizontalDivider(
         thickness = 1.dp,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.outline
     )
 }
 
