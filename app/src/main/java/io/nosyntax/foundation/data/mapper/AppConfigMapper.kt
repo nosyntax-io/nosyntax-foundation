@@ -2,7 +2,6 @@ package io.nosyntax.foundation.data.mapper
 
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppBarConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.BottomBarConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
@@ -16,7 +15,6 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.TypographyConfig
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
 import io.nosyntax.foundation.domain.model.app_config.ThemeConfig
-import io.nosyntax.foundation.domain.model.app_config.BottomBarConfig
 import io.nosyntax.foundation.domain.model.app_config.ComponentsConfig
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.LoadingIndicatorConfig
@@ -42,19 +40,19 @@ fun AppConfigDto.App.toApp(): AppConfig.App {
         name = this.name,
         category = this.category,
         description = this.description,
+        theme = this.theme.toTheme(),
+        components = this.components.toComponents(),
         configuration = this.configuration.toConfiguration(),
+        navigation = navigation.toNavigation()
     )
 }
 
 fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
-    val (theme, components, monetization, modules, navigation) = this
+    val (monetization, modules) = this
 
     return AppConfig.Configuration(
-        theme = theme.toTheme(),
-        components = components.toComponents(),
         monetization = monetization.toMonetization(),
         modules = modules.toModules(),
-        navigation = navigation.toNavigation()
     )
 }
 
@@ -93,18 +91,17 @@ fun TypographyConfigDto.toTypography(): TypographyConfig {
 }
 
 fun ThemeConfigDto.SettingsConfigDto.toSettings(): ThemeConfig.SettingsConfig {
-    return io.nosyntax.foundation.domain.model.app_config.ThemeConfig.SettingsConfig(
+    return ThemeConfig.SettingsConfig(
         darkMode = this.darkMode
     )
 }
 
 fun ComponentsConfigDto.toComponents(): ComponentsConfig {
-    val (appBar, sideMenu, bottomBar, loadingIndicator) = this
+    val (appBar, sideMenu, loadingIndicator) = this
 
     return ComponentsConfig(
         appBar = appBar.toAppBar(),
         sideMenu = sideMenu.toSideMenu(),
-        bottomBar = bottomBar.toBottomBar(),
         loadingIndicator = loadingIndicator.toLoadingIndicator()
     )
 }
@@ -113,7 +110,7 @@ fun AppBarConfigDto.toAppBar(): AppBarConfig {
     return AppBarConfig(
         display = this.visible,
         background = this.background,
-        title = io.nosyntax.foundation.domain.model.app_config.AppBarConfig.Title(
+        title = AppBarConfig.Title(
             display = this.title.visible,
             position = this.title.alignment
         )
@@ -124,18 +121,10 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
     return SideMenuConfig(
         display = this.visible,
         background = this.background,
-        header = io.nosyntax.foundation.domain.model.app_config.SideMenuConfig.Header(
+        header = SideMenuConfig.Header(
             display = this.header.visible,
             image = this.header.image
         )
-    )
-}
-
-fun BottomBarConfigDto.toBottomBar(): BottomBarConfig {
-    return BottomBarConfig(
-        display = this.visible,
-        background = this.background,
-        label = this.label
     )
 }
 
@@ -150,7 +139,7 @@ fun LoadingIndicatorConfigDto.toLoadingIndicator(): LoadingIndicatorConfig {
 
 fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
     return MonetizationConfig(
-        ads = io.nosyntax.foundation.domain.model.app_config.MonetizationConfig.Ads(
+        ads = MonetizationConfig.Ads(
             enabled = this.ads.enabled,
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay
@@ -174,10 +163,11 @@ fun NavigationConfigDto.toNavigation(): NavigationConfig {
         default = this.default,
         items = this.items.map { item ->
             NavigationItem(
-                route = item.route,
+                id = item.id,
+                type = item.type,
                 label = item.label,
                 icon = item.icon,
-                deeplink = item.deeplink
+                url = item.url
             )
         }
     )

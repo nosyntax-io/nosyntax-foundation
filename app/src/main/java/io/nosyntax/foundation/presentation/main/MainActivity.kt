@@ -52,10 +52,10 @@ class MainActivity : ComponentActivity() {
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             when {
                 state.response != null && state.error == null -> {
-                    val theme = state.response.app.configuration.theme
+                    val theme = state.response.app.theme
                     val colorScheme = theme.colorScheme
                     val typography = theme.typography
-                    val components = state.response.app.configuration.components
+                    val components = state.response.app.components
 
                     val dynamicColorScheme = DynamicColorScheme(
                         colorPrimary = Color(parseColor(colorScheme.primary)),

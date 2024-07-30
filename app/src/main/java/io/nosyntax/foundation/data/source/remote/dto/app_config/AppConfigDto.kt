@@ -16,7 +16,13 @@ data class AppConfigDto(
         val category: String,
         @SerializedName("description")
         val description: String,
+        @SerializedName("theme")
+        val theme: ThemeConfigDto,
+        @SerializedName("components")
+        val components: ComponentsConfigDto,
         @SerializedName("configuration")
-        val configuration: ConfigurationDto
+        val configuration: ConfigurationDto,
+        @SerializedName("navigation")
+    val navigation: NavigationConfigDto
     )
 }

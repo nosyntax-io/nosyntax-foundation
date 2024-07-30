@@ -9,13 +9,15 @@ data class NavigationConfigDto(
     val items: List<NavigationItem>) {
 
     data class NavigationItem(
-        @SerializedName("route")
-        val route: String,
+        @SerializedName("id")
+        val id: String,
+        @SerializedName("type")
+        val type: String,
         @SerializedName("label")
         val label: String?,
         @SerializedName("icon")
         val icon: String?,
-        @SerializedName("deeplink")
-        val deeplink: String
+        @SerializedName("url")
+        val url: String?
     )
 }

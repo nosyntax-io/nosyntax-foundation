@@ -32,7 +32,6 @@ import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.presentation.navigation.component.SideMenu
 import io.nosyntax.foundation.presentation.main.MainViewModel
-import io.nosyntax.foundation.presentation.navigation.component.BottomBar
 import io.nosyntax.foundation.presentation.navigation.graph.NavigationGraph
 import io.nosyntax.foundation.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
@@ -52,8 +51,8 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     appConfig?.let { config ->
-        val components = config.app.configuration.components
-        val navigationItems = config.app.configuration.navigation.items
+        val components = config.app.components
+        val navigationItems = config.app.navigation.items
 
         val content: @Composable () -> Unit = {
             HomeContent(
@@ -100,10 +99,10 @@ private fun HomeContent(
     navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
-    val components = appConfig.app.configuration.components
+    val components = appConfig.app.components
     val snackbarHostState = remember { SnackbarHostState() }
     val selectedItem = navigationItems.find {
-        it.route == currentRoute
+        it.id == currentRoute
     }
 
     Scaffold(
@@ -149,15 +148,5 @@ private fun HomeContent(
                 )
             }
         },
-        bottomBar = {
-            if (components.bottomBar.display && !isUtilityScreen(currentRoute)) {
-                BottomBar(
-                    bottomBarConfig = components.bottomBar,
-                    navController = navController,
-                    currentRoute = currentRoute,
-                    navigationItems = navigationItems
-                )
-            }
-        }
     )
 }
