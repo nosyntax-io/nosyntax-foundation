@@ -1,0 +1,111 @@
+{
+  "app": {
+    "id": "io.nosyntax.foundation.android",
+    "name": "NoSyntax",
+    "category": "Other",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    "theme": {
+      "color_scheme": {
+        "primary": "#1d6af5",
+        "on_primary": "#FFFFFF",
+        "secondary": "#1d6af5",
+        "on_secondary": "#FFFFFF",
+        "background_light": "#ecedef",
+        "on_background_light": "#041a1b",
+        "surface_light": "#f4f4f4",
+        "on_surface_light": "#041a1b",
+        "background_dark": "#1a1b20",
+        "on_background_dark": "#eeeeee",
+        "surface_dark": "#232429",
+        "on_surface_dark": "#eeeeee"
+      },
+      "typography": {
+        "primary_font_family": "Poppins",
+        "secondary_font_family": "Poppins"
+      },
+      "settings": {
+        "dark_mode": true
+      }
+    },
+    "components": {
+      "app_bar": {
+        "visible": true,
+        "background": "solid",
+        "title": {
+          "visible": true,
+          "alignment": "start"
+        }
+      },
+      "side_menu": {
+        "visible": true,
+        "background": "neutral",
+        "header": {
+          "visible": true,
+          "image": "https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&w=600"
+        }
+      },
+      "loading_indicator": {
+        "visible": true,
+        "animation": "loading_indicator_5",
+        "background": "neutral",
+        "color": "solid"
+      }
+    },
+    "navigation": {
+      "default": "home",
+      "items": [
+        {
+          "id": "home",
+          "type": "webview",
+          "label": "Home",
+          "icon": "https://img.icons8.com/?size=256&id=gE0woMnZGtua&format=png",
+          "url": "https://medium.com"
+        },
+        {
+          "id": "store",
+          "type": "webview",
+          "label": "Store 1",
+          "icon": "https://img.icons8.com/?size=100&id=dosi6bTgHIrs&format=png",
+          "url": "https://facebook.com"
+        },
+        {
+          "id": "news",
+          "type": "webview",
+          "label": "News",
+          "icon": "https://img.icons8.com/?size=256&id=D9RFWfYE57lW&format=png",
+          "url": "https://instagram.com"
+        },
+        {
+          "id": "profile",
+          "type": "settings",
+          "label": "Profile",
+          "icon": "https://img.icons8.com/?size=100&id=kvqTlMRogUYm&format=png"
+        },
+        {
+          "id": "about",
+          "type": "about",
+          "label": "About Us",
+          "icon": "https://img.icons8.com/?size=100&id=ABCD1234&format=png"
+        }
+      ]
+    },
+    "configuration": {
+      "monetization_options": {
+        "ads": {
+          "enabled": true,
+          "banner_display": true,
+          "interstitial_display": true
+        }
+      },
+      "modules": {
+        "webkit": {
+          "user_agent": {
+            "android": "",
+            "ios": ""
+          },
+          "custom_css": ""
+        }
+      }
+    }
+  }
+}

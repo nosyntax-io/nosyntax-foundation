@@ -3,18 +3,18 @@ package io.nosyntax.foundation.ui.theme
 import androidx.compose.ui.graphics.Color
 
 data class DynamicColorScheme(
-    val colorPrimary: Color = ColorPrimary,
-    val colorOnPrimary: Color = ColorOnPrimary,
-    val colorSecondary: Color = ColorSecondary,
-    val colorOnSecondary: Color = ColorOnSecondary,
-    val colorBackgroundLight: Color = ColorBackgroundLight,
-    val colorOnBackgroundLight: Color = ColorOnBackgroundLight,
-    val colorSurfaceLight: Color = ColorSurfaceLight,
-    val colorOnSurfaceLight: Color = ColorOnSurfaceLight,
-    val colorBackgroundDark: Color = ColorBackgroundDark,
-    val colorOnBackgroundDark: Color = ColorOnBackgroundDark,
-    val colorSurfaceDark: Color = ColorSurfaceDark,
-    val colorOnSurfaceDark: Color = ColorOnSurfaceDark
+    val primary: Color = ColorPrimary,
+    val onPrimary: Color = ColorOnPrimary,
+    val secondary: Color = ColorSecondary,
+    val onSecondary: Color = ColorOnSecondary,
+    val backgroundLight: Color = ColorBackgroundLight,
+    val onBackgroundLight: Color = ColorOnBackgroundLight,
+    val surfaceLight: Color = ColorSurfaceLight,
+    val onSurfaceLight: Color = ColorOnSurfaceLight,
+    val backgroundDark: Color = ColorBackgroundDark,
+    val onBackgroundDark: Color = ColorOnBackgroundDark,
+    val surfaceDark: Color = ColorSurfaceDark,
+    val onSurfaceDark: Color = ColorOnSurfaceDark
 )
 
 val ColorPrimary = Color(0xFF8EBBFF)

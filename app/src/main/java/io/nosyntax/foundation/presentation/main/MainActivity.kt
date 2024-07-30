@@ -58,18 +58,18 @@ class MainActivity : ComponentActivity() {
                     val components = state.response.app.configuration.components
 
                     val dynamicColorScheme = DynamicColorScheme(
-                        colorPrimary = Color(parseColor(colorScheme.primary)),
-                        colorOnPrimary = Color(parseColor(colorScheme.onPrimary)),
-                        colorSecondary = Color(parseColor(colorScheme.secondary)),
-                        colorOnSecondary = Color(parseColor(colorScheme.onSecondary)),
-                        colorBackgroundLight = Color(parseColor(colorScheme.backgroundLight)),
-                        colorOnBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
-                        colorSurfaceLight = Color(parseColor(colorScheme.surfaceLight)),
-                        colorOnSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
-                        colorBackgroundDark = Color(parseColor(colorScheme.backgroundDark)),
-                        colorOnBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
-                        colorSurfaceDark = Color(parseColor(colorScheme.surfaceDark)),
-                        colorOnSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark))
+                        primary = Color(parseColor(colorScheme.primary)),
+                        onPrimary = Color(parseColor(colorScheme.onPrimary)),
+                        secondary = Color(parseColor(colorScheme.secondary)),
+                        onSecondary = Color(parseColor(colorScheme.onSecondary)),
+                        backgroundLight = Color(parseColor(colorScheme.backgroundLight)),
+                        onBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
+                        surfaceLight = Color(parseColor(colorScheme.surfaceLight)),
+                        onSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
+                        backgroundDark = Color(parseColor(colorScheme.backgroundDark)),
+                        onBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
+                        surfaceDark = Color(parseColor(colorScheme.surfaceDark)),
+                        onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark))
                     )
                     val dynamicTypography = DynamicTypography(
                         primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),
