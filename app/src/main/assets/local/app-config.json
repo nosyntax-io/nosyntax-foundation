@@ -45,7 +45,7 @@
         }
       },
       "loading_indicator": {
-        "visible": true,
+        "visible": false,
         "animation": "loading_indicator_5",
         "background": "neutral",
         "color": "solid"
@@ -59,7 +59,7 @@
           "type": "webview",
           "label": "Home",
           "icon": "https://img.icons8.com/?size=256&id=gE0woMnZGtua&format=png",
-          "url": "https://medium.com"
+          "url": "https://google.com"
         },
         {
           "id": "store",
