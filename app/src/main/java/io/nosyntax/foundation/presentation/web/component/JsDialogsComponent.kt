@@ -78,7 +78,7 @@ fun AlertDialogComponent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.i_understand),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -131,7 +131,7 @@ fun ConfirmDialogComponent(
                         Text(
                             text = stringResource(id = R.string.cancel),
                             modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -148,7 +148,7 @@ fun ConfirmDialogComponent(
                         Text(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -209,7 +209,7 @@ fun PromptDialogComponent(
                         Text(
                             text = stringResource(id = R.string.cancel),
                             modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -226,7 +226,7 @@ fun PromptDialogComponent(
                         Text(
                             text = stringResource(id = R.string.confirm),
                             modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }

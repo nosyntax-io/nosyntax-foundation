@@ -66,6 +66,7 @@ val Typography = Typography(
     ),
     titleLarge = Typography().titleLarge.copy(
         fontFamily = TemplateFont,
+        fontWeight = FontWeight.Medium,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
@@ -108,6 +109,7 @@ val Typography = Typography(
     ),
     labelMedium = Typography().labelMedium.copy(
         fontFamily = TemplateFont,
+        lineHeight = 20.0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
