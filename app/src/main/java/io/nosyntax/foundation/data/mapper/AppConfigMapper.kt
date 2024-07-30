@@ -5,7 +5,6 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.ModulesConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.SideMenuConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ColorSchemeConfigDto
@@ -18,13 +17,11 @@ import io.nosyntax.foundation.domain.model.app_config.ThemeConfig
 import io.nosyntax.foundation.domain.model.app_config.ComponentsConfig
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.LoadingIndicatorConfig
-import io.nosyntax.foundation.domain.model.app_config.ModulesConfig
 import io.nosyntax.foundation.domain.model.app_config.MonetizationConfig
 import io.nosyntax.foundation.domain.model.app_config.TypographyConfig
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.domain.model.app_config.ColorSchemeConfig
 import io.nosyntax.foundation.domain.model.app_config.NavigationConfig
-import io.nosyntax.foundation.domain.model.app_config.WebKitConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
     val (app) = this
@@ -48,11 +45,10 @@ fun AppConfigDto.App.toApp(): AppConfig.App {
 }
 
 fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
-    val (monetization, modules) = this
+    val (monetization) = this
 
     return AppConfig.Configuration(
-        monetization = monetization.toMonetization(),
-        modules = modules.toModules(),
+        monetization = monetization.toMonetization()
     )
 }
 
@@ -143,17 +139,6 @@ fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
             enabled = this.ads.enabled,
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay
-        )
-    )
-}
-
-fun ModulesConfigDto.toModules(): ModulesConfig {
-    return ModulesConfig(
-        webkit = WebKitConfig(
-            userAgent = WebKitConfig.UserAgent(
-                android = this.webkit.userAgent.android
-            ),
-            customCss = this.webkit.customCss
         )
     )
 }

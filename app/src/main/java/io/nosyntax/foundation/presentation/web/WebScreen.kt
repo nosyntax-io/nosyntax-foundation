@@ -72,8 +72,6 @@ fun WebScreen(
 ) {
     val context = LocalContext.current
 
-    val webKitConfig = appConfig.app.configuration.modules.webkit
-
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
 
@@ -138,10 +136,6 @@ fun WebScreen(
                         setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
                     }
 
-                    if (webKitConfig.userAgent.android != "") {
-                        settings.userAgentString = webKitConfig.userAgent.android
-                    }
-
                     addJavascriptInterface(
                         JavaScriptInterface(
                             context = context,
@@ -172,16 +166,7 @@ fun WebScreen(
                     }
                     isRefreshing = false
                 },
-                onResourceLoaded = {
-                    val resourceContainer =
-                        """javascript:(function() { 
-                        var node = document.createElement('style');
-                        node.type = 'text/css';
-                        node.innerHTML = '${webKitConfig.customCss}';
-                        document.head.appendChild(node);
-                    })()""".trimIndent()
-                    navigator.loadUrl(resourceContainer)
-                },
+                onResourceLoaded = { },
                 onRequestInterrupted = {
                     noConnectionState = true
                 }
