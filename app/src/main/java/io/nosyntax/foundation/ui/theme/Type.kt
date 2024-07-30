@@ -28,152 +28,92 @@ val TemplateFont = FontFamily(
 )
 
 val Typography = Typography(
-    displayLarge = TextStyle(
+    displayLarge = Typography().displayLarge.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Light,
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    displayMedium = TextStyle(
+    displayMedium = Typography().displayMedium.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Light,
-        fontSize = 45.sp,
-        lineHeight = 52.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    displaySmall = TextStyle(
+    displaySmall = Typography().displaySmall.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 36.sp,
-        lineHeight = 44.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    headlineLarge = TextStyle(
+    headlineLarge = Typography().headlineLarge.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 32.sp,
-        lineHeight = 40.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    headlineMedium = TextStyle(
+    headlineMedium = Typography().headlineMedium.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 36.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    headlineSmall = TextStyle(
+    headlineSmall = Typography().headlineSmall.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    titleLarge = TextStyle(
+    titleLarge = Typography().titleLarge.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    titleMedium = TextStyle(
+    titleMedium = Typography().titleMedium.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    titleSmall = TextStyle(
+    titleSmall = Typography().titleSmall.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    bodyLarge = TextStyle(
+    bodyLarge = Typography().bodyLarge.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    bodyMedium = TextStyle(
+    bodyMedium = Typography().bodyMedium.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.25.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    bodySmall = TextStyle(
+    bodySmall = Typography().bodySmall.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.Medium,
-        fontSize = 13.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.4.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    labelLarge = TextStyle(
+    labelLarge = Typography().labelLarge.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    labelMedium = TextStyle(
+    labelMedium = Typography().labelMedium.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
     ),
-    labelSmall = TextStyle(
+    labelSmall = Typography().labelSmall.copy(
         fontFamily = TemplateFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
