@@ -20,16 +20,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.TextFieldComponent
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 sealed class JsDialog {
@@ -236,10 +235,10 @@ fun PromptDialogComponent(
     )
 }
 
+@Previews
 @Composable
-@Preview
 fun AlertDialogPreview() {
-    DynamicTheme(darkTheme = false) {
+    DynamicTheme {
         AlertDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onConfirm = { }
@@ -247,10 +246,10 @@ fun AlertDialogPreview() {
     }
 }
 
+@Previews
 @Composable
-@Preview
 fun ConfirmDialogPreview() {
-    DynamicTheme(darkTheme = false) {
+    DynamicTheme {
         ConfirmDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onCancel = { },
@@ -259,10 +258,10 @@ fun ConfirmDialogPreview() {
     }
 }
 
+@Previews
 @Composable
-@Preview
 fun PromptDialogPreview() {
-    DynamicTheme(darkTheme = false) {
+    DynamicTheme {
         PromptDialogComponent(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             defaultValue = "",
@@ -271,4 +270,3 @@ fun PromptDialogPreview() {
         )
     }
 }
-

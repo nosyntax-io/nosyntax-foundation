@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -143,10 +143,10 @@ fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
     )
 }
 
+@Previews
 @Composable
-@Preview
 fun AppBarPreview() {
-    DynamicTheme(darkTheme = false) {
+    DynamicTheme {
         AppBar(
             appBarConfig = AppBarConfig(
                 visibile = true,

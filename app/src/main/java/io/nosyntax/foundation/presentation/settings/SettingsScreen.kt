@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +23,7 @@ import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.Intents.openEmail
 import io.nosyntax.foundation.core.utility.Intents.openPlayStore
 import io.nosyntax.foundation.core.utility.Intents.openUrl
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.ui.theme.DynamicTheme
@@ -92,10 +92,10 @@ fun SettingDivider() {
     )
 }
 
-@Preview
+@Previews
 @Composable
 fun SettingsScreenPreview() {
-    DynamicTheme(darkTheme = true) {
+    DynamicTheme {
         SettingsScreen(navController = rememberNavController())
     }
 }

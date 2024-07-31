@@ -21,9 +21,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import io.nosyntax.foundation.core.utility.ThemePreviews
 import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -57,13 +57,14 @@ private fun shimmerColors(baseColor: Color): List<Color> {
     return listOf(baseColor, baseColor.copy(alpha = 0.3f), baseColor)
 }
 
-@Preview
+@ThemePreviews
 @Composable
 fun ShimmerPreview() {
-    DynamicTheme(darkTheme = false) {
+    DynamicTheme {
         Box(modifier = Modifier
             .fillMaxWidth()
             .height(170.dp)
+            .background(MaterialTheme.colorScheme.background)
             .shimmerEffect()
         )
     }

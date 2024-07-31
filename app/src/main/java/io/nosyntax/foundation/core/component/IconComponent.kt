@@ -3,26 +3,24 @@ package io.nosyntax.foundation.core.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import io.nosyntax.foundation.core.utility.ThemePreviews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
@@ -95,27 +93,31 @@ private fun AsyncImageIcon(
     )
 }
 
+@ThemePreviews
 @Composable
-@Preview
 fun IconPreview() {
-    DynamicTheme(darkTheme = false) {
-        Icon(
-            modifier = Modifier.size(80.dp),
-            source = painterResource(id = R.drawable.icon_circle_outline),
-            tint = MaterialTheme.colorScheme.onBackground
-        )
+    DynamicTheme {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            Icon(
+                modifier = Modifier.size(80.dp),
+                source = painterResource(id = R.drawable.icon_circle_outline),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        }
     }
 }
 
+@ThemePreviews
 @Composable
-@Preview
 fun ClickableIconPreview() {
-    DynamicTheme(darkTheme = false) {
-        ClickableIcon(
-            modifier = Modifier.size(80.dp),
-            source = painterResource(id = R.drawable.icon_circle_outline),
-            tint = MaterialTheme.colorScheme.onBackground,
-            onClick = { }
-        )
+    DynamicTheme {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            ClickableIcon(
+                modifier = Modifier.size(80.dp),
+                source = painterResource(id = R.drawable.icon_circle_outline),
+                tint = MaterialTheme.colorScheme.onBackground,
+                onClick = { }
+            )
+        }
     }
 }

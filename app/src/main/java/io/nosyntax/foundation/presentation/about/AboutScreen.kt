@@ -22,11 +22,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.core.utility.Utilities
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.presentation.main.MainActivity
@@ -91,10 +91,10 @@ fun AboutScreen(
     }
 }
 
-@Preview
+@Previews
 @Composable
 fun AboutScreenPreview() {
-    DynamicTheme(darkTheme = true) {
+    DynamicTheme {
         AboutScreen(
             appDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             navController = rememberNavController()
