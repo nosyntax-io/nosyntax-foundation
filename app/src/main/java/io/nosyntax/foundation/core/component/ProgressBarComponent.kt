@@ -1,16 +1,12 @@
 package io.nosyntax.foundation.core.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -55,24 +51,6 @@ fun AnimatedProgressBar(
     )
 }
 
-@Preview
-@Composable
-fun AnimatedProgressBarPreview() {
-    DynamicTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            AnimatedProgressBar(
-                modifier = Modifier.size(30.dp),
-                source = LottieCompositionSpec.Url(
-                    "https://lottie.host/b668a47d-6c6a-4016-b065-d7148975cd91/b8d2lCbOmv.json"
-                )
-            )
-        }
-    }
-}
-
 @Composable
 fun CircularProgressBar(
     modifier: Modifier = Modifier,
@@ -82,9 +60,7 @@ fun CircularProgressBar(
     )
 ) {
     CircularProgressIndicator(
-        modifier = modifier
-            .padding(20.dp)
-            .size(25.dp),
+        modifier = modifier.padding(20.dp).size(25.dp),
         color = color,
         strokeWidth = 2.5.dp
     )
@@ -92,16 +68,21 @@ fun CircularProgressBar(
 
 @Preview
 @Composable
+fun AnimatedProgressBarPreview() {
+    DynamicTheme {
+        AnimatedProgressBar(
+            modifier = Modifier.size(30.dp),
+            source = LottieCompositionSpec.Url(
+                "https://lottie.host/b668a47d-6c6a-4016-b065-d7148975cd91/b8d2lCbOmv.json"
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
 fun CircularProgressBarPreview() {
     DynamicTheme(darkTheme = false) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = MaterialTheme.colorScheme.background
-                )
-        ) {
-            CircularProgressBar()
-        }
+        CircularProgressBar()
     }
 }
