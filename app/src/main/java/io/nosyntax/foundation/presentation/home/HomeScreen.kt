@@ -67,9 +67,9 @@ fun HomeScreen(
             )
         }
 
-        if (components.sideMenu.display) {
+        if (components.sideMenu.visible) {
             SideMenu(
-                sideMenuConfig = components.sideMenu,
+                config = components.sideMenu,
                 navController = navController,
                 currentRoute = currentRoute,
                 navigationItems = navigationItems,
@@ -115,7 +115,7 @@ private fun HomeContent(
         topBar = {
             if (components.appBar.visibile) {
                 val navigationActionType = if (isUtilityScreen(currentRoute)) NavigationActionType.Back
-                else NavigationActionType.Menu(isEnabled = components.sideMenu.display)
+                else NavigationActionType.Menu(isEnabled = components.sideMenu.visible)
 
                 AppBar(
                     appBarConfig = components.appBar,

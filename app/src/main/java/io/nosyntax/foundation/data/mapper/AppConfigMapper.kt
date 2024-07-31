@@ -117,10 +117,10 @@ fun AppBarConfigDto.toAppBar(): AppBarConfig {
 
 fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
     return SideMenuConfig(
-        display = this.visible,
+        visible = this.visible,
         background = this.background,
         header = SideMenuConfig.Header(
-            display = this.header.visible,
+            visible = this.header.visible,
             image = this.header.image
         )
     )

@@ -1,8 +1,6 @@
 package io.nosyntax.foundation.presentation.navigation.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -37,7 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.component.Image
-import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.presentation.navigation.graph.NavigationActions
@@ -46,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SideMenu(
-    sideMenuConfig: SideMenuConfig,
+    config: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
@@ -58,7 +54,7 @@ fun SideMenu(
         gesturesEnabled = drawerState.isOpen,
         drawerContent = {
             SideMenuContent(
-                sideMenuConfig = sideMenuConfig,
+                config = config,
                 navController = navController,
                 currentRoute = currentRoute,
                 navigationItems = navigationItems,
@@ -71,7 +67,7 @@ fun SideMenu(
 
 @Composable
 fun SideMenuContent(
-    sideMenuConfig: SideMenuConfig,
+    config: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
     navigationItems: List<NavigationItem>,
@@ -79,123 +75,96 @@ fun SideMenuContent(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val containerColor = when (sideMenuConfig.background) {
+    val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
         Constants.BACKGROUND_SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.BACKGROUND_GRADIENT -> {
-            Modifier.background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.secondary
-                    )
-                )
+        Constants.BACKGROUND_GRADIENT -> Modifier.background(
+            brush = Brush.verticalGradient(
+                colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
             )
-        }
+        )
         else -> Modifier
     }
 
     ModalDrawerSheet(
         modifier = Modifier
-            .padding(end = 90.dp)
+            .padding(end = 100.dp)
             .clip(shape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp))
-            .then(other = containerColor),
+            .then(backgroundModifier),
         drawerContainerColor = Color.Transparent,
-        content = {
-            SideMenuHeader(sideMenuConfig = sideMenuConfig)
-            Spacer(modifier = Modifier.height(20.dp))
-            LazyColumn(content = {
-                items(navigationItems.size) { index ->
-                    val item = navigationItems[index]
-                    when (item.type) {
-                        "divider" -> {
-                            val dividerColor = MaterialTheme.colorScheme.let {
-                                if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL)
-                                    setColorContrast(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
-                                else Color.White.copy(alpha = .6f)
-                            }
-                            Divider(
-                                modifier = Modifier.padding(vertical = 7.dp),
-                                thickness = 1.dp,
-                                color = dividerColor
-                            )
-                        }
-                        else -> {
-                            SideMenuItem(
-                                sideMenuConfig = sideMenuConfig,
-                                currentRoute = currentRoute,
-                                item = item,
-                                onClick = {
-                                    NavigationActions(navController).navigateTo(
-                                        currentRoute = currentRoute,
-                                        route = item.id
-                                    )
-                                    coroutineScope.launch {
-                                        drawerState.close()
-                                    }
-                                }
-                            )
+        drawerContentColor = Color.Transparent
+    ) {
+        SideMenuHeader(config = config)
+        Spacer(modifier = Modifier.height(20.dp))
+        LazyColumn {
+            items(navigationItems.size) { index ->
+                val item = navigationItems[index]
+
+                SideMenuItem(
+                    config = config,
+                    currentRoute = currentRoute,
+                    item = item,
+                    onClick = {
+                        NavigationActions(navController).navigateTo(
+                            currentRoute = currentRoute,
+                            route = item.id
+                        )
+                        coroutineScope.launch {
+                            drawerState.close()
                         }
                     }
-                }
-            })
+                )
+            }
         }
-    )
+    }
 }
 
 @Composable
-fun SideMenuHeader(sideMenuConfig: SideMenuConfig, headerHeight: Dp = 150.dp) {
-    val header = sideMenuConfig.header
-    if (header.display) {
-        Box(
+fun SideMenuHeader(config: SideMenuConfig, headerHeight: Dp = 150.dp) {
+    if (config.header.visible) {
+        Image(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(headerHeight)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
-            content = {
-                Image(
-                    modifier = Modifier.fillMaxWidth(),
-                    source = header.image
-                )
-            }
+            source = config.header.image
         )
     }
 }
 
 @Composable
 fun SideMenuItem(
-    sideMenuConfig: SideMenuConfig,
+    config: SideMenuConfig,
     currentRoute: String,
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val contentColor = MaterialTheme.colorScheme.let {
-        if (sideMenuConfig.background == Constants.BACKGROUND_NEUTRAL)
-            it.onSurface else it.onPrimary
-    }
-
     val isSelected = currentRoute == item.id
-    val unselectedColor = contentColor.copy(alpha = 0.8f)
+    val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.primary to MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onPrimary to MaterialTheme.colorScheme.onPrimary
+    }
 
     NavigationDrawerItem(
         modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
-        selected = currentRoute == item.id,
+        selected = isSelected,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            selectedContainerColor = containerColor.copy(alpha = .1f),
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = contentColor,
             selectedIconColor = contentColor,
-            unselectedTextColor = if (isSelected) contentColor else unselectedColor,
-            unselectedIconColor = if (isSelected) contentColor else unselectedColor,
+            unselectedTextColor = contentColor.copy(alpha = 0.8f),
+            unselectedIconColor = contentColor.copy(alpha = 0.8f)
         ),
         label = {
             if (item.label != null) {
@@ -216,30 +185,36 @@ fun SideMenuItem(
     )
 }
 
-@Preview
+@Previews
 @Composable
 private fun SideMenuPreview() {
     DynamicTheme {
         val navController = rememberNavController()
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-        val currentRoute by remember { mutableStateOf("item1") }
+        val drawerState = rememberDrawerState(DrawerValue.Open)
+        val currentRoute by remember { mutableStateOf("1") }
 
-        /*SideMenu(
-            sideMenuConfig = SideMenuConfig(
-                display = true,
+        val items = listOf(
+            NavigationItem("1", "", "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            NavigationItem("2", "", "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            NavigationItem("3", "", "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
+            NavigationItem("4", "", "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
+            NavigationItem("5", "", "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
+        )
+
+        SideMenu(
+            config = SideMenuConfig(
+                visible = true,
                 background = Constants.BACKGROUND_NEUTRAL,
                 header = SideMenuConfig.Header(
-                    display = true,
+                    visible = true,
                     image = "https://via.placeholder.com/700x400"
                 )
             ),
             navController = navController,
             currentRoute = currentRoute,
-            navigationItems = generateMockNavigationItems(
-                itemCount = 10
-            ),
+            navigationItems = items,
             drawerState = drawerState,
             content = { }
-        )*/
+        )
     }
 }
