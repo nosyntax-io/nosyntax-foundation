@@ -56,7 +56,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         Spacer(modifier = Modifier.height(7.dp))
         Text(
             text = stringResource(id = R.string.no_internet_connection_description),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
