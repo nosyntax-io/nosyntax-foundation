@@ -10,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -48,11 +47,8 @@ fun AppBar(
             color = MaterialTheme.colorScheme.primary
         )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
-            Brush.horizontalGradient(
-                colors = listOf(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary
-                )
+            brush = Brush.horizontalGradient(
+                listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
             )
         )
         else -> Modifier
@@ -63,10 +59,9 @@ fun AppBar(
         .then(backgroundModifier)
 
     val appBarTitle: @Composable () -> Unit = {
-        AppBarTitle(
-            appBarConfig = appBarConfig,
-            title = title
-        )
+        if (appBarConfig.title.visible) {
+            AppBarTitle(title = title)
+        }
     }
 
     val appBarNavigationIcon: @Composable () -> Unit = {
@@ -89,17 +84,30 @@ fun AppBar(
         }
     }
 
-    if (appBarConfig.title.position == Constants.ALIGNMENT_CENTER) {
+    val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onPrimary
+    }
+
+    val appBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+        titleContentColor = contentColor,
+        navigationIconContentColor = contentColor,
+        actionIconContentColor = contentColor
+    )
+
+    if (appBarConfig.title.alignment == Constants.ALIGNMENT_CENTER) {
         CenterAlignedTopAppBar(
             modifier = appBarModifier,
-            colors = appBarColors(appBarConfig),
+            colors = appBarColors,
             title = appBarTitle,
             navigationIcon = appBarNavigationIcon
         )
     } else {
         TopAppBar(
             modifier = appBarModifier,
-            colors = appBarColors(appBarConfig),
+            colors = appBarColors,
             title = appBarTitle,
             navigationIcon = appBarNavigationIcon
         )
@@ -107,19 +115,17 @@ fun AppBar(
 }
 
 @Composable
-fun AppBarTitle(appBarConfig: AppBarConfig, title: String) {
-    if (appBarConfig.title.display) {
-        Box(
-            modifier = Modifier.fillMaxHeight(),
-            contentAlignment = Alignment.Center,
-            content = {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        )
-    }
+fun AppBarTitle(title: String) {
+    Box(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.Center,
+        content = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    )
 }
 
 @Composable
@@ -128,29 +134,12 @@ fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.Center,
         content = {
-            DynamicClickableIcon(
+            ClickableIcon(
                 modifier = Modifier.size(30.dp),
                 source = icon,
                 onClick = onClick
             )
         }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun appBarColors(appBarConfig: AppBarConfig): TopAppBarColors {
-    val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
-    }
-
-    return TopAppBarDefaults.topAppBarColors(
-        containerColor = Color.Transparent,
-        titleContentColor = contentColor,
-        navigationIconContentColor = contentColor,
-        actionIconContentColor = contentColor
     )
 }
 
@@ -160,11 +149,11 @@ fun AppBarPreview() {
     DynamicTheme(darkTheme = false) {
         AppBar(
             appBarConfig = AppBarConfig(
-                display = true,
+                visibile = true,
                 background = Constants.BACKGROUND_SOLID,
                 title = AppBarConfig.Title(
-                    display = true,
-                    position = Constants.ALIGNMENT_CENTER
+                    visible = true,
+                    alignment = Constants.ALIGNMENT_CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),

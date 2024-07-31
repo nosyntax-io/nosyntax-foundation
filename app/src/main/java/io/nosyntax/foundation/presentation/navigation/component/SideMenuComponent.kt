@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.DynamicIcon
-import io.nosyntax.foundation.core.component.DynamicImage
+import io.nosyntax.foundation.core.component.Icon
+import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
@@ -158,7 +158,7 @@ fun SideMenuHeader(sideMenuConfig: SideMenuConfig, headerHeight: Dp = 150.dp) {
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
             content = {
-                DynamicImage(
+                Image(
                     modifier = Modifier.fillMaxWidth(),
                     source = header.image
                 )
@@ -207,7 +207,7 @@ fun SideMenuItem(
         },
         icon = {
             if (item.icon != null) {
-                DynamicIcon(
+                Icon(
                     modifier = Modifier.size(22.dp),
                     source = item.icon
                 )

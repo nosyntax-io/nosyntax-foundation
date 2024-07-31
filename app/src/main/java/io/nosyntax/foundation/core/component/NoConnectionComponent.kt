@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,13 +42,13 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier.width(130.dp).height(130.dp),
+            modifier = Modifier.size(140.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
             colorFilter = ColorFilter.tint(color = setColorContrast(
                 isDark = isSystemInDarkTheme(),
-                color = MaterialTheme.colorScheme.surface)
-            )
+                color = MaterialTheme.colorScheme.surface
+            ))
         )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
@@ -55,11 +56,10 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(7.dp))
         Text(
-            modifier = Modifier.alpha(.7f),
             text = stringResource(id = R.string.no_internet_connection_description),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
@@ -76,8 +76,8 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.try_again),
                 modifier = Modifier.padding(horizontal = 30.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -87,8 +87,6 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
 @Preview
 fun NoConnectionPreview() {
     DynamicTheme(darkTheme = false) {
-        NoConnectionComponent {
-
-        }
+        NoConnectionComponent { }
     }
 }

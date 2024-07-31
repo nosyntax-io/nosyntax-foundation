@@ -1,6 +1,5 @@
 package io.nosyntax.foundation.core.component
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
@@ -27,16 +26,11 @@ fun SnackbarComponent(
         contentColor = Color.White,
         shape = MaterialTheme.shapes.medium
     ) {
-        CompositionLocalProvider(
-            LocalLayoutDirection provides
-                if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-        ) {
-            Row {
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -44,7 +38,7 @@ fun SnackbarComponent(
 @Preview
 @Composable
 fun SnackbarComponentPreview() {
-    DynamicTheme {
+    DynamicTheme(darkTheme = false) {
         SnackbarComponent(
             message = "Lorem Ipsum is simply dummy text of the printing.",
             isRtl = true

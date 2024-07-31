@@ -1,13 +1,13 @@
 package io.nosyntax.foundation.domain.model.app_config
 
 data class AppBarConfig(
-    val display: Boolean,
+    val visibile: Boolean,
     val background: String,
     val title: Title
 ) {
 
     data class Title(
-        val display: Boolean,
-        val position: String
+        val visible: Boolean,
+        val alignment: String
     )
 }

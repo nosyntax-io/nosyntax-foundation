@@ -54,22 +54,17 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 }
 
 private fun shimmerColors(baseColor: Color): List<Color> {
-    return listOf(
-        baseColor,
-        baseColor.copy(alpha = 0.3f),
-        baseColor
-    )
+    return listOf(baseColor, baseColor.copy(alpha = 0.3f), baseColor)
 }
 
 @Preview
 @Composable
 fun ShimmerPreview() {
     DynamicTheme(darkTheme = false) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(170.dp)
-                .shimmerEffect()
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(170.dp)
+            .shimmerEffect()
         )
     }
 }
