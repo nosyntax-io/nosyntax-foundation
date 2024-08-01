@@ -107,7 +107,7 @@ fun SideMenuContent(
                     onClick = {
                         NavigationActions(navController).navigateTo(
                             currentRoute = currentRoute,
-                            route = item.id
+                            route = item.route
                         )
                         coroutineScope.launch {
                             drawerState.close()
@@ -140,7 +140,7 @@ fun SideMenuItem(
     item: SideMenuConfig.Item,
     onClick: () -> Unit
 ) {
-    val isSelected = currentRoute == item.id
+    val isSelected = currentRoute == item.route
     val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.primary to MaterialTheme.colorScheme.onSurface
     } else {
@@ -190,11 +190,11 @@ private fun SideMenuPreview() {
         val currentRoute by remember { mutableStateOf("1") }
 
         val items = listOf(
-            SideMenuConfig.Item("1", "", "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            SideMenuConfig.Item("2", "", "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            SideMenuConfig.Item("3", "", "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
-            SideMenuConfig.Item("4", "", "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
-            SideMenuConfig.Item("5", "", "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
+            SideMenuConfig.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            SideMenuConfig.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            SideMenuConfig.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
+            SideMenuConfig.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
+            SideMenuConfig.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
         )
 
         SideMenu(

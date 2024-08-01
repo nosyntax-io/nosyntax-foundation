@@ -13,10 +13,9 @@ import io.nosyntax.foundation.presentation.settings.SettingsScreen
 import io.nosyntax.foundation.presentation.web.WebScreen
 
 object Roles {
-    const val ROLE_WEB = "webview"
+    const val ROLE_WEB = "web"
     const val ROLE_SETTINGS = "settings"
     const val ROLE_ABOUT = "about"
-    const val ROLE_DIVIDER = "divider"
 }
 
 @Composable
@@ -28,10 +27,10 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = appConfig.app.components.sideMenu.items.firstOrNull()?.id ?: ""
+        startDestination = appConfig.app.components.sideMenu.items.firstOrNull()?.route ?: ""
     ) {
         appConfig.app.components.sideMenu.items.forEach { item ->
-            composable(route = item.id) {
+            composable(route = item.route) {
                 NavigationHandler(
                     navController = navController,
                     item = item,
@@ -52,21 +51,21 @@ fun NavigationHandler(
     deeplink: Deeplink,
     drawerState: DrawerState
 ) {
-    when (item.type) {
-        Roles.ROLE_WEB -> {
+    when {
+        item.route.startsWith(Roles.ROLE_WEB) -> {
             WebScreen(
                 appConfig = appConfig,
                 url = deeplink.destination.ifEmpty { item.url ?: "" },
                 drawerState = drawerState
             )
         }
-        Roles.ROLE_SETTINGS -> {
+        item.route.startsWith(Roles.ROLE_SETTINGS) -> {
             SettingsScreen(
                 navController = navController
             )
         }
 
-        Roles.ROLE_ABOUT -> {
+        item.route.startsWith(Roles.ROLE_ABOUT) -> {
             AboutScreen(
                 appDescription = appConfig.app.description,
                 navController = navController

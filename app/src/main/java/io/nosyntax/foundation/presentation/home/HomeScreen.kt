@@ -97,7 +97,7 @@ private fun HomeContent(
     val components = appConfig.app.components
     val snackbarHostState = remember { SnackbarHostState() }
     val selectedItem = appConfig.app.components.sideMenu.items.find {
-        it.id == currentRoute
+        it.route == currentRoute
     }
 
     Scaffold(

@@ -121,8 +121,7 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
         ),
         items = this.items.map { item ->
             SideMenuConfig.Item(
-                id = item.id,
-                type = item.type,
+                route = item.route,
                 label = item.label,
                 icon = item.icon,
                 url = item.url
