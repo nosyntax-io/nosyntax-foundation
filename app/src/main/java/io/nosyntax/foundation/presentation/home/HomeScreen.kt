@@ -27,7 +27,6 @@ import io.nosyntax.foundation.core.component.NavigationActionType
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
-import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.presentation.navigation.component.SideMenu
@@ -52,7 +51,6 @@ fun HomeScreen(
 
     appConfig?.let { config ->
         val components = config.app.components
-        val navigationItems = config.app.navigation.items
 
         val content: @Composable () -> Unit = {
             HomeContent(
@@ -62,7 +60,6 @@ fun HomeScreen(
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
-                navigationItems = navigationItems,
                 drawerState = drawerState
             )
         }
@@ -72,7 +69,6 @@ fun HomeScreen(
                 config = components.sideMenu,
                 navController = navController,
                 currentRoute = currentRoute,
-                navigationItems = navigationItems,
                 drawerState = drawerState,
                 content = content
             )
@@ -96,12 +92,11 @@ private fun HomeContent(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     val components = appConfig.app.components
     val snackbarHostState = remember { SnackbarHostState() }
-    val selectedItem = navigationItems.find {
+    val selectedItem = appConfig.app.components.sideMenu.items.find {
         it.id == currentRoute
     }
 
@@ -143,7 +138,6 @@ private fun HomeContent(
                     appConfig = appConfig,
                     deeplink = deeplink,
                     navController = navController,
-                    navigationItems = navigationItems,
                     drawerState = drawerState
                 )
             }

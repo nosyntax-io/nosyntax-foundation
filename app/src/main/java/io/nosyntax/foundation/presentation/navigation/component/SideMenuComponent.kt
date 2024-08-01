@@ -34,7 +34,6 @@ import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.presentation.navigation.graph.NavigationActions
 import io.nosyntax.foundation.ui.theme.DynamicTheme
@@ -45,7 +44,6 @@ fun SideMenu(
     config: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
@@ -57,7 +55,6 @@ fun SideMenu(
                 config = config,
                 navController = navController,
                 currentRoute = currentRoute,
-                navigationItems = navigationItems,
                 drawerState = drawerState
             )
         },
@@ -70,7 +67,6 @@ fun SideMenuContent(
     config: SideMenuConfig,
     navController: NavHostController,
     currentRoute: String,
-    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -101,8 +97,8 @@ fun SideMenuContent(
         SideMenuHeader(config = config)
         Spacer(modifier = Modifier.height(20.dp))
         LazyColumn {
-            items(navigationItems.size) { index ->
-                val item = navigationItems[index]
+            items(config.items.size) { index ->
+                val item = config.items[index]
 
                 SideMenuItem(
                     config = config,
@@ -141,7 +137,7 @@ fun SideMenuHeader(config: SideMenuConfig, headerHeight: Dp = 150.dp) {
 fun SideMenuItem(
     config: SideMenuConfig,
     currentRoute: String,
-    item: NavigationItem,
+    item: SideMenuConfig.Item,
     onClick: () -> Unit
 ) {
     val isSelected = currentRoute == item.id
@@ -194,11 +190,11 @@ private fun SideMenuPreview() {
         val currentRoute by remember { mutableStateOf("1") }
 
         val items = listOf(
-            NavigationItem("1", "", "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            NavigationItem("2", "", "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            NavigationItem("3", "", "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
-            NavigationItem("4", "", "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
-            NavigationItem("5", "", "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
+            SideMenuConfig.Item("1", "", "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            SideMenuConfig.Item("2", "", "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
+            SideMenuConfig.Item("3", "", "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
+            SideMenuConfig.Item("4", "", "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
+            SideMenuConfig.Item("5", "", "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
         )
 
         SideMenu(
@@ -208,11 +204,11 @@ private fun SideMenuPreview() {
                 header = SideMenuConfig.Header(
                     visible = true,
                     image = "https://via.placeholder.com/700x400"
-                )
+                ),
+                items = items
             ),
             navController = navController,
             currentRoute = currentRoute,
-            navigationItems = items,
             drawerState = drawerState,
             content = { }
         )

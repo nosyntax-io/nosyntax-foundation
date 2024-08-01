@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.nosyntax.foundation.domain.model.Deeplink
-import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
+import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.presentation.about.AboutScreen
 import io.nosyntax.foundation.presentation.settings.SettingsScreen
 import io.nosyntax.foundation.presentation.web.WebScreen
@@ -24,14 +24,13 @@ fun NavigationGraph(
     appConfig: AppConfig,
     deeplink: Deeplink,
     navController: NavHostController,
-    navigationItems: List<NavigationItem>,
     drawerState: DrawerState
 ) {
     NavHost(
         navController = navController,
-        startDestination = navigationItems.firstOrNull()?.id ?: ""
+        startDestination = appConfig.app.components.sideMenu.items.firstOrNull()?.id ?: ""
     ) {
-        navigationItems.forEach { item ->
+        appConfig.app.components.sideMenu.items.forEach { item ->
             composable(route = item.id) {
                 NavigationHandler(
                     navController = navController,
@@ -48,7 +47,7 @@ fun NavigationGraph(
 @Composable
 fun NavigationHandler(
     navController: NavHostController,
-    item: NavigationItem,
+    item: SideMenuConfig.Item,
     appConfig: AppConfig,
     deeplink: Deeplink,
     drawerState: DrawerState

@@ -21,8 +21,6 @@ data class AppConfigDto(
         @SerializedName("components")
         val components: ComponentsConfigDto,
         @SerializedName("configuration")
-        val configuration: ConfigurationDto,
-        @SerializedName("navigation")
-    val navigation: NavigationConfigDto
+        val configuration: ConfigurationDto
     )
 }

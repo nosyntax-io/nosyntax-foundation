@@ -9,9 +9,7 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationConf
 import io.nosyntax.foundation.data.source.remote.dto.app_config.SideMenuConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ColorSchemeConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ConfigurationDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.NavigationConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.TypographyConfigDto
-import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
 import io.nosyntax.foundation.domain.model.app_config.ThemeConfig
 import io.nosyntax.foundation.domain.model.app_config.ComponentsConfig
@@ -21,7 +19,6 @@ import io.nosyntax.foundation.domain.model.app_config.MonetizationConfig
 import io.nosyntax.foundation.domain.model.app_config.TypographyConfig
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.domain.model.app_config.ColorSchemeConfig
-import io.nosyntax.foundation.domain.model.app_config.NavigationConfig
 
 fun AppConfigDto.toConfiguration(): AppConfig {
     val (app) = this
@@ -39,8 +36,7 @@ fun AppConfigDto.App.toApp(): AppConfig.App {
         description = this.description,
         theme = this.theme.toTheme(),
         components = this.components.toComponents(),
-        configuration = this.configuration.toConfiguration(),
-        navigation = navigation.toNavigation()
+        configuration = this.configuration.toConfiguration()
     )
 }
 
@@ -122,7 +118,16 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
         header = SideMenuConfig.Header(
             visible = this.header.visible,
             image = this.header.image
-        )
+        ),
+        items = this.items.map { item ->
+            SideMenuConfig.Item(
+                id = item.id,
+                type = item.type,
+                label = item.label,
+                icon = item.icon,
+                url = item.url
+            )
+        }
     )
 }
 
@@ -142,20 +147,5 @@ fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay
         )
-    )
-}
-
-fun NavigationConfigDto.toNavigation(): NavigationConfig {
-    return NavigationConfig(
-        default = this.default,
-        items = this.items.map { item ->
-            NavigationItem(
-                id = item.id,
-                type = item.type,
-                label = item.label,
-                icon = item.icon,
-                url = item.url
-            )
-        }
     )
 }

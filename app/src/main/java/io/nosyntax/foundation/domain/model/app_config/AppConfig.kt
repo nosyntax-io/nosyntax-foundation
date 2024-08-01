@@ -11,8 +11,7 @@ data class AppConfig(
         val description: String,
         val theme: ThemeConfig,
         val components: ComponentsConfig,
-        val configuration: Configuration,
-        val navigation: NavigationConfig
+        val configuration: Configuration
     )
 
     data class Configuration(
