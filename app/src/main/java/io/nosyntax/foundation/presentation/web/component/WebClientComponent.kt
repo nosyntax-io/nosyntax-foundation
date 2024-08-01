@@ -40,7 +40,10 @@ fun webClient(
 
             override fun onReceivedError(view: WebView, request: WebResourceRequest?, error: WebResourceError?) {
                 super.onReceivedError(view, request, error)
-                onRequestInterrupted()
+                val networkErrors = listOf(ERROR_CONNECT, ERROR_TIMEOUT, ERROR_HOST_LOOKUP, ERROR_UNKNOWN)
+                if (request?.isForMainFrame == true && error?.errorCode in networkErrors) {
+                    onRequestInterrupted()
+                }
             }
         }
     }
