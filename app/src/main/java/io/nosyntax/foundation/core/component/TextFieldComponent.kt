@@ -14,17 +14,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onValueChange: (String) -> Unit) {
+fun TextFieldComponent(
+    placeholder: String = "",
+    defaultValue: String = "",
+    onValueChange: (String) -> Unit
+) {
     val inputValue = remember { mutableStateOf(defaultValue) }
+    val interactionSource = remember { MutableInteractionSource() }
 
     BasicTextField(
         value = inputValue.value,
@@ -32,37 +36,37 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             inputValue.value = it
             onValueChange(it)
         },
-        textStyle = MaterialTheme.typography.bodyMedium.copy(
-            MaterialTheme.colorScheme.onSurface
-        ),
         modifier = Modifier
+            .fillMaxWidth()
+            .height(45.dp)
+            .border(0.dp, Color.Transparent)
             .indicatorLine(
                 enabled = true,
                 isError = false,
-                interactionSource = MutableInteractionSource(),
+                interactionSource = interactionSource,
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
                 ),
                 focusedIndicatorLineThickness = 0.dp,
                 unfocusedIndicatorLineThickness = 0.dp
-            )
-            .fillMaxWidth()
-            .border(width = 0.dp, Color.Transparent)
-            .height(45.dp),
-        interactionSource = MutableInteractionSource(),
+            ),
+        textStyle = MaterialTheme.typography.bodyMedium.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        interactionSource = interactionSource,
         enabled = true,
         singleLine = true
     ) {
         TextFieldDefaults.DecorationBox(
             value = inputValue.value,
             innerTextField = it,
-            singleLine = true,
             enabled = true,
+            singleLine = true,
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
@@ -73,13 +77,12 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
             trailingIcon = { /* ... */ },
             placeholder = {
                 Text(
-                    modifier = Modifier.alpha(.7f),
                     text = placeholder,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f)
                 )
             },
-            interactionSource = MutableInteractionSource(),
+            interactionSource = interactionSource,
             contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(
                 top = 0.dp, bottom = 0.dp
             )
@@ -87,10 +90,10 @@ fun TextFieldComponent(placeholder: String = "", defaultValue: String = "", onVa
     }
 }
 
+@Previews
 @Composable
-@Preview
 fun TextFieldPreview() {
-    DynamicTheme(darkTheme = true) {
+    DynamicTheme {
         TextFieldComponent(
             placeholder = "Enter Text",
             onValueChange = { }
