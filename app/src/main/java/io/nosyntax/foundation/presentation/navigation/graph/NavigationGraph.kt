@@ -1,22 +1,20 @@
 package io.nosyntax.foundation.presentation.navigation.graph
 
+import android.content.Context
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import io.nosyntax.foundation.core.utility.Intents.openDial
+import io.nosyntax.foundation.core.utility.Intents.openEmail
+import io.nosyntax.foundation.core.utility.Intents.openSMS
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.presentation.about.AboutScreen
 import io.nosyntax.foundation.presentation.settings.SettingsScreen
 import io.nosyntax.foundation.presentation.web.WebScreen
-
-object Roles {
-    const val ROLE_WEB = "web"
-    const val ROLE_SETTINGS = "settings"
-    const val ROLE_ABOUT = "about"
-}
 
 @Composable
 fun NavigationGraph(
@@ -25,17 +23,18 @@ fun NavigationGraph(
     navController: NavHostController,
     drawerState: DrawerState
 ) {
+    // TODO: Handle startDestination
     NavHost(
         navController = navController,
-        startDestination = appConfig.app.components.sideMenu.items.firstOrNull()?.route ?: ""
+        startDestination = "web-1"
     ) {
         appConfig.app.components.sideMenu.items.forEach { item ->
             composable(route = item.route) {
-                NavigationHandler(
-                    navController = navController,
-                    item = item,
+                ComposableContent(
                     appConfig = appConfig,
                     deeplink = deeplink,
+                    item = item,
+                    navController = navController,
                     drawerState = drawerState
                 )
             }
@@ -44,28 +43,27 @@ fun NavigationGraph(
 }
 
 @Composable
-fun NavigationHandler(
-    navController: NavHostController,
-    item: SideMenuConfig.Item,
+fun ComposableContent(
     appConfig: AppConfig,
     deeplink: Deeplink,
+    item: SideMenuConfig.Item,
+    navController: NavHostController,
     drawerState: DrawerState
 ) {
     when {
-        item.route.startsWith(Roles.ROLE_WEB) -> {
+        item.route.startsWith("web") -> {
             WebScreen(
                 appConfig = appConfig,
                 url = deeplink.destination.ifEmpty { item.action ?: "" },
                 drawerState = drawerState
             )
         }
-        item.route.startsWith(Roles.ROLE_SETTINGS) -> {
+        item.route.startsWith("settings") -> {
             SettingsScreen(
                 navController = navController
             )
         }
-
-        item.route.startsWith(Roles.ROLE_ABOUT) -> {
+        item.route.startsWith("about") -> {
             AboutScreen(
                 appDescription = appConfig.app.description,
                 navController = navController
@@ -74,12 +72,20 @@ fun NavigationHandler(
     }
 }
 
-class NavigationActions(private val navController: NavHostController) {
-    fun navigateTo(currentRoute: String, route: String) {
-        if (!isUtilityScreen(route = currentRoute)) {
+class Navigator(private val context: Context, private val navController: NavHostController) {
+    fun navigate(currentRoute: String, route: String) {
+        if (!isUtilityScreen(currentRoute)) {
             clearBackStackToMainScreen()
         }
-        navController.navigate(route = route)
+        navController.navigate(route)
+    }
+
+    fun open(route: String, action: String) {
+        when {
+            route.startsWith("mail") -> context.openEmail(url = action)
+            route.startsWith("dial") -> context.openDial(url = action)
+            route.startsWith("sms") -> context.openSMS(url = action)
+        }
     }
 
     private fun clearBackStackToMainScreen() {
@@ -91,9 +97,5 @@ class NavigationActions(private val navController: NavHostController) {
 }
 
 fun isUtilityScreen(route: String): Boolean {
-    val roles = setOf(
-        Roles.ROLE_SETTINGS,
-        Roles.ROLE_ABOUT
-    )
-    return roles.any { route.startsWith(it) }
+    return setOf("settings", "about").any { route.startsWith(it) }
 }

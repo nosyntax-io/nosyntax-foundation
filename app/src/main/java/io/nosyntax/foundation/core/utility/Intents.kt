@@ -11,7 +11,7 @@ import io.nosyntax.foundation.R
 object Intents {
     fun Context.handleUrlAction(url: String) {
         when {
-            url.startsWith("mailto:") -> openEmailFromUrl(url)
+            url.startsWith("mailto:") -> openEmail(url)
             url.startsWith("tel:") -> openDial(url)
             url.startsWith("sms:") -> openSMS(url)
             url.startsWith("market://") -> openPlayStore(packageName)
@@ -54,7 +54,7 @@ object Intents {
         }
     }
 
-    fun Context.openEmailFromUrl(url: String) {
+    fun Context.openEmail(url: String) {
         val mail = MailTo.parse(url)
         val recipient = mail.to
         val subject = mail.subject ?: ""

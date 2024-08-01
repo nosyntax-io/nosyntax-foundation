@@ -15,6 +15,6 @@ data class SideMenuConfig(
         val route: String,
         val label: String?,
         val icon: String?,
-        val action: String?
+        val action: String? = null
     )
 }

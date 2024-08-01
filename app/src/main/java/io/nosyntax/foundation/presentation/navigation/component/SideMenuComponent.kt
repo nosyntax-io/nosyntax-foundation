@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -35,7 +36,7 @@ import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
-import io.nosyntax.foundation.presentation.navigation.graph.NavigationActions
+import io.nosyntax.foundation.presentation.navigation.graph.Navigator
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
 
@@ -69,6 +70,7 @@ fun SideMenuContent(
     currentRoute: String,
     drawerState: DrawerState
 ) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val backgroundModifier = when (config.background) {
@@ -105,10 +107,14 @@ fun SideMenuContent(
                     currentRoute = currentRoute,
                     item = item,
                     onClick = {
-                        NavigationActions(navController).navigateTo(
-                            currentRoute = currentRoute,
-                            route = item.route
-                        )
+                        val navigator = Navigator(context, navController)
+
+                        if (item.route.startsWith("mail") || item.route.startsWith("dial") || item.route.startsWith("sms")) {
+                            navigator.open(route = item.route, action = item.action!!)
+                        } else {
+                            navigator.navigate(currentRoute = currentRoute, route = item.route)
+                        }
+
                         coroutineScope.launch {
                             drawerState.close()
                         }
@@ -190,11 +196,11 @@ private fun SideMenuPreview() {
         val currentRoute by remember { mutableStateOf("1") }
 
         val items = listOf(
-            SideMenuConfig.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            SideMenuConfig.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png", null),
-            SideMenuConfig.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png", null),
-            SideMenuConfig.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png", null),
-            SideMenuConfig.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png", null)
+            SideMenuConfig.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            SideMenuConfig.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            SideMenuConfig.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
+            SideMenuConfig.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
+            SideMenuConfig.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
         )
 
         SideMenu(
