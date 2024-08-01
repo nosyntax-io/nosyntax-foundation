@@ -124,7 +124,7 @@ fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
                 route = item.route,
                 label = item.label,
                 icon = item.icon,
-                url = item.url
+                action = item.action
             )
         }
     )

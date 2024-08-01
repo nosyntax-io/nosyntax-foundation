@@ -55,7 +55,7 @@ fun NavigationHandler(
         item.route.startsWith(Roles.ROLE_WEB) -> {
             WebScreen(
                 appConfig = appConfig,
-                url = deeplink.destination.ifEmpty { item.url ?: "" },
+                url = deeplink.destination.ifEmpty { item.action ?: "" },
                 drawerState = drawerState
             )
         }

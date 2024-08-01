@@ -26,7 +26,7 @@ data class SideMenuConfigDto(
         val label: String?,
         @SerializedName("icon")
         val icon: String?,
-        @SerializedName("url")
-        val url: String?
+        @SerializedName("action")
+        val action: String?
     )
 }
