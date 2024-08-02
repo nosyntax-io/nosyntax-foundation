@@ -23,10 +23,9 @@ fun NavigationGraph(
     navController: NavHostController,
     drawerState: DrawerState
 ) {
-    // TODO: Handle startDestination
     NavHost(
         navController = navController,
-        startDestination = "web-1"
+        startDestination = appConfig.settings.entryPage
     ) {
         appConfig.components.sideMenu.items.forEach { item ->
             composable(route = item.route) {
