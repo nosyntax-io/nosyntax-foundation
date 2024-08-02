@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class ComponentsDto(
     @SerializedName("app_bar")
-    val appBar: AppBarDto,
+    val appBar: AppBar,
     @SerializedName("side_menu")
-    val sideMenu: SideMenuDto,
+    val sideMenu: SideMenu,
     @SerializedName("loading_indicator")
-    val loadingIndicator: LoadingIndicatorDto
+    val loadingIndicator: LoadingIndicator
 ) {
-    data class AppBarDto(
+    data class AppBar(
         @SerializedName("visible")
         val visible: Boolean,
         @SerializedName("background")
@@ -26,7 +26,7 @@ data class ComponentsDto(
         )
     }
 
-    data class SideMenuDto(
+    data class SideMenu(
         @SerializedName("visible")
         val visible: Boolean,
         @SerializedName("background")
@@ -55,7 +55,7 @@ data class ComponentsDto(
         )
     }
 
-    data class LoadingIndicatorDto(
+    data class LoadingIndicator(
         @SerializedName("visible")
         val visible: Boolean,
         @SerializedName("animation")

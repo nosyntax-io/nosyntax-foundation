@@ -5,7 +5,7 @@ import io.nosyntax.foundation.BuildConfig
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.utility.Resource
 import io.nosyntax.foundation.core.utility.Utilities.getDtoFromJson
-import io.nosyntax.foundation.data.mapper.toConfiguration
+import io.nosyntax.foundation.data.mapper.toAppConfig
 import io.nosyntax.foundation.data.source.remote.CoreAPI
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -26,7 +26,7 @@ class AppConfigRepositoryImpl @Inject constructor(private val context: Context, 
             if (BuildConfig.APP_REMOTE_CONFIG == "enabled") {
                 try {
                     val response = coreApi.appConfig()
-                    emit(Resource.Success(response.toConfiguration()))
+                    emit(Resource.Success(response.toAppConfig()))
                 } catch (t: Throwable) {
                     when (t) {
                         is IOException -> emit(Resource.Error(Constants.NETWORK_FAILURE_EXCEPTION))
@@ -36,7 +36,7 @@ class AppConfigRepositoryImpl @Inject constructor(private val context: Context, 
                 }
             } else {
                 getDtoFromJson(context, "local/app-config.json", AppConfigDto::class.java)?.let { localConfig ->
-                    emit(Resource.Success(localConfig.toConfiguration()))
+                    emit(Resource.Success(localConfig.toAppConfig()))
                 } ?: run {
                     emit(Resource.Error(Constants.LOADING_LOCAL_JSON_EXCEPTION))
                 }

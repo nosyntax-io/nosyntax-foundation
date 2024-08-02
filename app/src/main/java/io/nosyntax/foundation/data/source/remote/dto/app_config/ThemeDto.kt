@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class ThemeDto(
     @SerializedName("color_scheme")
-    val colorScheme: ColorSchemeDto,
+    val colorScheme: ColorScheme,
     @SerializedName("typography")
-    val typography: TypographyDto,
+    val typography: Typography,
     @SerializedName("dark_mode")
     val darkMode: Boolean
 ) {
-    data class ColorSchemeDto(
+    data class ColorScheme(
         @SerializedName("primary")
         val primary: String,
         @SerializedName("on_primary")
@@ -41,7 +41,7 @@ data class ThemeDto(
         val outlineDark: String
     )
 
-    data class TypographyDto(
+    data class Typography(
         @SerializedName("primary_font_family")
         val primaryFontFamily: String,
         @SerializedName("secondary_font_family")

@@ -11,7 +11,7 @@ import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Monetization
 import io.nosyntax.foundation.domain.model.app_config.Settings
 
-fun AppConfigDto.toConfiguration(): AppConfig {
+fun AppConfigDto.toAppConfig(): AppConfig {
     return AppConfig(
         id = this.id,
         name = this.name,
