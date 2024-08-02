@@ -1,6 +1,6 @@
 package io.nosyntax.foundation.domain.model.app_config
 
-data class MonetizationConfig(
+data class Monetization(
     val ads: Ads
 ) {
 

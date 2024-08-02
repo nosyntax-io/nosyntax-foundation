@@ -1,152 +1,109 @@
 package io.nosyntax.foundation.data.mapper
 
-import io.nosyntax.foundation.data.source.remote.dto.app_config.AppBarConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsConfigDto
+import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeDto
+import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.LoadingIndicatorConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.SideMenuConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.ColorSchemeConfigDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.ConfigurationDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.DetailsDto
-import io.nosyntax.foundation.data.source.remote.dto.app_config.TypographyConfigDto
-import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
-import io.nosyntax.foundation.domain.model.app_config.ThemeConfig
-import io.nosyntax.foundation.domain.model.app_config.ComponentsConfig
+import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationDto
+import io.nosyntax.foundation.data.source.remote.dto.app_config.SettingsDto
+import io.nosyntax.foundation.domain.model.app_config.Theme
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.domain.model.app_config.LoadingIndicatorConfig
-import io.nosyntax.foundation.domain.model.app_config.MonetizationConfig
-import io.nosyntax.foundation.domain.model.app_config.TypographyConfig
-import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
-import io.nosyntax.foundation.domain.model.app_config.ColorSchemeConfig
-import io.nosyntax.foundation.domain.model.app_config.Details
+import io.nosyntax.foundation.domain.model.app_config.Monetization
+import io.nosyntax.foundation.domain.model.app_config.Settings
 
 fun AppConfigDto.toConfiguration(): AppConfig {
-    val (app) = this
-
     return AppConfig(
-        app = app.toApp(),
-    )
-}
-
-fun AppConfigDto.App.toApp(): AppConfig.App {
-    return AppConfig.App(
-        details = this.details.toDetails(),
-        theme = this.theme.toTheme(),
-        components = this.components.toComponents(),
-        configuration = this.configuration.toConfiguration()
-    )
-}
-
-
-fun DetailsDto.toDetails(): Details {
-    return Details(
         id = this.id,
         name = this.name,
         version = this.version,
         description = this.description,
+        settings = this.settings.toSettings(),
+        theme = this.theme.toTheme(),
+        components = this.components.toComponents(),
+        monetization = this.monetization.toMonetization()
+    )
+}
+
+fun SettingsDto.toSettings(): Settings {
+    return Settings(
+        entryPage = this.entryPage,
         email = this.email,
-        privacyPolicy = this.privacyPolicy
+        privacyPolicy = this.privacyPolicy,
+        termsOfService = this.termsOfService
     )
 }
 
-fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
-    val (monetization) = this
+fun ThemeDto.toTheme(): Theme {
+    val colorScheme = this.colorScheme
+    val typography = this.typography
 
-    return AppConfig.Configuration(
-        monetization = monetization.toMonetization()
-    )
-}
-
-fun ThemeConfigDto.toTheme(): ThemeConfig {
-    val (colorScheme, typography) = this
-
-    return ThemeConfig(
-        colorScheme = colorScheme.toColorScheme(),
-        typography = typography.toTypography(),
+    return Theme(
+        colorScheme = Theme.ColorScheme(
+            primary = colorScheme.primary,
+            onPrimary = colorScheme.onPrimary,
+            secondary = colorScheme.secondary,
+            onSecondary = colorScheme.onSecondary,
+            backgroundLight = colorScheme.backgroundLight,
+            onBackgroundLight = colorScheme.onBackgroundLight,
+            surfaceLight = colorScheme.surfaceLight,
+            onSurfaceLight = colorScheme.onSurfaceLight,
+            outlineLight = colorScheme.outlineLight,
+            backgroundDark = colorScheme.backgroundDark,
+            onBackgroundDark = colorScheme.onBackgroundDark,
+            surfaceDark = colorScheme.surfaceDark,
+            onSurfaceDark = colorScheme.onSurfaceDark,
+            outlineDark = colorScheme.outlineDark
+        ),
+        typography = Theme.Typography(
+            primaryFontFamily = typography.primaryFontFamily,
+            secondaryFontFamily = typography.secondaryFontFamily
+        ),
         darkMode = darkMode
     )
 }
 
-fun ColorSchemeConfigDto.toColorScheme(): ColorSchemeConfig {
-    return ColorSchemeConfig(
-        primary = this.primary,
-        onPrimary = this.onPrimary,
-        secondary = this.secondary,
-        onSecondary = this.onSecondary,
-        backgroundLight = this.backgroundLight,
-        onBackgroundLight = this.onBackgroundLight,
-        surfaceLight = this.surfaceLight,
-        onSurfaceLight = this.onSurfaceLight,
-        outlineLight = this.outlineLight,
-        backgroundDark = this.backgroundDark,
-        onBackgroundDark = this.onBackgroundDark,
-        surfaceDark = this.surfaceDark,
-        onSurfaceDark = this.onSurfaceDark,
-        outlineDark = this.outlineDark
-    )
-}
+fun ComponentsDto.toComponents(): Components {
+    val appBar = this.appBar
+    val sideMenu = this.sideMenu
+    val loadingIndicator = this.loadingIndicator
 
-fun TypographyConfigDto.toTypography(): TypographyConfig {
-    return TypographyConfig(
-        primaryFontFamily = this.primaryFontFamily,
-        secondaryFontFamily = this.secondaryFontFamily
-    )
-}
-
-fun ComponentsConfigDto.toComponents(): ComponentsConfig {
-    val (appBar, sideMenu, loadingIndicator) = this
-
-    return ComponentsConfig(
-        appBar = appBar.toAppBar(),
-        sideMenu = sideMenu.toSideMenu(),
-        loadingIndicator = loadingIndicator.toLoadingIndicator()
-    )
-}
-
-fun AppBarConfigDto.toAppBar(): AppBarConfig {
-    return AppBarConfig(
-        visible = this.visible,
-        background = this.background,
-        title = AppBarConfig.Title(
-            visible = this.title.visible,
-            alignment = this.title.alignment
+    return Components(
+        appBar = Components.AppBar(
+            visible = appBar.visible,
+            background = appBar.background,
+            title = Components.AppBar.Title(
+                visible = appBar.title.visible,
+                alignment = appBar.title.alignment
+            )
+        ),
+        sideMenu = Components.SideMenu(
+            visible = sideMenu.visible,
+            background = sideMenu.background,
+            header = Components.SideMenu.Header(
+                visible = sideMenu.header.visible,
+                image = sideMenu.header.image
+            ),
+            items = this.sideMenu.items.map { item ->
+                Components.SideMenu.Item(
+                    route = item.route,
+                    label = item.label,
+                    icon = item.icon,
+                    action = item.action
+                )
+            }
+        ),
+        loadingIndicator = Components.LoadingIndicator(
+            visible = loadingIndicator.visible,
+            animation = loadingIndicator.animation,
+            background = loadingIndicator.background,
+            color = loadingIndicator.color
         )
     )
 }
 
-fun SideMenuConfigDto.toSideMenu(): SideMenuConfig {
-    return SideMenuConfig(
-        visible = this.visible,
-        background = this.background,
-        header = SideMenuConfig.Header(
-            visible = this.header.visible,
-            image = this.header.image
-        ),
-        items = this.items.map { item ->
-            SideMenuConfig.Item(
-                route = item.route,
-                label = item.label,
-                icon = item.icon,
-                action = item.action
-            )
-        }
-    )
-}
-
-fun LoadingIndicatorConfigDto.toLoadingIndicator(): LoadingIndicatorConfig {
-    return LoadingIndicatorConfig(
-        display = this.visible,
-        animation = this.animation,
-        background = this.background,
-        color = this.color
-    )
-}
-
-fun MonetizationConfigDto.toMonetization(): MonetizationConfig {
-    return MonetizationConfig(
-        ads = MonetizationConfig.Ads(
+fun MonetizationDto.toMonetization(): Monetization {
+    return Monetization(
+        ads = Monetization.Ads(
             enabled = this.ads.enabled,
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay

@@ -16,13 +16,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.component.AnimatedProgressBar
-import io.nosyntax.foundation.domain.model.app_config.LoadingIndicatorConfig
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import io.nosyntax.foundation.domain.model.app_config.Components
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun LoadingIndicator(indicatorConfig: LoadingIndicatorConfig) {
+fun LoadingIndicator(indicatorConfig: Components.LoadingIndicator) {
     val context = LocalContext.current
     val resources = context.resources
 
@@ -66,8 +66,8 @@ fun LoadingIndicator(indicatorConfig: LoadingIndicatorConfig) {
 fun LoadingIndicatorPreview() {
     DynamicTheme {
         LoadingIndicator(
-            indicatorConfig = LoadingIndicatorConfig(
-                display = true,
+            indicatorConfig = Components.LoadingIndicator(
+                visible = true,
                 animation = "loading_indicator_1",
                 background = "neutral",
                 color = "solid"

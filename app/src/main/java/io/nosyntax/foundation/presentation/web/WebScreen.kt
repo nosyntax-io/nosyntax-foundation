@@ -213,7 +213,7 @@ fun WebScreen(
             contentColor = MaterialTheme.colorScheme.onSurface
         )
 
-        val ads = appConfig.app.configuration.monetization.ads
+        val ads = appConfig.monetization.ads
         BannerAd(enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
@@ -229,8 +229,8 @@ fun WebScreen(
     }
 
     if (webViewState.isLoading) {
-        val indicatorConfig = appConfig.app.components.loadingIndicator
-        if (indicatorConfig.display) {
+        val indicatorConfig = appConfig.components.loadingIndicator
+        if (indicatorConfig.visible) {
             LoadingIndicator(indicatorConfig = indicatorConfig)
         }
     }

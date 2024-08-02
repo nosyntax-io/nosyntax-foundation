@@ -52,10 +52,12 @@ class MainActivity : ComponentActivity() {
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             when {
                 state.response != null && state.error == null -> {
-                    val theme = state.response.app.theme
-                    val colorScheme = theme.colorScheme
-                    val typography = theme.typography
-                    val components = state.response.app.components
+                    val (theme, components) = state.response.run {
+                        theme to components
+                    }
+                    val (colorScheme, typography) = theme.run {
+                        colorScheme to typography
+                    }
 
                     val dynamicColorScheme = DynamicColorScheme(
                         primary = Color(parseColor(colorScheme.primary)),
@@ -96,7 +98,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    val ads = state.response.app.configuration.monetization.ads
+                    val ads = state.response.monetization.ads
                     if (ads.enabled && ads.interstitialDisplay) {
                         interstitialAd = InterstitialAd(this@MainActivity).load()
                     }

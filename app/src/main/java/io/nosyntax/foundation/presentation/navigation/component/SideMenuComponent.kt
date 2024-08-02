@@ -35,14 +35,14 @@ import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.navigation.graph.Navigator
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun SideMenu(
-    config: SideMenuConfig,
+    config: Components.SideMenu,
     navController: NavHostController,
     currentRoute: String,
     drawerState: DrawerState,
@@ -65,7 +65,7 @@ fun SideMenu(
 
 @Composable
 fun SideMenuContent(
-    config: SideMenuConfig,
+    config: Components.SideMenu,
     navController: NavHostController,
     currentRoute: String,
     drawerState: DrawerState
@@ -126,7 +126,7 @@ fun SideMenuContent(
 }
 
 @Composable
-fun SideMenuHeader(config: SideMenuConfig, headerHeight: Dp = 150.dp) {
+fun SideMenuHeader(config: Components.SideMenu, headerHeight: Dp = 150.dp) {
     if (config.header.visible) {
         Image(
             modifier = Modifier
@@ -141,9 +141,9 @@ fun SideMenuHeader(config: SideMenuConfig, headerHeight: Dp = 150.dp) {
 
 @Composable
 fun SideMenuItem(
-    config: SideMenuConfig,
+    config: Components.SideMenu,
     currentRoute: String,
-    item: SideMenuConfig.Item,
+    item: Components.SideMenu.Item,
     onClick: () -> Unit
 ) {
     val isSelected = currentRoute == item.route
@@ -196,18 +196,18 @@ private fun SideMenuPreview() {
         val currentRoute by remember { mutableStateOf("1") }
 
         val items = listOf(
-            SideMenuConfig.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            SideMenuConfig.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            SideMenuConfig.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
-            SideMenuConfig.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
-            SideMenuConfig.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
+            Components.SideMenu.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            Components.SideMenu.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            Components.SideMenu.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
+            Components.SideMenu.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
+            Components.SideMenu.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
         )
 
         SideMenu(
-            config = SideMenuConfig(
+            config = Components.SideMenu(
                 visible = true,
                 background = Constants.BACKGROUND_NEUTRAL,
-                header = SideMenuConfig.Header(
+                header = Components.SideMenu.Header(
                     visible = true,
                     image = "https://via.placeholder.com/700x400"
                 ),

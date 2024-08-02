@@ -51,14 +51,14 @@ fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
         SettingItem(
             text = stringResource(id = R.string.send_feedback),
             onClick = {
-                context.openEmail(email = appConfig.app.details.email)
+                context.openEmail(email = appConfig.settings.email)
             }
         )
         SettingDivider()
         SettingItem(
             text = stringResource(id = R.string.privacy_policy),
             onClick = {
-                context.openUrl(appConfig.app.details.privacyPolicy)
+                context.openUrl(appConfig.settings.privacyPolicy)
             }
         )
         SettingDivider()

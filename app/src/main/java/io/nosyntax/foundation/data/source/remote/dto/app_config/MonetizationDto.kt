@@ -2,7 +2,7 @@ package io.nosyntax.foundation.data.source.remote.dto.app_config
 
 import com.google.gson.annotations.SerializedName
 
-data class MonetizationConfigDto(
+data class MonetizationDto(
     @SerializedName("ads")
     val ads: Ads
 ) {

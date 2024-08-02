@@ -11,7 +11,7 @@ import io.nosyntax.foundation.core.utility.Intents.openEmail
 import io.nosyntax.foundation.core.utility.Intents.openSMS
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.about.AboutScreen
 import io.nosyntax.foundation.presentation.settings.SettingsScreen
 import io.nosyntax.foundation.presentation.web.WebScreen
@@ -28,7 +28,7 @@ fun NavigationGraph(
         navController = navController,
         startDestination = "web-1"
     ) {
-        appConfig.app.components.sideMenu.items.forEach { item ->
+        appConfig.components.sideMenu.items.forEach { item ->
             composable(route = item.route) {
                 ComposableContent(
                     appConfig = appConfig,
@@ -46,7 +46,7 @@ fun NavigationGraph(
 fun ComposableContent(
     appConfig: AppConfig,
     deeplink: Deeplink,
-    item: SideMenuConfig.Item,
+    item: Components.SideMenu.Item,
     navController: NavHostController,
     drawerState: DrawerState
 ) {

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 sealed class NavigationActionType {
@@ -34,12 +34,12 @@ sealed class NavigationActionType {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
-    appBarConfig: AppBarConfig,
+    config: Components.AppBar,
     title: String,
     navigationActionType: NavigationActionType,
     onNavigationActionClick: () -> Unit
 ) {
-    val backgroundModifier = when (appBarConfig.background) {
+    val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
@@ -59,7 +59,7 @@ fun AppBar(
         .then(backgroundModifier)
 
     val appBarTitle: @Composable () -> Unit = {
-        if (appBarConfig.title.visible) {
+        if (config.title.visible) {
             AppBarTitle(title = title)
         }
     }
@@ -84,7 +84,7 @@ fun AppBar(
         }
     }
 
-    val contentColor = if (appBarConfig.background == Constants.BACKGROUND_NEUTRAL) {
+    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onPrimary
@@ -97,7 +97,7 @@ fun AppBar(
         actionIconContentColor = contentColor
     )
 
-    if (appBarConfig.title.alignment == Constants.ALIGNMENT_CENTER) {
+    if (config.title.alignment == Constants.ALIGNMENT_CENTER) {
         CenterAlignedTopAppBar(
             modifier = appBarModifier,
             colors = appBarColors,
@@ -148,10 +148,10 @@ fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
 fun AppBarPreview() {
     DynamicTheme {
         AppBar(
-            appBarConfig = AppBarConfig(
+            config = Components.AppBar(
                 visible = true,
                 background = Constants.BACKGROUND_SOLID,
-                title = AppBarConfig.Title(
+                title = Components.AppBar.Title(
                     visible = true,
                     alignment = Constants.ALIGNMENT_CENTER
                 )

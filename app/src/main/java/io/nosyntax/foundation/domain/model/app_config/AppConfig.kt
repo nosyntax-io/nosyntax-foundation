@@ -1,14 +1,12 @@
 package io.nosyntax.foundation.domain.model.app_config
 
-data class AppConfig(val app: App) {
-    data class App(
-        val details: Details,
-        val theme: ThemeConfig,
-        val components: ComponentsConfig,
-        val configuration: Configuration
-    )
-
-    data class Configuration(
-        val monetization: MonetizationConfig
-    )
-}
+data class AppConfig(
+    val id: String,
+    val name: String,
+    val version: String,
+    val description: String,
+    val settings: Settings,
+    val theme: Theme,
+    val components: Components,
+    val monetization: Monetization
+)

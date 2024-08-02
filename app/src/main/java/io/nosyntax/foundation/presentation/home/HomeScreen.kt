@@ -50,7 +50,7 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     appConfig?.let { config ->
-        val components = config.app.components
+        val components = config.components
 
         val content: @Composable () -> Unit = {
             HomeContent(
@@ -94,9 +94,9 @@ private fun HomeContent(
     currentRoute: String,
     drawerState: DrawerState
 ) {
-    val components = appConfig.app.components
+    val components = appConfig.components
     val snackbarHostState = remember { SnackbarHostState() }
-    val selectedItem = appConfig.app.components.sideMenu.items.find {
+    val selectedItem = appConfig.components.sideMenu.items.find {
         it.route == currentRoute
     }
 
@@ -113,7 +113,7 @@ private fun HomeContent(
                 else NavigationActionType.Menu(isEnabled = components.sideMenu.visible)
 
                 AppBar(
-                    appBarConfig = components.appBar,
+                    config = components.appBar,
                     title = selectedItem?.label ?: "",
                     navigationActionType = navigationActionType,
                     onNavigationActionClick = {
