@@ -109,7 +109,7 @@ fun SideMenuContent(
                     onClick = {
                         val navigator = Navigator(context, navController)
 
-                        if (item.route.startsWith("mail") || item.route.startsWith("dial") || item.route.startsWith("sms")) {
+                        if (setOf("browser", "mail", "dial", "sms").any { item.route.startsWith(it) }) {
                             navigator.open(route = item.route, action = item.action!!)
                         } else {
                             navigator.navigate(currentRoute = currentRoute, route = item.route)

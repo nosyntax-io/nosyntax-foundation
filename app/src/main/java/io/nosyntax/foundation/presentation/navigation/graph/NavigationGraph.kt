@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import io.nosyntax.foundation.core.utility.Intents.openDial
 import io.nosyntax.foundation.core.utility.Intents.openEmail
 import io.nosyntax.foundation.core.utility.Intents.openSMS
+import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
@@ -92,6 +93,7 @@ class Navigator(private val context: Context, private val navController: NavHost
 
     fun open(route: String, action: String) {
         when {
+            route.startsWith("browser") -> context.openUrl(url = action)
             route.startsWith("mail") -> context.openEmail(url = action)
             route.startsWith("dial") -> context.openDial(url = action)
             route.startsWith("sms") -> context.openSMS(url = action)
