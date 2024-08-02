@@ -2,15 +2,16 @@ import java.io.File
 import java.io.IOException
 import java.util.Properties
 
-class Properties() {
-    fun load(file: File): Properties {
-        val properties = Properties()
+class Properties {
+    fun load(file: File): Properties? = if (file.exists()) {
         try {
-            if (file.exists()) properties.load(file.inputStream())
-            else println("Warning: ${file.name} file not found.")
-        } catch (exception: IOException) {
-            println("Warning: Error loading ${file.name} file: ${exception.message}")
+            Properties().apply { load(file.inputStream()) }
+        } catch (e: IOException) {
+            println("Warning: Error loading ${file.name}: ${e.message}")
+            null
         }
-        return properties
+    } else {
+        println("Warning: ${file.name} not found.")
+        null
     }
 }

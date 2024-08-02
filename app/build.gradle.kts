@@ -36,11 +36,12 @@ android {
 
     signingConfigs {
         create("release") {
-            val signingConfig = Properties().load(rootProject.file("signing.properties"))
-            storeFile = rootProject.file(signingConfig.getProperty("signing.store_file"))
-            storePassword = signingConfig.getProperty("signing.store_password")
-            keyAlias = signingConfig.getProperty("signing.key_alias")
-            keyPassword = signingConfig.getProperty("signing.key_password")
+            Properties().load(rootProject.file("signing.properties"))?.let { config ->
+                storeFile = rootProject.file(config.getProperty("signing.store_file"))
+                storePassword = config.getProperty("signing.store_password")
+                keyAlias = config.getProperty("signing.key_alias")
+                keyPassword = config.getProperty("signing.key_password")
+            }
         }
     }
 
