@@ -22,21 +22,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
+import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.core.utility.Utilities
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
+import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun AboutScreen(
-    appDescription: String,
-    navController: NavHostController
-) {
+fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
     val context = LocalContext.current
 
     Box(
@@ -64,7 +64,7 @@ fun AboutScreen(
             )
             Spacer(modifier = Modifier.height(15.dp))
             Text(
-                text = appDescription,
+                text = appConfig.app.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
@@ -93,10 +93,12 @@ fun AboutScreen(
 
 @Previews
 @Composable
-fun AboutScreenPreview() {
+fun AboutScreenPreview(
+    @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
+) {
     DynamicTheme {
         AboutScreen(
-            appDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            appConfig = appConfig,
             navController = rememberNavController()
         )
     }

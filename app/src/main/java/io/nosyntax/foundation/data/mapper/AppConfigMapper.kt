@@ -102,7 +102,7 @@ fun ComponentsConfigDto.toComponents(): ComponentsConfig {
 
 fun AppBarConfigDto.toAppBar(): AppBarConfig {
     return AppBarConfig(
-        visibile = this.visible,
+        visible = this.visible,
         background = this.background,
         title = AppBarConfig.Title(
             visible = this.title.visible,

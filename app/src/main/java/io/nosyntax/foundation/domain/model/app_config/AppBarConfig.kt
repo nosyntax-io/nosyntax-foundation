@@ -1,7 +1,7 @@
 package io.nosyntax.foundation.domain.model.app_config
 
 data class AppBarConfig(
-    val visibile: Boolean,
+    val visible: Boolean,
     val background: String,
     val title: Title
 ) {

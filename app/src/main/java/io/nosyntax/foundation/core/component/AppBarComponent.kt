@@ -149,7 +149,7 @@ fun AppBarPreview() {
     DynamicTheme {
         AppBar(
             appBarConfig = AppBarConfig(
-                visibile = true,
+                visible = true,
                 background = Constants.BACKGROUND_SOLID,
                 title = AppBarConfig.Title(
                     visible = true,

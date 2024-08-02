@@ -60,12 +60,13 @@ fun ComposableContent(
         }
         item.route.startsWith("settings") -> {
             SettingsScreen(
+                appConfig = appConfig,
                 navController = navController
             )
         }
         item.route.startsWith("about") -> {
             AboutScreen(
-                appDescription = appConfig.app.description,
+                appConfig = appConfig,
                 navController = navController
             )
         }

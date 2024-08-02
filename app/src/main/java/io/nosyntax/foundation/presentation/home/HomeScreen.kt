@@ -108,7 +108,7 @@ private fun HomeContent(
             )
         },
         topBar = {
-            if (components.appBar.visibile) {
+            if (components.appBar.visible) {
                 val navigationActionType = if (isUtilityScreen(currentRoute)) NavigationActionType.Back
                 else NavigationActionType.Menu(isEnabled = components.sideMenu.visible)
 

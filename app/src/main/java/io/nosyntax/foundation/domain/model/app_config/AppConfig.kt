@@ -1,9 +1,6 @@
 package io.nosyntax.foundation.domain.model.app_config
 
-data class AppConfig(
-    val app: App,
-) {
-
+data class AppConfig(val app: App) {
     data class App(
         val id: String,
         val name: String,
