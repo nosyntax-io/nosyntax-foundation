@@ -1,6 +1,8 @@
 package io.nosyntax.foundation.presentation.navigation.graph
 
 import android.content.Context
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -25,7 +27,9 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = appConfig.settings.entryPage
+        startDestination = appConfig.settings.entryPage,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
         appConfig.components.sideMenu.items.forEach { item ->
             composable(route = item.route) {
