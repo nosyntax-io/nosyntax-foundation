@@ -38,6 +38,12 @@ fun NavigationGraph(
                 )
             }
         }
+        composable(route = "about") {
+            AboutScreen(
+                appConfig = appConfig,
+                navController = navController
+            )
+        }
     }
 }
 

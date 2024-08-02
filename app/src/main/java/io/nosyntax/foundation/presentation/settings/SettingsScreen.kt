@@ -41,30 +41,25 @@ fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
             .background(color = MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
-        SettingItem(
-            text = stringResource(id = R.string.rate_us),
-            onClick = { context.openPlayStore(context.packageName) }
-        )
+        SettingItem(text = stringResource(id = R.string.rate_us)) {
+            context.openPlayStore(context.packageName)
+        }
         SettingDivider()
-        SettingItem(
-            text = stringResource(id = R.string.send_feedback),
-            onClick = { context.openEmail(email = appConfig.settings.email) }
-        )
+        SettingItem(text = stringResource(id = R.string.send_feedback)) {
+            context.openEmail(email = appConfig.settings.email)
+        }
         SettingDivider()
-        SettingItem(
-            text = stringResource(id = R.string.privacy_policy),
-            onClick = { context.openUrl(appConfig.settings.privacyPolicy) }
-        )
+        SettingItem(text = stringResource(id = R.string.privacy_policy)) {
+            context.openUrl(appConfig.settings.privacyPolicy)
+        }
         SettingDivider()
-        SettingItem(
-            text = stringResource(id = R.string.terms_of_service),
-            onClick = { context.openUrl(appConfig.settings.termsOfService) }
-        )
+        SettingItem(text = stringResource(id = R.string.terms_of_service)) {
+            context.openUrl(appConfig.settings.termsOfService)
+        }
         SettingDivider()
-        SettingItem(
-            text = stringResource(id = R.string.about_us),
-            onClick = { navController.navigate(route = "about") }
-        )
+        SettingItem(text = stringResource(id = R.string.about_us)) {
+            navController.navigate("about")
+        }
     }
 
     BackHandler(enabled = true) {
