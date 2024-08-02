@@ -21,6 +21,9 @@ jobs:
           java-version: 17
           cache: gradle
 
+      - name: Copy CI App Config
+        run: cp .github/ci-app-config.yml app-config.yml
+
       - name: Update Dependencies
         run: ./gradlew versionCatalogUpdate
 
