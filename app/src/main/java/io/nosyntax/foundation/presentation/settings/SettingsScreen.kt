@@ -43,23 +43,22 @@ fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
     ) {
         SettingItem(
             text = stringResource(id = R.string.rate_us),
-            onClick = {
-                context.openPlayStore(context.packageName)
-            }
+            onClick = { context.openPlayStore(context.packageName) }
         )
         SettingDivider()
         SettingItem(
             text = stringResource(id = R.string.send_feedback),
-            onClick = {
-                context.openEmail(email = appConfig.settings.email)
-            }
+            onClick = { context.openEmail(email = appConfig.settings.email) }
         )
         SettingDivider()
         SettingItem(
             text = stringResource(id = R.string.privacy_policy),
-            onClick = {
-                context.openUrl(appConfig.settings.privacyPolicy)
-            }
+            onClick = { context.openUrl(appConfig.settings.privacyPolicy) }
+        )
+        SettingDivider()
+        SettingItem(
+            text = stringResource(id = R.string.terms_of_service),
+            onClick = { context.openUrl(appConfig.settings.termsOfService) }
         )
         SettingDivider()
         SettingItem(
