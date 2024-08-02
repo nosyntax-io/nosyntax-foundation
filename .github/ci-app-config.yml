@@ -1,0 +1,23 @@
+app:
+  id: com.example.app
+  name: Example App
+  version: 1.0
+  build_number: 1
+
+build:
+  environment: ci
+
+permissions:
+  - permission1
+  - permission2
+  - permission3
+
+integrations:
+  onesignal:
+    enabled: true
+    app_id: app_id
+  admob:
+    enabled: true
+    app_id: app_id
+    banner_id: banner_id
+    interstitial_id: interstitial_id
