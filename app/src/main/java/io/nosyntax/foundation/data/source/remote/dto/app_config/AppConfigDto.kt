@@ -8,14 +8,8 @@ data class AppConfigDto(
 ) {
 
     data class App(
-        @SerializedName("id")
-        val id: String,
-        @SerializedName("name")
-        val name: String,
-        @SerializedName("category")
-        val category: String,
-        @SerializedName("description")
-        val description: String,
+        @SerializedName("details")
+        val details: DetailsDto,
         @SerializedName("theme")
         val theme: ThemeConfigDto,
         @SerializedName("components")

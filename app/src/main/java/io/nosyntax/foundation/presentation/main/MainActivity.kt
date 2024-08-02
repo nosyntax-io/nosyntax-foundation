@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                     val statusBarColor = components.appBar.background
 
                     setContent {
-                        val darkTheme = if (theme.settings.darkMode) {
+                        val darkTheme = if (theme.darkMode) {
                             isSystemInDarkTheme()
                         } else {
                             false

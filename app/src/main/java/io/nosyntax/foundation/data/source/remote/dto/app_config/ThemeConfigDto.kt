@@ -7,12 +7,6 @@ data class ThemeConfigDto(
     val colorScheme: ColorSchemeConfigDto,
     @SerializedName("typography")
     val typography: TypographyConfigDto,
-    @SerializedName("settings")
-    val settings: SettingsConfigDto
-) {
-
-    data class SettingsConfigDto(
-        @SerializedName("dark_mode")
-        val darkMode: Boolean
-    )
-}
+    @SerializedName("dark_mode")
+    val darkMode: Boolean
+)

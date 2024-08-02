@@ -9,6 +9,7 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationConf
 import io.nosyntax.foundation.data.source.remote.dto.app_config.SideMenuConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ColorSchemeConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ConfigurationDto
+import io.nosyntax.foundation.data.source.remote.dto.app_config.DetailsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.TypographyConfigDto
 import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
 import io.nosyntax.foundation.domain.model.app_config.ThemeConfig
@@ -19,6 +20,7 @@ import io.nosyntax.foundation.domain.model.app_config.MonetizationConfig
 import io.nosyntax.foundation.domain.model.app_config.TypographyConfig
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
 import io.nosyntax.foundation.domain.model.app_config.ColorSchemeConfig
+import io.nosyntax.foundation.domain.model.app_config.Details
 
 fun AppConfigDto.toConfiguration(): AppConfig {
     val (app) = this
@@ -30,13 +32,22 @@ fun AppConfigDto.toConfiguration(): AppConfig {
 
 fun AppConfigDto.App.toApp(): AppConfig.App {
     return AppConfig.App(
-        id = this.id,
-        name = this.name,
-        category = this.category,
-        description = this.description,
+        details = this.details.toDetails(),
         theme = this.theme.toTheme(),
         components = this.components.toComponents(),
         configuration = this.configuration.toConfiguration()
+    )
+}
+
+
+fun DetailsDto.toDetails(): Details {
+    return Details(
+        id = this.id,
+        name = this.name,
+        version = this.version,
+        description = this.description,
+        email = this.email,
+        privacyPolicy = this.privacyPolicy
     )
 }
 
@@ -49,12 +60,12 @@ fun ConfigurationDto.toConfiguration(): AppConfig.Configuration {
 }
 
 fun ThemeConfigDto.toTheme(): ThemeConfig {
-    val (colorScheme, typography, settings) = this
+    val (colorScheme, typography) = this
 
     return ThemeConfig(
         colorScheme = colorScheme.toColorScheme(),
         typography = typography.toTypography(),
-        settings = settings.toSettings()
+        darkMode = darkMode
     )
 }
 
@@ -81,12 +92,6 @@ fun TypographyConfigDto.toTypography(): TypographyConfig {
     return TypographyConfig(
         primaryFontFamily = this.primaryFontFamily,
         secondaryFontFamily = this.secondaryFontFamily
-    )
-}
-
-fun ThemeConfigDto.SettingsConfigDto.toSettings(): ThemeConfig.SettingsConfig {
-    return ThemeConfig.SettingsConfig(
-        darkMode = this.darkMode
     )
 }
 

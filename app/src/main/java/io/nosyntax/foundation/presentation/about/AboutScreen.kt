@@ -64,7 +64,7 @@ fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
             )
             Spacer(modifier = Modifier.height(15.dp))
             Text(
-                text = appConfig.app.description,
+                text = appConfig.app.details.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center

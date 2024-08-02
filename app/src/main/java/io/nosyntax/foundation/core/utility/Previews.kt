@@ -8,6 +8,7 @@ import io.nosyntax.foundation.domain.model.app_config.AppBarConfig
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.ColorSchemeConfig
 import io.nosyntax.foundation.domain.model.app_config.ComponentsConfig
+import io.nosyntax.foundation.domain.model.app_config.Details
 import io.nosyntax.foundation.domain.model.app_config.LoadingIndicatorConfig
 import io.nosyntax.foundation.domain.model.app_config.MonetizationConfig
 import io.nosyntax.foundation.domain.model.app_config.SideMenuConfig
@@ -28,10 +29,14 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
     override val values = sequenceOf(
         AppConfig(
             app = AppConfig.App(
-                id = "io.nosyntax.foundation.android",
-                name = "NoSyntax",
-                category = "Utility",
-                description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                details = Details(
+                    id = "io.nosyntax.foundation.android",
+                    name = "NoSyntax",
+                    version = "1.0",
+                    description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                    email = "rixhion@gmail.com",
+                    privacyPolicy = "https://google.com"
+                ),
                 theme = ThemeConfig(
                     colorScheme = ColorSchemeConfig(
                         primary = "#369770",
@@ -53,9 +58,7 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                         primaryFontFamily = "Poppins",
                         secondaryFontFamily = "Poppins"
                     ),
-                    settings = ThemeConfig.SettingsConfig(
-                        darkMode = true
-                    )
+                    darkMode = true
                 ),
                 components = ComponentsConfig(
                     appBar = AppBarConfig(
