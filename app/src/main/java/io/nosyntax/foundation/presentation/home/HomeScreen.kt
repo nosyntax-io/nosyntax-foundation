@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.core.component.AppBar
-import io.nosyntax.foundation.core.component.NavigationActionType
+import io.nosyntax.foundation.core.component.NavigationAction
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
@@ -109,15 +109,15 @@ private fun HomeContent(
         },
         topBar = {
             if (components.appBar.visible) {
-                val navigationActionType = if (isUtilityScreen(currentRoute)) NavigationActionType.Back
-                else NavigationActionType.Menu(isEnabled = components.sideMenu.visible)
+                val navigationAction = if (isUtilityScreen(currentRoute)) NavigationAction.Back
+                else NavigationAction.Menu(enabled = components.sideMenu.visible)
 
                 AppBar(
                     config = components.appBar,
                     title = selectedItem?.label ?: "",
-                    navigationActionType = navigationActionType,
+                    navigationAction = navigationAction,
                     onNavigationActionClick = {
-                        if (navigationActionType is NavigationActionType.Menu) {
+                        if (navigationAction is NavigationAction.Menu) {
                             coroutineScope.launch { drawerState.open() }
                         } else {
                             (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
