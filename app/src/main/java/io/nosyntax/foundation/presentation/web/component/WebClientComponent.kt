@@ -1,13 +1,13 @@
 package io.nosyntax.foundation.presentation.web.component
 
 import android.content.Context
+import android.webkit.URLUtil
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import io.nosyntax.foundation.core.utility.Intents.handleUrlAction
-import io.nosyntax.foundation.core.utility.Utilities
+import io.nosyntax.foundation.core.utility.Intents.handleUrl
 import io.nosyntax.foundation.core.utility.WebKitClient
 
 @Composable
@@ -26,8 +26,8 @@ fun webClient(
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url.toString()
-                if (!Utilities.isUrlValid(url)) {
-                    context.handleUrlAction(url)
+                if (!URLUtil.isValidUrl(url)) {
+                    context.handleUrl(url)
                     return true
                 }
                 return false

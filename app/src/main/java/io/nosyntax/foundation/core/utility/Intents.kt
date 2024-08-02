@@ -9,7 +9,7 @@ import android.widget.Toast
 import io.nosyntax.foundation.R
 
 object Intents {
-    fun Context.handleUrlAction(url: String) {
+    fun Context.handleUrl(url: String) {
         when {
             url.startsWith("mailto:") -> openEmail(url)
             url.startsWith("tel:") -> openDial(url)
@@ -39,18 +39,6 @@ object Intents {
                 intent.data = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
                 startActivity(intent)
             }
-        }
-    }
-
-    fun Context.openEmail(email: String, subject: String = "", body: String = "") {
-        try {
-            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email")).apply {
-                putExtra(Intent.EXTRA_SUBJECT, subject)
-                putExtra(Intent.EXTRA_TEXT, body)
-            }
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            e.printStackTrace()
         }
     }
 

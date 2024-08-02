@@ -15,7 +15,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Connectivity.getInstance().initializeWithApplicationContext(context = this)
+        Connectivity.getInstance().initialize(context = this)
 
         OneSignalService(this)
             .initialize(appId = BuildConfig.ONESIGNAL_APP_ID)

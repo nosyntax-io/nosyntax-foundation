@@ -50,70 +50,60 @@ class MainActivity : ComponentActivity() {
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
-            when {
-                state.response != null && state.error == null -> {
-                    val (theme, components) = state.response.run {
-                        theme to components
-                    }
-                    val (colorScheme, typography) = theme.run {
-                        colorScheme to typography
-                    }
+            state.response?.let { response ->
+                val theme = response.theme
+                val components = response.components
 
-                    val dynamicColorScheme = DynamicColorScheme(
-                        primary = Color(parseColor(colorScheme.primary)),
-                        onPrimary = Color(parseColor(colorScheme.onPrimary)),
-                        secondary = Color(parseColor(colorScheme.secondary)),
-                        onSecondary = Color(parseColor(colorScheme.onSecondary)),
-                        backgroundLight = Color(parseColor(colorScheme.backgroundLight)),
-                        onBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
-                        surfaceLight = Color(parseColor(colorScheme.surfaceLight)),
-                        onSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
-                        outlineLight = Color(parseColor(colorScheme.outlineLight)),
-                        backgroundDark = Color(parseColor(colorScheme.backgroundDark)),
-                        onBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
-                        surfaceDark = Color(parseColor(colorScheme.surfaceDark)),
-                        onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark)),
-                        outlineDark = Color(parseColor(colorScheme.outlineDark))
-                    )
-                    val dynamicTypography = DynamicTypography(
-                        primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),
-                        secondaryFontFamily = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
-                    )
-                    val statusBarColor = components.appBar.background
-
-                    setContent {
-                        val darkTheme = if (theme.darkMode) {
-                            isSystemInDarkTheme()
-                        } else {
-                            false
-                        }
-
-                        DynamicTheme(
-                            dynamicColorScheme = dynamicColorScheme,
-                            dynamicTypography = dynamicTypography,
-                            statusBarColor = statusBarColor,
-                            darkTheme = darkTheme
-                        ) {
-                            HomeScreen()
-                        }
-                    }
-
-                    val ads = state.response.monetization.ads
-                    if (ads.enabled && ads.interstitialDisplay) {
-                        interstitialAd = InterstitialAd(this@MainActivity).load()
-                    }
-                    isAdsEnabled = ads.enabled && ads.interstitialDisplay
-                    isInterstitialAdEnabled = ads.interstitialDisplay
+                val (colorScheme, typography) = theme.run {
+                    colorScheme to typography
                 }
-                state.error != null -> {
-                    setContent {
-                        DynamicTheme {
-                            NoConnectionComponent(onRetry = {
-                                if (Connectivity.getInstance().isOnline()) {
-                                    mainViewModel.requestAppConfig()
-                                }
-                            })
-                        }
+
+                val dynamicColorScheme = DynamicColorScheme(
+                    primary = Color(parseColor(colorScheme.primary)),
+                    onPrimary = Color(parseColor(colorScheme.onPrimary)),
+                    secondary = Color(parseColor(colorScheme.secondary)),
+                    onSecondary = Color(parseColor(colorScheme.onSecondary)),
+                    backgroundLight = Color(parseColor(colorScheme.backgroundLight)),
+                    onBackgroundLight = Color(parseColor(colorScheme.onBackgroundLight)),
+                    surfaceLight = Color(parseColor(colorScheme.surfaceLight)),
+                    onSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
+                    outlineLight = Color(parseColor(colorScheme.outlineLight)),
+                    backgroundDark = Color(parseColor(colorScheme.backgroundDark)),
+                    onBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
+                    surfaceDark = Color(parseColor(colorScheme.surfaceDark)),
+                    onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark)),
+                    outlineDark = Color(parseColor(colorScheme.outlineDark))
+                )
+
+                val dynamicTypography = DynamicTypography(
+                    primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),
+                    secondaryFontFamily = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
+                )
+
+                setContent {
+                    DynamicTheme(
+                        dynamicColorScheme = dynamicColorScheme,
+                        dynamicTypography = dynamicTypography,
+                        statusBarColor = components.appBar.background,
+                        darkTheme = if (theme.darkMode) isSystemInDarkTheme() else false,
+                        content = { HomeScreen() }
+                    )
+                }
+
+                val ads = response.monetization.ads
+                if (ads.enabled && ads.interstitialDisplay) {
+                    interstitialAd = InterstitialAd(this@MainActivity).load()
+                }
+                isAdsEnabled = ads.enabled && ads.interstitialDisplay
+                isInterstitialAdEnabled = ads.interstitialDisplay
+            } ?: run {
+                setContent {
+                    DynamicTheme {
+                        NoConnectionComponent(onRetry = {
+                            if (Connectivity.getInstance().isOnline()) {
+                                mainViewModel.requestAppConfig()
+                            }
+                        })
                     }
                 }
             }

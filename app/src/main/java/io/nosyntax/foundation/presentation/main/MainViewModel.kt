@@ -41,24 +41,21 @@ class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases):
             mainUseCases.getAppConfigUseCase.invoke().collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _appConfig.emit(
-                            AppConfigState(
-                            isLoading = result.isLoading)
-                        )
+                        _appConfig.emit(AppConfigState(
+                            isLoading = result.isLoading
+                        ))
                     }
                     is Resource.Success -> {
-                        _appConfig.emit(
-                            AppConfigState(
-                            response = result.data)
-                        )
+                        _appConfig.emit(AppConfigState(
+                            response = result.data
+                        ))
                         _appConfigUI.value = result.data
                         _isInitialized.emit(true)
                     }
                     is Resource.Error -> {
-                        _appConfig.emit(
-                            AppConfigState(
-                            error = result.message)
-                        )
+                        _appConfig.emit(AppConfigState(
+                            error = result.message
+                        ))
                         _isInitialized.emit(true)
                     }
                 }

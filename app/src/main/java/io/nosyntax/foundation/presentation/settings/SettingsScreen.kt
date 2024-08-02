@@ -46,7 +46,7 @@ fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.send_feedback)) {
-            context.openEmail(email = appConfig.settings.email)
+            context.openEmail(url = "mailto:${appConfig.settings.email}")
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.privacy_policy)) {

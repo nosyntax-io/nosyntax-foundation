@@ -16,7 +16,6 @@ class SystemUIController(private val window: Window, private val view: View) {
     fun hideSystemUi() {
         WindowInsetsControllerCompat(window, view).apply {
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
             hide(WindowInsetsCompat.Type.systemBars())
         }
     }

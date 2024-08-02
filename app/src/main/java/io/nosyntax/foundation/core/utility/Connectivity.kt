@@ -22,14 +22,15 @@ class Connectivity private constructor() {
         }
     }
 
-    fun initializeWithApplicationContext(context: Context) {
+    fun initialize(context: Context) {
         connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     fun isOnline(): Boolean {
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.let {
+            it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+            it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         } ?: false
     }
 }
