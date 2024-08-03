@@ -7,8 +7,6 @@ object Constants {
     const val MALFORMED_REQUEST_EXCEPTION = "exception:malformed_request"
     const val LOADING_LOCAL_JSON_EXCEPTION = "exception:loading_local_json"
 
-    const val DEEPLINK = "deeplink"
-
     const val BACKGROUND_NEUTRAL = "neutral"
     const val BACKGROUND_SOLID = "solid"
     const val BACKGROUND_GRADIENT = "gradient"

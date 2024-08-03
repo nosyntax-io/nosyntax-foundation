@@ -11,21 +11,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.NoConnectionComponent
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.collectLatestOnLifecycleStarted
 import io.nosyntax.foundation.core.utility.monetize.InterstitialAd
-import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.presentation.home.HomeScreen
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import io.nosyntax.foundation.ui.theme.DynamicColorScheme
 import io.nosyntax.foundation.ui.theme.DynamicTypography
 import io.nosyntax.foundation.ui.theme.googleFontProvider
 import dagger.hilt.android.AndroidEntryPoint
+import io.nosyntax.foundation.core.utility.Utilities.getSerializable
+import io.nosyntax.foundation.domain.model.Deeplink
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity: ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
     private var interstitialAd: InterstitialAd? = null
@@ -35,18 +35,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val deeplink = getSerializable(this, "deeplink", Deeplink::class.java)
+
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 !mainViewModel.isInitialized.value
             }
-        }
-
-        intent.getStringExtra(Constants.DEEPLINK)?.let { deeplink ->
-            mainViewModel.setDeeplink(
-                Deeplink(
-                destination = deeplink
-            )
-            )
         }
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
@@ -86,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         dynamicTypography = dynamicTypography,
                         statusBarColor = components.appBar.background,
                         darkTheme = if (theme.darkMode) isSystemInDarkTheme() else false,
-                        content = { HomeScreen() }
+                        content = { HomeScreen(deeplink = deeplink) }
                     )
                 }
 
@@ -101,7 +95,7 @@ class MainActivity : ComponentActivity() {
                     DynamicTheme {
                         NoConnectionComponent(onRetry = {
                             if (Connectivity.getInstance().isOnline()) {
-                                mainViewModel.requestAppConfig()
+                                mainViewModel.getAppConfig()
                             }
                         })
                     }

@@ -40,16 +40,16 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     viewModel: MainViewModel = viewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    deeplink: Deeplink? = null
 ) {
     val context = LocalContext.current
-    val appConfig by viewModel.appConfigUI.collectAsState()
-    val deeplink by viewModel.deeplink.collectAsState()
+    val appConfig by viewModel.appConfig.collectAsState()
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: ""
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    appConfig?.let { config ->
+    appConfig.response?.let { config ->
         val components = config.components
 
         val content: @Composable () -> Unit = {
@@ -88,7 +88,7 @@ fun HomeScreen(
 private fun HomeContent(
     context: Context,
     appConfig: AppConfig,
-    deeplink: Deeplink,
+    deeplink: Deeplink?,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,

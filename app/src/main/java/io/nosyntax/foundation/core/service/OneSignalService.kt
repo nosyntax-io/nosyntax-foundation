@@ -6,15 +6,10 @@ import com.onesignal.debug.LogLevel
 import com.onesignal.notifications.INotification
 import com.onesignal.notifications.INotificationClickEvent
 import com.onesignal.notifications.INotificationClickListener
+import io.nosyntax.foundation.domain.model.Deeplink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-
-data class DeeplinkData(
-    val destination: String,
-    val action: String
-)
 
 class OneSignalService(private val context: Context) {
     /**
@@ -24,7 +19,7 @@ class OneSignalService(private val context: Context) {
      * @param logLevel The logging level for debugging.
      * @return The current instance of OneSignalService.
      */
-    fun initialize(appId: String, logLevel: LogLevel = LogLevel.NONE): OneSignalService {
+    fun initialize(appId: String, logLevel: LogLevel = LogLevel.DEBUG): OneSignalService {
         OneSignal.Debug.logLevel = logLevel
         OneSignal.initWithContext(context, appId)
         CoroutineScope(Dispatchers.IO).launch {
@@ -39,14 +34,11 @@ class OneSignalService(private val context: Context) {
      * @param onNotificationOpened A callback invoked when a notification is clicked.
      * @return The current instance of OneSignalService.
      */
-    fun registerOnNotificationClick(onNotificationOpened: (DeeplinkData) -> Unit): OneSignalService {
+    fun registerOnNotificationClick(onNotificationOpened: (Deeplink) -> Unit): OneSignalService {
         OneSignal.Notifications.addClickListener(object: INotificationClickListener {
             override fun onClick(event: INotificationClickEvent) {
-                val notification = event.notification
-                val additionalData = notification.additionalData
-
-                val deeplinkData = extractDeeplinkData(notification, additionalData)
-                onNotificationOpened(deeplinkData)
+                val deeplink = extractDeeplink(event.notification)
+                onNotificationOpened(deeplink)
             }
         })
         return this
@@ -56,10 +48,9 @@ class OneSignalService(private val context: Context) {
      * Extract deeplink data from the notification.
      *
      * @param notification The OneSignal notification object.
-     * @param additionalData JSON object containing additional notification data.
-     * @return A DeeplinkData object containing the extracted destination and type.
+     * @return A Deeplink object containing the extracted destination and action.
      */
-    private fun extractDeeplinkData(notification: INotification, additionalData: JSONObject?): DeeplinkData {
+    private fun extractDeeplink(notification: INotification): Deeplink {
         var destination = ""
         var action = ""
 
@@ -68,11 +59,11 @@ class OneSignalService(private val context: Context) {
             action = "IN_APP_WEBVIEW"
         }
 
-        additionalData?.let {
+        notification.additionalData?.let {
             destination = it.optString("deeplink_destination", destination)
             action = it.optString("deeplink_action", action)
         }
 
-        return DeeplinkData(destination, action)
+        return Deeplink(destination, action)
     }
 }

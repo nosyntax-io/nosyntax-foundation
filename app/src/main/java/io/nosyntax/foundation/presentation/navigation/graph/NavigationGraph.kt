@@ -22,13 +22,13 @@ import io.nosyntax.foundation.presentation.web.WebScreen
 @Composable
 fun NavigationGraph(
     appConfig: AppConfig,
-    deeplink: Deeplink,
+    deeplink: Deeplink?,
     navController: NavHostController,
     drawerState: DrawerState
 ) {
     NavHost(
         navController = navController,
-        startDestination = appConfig.settings.entryPage,
+        startDestination = if (deeplink != null) "deeplink" else appConfig.settings.entryPage,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
@@ -36,12 +36,18 @@ fun NavigationGraph(
             composable(route = item.route) {
                 ComposableContent(
                     appConfig = appConfig,
-                    deeplink = deeplink,
                     item = item,
                     navController = navController,
                     drawerState = drawerState
                 )
             }
+        }
+        composable(route = "deeplink") {
+            WebScreen(
+                appConfig = appConfig,
+                url = deeplink?.destination ?: "",
+                drawerState = drawerState
+            )
         }
         composable(route = "about") {
             AboutScreen(
@@ -55,7 +61,6 @@ fun NavigationGraph(
 @Composable
 fun ComposableContent(
     appConfig: AppConfig,
-    deeplink: Deeplink,
     item: Components.SideMenu.Item,
     navController: NavHostController,
     drawerState: DrawerState
@@ -64,7 +69,7 @@ fun ComposableContent(
         item.route.startsWith("web") -> {
             WebScreen(
                 appConfig = appConfig,
-                url = deeplink.destination.ifEmpty { item.action ?: "" },
+                url = item.action!!,
                 drawerState = drawerState
             )
         }
