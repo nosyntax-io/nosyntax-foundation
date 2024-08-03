@@ -39,7 +39,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier.size(140.dp),
+            modifier = Modifier.size(130.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
             colorFilter = ColorFilter.tint(color = setColorContrast(
@@ -57,7 +57,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         Text(
             text = stringResource(id = R.string.no_internet_connection_description),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(20.dp))

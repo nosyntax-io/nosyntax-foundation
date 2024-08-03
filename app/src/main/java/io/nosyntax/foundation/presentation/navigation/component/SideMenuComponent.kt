@@ -148,7 +148,7 @@ fun SideMenuItem(
 ) {
     val isSelected = currentRoute == item.route
     val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.primary to MaterialTheme.colorScheme.onSurface
+        MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onPrimary to MaterialTheme.colorScheme.onPrimary
     }

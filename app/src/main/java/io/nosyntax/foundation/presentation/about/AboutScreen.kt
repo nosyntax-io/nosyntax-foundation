@@ -66,7 +66,7 @@ fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
             Text(
                 text = appConfig.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -78,7 +78,7 @@ fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
                     "${stringResource(R.string.app_name)}.\n" +
                     stringResource(R.string.all_rights_reserved),
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
                 textAlign = TextAlign.Center
             )
         }
