@@ -75,47 +75,55 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                     items = listOf(
                         Components.SideMenu.Item(
                             route = "web-1",
+                            type = "page",
                             label = "Home",
                             icon = "https://img.icons8.com/?size=256&id=gE0woMnZGtua&format=png",
                             action = "https://home.com"
                         ),
                         Components.SideMenu.Item(
                             route = "web-2",
+                            type = "page",
                             label = "Store",
                             icon = "https://img.icons8.com/?size=100&id=dosi6bTgHIrs&format=png",
                             action = "https://store.com"
                         ),
                         Components.SideMenu.Item(
                             route = "web-3",
+                            type = "page",
                             label = "News",
                             icon = "https://img.icons8.com/?size=256&id=D9RFWfYE57lW&format=png",
                             action = "https://news.com"
                         ),
                         Components.SideMenu.Item(
                             route = "mail-4",
+                            type = "page",
                             label = "Contact Us",
                             icon = "https://img.icons8.com/fluency-systems-filled/96/new-post.png",
                             action = "mailto:email@example.com"
                         ),
                         Components.SideMenu.Item(
                             route = "dial-5",
+                            type = "page",
                             label = "Call Us",
                             icon = "https://img.icons8.com/fluency-systems-filled/96/phone-disconnected.png",
                             action = "tel:+0123456789"
                         ),
                         Components.SideMenu.Item(
                             route = "sms-6",
+                            type = "page",
                             label = "Send SMS",
                             icon = "https://img.icons8.com/fluency-systems-filled/96/speech-bubble-with-dots.png",
                             action = "sms:+0123456789"
                         ),
                         Components.SideMenu.Item(
                             route = "settings-7",
+                            type = "page",
                             label = "Settings",
                             icon = "https://img.icons8.com/fluency-systems-filled/100/settings.png"
                         ),
                         Components.SideMenu.Item(
                             route = "about-8",
+                            type = "page",
                             label = "About Us",
                             icon = "https://img.icons8.com/fluency-systems-filled/100/user-male-circle.png"
                         )

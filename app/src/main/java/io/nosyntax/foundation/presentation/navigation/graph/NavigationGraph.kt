@@ -32,8 +32,8 @@ fun NavigationGraph(
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
-        appConfig.components.sideMenu.items.forEach { item ->
-            composable(route = item.route) {
+        appConfig.components.sideMenu.items.filter { it.route != null }.forEach { item ->
+            composable(route = item.route!!) {
                 ComposableContent(
                     appConfig = appConfig,
                     item = item,
@@ -65,21 +65,21 @@ fun ComposableContent(
     navController: NavHostController,
     drawerState: DrawerState
 ) {
-    when {
-        item.route.startsWith("web") -> {
+    when (item.type) {
+        "webview" -> {
             WebScreen(
                 appConfig = appConfig,
                 url = item.action!!,
                 drawerState = drawerState
             )
         }
-        item.route.startsWith("settings") -> {
+        "settings" -> {
             SettingsScreen(
                 appConfig = appConfig,
                 navController = navController
             )
         }
-        item.route.startsWith("about") -> {
+        "about" -> {
             AboutScreen(
                 appConfig = appConfig,
                 navController = navController
@@ -96,12 +96,12 @@ class Navigator(private val context: Context, private val navController: NavHost
         navController.navigate(route)
     }
 
-    fun open(route: String, action: String) {
-        when {
-            route.startsWith("browser") -> context.openUrl(url = action)
-            route.startsWith("mail") -> context.openEmail(url = action)
-            route.startsWith("dial") -> context.openDial(url = action)
-            route.startsWith("sms") -> context.openSMS(url = action)
+    fun open(type: String, action: String) {
+        when (type) {
+            "browser" -> context.openUrl(url = action)
+            "mail" -> context.openEmail(url = action)
+            "dial" -> context.openDial(url = action)
+            "sms" -> context.openSMS(url = action)
         }
     }
 

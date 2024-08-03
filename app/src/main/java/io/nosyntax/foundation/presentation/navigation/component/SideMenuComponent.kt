@@ -109,10 +109,10 @@ fun SideMenuContent(
                     onClick = {
                         val navigator = Navigator(context, navController)
 
-                        if (setOf("browser", "mail", "dial", "sms").any { item.route.startsWith(it) }) {
-                            navigator.open(route = item.route, action = item.action!!)
+                        if (setOf("browser", "mail", "dial", "sms").any { item.type == it }) {
+                            navigator.open(type = item.type, action = item.action!!)
                         } else {
-                            navigator.navigate(currentRoute = currentRoute, route = item.route)
+                            navigator.navigate(currentRoute = currentRoute, route = item.route!!)
                         }
 
                         coroutineScope.launch {
@@ -196,11 +196,11 @@ private fun SideMenuPreview() {
         val currentRoute by remember { mutableStateOf("1") }
 
         val items = listOf(
-            Components.SideMenu.Item("1",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            Components.SideMenu.Item("2",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            Components.SideMenu.Item("3",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
-            Components.SideMenu.Item("4",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
-            Components.SideMenu.Item("5",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
+            Components.SideMenu.Item("1", type = "webview",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            Components.SideMenu.Item("2", type = "webview",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
+            Components.SideMenu.Item("3", type = "webview",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
+            Components.SideMenu.Item("4", type = "settings",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
+            Components.SideMenu.Item("5", type = "about",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
         )
 
         SideMenu(

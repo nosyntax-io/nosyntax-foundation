@@ -86,6 +86,7 @@ fun ComponentsDto.toComponents(): Components {
             items = this.sideMenu.items.map { item ->
                 Components.SideMenu.Item(
                     route = item.route,
+                    type = item.type,
                     label = item.label,
                     icon = item.icon,
                     action = item.action

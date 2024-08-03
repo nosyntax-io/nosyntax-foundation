@@ -45,7 +45,9 @@ data class ComponentsDto(
 
         data class Item(
             @SerializedName("route")
-            val route: String,
+            val route: String?,
+            @SerializedName("type")
+            val type: String,
             @SerializedName("label")
             val label: String?,
             @SerializedName("icon")
