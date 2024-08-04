@@ -27,8 +27,15 @@ import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 sealed class NavigationAction {
-    data class Menu(val enabled: Boolean): NavigationAction()
-    data object Back: NavigationAction()
+    abstract fun onClick()
+
+    data class Menu(val enabled: Boolean, val clickAction: () -> Unit) : NavigationAction() {
+        override fun onClick() = clickAction()
+    }
+
+    data class Back(val clickAction: () -> Unit) : NavigationAction() {
+        override fun onClick() = clickAction()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,8 +43,7 @@ sealed class NavigationAction {
 fun AppBar(
     config: Components.AppBar,
     title: String,
-    navigationAction: NavigationAction,
-    onNavigationActionClick: () -> Unit
+    navigationAction: NavigationAction
 ) {
     val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
@@ -77,7 +83,7 @@ fun AppBar(
             colors = appBarColors,
             title = { AppBarTitle(config, title) },
             navigationIcon = {
-                AppBarNavigationIcon(navigationAction, onNavigationActionClick)
+                AppBarNavigationIcon(navigationAction)
             }
         )
     } else {
@@ -86,7 +92,7 @@ fun AppBar(
             colors = appBarColors,
             title = { AppBarTitle(config, title) },
             navigationIcon = {
-                AppBarNavigationIcon(navigationAction, onNavigationActionClick)
+                AppBarNavigationIcon(navigationAction)
             }
         )
     }
@@ -108,24 +114,18 @@ fun AppBarTitle(config: Components.AppBar, title: String) {
 }
 
 @Composable
-fun AppBarNavigationIcon(
-    navigationAction: NavigationAction,
-    onNavigationActionClick: () -> Unit
-) {
-    val navigationIconResId = when (navigationAction) {
-        is NavigationAction.Back -> R.drawable.icon_arrow_left_filled
+fun AppBarNavigationIcon(navigationAction: NavigationAction) {
+    val iconPainter = when (navigationAction) {
+        is NavigationAction.Back -> painterResource(id = R.drawable.icon_arrow_left_filled)
         is NavigationAction.Menu -> if (navigationAction.enabled) {
-            R.drawable.icon_menu_filled
+            painterResource(id = R.drawable.icon_menu_filled)
         } else {
             null
         }
     }
 
-    navigationIconResId?.let {
-        AppBarActionIcon(
-            icon = painterResource(id = it),
-            onClick = onNavigationActionClick
-        )
+    iconPainter?.let {
+        AppBarActionIcon(icon = it, onClick = navigationAction::onClick)
     }
 }
 
@@ -157,8 +157,9 @@ fun AppBarPreview() {
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            navigationAction = NavigationAction.Menu(enabled = true),
-            onNavigationActionClick = { }
+            navigationAction = NavigationAction.Menu(enabled = true) {
+
+            }
         )
     }
 }

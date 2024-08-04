@@ -48,7 +48,7 @@ fun HomeScreen(
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: ""
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
+    
     appConfig.response?.let { config ->
         val components = config.components
 
@@ -109,22 +109,22 @@ private fun HomeContent(
         },
         topBar = {
             if (components.appBar.visible) {
-                val navigationAction = if (isUtilityScreen(currentRoute)) NavigationAction.Back
-                else NavigationAction.Menu(enabled = components.sideMenu.visible)
+                val nav = if (!isUtilityScreen(currentRoute)) {
+                    NavigationAction.Menu(enabled = true) {
+                        coroutineScope.launch { drawerState.open() }
+                    }
+                } else {
+                    NavigationAction.Back {
+                        (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
+                            navController.popBackStack()
+                        })
+                    }
+                }
 
                 AppBar(
                     config = components.appBar,
                     title = selectedItem?.label ?: "",
-                    navigationAction = navigationAction,
-                    onNavigationActionClick = {
-                        if (navigationAction is NavigationAction.Menu) {
-                            coroutineScope.launch { drawerState.open() }
-                        } else {
-                            (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
-                                navController.popBackStack()
-                            })
-                        }
-                    }
+                    navigationAction = nav
                 )
             }
         },
