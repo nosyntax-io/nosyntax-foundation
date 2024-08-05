@@ -21,7 +21,7 @@ data class DynamicColorScheme(
 
 val ColorPrimary = Color(0xFF369770)
 val ColorOnPrimary = Color(0xFFFFFFFF)
-val ColorSecondary = Color(0xFF121212)
+val ColorSecondary = Color(0xFF369770)
 val ColorOnSecondary = Color(0xFFFFFFFF)
 val ColorBackgroundLight = Color(0xFFfcfcfc)
 val ColorOnBackgroundLight = Color(0xFF19191a)

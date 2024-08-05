@@ -145,7 +145,6 @@ fun SideMenuItem(
     onClick: () -> Unit
 ) {
     val isSelected = currentRoute == item.route
-    // TODO: Verify that colors are used properly. 
     val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
     } else {
@@ -160,7 +159,7 @@ fun SideMenuItem(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = containerColor.copy(alpha = .1f),
+            selectedContainerColor = containerColor.copy(alpha = .12f),
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = contentColor,
             selectedIconColor = contentColor,
