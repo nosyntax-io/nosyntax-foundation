@@ -1,6 +1,7 @@
 package io.nosyntax.foundation.core.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
+import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
@@ -78,7 +81,9 @@ fun NavigationDrawerContent(
     ModalDrawerSheet(
         modifier = Modifier
             .padding(end = 100.dp)
-            .clip(shape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp))
+            .clip(shape = RoundedCornerShape(
+                topEnd = 15.dp, bottomEnd = 15.dp
+            ))
             .then(backgroundModifier),
         drawerContainerColor = Color.Transparent,
         drawerContentColor = Color.Transparent
@@ -89,13 +94,21 @@ fun NavigationDrawerContent(
             items(config.items.size) { index ->
                 val item = config.items[index]
 
-                // TODO: Add support for dividers
-                NavigationDrawerItem(
-                    config = config,
-                    currentRoute = currentRoute,
-                    item = item,
-                    onClick = { onItemClick(item) }
-                )
+                when (item.type) {
+                    "divider" -> {
+                        NavigationDrawerDivider(
+                            config = config
+                        )
+                    }
+                    else -> {
+                        NavigationDrawerItem(
+                            config = config,
+                            currentRoute = currentRoute,
+                            item = item,
+                            onClick = { onItemClick(item) }
+                        )
+                    }
+                }
             }
         }
     }
@@ -113,6 +126,20 @@ fun NavigationDrawerHeader(config: Components.NavigationDrawer, headerHeight: Dp
             source = config.header.image
         )
     }
+}
+
+@Composable
+fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
+    val dividerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.outline
+    } else {
+        MaterialTheme.colorScheme.onPrimary.copy(alpha = .3f)
+    }
+    HorizontalDivider(
+        modifier = Modifier.padding(vertical = 7.dp),
+        thickness = 1.dp,
+        color = dividerColor
+    )
 }
 
 @Composable
