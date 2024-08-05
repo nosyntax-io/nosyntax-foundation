@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.presentation.navigation.component
+package io.nosyntax.foundation.core.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -17,34 +17,26 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.Icon
-import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.navigation.graph.Navigator
 import io.nosyntax.foundation.ui.theme.DynamicTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun SideMenu(
     config: Components.SideMenu,
-    navController: NavHostController,
     currentRoute: String,
     drawerState: DrawerState,
+    onItemClick: (Components.SideMenu.Item) -> Unit,
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
@@ -54,9 +46,8 @@ fun SideMenu(
         drawerContent = {
             SideMenuContent(
                 config = config,
-                navController = navController,
                 currentRoute = currentRoute,
-                drawerState = drawerState
+                onItemClick = onItemClick
             )
         }
     )
@@ -65,13 +56,9 @@ fun SideMenu(
 @Composable
 fun SideMenuContent(
     config: Components.SideMenu,
-    navController: NavHostController,
     currentRoute: String,
-    drawerState: DrawerState
+    onItemClick: (Components.SideMenu.Item) -> Unit,
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
     val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
@@ -106,17 +93,7 @@ fun SideMenuContent(
                     config = config,
                     currentRoute = currentRoute,
                     item = item,
-                    onClick = {
-                        // TODO: Find a cleaner approach for navigation.
-                        val navigator = Navigator(context, navController)
-
-                        if (setOf("browser", "mail", "dial", "sms").any { item.type == it }) {
-                            navigator.open(type = item.type, action = item.action!!)
-                        } else {
-                            navigator.navigate(currentRoute = currentRoute, route = item.route!!)
-                        }
-                        coroutineScope.launch { drawerState.close() }
-                    }
+                    onClick = { onItemClick(item) }
                 )
             }
         }
@@ -193,9 +170,9 @@ private fun SideMenuPreview(
     DynamicTheme {
         SideMenu(
             config = appConfig.components.sideMenu,
-            navController = rememberNavController(),
             currentRoute = "web-000",
             drawerState = DrawerState(DrawerValue.Open),
+            onItemClick = { },
             content = { }
         )
     }

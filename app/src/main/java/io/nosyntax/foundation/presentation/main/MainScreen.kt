@@ -31,9 +31,9 @@ import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.navigation.component.SideMenu
-import io.nosyntax.foundation.presentation.navigation.graph.NavigationGraph
-import io.nosyntax.foundation.presentation.navigation.graph.isUtilityScreen
+import io.nosyntax.foundation.core.component.SideMenu
+import io.nosyntax.foundation.presentation.navigation.NavigationGraph
+import io.nosyntax.foundation.presentation.navigation.SideMenuNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -44,14 +44,14 @@ fun MainScreen(
     navController: NavHostController = rememberNavController(),
     deeplink: Deeplink? = null
 ) {
+    val context = LocalContext.current
     val appConfig by viewModel.appConfig.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val navigator = remember { SideMenuNavigator(context, navController) }
 
     appConfig.response?.let { config ->
-        val components = config.components
-
         val content: @Composable () -> Unit = {
             MainContent(
                 appConfig = config,
@@ -63,13 +63,16 @@ fun MainScreen(
             )
         }
 
-        components.sideMenu.takeIf { it.visible }?.let {
+        config.components.sideMenu.takeIf { it.visible }?.let {
             SideMenu(
-                config = components.sideMenu,
-                navController = navController,
+                config = config.components.sideMenu,
                 currentRoute = currentRoute,
                 drawerState = drawerState,
-                content = content
+                content = content,
+                onItemClick = { item ->
+                    navigator.handleItemClick(item)
+                    coroutineScope.launch { drawerState.close() }
+                },
             )
         } ?: content
     }
@@ -111,7 +114,9 @@ private fun MainContent(
             }
         },
         content = { inline ->
-            Column(modifier = Modifier.fillMaxSize().padding(inline)) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(inline)) {
                 NavigationGraph(
                     appConfig = appConfig,
                     navController = navController,
@@ -138,7 +143,7 @@ private fun getNavigationAction(
     context: Context,
     navController: NavHostController
 ): NavigationAction {
-    return if (!isUtilityScreen(currentRoute)) {
+    return if (!currentRoute.startsWith("settings") || currentRoute.startsWith("about")) {
         NavigationAction.Menu(enabled = true) {
             coroutineScope.launch { drawerState.open() }
         }

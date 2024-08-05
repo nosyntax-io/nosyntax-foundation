@@ -1,6 +1,5 @@
-package io.nosyntax.foundation.presentation.navigation.graph
+package io.nosyntax.foundation.presentation.navigation
 
-import android.content.Context
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.DrawerState
@@ -8,10 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import io.nosyntax.foundation.core.utility.Intents.openDial
-import io.nosyntax.foundation.core.utility.Intents.openEmail
-import io.nosyntax.foundation.core.utility.Intents.openSMS
-import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.about.AboutScreen
@@ -22,8 +17,8 @@ import io.nosyntax.foundation.presentation.web.WebScreen
 fun NavigationGraph(
     appConfig: AppConfig,
     navController: NavHostController,
-    deeplink: Deeplink?,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    deeplink: Deeplink?
 ) {
     val startDestination = deeplink?.let { "deeplink" } ?: appConfig.settings.entryPage
 
@@ -38,8 +33,8 @@ fun NavigationGraph(
                 when (item.type) {
                     "webview" -> WebScreen(
                         appConfig = appConfig,
-                        url = item.action.orEmpty(),
-                        drawerState = drawerState
+                        drawerState = drawerState,
+                        url = item.action.orEmpty()
                     )
                     "settings" -> SettingsScreen(
                         appConfig = appConfig,
@@ -55,8 +50,8 @@ fun NavigationGraph(
         composable(route = "deeplink") {
             WebScreen(
                 appConfig = appConfig,
-                url = deeplink?.destination.orEmpty(),
-                drawerState = drawerState
+                drawerState = drawerState,
+                url = deeplink?.destination.orEmpty()
             )
         }
         composable(route = "about") {
@@ -66,35 +61,4 @@ fun NavigationGraph(
             )
         }
     }
-}
-
-// TODO: Find a cleaner approach for the navigator class 
-class Navigator(private val context: Context, private val navController: NavHostController) {
-    fun navigate(currentRoute: String, route: String) {
-        if (!isUtilityScreen(currentRoute)) {
-            clearBackStackToMainScreen()
-        }
-        navController.navigate(route)
-    }
-
-    fun open(type: String, action: String) {
-        when (type) {
-            "browser" -> context.openUrl(url = action)
-            "mail" -> context.openEmail(url = action)
-            "dial" -> context.openDial(url = action)
-            "sms" -> context.openSMS(url = action)
-        }
-    }
-
-    private fun clearBackStackToMainScreen() {
-        navController.popBackStack(
-            destinationId = navController.graph.startDestinationId,
-            inclusive = false
-        )
-    }
-}
-
-// TODO: Handle utility screens in a cleaner way
-fun isUtilityScreen(route: String): Boolean {
-    return setOf("settings", "about").any { route.startsWith(it) }
 }
