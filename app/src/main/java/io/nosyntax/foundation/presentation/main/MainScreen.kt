@@ -1,6 +1,5 @@
 package io.nosyntax.foundation.presentation.main
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +29,6 @@ import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.core.component.SideMenu
 import io.nosyntax.foundation.presentation.navigation.NavigationGraph
 import io.nosyntax.foundation.presentation.navigation.SideMenuNavigator
@@ -103,13 +101,29 @@ private fun MainContent(
         },
         topBar = {
             if (components.appBar.visible) {
-                val title = getAppBarTitle(currentRoute, components)
-                val navigationAction = getNavigationAction(currentRoute, coroutineScope, drawerState, context, navController)
+                val title = when (currentRoute) {
+                    "about" -> stringResource(id = R.string.about_us)
+                    else -> components.sideMenu.items.find {
+                        it.route == currentRoute
+                    }?.label.orEmpty()
+                }
+
+                val action = if (currentRoute.startsWith("settings") || currentRoute.startsWith("about")) {
+                    NavigationAction.Back {
+                        (context.findActivity() as MainActivity).showInterstitial {
+                            navController.popBackStack()
+                        }
+                    }
+                } else {
+                    NavigationAction.Menu(enabled = true) {
+                        coroutineScope.launch { drawerState.open() }
+                    }
+                }
 
                 AppBar(
                     config = components.appBar,
                     title = title,
-                    navigationAction = navigationAction
+                    navigationAction = action
                 )
             }
         },
@@ -126,32 +140,4 @@ private fun MainContent(
             }
         }
     )
-}
-
-@Composable
-private fun getAppBarTitle(currentRoute: String, components: Components): String {
-    return when (currentRoute) {
-        "profile" -> stringResource(id = R.string.about_us)
-        else -> components.sideMenu.items.find { it.route == currentRoute }?.label.orEmpty()
-    }
-}
-
-private fun getNavigationAction(
-    currentRoute: String,
-    coroutineScope: CoroutineScope,
-    drawerState: DrawerState,
-    context: Context,
-    navController: NavHostController
-): NavigationAction {
-    return if (!currentRoute.startsWith("settings") || currentRoute.startsWith("about")) {
-        NavigationAction.Menu(enabled = true) {
-            coroutineScope.launch { drawerState.open() }
-        }
-    } else {
-        NavigationAction.Back {
-            (context.findActivity() as MainActivity).showInterstitial {
-                navController.popBackStack()
-            }
-        }
-    }
 }
