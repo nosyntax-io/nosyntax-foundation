@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class ComponentsDto(
     @SerializedName("app_bar")
     val appBar: AppBar,
-    @SerializedName("side_menu")
-    val sideMenu: SideMenu,
+    @SerializedName("navigation_drawer")
+    val navigationDrawer: NavigationDrawer,
     @SerializedName("navigation_bar")
     val navigationBar: NavigationBar,
     @SerializedName("loading_indicator")
@@ -28,7 +28,7 @@ data class ComponentsDto(
         )
     }
 
-    data class SideMenu(
+    data class NavigationDrawer(
         @SerializedName("visible")
         val visible: Boolean,
         @SerializedName("background")

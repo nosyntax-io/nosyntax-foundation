@@ -35,9 +35,6 @@ fun SettingsDto.toSettings(): Settings {
 }
 
 fun ThemeDto.toTheme(): Theme {
-    val colorScheme = this.colorScheme
-    val typography = this.typography
-
     return Theme(
         colorScheme = Theme.ColorScheme(
             primary = colorScheme.primary,
@@ -64,10 +61,6 @@ fun ThemeDto.toTheme(): Theme {
 }
 
 fun ComponentsDto.toComponents(): Components {
-    val appBar = this.appBar
-    val sideMenu = this.sideMenu
-    val loadingIndicator = this.loadingIndicator
-
     return Components(
         appBar = Components.AppBar(
             visible = appBar.visible,
@@ -77,14 +70,14 @@ fun ComponentsDto.toComponents(): Components {
                 alignment = appBar.title.alignment
             )
         ),
-        sideMenu = Components.SideMenu(
-            visible = sideMenu.visible,
-            background = sideMenu.background,
-            header = Components.SideMenu.Header(
-                visible = sideMenu.header.visible,
-                image = sideMenu.header.image
+        navigationDrawer = Components.NavigationDrawer(
+            visible = navigationDrawer.visible,
+            background = navigationDrawer.background,
+            header = Components.NavigationDrawer.Header(
+                visible = navigationDrawer.header.visible,
+                image = navigationDrawer.header.image
             ),
-            items = this.sideMenu.items.map { item ->
+            items = this.navigationDrawer.items.map { item ->
                 NavigationItem(
                     route = item.route,
                     type = item.type,
@@ -98,7 +91,7 @@ fun ComponentsDto.toComponents(): Components {
             visible = navigationBar.visible,
             background = navigationBar.background,
             label = navigationBar.label,
-            items = this.navigationBar.items.map { item ->
+            items = navigationBar.items.map { item ->
                 NavigationItem(
                     route = item.route,
                     type = item.type,

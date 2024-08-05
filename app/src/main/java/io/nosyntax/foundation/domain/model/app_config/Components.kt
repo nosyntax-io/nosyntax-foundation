@@ -4,7 +4,7 @@ import io.nosyntax.foundation.domain.model.NavigationItem
 
 data class Components(
     val appBar: AppBar,
-    val sideMenu: SideMenu,
+    val navigationDrawer: NavigationDrawer,
     val navigationBar: NavigationBar,
     val loadingIndicator: LoadingIndicator
 ) {
@@ -19,7 +19,7 @@ data class Components(
         )
     }
 
-    data class SideMenu(
+    data class NavigationDrawer(
         val visible: Boolean,
         val background: String,
         val header: Header,

@@ -33,8 +33,8 @@ import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun SideMenu(
-    config: Components.SideMenu,
+fun NavigationDrawer(
+    config: Components.NavigationDrawer,
     currentRoute: String,
     drawerState: DrawerState,
     onItemClick: (NavigationItem) -> Unit,
@@ -45,7 +45,7 @@ fun SideMenu(
         gesturesEnabled = drawerState.isOpen,
         content = content,
         drawerContent = {
-            SideMenuContent(
+            NavigationDrawerContent(
                 config = config,
                 currentRoute = currentRoute,
                 onItemClick = onItemClick
@@ -55,8 +55,8 @@ fun SideMenu(
 }
 
 @Composable
-fun SideMenuContent(
-    config: Components.SideMenu,
+fun NavigationDrawerContent(
+    config: Components.NavigationDrawer,
     currentRoute: String,
     onItemClick: (NavigationItem) -> Unit,
 ) {
@@ -83,14 +83,14 @@ fun SideMenuContent(
         drawerContainerColor = Color.Transparent,
         drawerContentColor = Color.Transparent
     ) {
-        SideMenuHeader(config = config)
+        NavigationDrawerHeader(config = config)
         Spacer(modifier = Modifier.height(20.dp))
         LazyColumn {
             items(config.items.size) { index ->
                 val item = config.items[index]
 
                 // TODO: Add support for dividers
-                SideMenuItem(
+                NavigationDrawerItem(
                     config = config,
                     currentRoute = currentRoute,
                     item = item,
@@ -102,7 +102,7 @@ fun SideMenuContent(
 }
 
 @Composable
-fun SideMenuHeader(config: Components.SideMenu, headerHeight: Dp = 150.dp) {
+fun NavigationDrawerHeader(config: Components.NavigationDrawer, headerHeight: Dp = 150.dp) {
     if (config.header.visible) {
         Image(
             modifier = Modifier
@@ -116,13 +116,12 @@ fun SideMenuHeader(config: Components.SideMenu, headerHeight: Dp = 150.dp) {
 }
 
 @Composable
-fun SideMenuItem(
-    config: Components.SideMenu,
+fun NavigationDrawerItem(
+    config: Components.NavigationDrawer,
     currentRoute: String,
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val isSelected = currentRoute == item.route
     val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
     } else {
@@ -133,7 +132,7 @@ fun SideMenuItem(
         modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
-        selected = isSelected,
+        selected = currentRoute == item.route,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
@@ -165,12 +164,12 @@ fun SideMenuItem(
 
 @Previews
 @Composable
-private fun SideMenuPreview(
+private fun NavigationDrawerPreview(
     @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
 ) {
     DynamicTheme {
-        SideMenu(
-            config = appConfig.components.sideMenu,
+        NavigationDrawer(
+            config = appConfig.components.navigationDrawer,
             currentRoute = "web-000",
             drawerState = DrawerState(DrawerValue.Open),
             onItemClick = { },

@@ -66,10 +66,10 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                         alignment = "start"
                     )
                 ),
-                sideMenu = Components.SideMenu(
+                navigationDrawer = Components.NavigationDrawer(
                     visible = true,
                     background = "neutral",
-                    header = Components.SideMenu.Header(
+                    header = Components.NavigationDrawer.Header(
                         visible = true,
                         image = "https://nosyntax.io/img.php"
                     ),

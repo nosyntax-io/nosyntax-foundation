@@ -30,7 +30,7 @@ import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.core.component.SideMenu
+import io.nosyntax.foundation.core.component.NavigationDrawer
 import io.nosyntax.foundation.presentation.navigation.NavigationGraph
 import io.nosyntax.foundation.presentation.navigation.SideMenuNavigator
 import kotlinx.coroutines.CoroutineScope
@@ -62,9 +62,9 @@ fun MainScreen(
             )
         }
 
-        config.components.sideMenu.takeIf { it.visible }?.let {
-            SideMenu(
-                config = config.components.sideMenu,
+        config.components.navigationDrawer.takeIf { it.visible }?.let {
+            NavigationDrawer(
+                config = config.components.navigationDrawer,
                 currentRoute = currentRoute,
                 drawerState = drawerState,
                 content = content,
@@ -104,7 +104,7 @@ private fun MainContent(
             if (components.appBar.visible) {
                 val title = when (currentRoute) {
                     "about" -> stringResource(id = R.string.about_us)
-                    else -> components.sideMenu.items.find {
+                    else -> components.navigationDrawer.items.find {
                         it.route == currentRoute
                     }?.label.orEmpty()
                 }
