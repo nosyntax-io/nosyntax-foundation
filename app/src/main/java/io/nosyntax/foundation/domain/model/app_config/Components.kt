@@ -1,11 +1,9 @@
 package io.nosyntax.foundation.domain.model.app_config
 
-import com.google.gson.annotations.SerializedName
-
 data class Components(
     val appBar: AppBar,
     val sideMenu: SideMenu,
-    val bottomMenu: BottomMenu,
+    val navigationBar: NavigationBar,
     val loadingIndicator: LoadingIndicator
 ) {
     data class AppBar(
@@ -39,7 +37,7 @@ data class Components(
         )
     }
 
-    data class BottomMenu(
+    data class NavigationBar(
         val visible: Boolean,
         val background: String,
         val label: String,

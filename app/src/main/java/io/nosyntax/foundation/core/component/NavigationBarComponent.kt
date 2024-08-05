@@ -21,10 +21,10 @@ import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.domain.model.app_config.Components
 
 @Composable
-fun BottomBar(
-    config: Components.BottomMenu,
+fun NavigationBar(
+    config: Components.NavigationBar,
     currentRoute: String,
-    onItemClick: (Components.BottomMenu.Item) -> Unit
+    onItemClick: (Components.NavigationBar.Item) -> Unit
 ) {
     val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
@@ -55,7 +55,7 @@ fun BottomBar(
         containerColor = Color.Transparent
     ) {
         config.items.forEach { item ->
-            BottomBarNavigationItem(
+            NavigationBarItem(
                 config = config,
                 currentRoute = currentRoute,
                 item = item,
@@ -66,10 +66,10 @@ fun BottomBar(
 }
 
 @Composable
-fun RowScope.BottomBarNavigationItem(
-    config: Components.BottomMenu,
+fun RowScope.NavigationBarItem(
+    config: Components.NavigationBar,
     currentRoute: String,
-    item: Components.BottomMenu.Item,
+    item: Components.NavigationBar.Item,
     onClick: () -> Unit
 ) {
     val (indicatorColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {

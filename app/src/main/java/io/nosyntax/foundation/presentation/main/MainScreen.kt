@@ -24,7 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.AppBar
-import io.nosyntax.foundation.core.component.BottomBar
+import io.nosyntax.foundation.core.component.NavigationBar
 import io.nosyntax.foundation.core.component.NavigationAction
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
@@ -141,9 +141,9 @@ private fun MainContent(
             }
         },
         bottomBar = {
-            if (components.bottomMenu.visible) {
-                BottomBar(
-                    config = components.bottomMenu,
+            if (components.navigationBar.visible) {
+                NavigationBar(
+                    config = components.navigationBar,
                     currentRoute = currentRoute,
                     onItemClick = {
 

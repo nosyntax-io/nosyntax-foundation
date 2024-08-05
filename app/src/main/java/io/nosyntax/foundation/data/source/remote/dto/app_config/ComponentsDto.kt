@@ -7,8 +7,8 @@ data class ComponentsDto(
     val appBar: AppBar,
     @SerializedName("side_menu")
     val sideMenu: SideMenu,
-    @SerializedName("bottom_menu")
-    val bottomMenu: BottomMenu,
+    @SerializedName("navigation_bar")
+    val navigationBar: NavigationBar,
     @SerializedName("loading_indicator")
     val loadingIndicator: LoadingIndicator
 ) {
@@ -59,7 +59,7 @@ data class ComponentsDto(
         )
     }
 
-    data class BottomMenu(
+    data class NavigationBar(
         @SerializedName("visible")
         val visible: Boolean,
         @SerializedName("background")

@@ -129,12 +129,12 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                         )
                     )
                 ),
-                bottomMenu = Components.BottomMenu(
+                navigationBar = Components.NavigationBar(
                     visible = true,
                     background = "neutral",
                     label = "visible",
                     items = listOf(
-                        Components.BottomMenu.Item(
+                        Components.NavigationBar.Item(
                             route = "web-000",
                             type = "page",
                             label = "Home",

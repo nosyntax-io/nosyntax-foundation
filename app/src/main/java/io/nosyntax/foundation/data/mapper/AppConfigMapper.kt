@@ -93,12 +93,12 @@ fun ComponentsDto.toComponents(): Components {
                 )
             }
         ),
-        bottomMenu = Components.BottomMenu(
-            visible = bottomMenu.visible,
-            background = bottomMenu.background,
-            label = bottomMenu.label,
-            items = this.bottomMenu.items.map { item ->
-                Components.BottomMenu.Item(
+        navigationBar = Components.NavigationBar(
+            visible = navigationBar.visible,
+            background = navigationBar.background,
+            label = navigationBar.label,
+            items = this.navigationBar.items.map { item ->
+                Components.NavigationBar.Item(
                     route = item.route,
                     type = item.type,
                     label = item.label,
