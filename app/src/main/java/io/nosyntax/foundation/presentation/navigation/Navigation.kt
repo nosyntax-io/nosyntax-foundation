@@ -28,13 +28,13 @@ class SideMenuNavigator(private val context: Context, private val navController:
 
     private fun navigate(route: String?, type: String) {
         requireNotNull(route) { "Route must not be null" }
-        navController.navigate(route)
 
-        if (type == "webview") {
+        if (type !in setOf("settings", "about")) {
             navController.popBackStack(
                 destinationId = navController.graph.startDestinationId,
                 inclusive = false
             )
         }
+        navController.navigate(route)
     }
 }
