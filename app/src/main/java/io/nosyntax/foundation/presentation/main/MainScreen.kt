@@ -24,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.AppBar
+import io.nosyntax.foundation.core.component.BottomBar
 import io.nosyntax.foundation.core.component.NavigationAction
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
@@ -72,7 +73,7 @@ fun MainScreen(
                     coroutineScope.launch { drawerState.close() }
                 },
             )
-        } ?: content
+        } ?: content()
     }
 
     BackHandler(enabled = drawerState.isOpen, onBack = {
@@ -136,6 +137,17 @@ private fun MainContent(
                     navController = navController,
                     deeplink = deeplink,
                     drawerState = drawerState
+                )
+            }
+        },
+        bottomBar = {
+            if (components.bottomMenu.visible) {
+                BottomBar(
+                    config = components.bottomMenu,
+                    currentRoute = currentRoute,
+                    onItemClick = {
+
+                    }
                 )
             }
         }

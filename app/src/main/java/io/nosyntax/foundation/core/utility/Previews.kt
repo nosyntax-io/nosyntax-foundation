@@ -129,6 +129,20 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                         )
                     )
                 ),
+                bottomMenu = Components.BottomMenu(
+                    visible = true,
+                    background = "neutral",
+                    label = "visible",
+                    items = listOf(
+                        Components.BottomMenu.Item(
+                            route = "web-000",
+                            type = "page",
+                            label = "Home",
+                            icon = "https://img.icons8.com/?size=256&id=gE0woMnZGtua&format=png",
+                            action = "https://home.com"
+                        )
+                    )
+                ),
                 loadingIndicator = Components.LoadingIndicator(
                     visible = true,
                     animation = "loading_indicator_9",

@@ -93,6 +93,20 @@ fun ComponentsDto.toComponents(): Components {
                 )
             }
         ),
+        bottomMenu = Components.BottomMenu(
+            visible = bottomMenu.visible,
+            background = bottomMenu.background,
+            label = bottomMenu.label,
+            items = this.bottomMenu.items.map { item ->
+                Components.BottomMenu.Item(
+                    route = item.route,
+                    type = item.type,
+                    label = item.label,
+                    icon = item.icon,
+                    action = item.action
+                )
+            }
+        ),
         loadingIndicator = Components.LoadingIndicator(
             visible = loadingIndicator.visible,
             animation = loadingIndicator.animation,

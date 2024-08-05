@@ -11,6 +11,9 @@ object Constants {
     const val BACKGROUND_SOLID = "solid"
     const val BACKGROUND_GRADIENT = "gradient"
     const val ALIGNMENT_CENTER = "center"
+    const val LABEL_HIDDEN = "hidden"
+    const val LABEL_ALWAYS = "always"
+    const val LABEL_SELECTED = "selected"
 
     const val WEB_JAVASCRIPT_OPTION = true
     const val WEB_ALLOW_FILE_ACCESS = true

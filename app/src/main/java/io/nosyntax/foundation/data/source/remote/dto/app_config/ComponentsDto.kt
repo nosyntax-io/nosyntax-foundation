@@ -7,6 +7,8 @@ data class ComponentsDto(
     val appBar: AppBar,
     @SerializedName("side_menu")
     val sideMenu: SideMenu,
+    @SerializedName("bottom_menu")
+    val bottomMenu: BottomMenu,
     @SerializedName("loading_indicator")
     val loadingIndicator: LoadingIndicator
 ) {
@@ -43,6 +45,30 @@ data class ComponentsDto(
             val image: String
         )
 
+        data class Item(
+            @SerializedName("route")
+            val route: String?,
+            @SerializedName("type")
+            val type: String,
+            @SerializedName("label")
+            val label: String?,
+            @SerializedName("icon")
+            val icon: String?,
+            @SerializedName("action")
+            val action: String?
+        )
+    }
+
+    data class BottomMenu(
+        @SerializedName("visible")
+        val visible: Boolean,
+        @SerializedName("background")
+        val background: String,
+        @SerializedName("label")
+        val label: String,
+        @SerializedName("items")
+        val items: List<Item>
+    ) {
         data class Item(
             @SerializedName("route")
             val route: String?,
