@@ -16,10 +16,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.core.utility.AppConfigProvider
+import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
+import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
+import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun NavigationBar(
@@ -111,4 +116,18 @@ fun RowScope.NavigationBarItem(
             }
         }
     )
+}
+
+@Previews
+@Composable
+private fun NavigationBarPreview(
+    @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
+) {
+    DynamicTheme {
+        NavigationBar(
+            config = appConfig.components.navigationBar,
+            currentRoute = "web-000",
+            onItemClick = { }
+        )
+    }
 }
