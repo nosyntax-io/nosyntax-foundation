@@ -1,7 +1,6 @@
 package io.nosyntax.foundation.core.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
@@ -88,9 +86,11 @@ fun NavigationDrawerContent(
         drawerContainerColor = Color.Transparent,
         drawerContentColor = Color.Transparent
     ) {
-        NavigationDrawerHeader(config = config)
-        Spacer(modifier = Modifier.height(20.dp))
         LazyColumn {
+            item {
+                NavigationDrawerHeader(config = config)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
             items(config.items.size) { index ->
                 val item = config.items[index]
 
@@ -115,12 +115,12 @@ fun NavigationDrawerContent(
 }
 
 @Composable
-fun NavigationDrawerHeader(config: Components.NavigationDrawer, headerHeight: Dp = 150.dp) {
+fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150.dp) {
     if (config.header.visible) {
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(headerHeight)
+                .height(height)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
             source = config.header.image
