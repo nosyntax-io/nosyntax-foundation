@@ -14,7 +14,6 @@ import io.nosyntax.foundation.core.utility.Intents.openSMS
 import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.about.AboutScreen
 import io.nosyntax.foundation.presentation.settings.SettingsScreen
 import io.nosyntax.foundation.presentation.web.WebScreen
@@ -22,30 +21,41 @@ import io.nosyntax.foundation.presentation.web.WebScreen
 @Composable
 fun NavigationGraph(
     appConfig: AppConfig,
-    deeplink: Deeplink?,
     navController: NavHostController,
+    deeplink: Deeplink?,
     drawerState: DrawerState
 ) {
+    val startDestination = deeplink?.let { "deeplink" } ?: appConfig.settings.entryPage
+
     NavHost(
         navController = navController,
-        startDestination = if (deeplink != null) "deeplink" else appConfig.settings.entryPage,
+        startDestination = startDestination,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
         appConfig.components.sideMenu.items.filter { it.route != null }.forEach { item ->
             composable(route = item.route!!) {
-                ComposableContent(
-                    appConfig = appConfig,
-                    item = item,
-                    navController = navController,
-                    drawerState = drawerState
-                )
+                when (item.type) {
+                    "webview" -> WebScreen(
+                        appConfig = appConfig,
+                        url = item.action.orEmpty(),
+                        drawerState = drawerState
+                    )
+                    "settings" -> SettingsScreen(
+                        appConfig = appConfig,
+                        navController = navController
+                    )
+                    "about" -> AboutScreen(
+                        appConfig = appConfig,
+                        navController = navController
+                    )
+                }
             }
         }
         composable(route = "deeplink") {
             WebScreen(
                 appConfig = appConfig,
-                url = deeplink?.destination ?: "",
+                url = deeplink?.destination.orEmpty(),
                 drawerState = drawerState
             )
         }
@@ -58,36 +68,7 @@ fun NavigationGraph(
     }
 }
 
-@Composable
-fun ComposableContent(
-    appConfig: AppConfig,
-    item: Components.SideMenu.Item,
-    navController: NavHostController,
-    drawerState: DrawerState
-) {
-    when (item.type) {
-        "webview" -> {
-            WebScreen(
-                appConfig = appConfig,
-                url = item.action!!,
-                drawerState = drawerState
-            )
-        }
-        "settings" -> {
-            SettingsScreen(
-                appConfig = appConfig,
-                navController = navController
-            )
-        }
-        "about" -> {
-            AboutScreen(
-                appConfig = appConfig,
-                navController = navController
-            )
-        }
-    }
-}
-
+// TODO: Find a cleaner approach for the navigator class 
 class Navigator(private val context: Context, private val navController: NavHostController) {
     fun navigate(currentRoute: String, route: String) {
         if (!isUtilityScreen(currentRoute)) {
@@ -113,6 +94,7 @@ class Navigator(private val context: Context, private val navController: NavHost
     }
 }
 
+// TODO: Handle utility screens in a cleaner way
 fun isUtilityScreen(route: String): Boolean {
     return setOf("settings", "about").any { route.startsWith(it) }
 }

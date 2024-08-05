@@ -16,17 +16,14 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -34,7 +31,9 @@ import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.component.Image
+import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
+import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.navigation.graph.Navigator
 import io.nosyntax.foundation.ui.theme.DynamicTheme
@@ -51,6 +50,7 @@ fun SideMenu(
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = drawerState.isOpen,
+        content = content,
         drawerContent = {
             SideMenuContent(
                 config = config,
@@ -58,8 +58,7 @@ fun SideMenu(
                 currentRoute = currentRoute,
                 drawerState = drawerState
             )
-        },
-        content = content
+        }
     )
 }
 
@@ -102,11 +101,13 @@ fun SideMenuContent(
             items(config.items.size) { index ->
                 val item = config.items[index]
 
+                // TODO: Add support for dividers
                 SideMenuItem(
                     config = config,
                     currentRoute = currentRoute,
                     item = item,
                     onClick = {
+                        // TODO: Find a cleaner approach for navigation.
                         val navigator = Navigator(context, navController)
 
                         if (setOf("browser", "mail", "dial", "sms").any { item.type == it }) {
@@ -114,10 +115,7 @@ fun SideMenuContent(
                         } else {
                             navigator.navigate(currentRoute = currentRoute, route = item.route!!)
                         }
-
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
+                        coroutineScope.launch { drawerState.close() }
                     }
                 )
             }
@@ -147,6 +145,7 @@ fun SideMenuItem(
     onClick: () -> Unit
 ) {
     val isSelected = currentRoute == item.route
+    // TODO: Verify that colors are used properly. 
     val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
     } else {
@@ -189,33 +188,15 @@ fun SideMenuItem(
 
 @Previews
 @Composable
-private fun SideMenuPreview() {
+private fun SideMenuPreview(
+    @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
+) {
     DynamicTheme {
-        val navController = rememberNavController()
-        val drawerState = rememberDrawerState(DrawerValue.Open)
-        val currentRoute by remember { mutableStateOf("1") }
-
-        val items = listOf(
-            Components.SideMenu.Item("1", type = "webview",  "Home", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            Components.SideMenu.Item("2", type = "webview",  "Store", "https://img.icons8.com/fluency-systems-filled/96/shopping-cart.png"),
-            Components.SideMenu.Item("3", type = "webview",  "Blog", "https://img.icons8.com/fluency-systems-filled/96/medium-logo.png"),
-            Components.SideMenu.Item("4", type = "settings",  "Settings", "https://img.icons8.com/fluency-systems-filled/96/gear.png"),
-            Components.SideMenu.Item("5", type = "about",  "About", "https://img.icons8.com/fluency-systems-filled/96/user-male-circle.png")
-        )
-
         SideMenu(
-            config = Components.SideMenu(
-                visible = true,
-                background = Constants.BACKGROUND_NEUTRAL,
-                header = Components.SideMenu.Header(
-                    visible = true,
-                    image = "https://via.placeholder.com/700x400"
-                ),
-                items = items
-            ),
-            navController = navController,
-            currentRoute = currentRoute,
-            drawerState = drawerState,
+            config = appConfig.components.sideMenu,
+            navController = rememberNavController(),
+            currentRoute = "web-000",
+            drawerState = DrawerState(DrawerValue.Open),
             content = { }
         )
     }

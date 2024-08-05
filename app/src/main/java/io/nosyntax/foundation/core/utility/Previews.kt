@@ -74,7 +74,7 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                     ),
                     items = listOf(
                         Components.SideMenu.Item(
-                            route = "web-1",
+                            route = "web-000",
                             type = "page",
                             label = "Home",
                             icon = "https://img.icons8.com/?size=256&id=gE0woMnZGtua&format=png",

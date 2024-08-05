@@ -30,6 +30,7 @@ import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.navigation.component.SideMenu
 import io.nosyntax.foundation.presentation.navigation.graph.NavigationGraph
 import io.nosyntax.foundation.presentation.navigation.graph.isUtilityScreen
@@ -43,7 +44,6 @@ fun MainScreen(
     navController: NavHostController = rememberNavController(),
     deeplink: Deeplink? = null
 ) {
-    val context = LocalContext.current
     val appConfig by viewModel.appConfig.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
@@ -54,17 +54,16 @@ fun MainScreen(
 
         val content: @Composable () -> Unit = {
             MainContent(
-                context = context,
                 appConfig = config,
-                deeplink = deeplink,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
+                deeplink = deeplink,
                 drawerState = drawerState
             )
         }
 
-        if (components.sideMenu.visible) {
+        components.sideMenu.takeIf { it.visible }?.let {
             SideMenu(
                 config = components.sideMenu,
                 navController = navController,
@@ -72,9 +71,7 @@ fun MainScreen(
                 drawerState = drawerState,
                 content = content
             )
-        } else {
-            content()
-        }
+        } ?: content
     }
 
     BackHandler(enabled = drawerState.isOpen, onBack = {
@@ -84,67 +81,72 @@ fun MainScreen(
 
 @Composable
 private fun MainContent(
-    context: Context,
     appConfig: AppConfig,
-    deeplink: Deeplink?,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
+    deeplink: Deeplink?,
     drawerState: DrawerState
 ) {
+    val context = LocalContext.current
     val components = appConfig.components
-    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         snackbarHost = {
             SnackbarHost(
-                hostState = snackbarHostState,
+                hostState = remember { SnackbarHostState() },
                 snackbar = { SnackbarComponent(it.visuals.message) }
             )
         },
         topBar = {
             if (components.appBar.visible) {
-                
-
-                val title = when (currentRoute) {
-                    "profile" -> stringResource(id = R.string.about_us)
-                    else -> appConfig.components.sideMenu.items.find {
-                        it.route == currentRoute
-                    }?.label
-                }
-
-                val nav = if (!isUtilityScreen(currentRoute)) {
-                    NavigationAction.Menu(enabled = true) {
-                        coroutineScope.launch { drawerState.open() }
-                    }
-                } else {
-                    NavigationAction.Back {
-                        (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
-                            navController.popBackStack()
-                        })
-                    }
-                }
+                val title = getAppBarTitle(currentRoute, components)
+                val navigationAction = getNavigationAction(currentRoute, coroutineScope, drawerState, context, navController)
 
                 AppBar(
                     config = components.appBar,
-                    title = title.orEmpty(),
-                    navigationAction = nav
+                    title = title,
+                    navigationAction = navigationAction
                 )
             }
         },
-        content = { inlinePadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(inlinePadding)
-            ) {
+        content = { inline ->
+            Column(modifier = Modifier.fillMaxSize().padding(inline)) {
                 NavigationGraph(
                     appConfig = appConfig,
-                    deeplink = deeplink,
                     navController = navController,
+                    deeplink = deeplink,
                     drawerState = drawerState
                 )
             }
         }
     )
+}
+
+@Composable
+private fun getAppBarTitle(currentRoute: String, components: Components): String {
+    return when (currentRoute) {
+        "profile" -> stringResource(id = R.string.about_us)
+        else -> components.sideMenu.items.find { it.route == currentRoute }?.label.orEmpty()
+    }
+}
+
+private fun getNavigationAction(
+    currentRoute: String,
+    coroutineScope: CoroutineScope,
+    drawerState: DrawerState,
+    context: Context,
+    navController: NavHostController
+): NavigationAction {
+    return if (!isUtilityScreen(currentRoute)) {
+        NavigationAction.Menu(enabled = true) {
+            coroutineScope.launch { drawerState.open() }
+        }
+    } else {
+        NavigationAction.Back {
+            (context.findActivity() as MainActivity).showInterstitial {
+                navController.popBackStack()
+            }
+        }
+    }
 }
