@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.presentation.home
+package io.nosyntax.foundation.presentation.main
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
@@ -18,26 +18,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.AppBar
 import io.nosyntax.foundation.core.component.NavigationAction
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.presentation.navigation.component.SideMenu
-import io.nosyntax.foundation.presentation.main.MainViewModel
 import io.nosyntax.foundation.presentation.navigation.graph.NavigationGraph
 import io.nosyntax.foundation.presentation.navigation.graph.isUtilityScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(
+fun MainScreen(
     viewModel: MainViewModel = viewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
@@ -45,15 +45,15 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val appConfig by viewModel.appConfig.collectAsState()
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: ""
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    
+
     appConfig.response?.let { config ->
         val components = config.components
 
         val content: @Composable () -> Unit = {
-            HomeContent(
+            MainContent(
                 context = context,
                 appConfig = config,
                 deeplink = deeplink,
@@ -78,14 +78,12 @@ fun HomeScreen(
     }
 
     BackHandler(enabled = drawerState.isOpen, onBack = {
-        coroutineScope.launch {
-            drawerState.close()
-        }
+        coroutineScope.launch { drawerState.close() }
     })
 }
 
 @Composable
-private fun HomeContent(
+private fun MainContent(
     context: Context,
     appConfig: AppConfig,
     deeplink: Deeplink?,
@@ -96,9 +94,6 @@ private fun HomeContent(
 ) {
     val components = appConfig.components
     val snackbarHostState = remember { SnackbarHostState() }
-    val selectedItem = appConfig.components.sideMenu.items.find {
-        it.route == currentRoute
-    }
 
     Scaffold(
         snackbarHost = {
@@ -109,6 +104,15 @@ private fun HomeContent(
         },
         topBar = {
             if (components.appBar.visible) {
+                
+
+                val title = when (currentRoute) {
+                    "profile" -> stringResource(id = R.string.about_us)
+                    else -> appConfig.components.sideMenu.items.find {
+                        it.route == currentRoute
+                    }?.label
+                }
+
                 val nav = if (!isUtilityScreen(currentRoute)) {
                     NavigationAction.Menu(enabled = true) {
                         coroutineScope.launch { drawerState.open() }
@@ -123,7 +127,7 @@ private fun HomeContent(
 
                 AppBar(
                     config = components.appBar,
-                    title = selectedItem?.label ?: "",
+                    title = title.orEmpty(),
                     navigationAction = nav
                 )
             }
@@ -141,6 +145,6 @@ private fun HomeContent(
                     drawerState = drawerState
                 )
             }
-        },
+        }
     )
 }

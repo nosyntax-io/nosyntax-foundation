@@ -15,7 +15,6 @@ import io.nosyntax.foundation.core.component.NoConnectionComponent
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.collectLatestOnLifecycleStarted
 import io.nosyntax.foundation.core.utility.monetize.InterstitialAd
-import io.nosyntax.foundation.presentation.home.HomeScreen
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import io.nosyntax.foundation.ui.theme.DynamicColorScheme
 import io.nosyntax.foundation.ui.theme.DynamicTypography
@@ -80,7 +79,7 @@ class MainActivity: ComponentActivity() {
                         dynamicTypography = dynamicTypography,
                         statusBarColor = components.appBar.background,
                         darkTheme = if (theme.darkMode) isSystemInDarkTheme() else false,
-                        content = { HomeScreen(deeplink = deeplink) }
+                        content = { MainScreen(deeplink = deeplink) }
                     )
                 }
 
