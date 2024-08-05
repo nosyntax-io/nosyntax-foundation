@@ -96,11 +96,11 @@ fun RowScope.NavigationBarItem(
             unselectedTextColor = contentColor.copy(alpha = 0.8f),
         ),
         label = {
-            if (config.label != Constants.LABEL_HIDDEN) {
+            if (item.label != null && config.label != Constants.LABEL_HIDDEN) {
                 Text(
                     modifier = Modifier,
-                    text = item.label.orEmpty(),
-                    style = MaterialTheme.typography.labelSmall,
+                    text = item.label,
+                    style = MaterialTheme.typography.labelMedium,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
