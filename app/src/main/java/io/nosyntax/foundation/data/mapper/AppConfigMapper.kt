@@ -5,6 +5,7 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.SettingsDto
+import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.Theme
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -84,7 +85,7 @@ fun ComponentsDto.toComponents(): Components {
                 image = sideMenu.header.image
             ),
             items = this.sideMenu.items.map { item ->
-                Components.SideMenu.Item(
+                NavigationItem(
                     route = item.route,
                     type = item.type,
                     label = item.label,
@@ -98,7 +99,7 @@ fun ComponentsDto.toComponents(): Components {
             background = navigationBar.background,
             label = navigationBar.label,
             items = this.navigationBar.items.map { item ->
-                Components.NavigationBar.Item(
+                NavigationItem(
                     route = item.route,
                     type = item.type,
                     label = item.label,

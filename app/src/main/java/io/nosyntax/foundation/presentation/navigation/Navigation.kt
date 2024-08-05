@@ -6,10 +6,10 @@ import io.nosyntax.foundation.core.utility.Intents.openDial
 import io.nosyntax.foundation.core.utility.Intents.openEmail
 import io.nosyntax.foundation.core.utility.Intents.openSMS
 import io.nosyntax.foundation.core.utility.Intents.openUrl
-import io.nosyntax.foundation.domain.model.app_config.Components
+import io.nosyntax.foundation.domain.model.NavigationItem
 
 class SideMenuNavigator(private val context: Context, private val navController: NavHostController) {
-    fun handleItemClick(item: Components.SideMenu.Item) {
+    fun handleItemClick(item: NavigationItem) {
         if (item.type in setOf("browser", "mail", "dial", "sms")) {
             performAction(item.type, item.action)
         } else {

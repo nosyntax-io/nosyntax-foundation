@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
+import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
@@ -36,7 +37,7 @@ fun SideMenu(
     config: Components.SideMenu,
     currentRoute: String,
     drawerState: DrawerState,
-    onItemClick: (Components.SideMenu.Item) -> Unit,
+    onItemClick: (NavigationItem) -> Unit,
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
@@ -57,7 +58,7 @@ fun SideMenu(
 fun SideMenuContent(
     config: Components.SideMenu,
     currentRoute: String,
-    onItemClick: (Components.SideMenu.Item) -> Unit,
+    onItemClick: (NavigationItem) -> Unit,
 ) {
     val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
@@ -118,7 +119,7 @@ fun SideMenuHeader(config: Components.SideMenu, headerHeight: Dp = 150.dp) {
 fun SideMenuItem(
     config: Components.SideMenu,
     currentRoute: String,
-    item: Components.SideMenu.Item,
+    item: NavigationItem,
     onClick: () -> Unit
 ) {
     val isSelected = currentRoute == item.route

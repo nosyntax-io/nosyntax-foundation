@@ -18,13 +18,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.Components
 
 @Composable
 fun NavigationBar(
     config: Components.NavigationBar,
     currentRoute: String,
-    onItemClick: (Components.NavigationBar.Item) -> Unit
+    onItemClick: (NavigationItem) -> Unit
 ) {
     val backgroundModifier = when (config.background) {
         Constants.BACKGROUND_NEUTRAL -> Modifier.background(
@@ -69,7 +70,7 @@ fun NavigationBar(
 fun RowScope.NavigationBarItem(
     config: Components.NavigationBar,
     currentRoute: String,
-    item: Components.NavigationBar.Item,
+    item: NavigationItem,
     onClick: () -> Unit
 ) {
     val (indicatorColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {

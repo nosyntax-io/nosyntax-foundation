@@ -1,5 +1,7 @@
 package io.nosyntax.foundation.domain.model.app_config
 
+import io.nosyntax.foundation.domain.model.NavigationItem
+
 data class Components(
     val appBar: AppBar,
     val sideMenu: SideMenu,
@@ -21,19 +23,11 @@ data class Components(
         val visible: Boolean,
         val background: String,
         val header: Header,
-        val items: List<Item>
+        val items: List<NavigationItem>
     ) {
         data class Header(
             val visible: Boolean,
             val image: String
-        )
-
-        data class Item(
-            val route: String?,
-            val type: String,
-            val label: String?,
-            val icon: String?,
-            val action: String? = null
         )
     }
 
@@ -41,16 +35,8 @@ data class Components(
         val visible: Boolean,
         val background: String,
         val label: String,
-        val items: List<Item>
-    ) {
-        data class Item(
-            val route: String?,
-            val type: String,
-            val label: String?,
-            val icon: String?,
-            val action: String? = null
-        )
-    }
+        val items: List<NavigationItem>
+    )
 
     data class LoadingIndicator(
         val visible: Boolean,
