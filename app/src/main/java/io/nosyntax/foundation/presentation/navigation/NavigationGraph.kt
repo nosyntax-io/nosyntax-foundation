@@ -28,7 +28,10 @@ fun NavigationGraph(
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
-        appConfig.components.navigationDrawer.items.filter { it.route != null }.forEach { item ->
+        val navigationDrawerItems = appConfig.components.navigationDrawer.items
+        val navigationBarItems = appConfig.components.navigationBar.items
+
+        (navigationDrawerItems + navigationBarItems).filter { it.route != null }.forEach { item ->
             composable(route = item.route!!) {
                 when (item.type) {
                     "webview" -> WebScreen(
