@@ -3,7 +3,7 @@ activity-compose = "1.9.1"
 agp = "8.5.1"
 coil = "2.7.0"
 # @keep
-compile-sdk = "35"
+compile-sdk = "34"
 compose-bom = "2024.06.00"
 core-ktx = "1.13.1"
 core-splashscreen = "1.0.1"
