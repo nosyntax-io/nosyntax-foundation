@@ -4,9 +4,6 @@ app:
   version: {{ APP_VERSION }}
   build_number: {{ APP_BUILD_NUMBER }}
 
-build:
-  environment: {{ BUILD_ENVIRONMENT }}
-
 permissions:
 {%- for PERMISSION in PERMISSIONS %}
   - {{ PERMISSION }}
