@@ -32,7 +32,7 @@ import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.core.component.NavigationDrawer
 import io.nosyntax.foundation.presentation.navigation.NavigationGraph
-import io.nosyntax.foundation.presentation.navigation.SideMenuNavigator
+import io.nosyntax.foundation.presentation.navigation.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -48,7 +48,7 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val navigator = remember { SideMenuNavigator(context, navController) }
+    val navigator = remember { Navigator(context, navController) }
 
     appConfig.response?.let { config ->
         val content: @Composable () -> Unit = {
@@ -57,6 +57,7 @@ fun MainScreen(
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
+                navigator = navigator,
                 deeplink = deeplink,
                 drawerState = drawerState
             )
@@ -87,6 +88,7 @@ private fun MainContent(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
+    navigator: Navigator,
     deeplink: Deeplink?,
     drawerState: DrawerState
 ) {
@@ -129,9 +131,7 @@ private fun MainContent(
             }
         },
         content = { inline ->
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(inline)) {
+            Column(modifier = Modifier.fillMaxSize().padding(inline)) {
                 NavigationGraph(
                     appConfig = appConfig,
                     navController = navController,
@@ -141,12 +141,12 @@ private fun MainContent(
             }
         },
         bottomBar = {
-            if (components.navigationBar.visible) {
+            if (components.navigationBar.visible && (!currentRoute.startsWith("settings") && !currentRoute.startsWith("about"))) {
                 NavigationBar(
                     config = components.navigationBar,
                     currentRoute = currentRoute,
-                    onItemClick = {
-
+                    onItemClick = { item ->
+                        navigator.handleItemClick(item)
                     }
                 )
             }
