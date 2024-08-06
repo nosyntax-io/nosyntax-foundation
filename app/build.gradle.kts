@@ -20,8 +20,7 @@ android {
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
         versionCode = appConfig.get<Int>("app.build_number")
-        // TODO: Handle when the version contains letters such as beta-1.0, etc...
-        versionName = appConfig.get<Double>("app.version").toString()
+        versionName = appConfig.get<Any>("app.version").toString()
 
         resValue("string", "app_name", appConfig.get<String>("app.name"))
 
