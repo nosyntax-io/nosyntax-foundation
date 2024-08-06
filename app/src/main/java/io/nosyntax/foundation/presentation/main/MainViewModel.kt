@@ -26,16 +26,15 @@ class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases):
 
     fun getAppConfig() {
         viewModelScope.launch {
-            mainUseCases.getAppConfigUseCase.invoke().collect { result ->
+            mainUseCases.getAppConfigUseCase().collect { result ->
                 when (result) {
                     is Resource.Loading -> {
                         _appConfig.emit(AppConfigState(
                             isLoading = result.isLoading))
                     }
                     is Resource.Success -> {
-                        _appConfig.emit(
-                            AppConfigState(
-                                response = result.data))
+                        _appConfig.emit(AppConfigState(
+                            response = result.data))
                         _isInitialized.emit(true)
                     }
                     is Resource.Error -> {

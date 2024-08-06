@@ -1,6 +1,6 @@
 package io.nosyntax.foundation.di
 
-import io.nosyntax.foundation.data.source.remote.CoreAPI
+import io.nosyntax.foundation.data.source.remote.AppService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 object RemoteModule {
     @Provides
     @Singleton
-    fun provideCoreApi(): CoreAPI {
-        return CoreAPI.getInstance()
+    fun provideAppService(): AppService {
+        return AppService.getInstance()
     }
 }

@@ -21,7 +21,7 @@ class AppConfig(path: Path) {
     fun getBuildConfigFields(): Map<String, Any> {
         return mapOf(
             "DYNAMIC_CONFIG_ENABLED" to "dynamic_config.enabled",
-            "DYNAMIC_CONFIG_ACCESS_TOKEN" to "dynamic_config.access_token",
+            "DYNAMIC_CONFIG_TOKEN" to "dynamic_config.access_token",
             "ONESIGNAL_ENABLED" to "integrations.onesignal.enabled",
             "ONESIGNAL_APP_ID" to "integrations.onesignal.app_id"
         ).mapValues { (_, path) -> get<Any>(path) }
