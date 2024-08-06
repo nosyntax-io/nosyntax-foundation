@@ -16,13 +16,13 @@ android {
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        applicationId = appConfig.get("app.id")
+        applicationId = appConfig.get<String>("app.id")
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = appConfig.get("app.build_number")
-        versionName = appConfig.get("app.version")
+        versionCode = appConfig.get<Int>("app.build_number")
+        versionName = appConfig.get<Double>("app.version").toString()
 
-        resValue("string", "app_name", appConfig.get("app.name"))
+        resValue("string", "app_name", appConfig.get<String>("app.name"))
 
         appConfig.getBuildConfigFields().forEach { (name, value) ->
             val (type, formattedValue) = when (value) {
