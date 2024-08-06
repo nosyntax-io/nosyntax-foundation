@@ -14,14 +14,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
@@ -61,7 +53,6 @@ import io.nosyntax.foundation.presentation.web.component.webClient
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
 import kotlinx.coroutines.CoroutineScope
 
-@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(
@@ -77,7 +68,6 @@ fun WebScreen(
 
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
-    var isRefreshing by remember { mutableStateOf(false) }
 
     var jsDialogInfo by rememberSaveable { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
     var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
@@ -95,23 +85,9 @@ fun WebScreen(
         }
     }
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        refreshingOffset = 100.dp,
-        onRefresh = {
-            isRefreshing = true
-            navigator.reload()
-        }
-    )
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .pullRefresh(pullRefreshState)
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         WebView(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize(),
             state = webViewState,
             navigator = navigator,
             captureBackPresses = !drawerState.isOpen,
@@ -164,7 +140,6 @@ fun WebScreen(
                         (context.findActivity() as MainActivity).showInterstitial()
                         totalLoadedPages = 1
                     }
-                    isRefreshing = false
                 },
                 onResourceLoaded = { },
                 onRequestInterrupted = {
@@ -203,14 +178,6 @@ fun WebScreen(
                     }
                 }
             )
-        )
-
-        PullRefreshIndicator(
-            refreshing = isRefreshing,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
         )
 
         val ads = appConfig.monetization.ads
