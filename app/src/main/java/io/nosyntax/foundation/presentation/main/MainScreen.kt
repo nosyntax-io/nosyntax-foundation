@@ -106,7 +106,7 @@ private fun MainContent(
             if (components.appBar.visible) {
                 val title = when (currentRoute) {
                     "about" -> stringResource(id = R.string.about_us)
-                    else -> components.navigationDrawer.items.find {
+                    else -> (components.navigationDrawer.items + components.navigationBar.items).find {
                         it.route == currentRoute
                     }?.label.orEmpty()
                 }
