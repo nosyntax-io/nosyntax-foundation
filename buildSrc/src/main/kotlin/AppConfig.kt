@@ -29,17 +29,28 @@ class AppConfig(path: Path) {
 
     fun getPermissions(): List<String> {
         val permissionMapping = mapOf(
-            "internet" to "android.permission.INTERNET",
-            "network_state" to "android.permission.ACCESS_NETWORK_STATE",
-            "storage" to "android.permission.WRITE_EXTERNAL_STORAGE",
+            "internet" to listOf(
+                "android.permission.INTERNET",
+                "android.permission.ACCESS_NETWORK_STATE"
+            ),
+            "storage" to listOf(
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+            ),
             "geolocation" to "android.permission.ACCESS_COARSE_LOCATION",
             "camera" to "android.permission.CAMERA",
             "contacts" to "android.permission.READ_CONTACTS"
         )
 
-        val permissionsList = (config["permissions"] as? List<*> ?: emptyList<String>()).mapNotNull {
-            permissionMapping[it as? String ?: ""]
-        }
-        return permissionsList
+        return (config["permissions"] as? List<*> ?: emptyList<String>())
+            .mapNotNull { permissionKey ->
+                permissionMapping[permissionKey as? String]?.let { permissions ->
+                    when (permissions) {
+                        is List<*> -> permissions.filterIsInstance<String>()
+                        is String -> listOf(permissions)
+                        else -> emptyList()
+                    }
+                }
+            }.flatten()
     }
 }
