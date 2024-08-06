@@ -24,8 +24,13 @@ android {
 
         resValue("string", "app_name", appConfig.get("app.name"))
 
-        appConfig.getBuildConfigFields().forEach { (field, value) ->
-            buildConfigField("String", field, "\"$value\"")
+        appConfig.getBuildConfigFields().forEach { (name, value) ->
+            val (type, formattedValue) = when (value) {
+                is String -> "String" to "\"$value\""
+                is Boolean -> "Boolean" to value.toString()
+                else -> throw IllegalArgumentException("Unsupported type")
+            }
+            buildConfigField(type, name, formattedValue)
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -3,12 +3,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class AppConfig(path: Path) {
-    val config: Map<String, Any>
-
-    init {
-        val configContent = Files.readString(path)
-        config = Yaml().load(configContent)
-    }
+    val config: Map<String, Any> = Yaml().load(Files.readString(path))
 
     inline fun <reified T> get(path: String): T {
         val value = path.split(".").fold(config as Any?) { current, key ->
@@ -17,22 +12,19 @@ class AppConfig(path: Path) {
         return (value as? T) ?: when (T::class) {
             String::class -> "" as T
             Int::class -> 0 as T
+            Double::class -> 0 as T
             Boolean::class -> false as T
             else -> throw IllegalArgumentException("Unsupported type")
         }
     }
 
-    fun getBuildConfigFields(): Map<String, String> {
-        val buildConfigKeys = mapOf(
-            "SERVER_AUTH_TOKEN" to "server.auth_token",
-            "SERVER_ACCESS_TOKEN" to "server.access_token",
-            "APP_REMOTE_CONFIG" to "app.remote_config",
-            "ONESIGNAL_APP_ID" to "integrations.onesignal.app_id",
-            "ADMOB_BANNER_ID" to "integrations.admob.banner_id",
-            "ADMOB_INTERSTITIAL_ID" to "integrations.admob.interstitial_id"
-        )
-
-        return buildConfigKeys.mapValues { get<String>(it.value) }
+    fun getBuildConfigFields(): Map<String, Any> {
+        return mapOf(
+            "DYNAMIC_CONFIG_ENABLED" to "dynamic_config.enabled",
+            "DYNAMIC_CONFIG_ACCESS_TOKEN" to "dynamic_config.access_token",
+            "ONESIGNAL_ENABLED" to "integrations.onesignal.enabled",
+            "ONESIGNAL_APP_ID" to "integrations.onesignal.app_id"
+        ).mapValues { (_, path) -> get<Any>(path) }
     }
 
     fun getPermissions(): List<String> {
