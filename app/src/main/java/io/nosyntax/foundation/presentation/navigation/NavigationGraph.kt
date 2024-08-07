@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import io.nosyntax.foundation.core.extension.getNavigationItems
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.about.AboutScreen
@@ -28,10 +29,7 @@ fun NavigationGraph(
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
-        val navigationDrawerItems = appConfig.components.navigationDrawer.items
-        val navigationBarItems = appConfig.components.navigationBar.items
-
-        (navigationDrawerItems + navigationBarItems).filter { it.route != null }.forEach { item ->
+        appConfig.getNavigationItems.filter { it.route != null }.forEach { item ->
             composable(route = item.route!!) {
                 when (item.type) {
                     "webview" -> WebScreen(

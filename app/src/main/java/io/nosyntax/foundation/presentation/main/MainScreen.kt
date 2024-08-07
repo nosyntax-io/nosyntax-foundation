@@ -29,6 +29,7 @@ import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.core.component.NavigationDrawer
+import io.nosyntax.foundation.core.extension.getNavigationItems
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.navigation.NavigationGraph
@@ -98,7 +99,7 @@ private fun MainContent(
         },
         topBar = {
             MainAppBar(
-                config = config.components,
+                config = config,
                 coroutineScope = coroutineScope,
                 navController = navController,
                 currentRoute = currentRoute,
@@ -135,7 +136,7 @@ private fun MainSnackbarHost() {
 
 @Composable
 private fun MainAppBar(
-    config: Components,
+    config: AppConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     currentRoute: String,
@@ -143,10 +144,10 @@ private fun MainAppBar(
 ) {
     val context = LocalContext.current
 
-    config.appBar.takeIf { it.visible }?.let {
+    config.components.appBar.takeIf { it.visible }?.let {
         val title = when (currentRoute) {
             "about" -> stringResource(id = R.string.about_us)
-            else -> (config.navigationDrawer.items + config.navigationBar.items).find { item ->
+            else -> config.getNavigationItems.find { item ->
                 item.route == currentRoute
             }?.label.orEmpty()
         }
