@@ -55,7 +55,8 @@ fun JsAlertDialog(
             Button(
                 modifier = Modifier.fillMaxWidth().height(40.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = MaterialTheme.shapes.medium,
                 contentPadding = PaddingValues(0.dp),
@@ -63,8 +64,7 @@ fun JsAlertDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.i_understand),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
         }

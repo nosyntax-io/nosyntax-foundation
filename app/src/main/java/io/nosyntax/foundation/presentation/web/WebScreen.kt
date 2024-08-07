@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -148,7 +147,7 @@ fun WebScreen(
             ),
             chromeClient = chromeClient(
                 context = context,
-                onJsDialog = { dialog, result ->
+                onJsDialogEvent = { dialog, result ->
                     jsDialogInfo = dialog to result
                 },
                 onCustomViewShown = { view, callback ->

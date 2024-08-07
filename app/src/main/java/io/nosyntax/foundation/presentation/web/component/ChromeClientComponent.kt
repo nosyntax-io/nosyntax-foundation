@@ -20,16 +20,10 @@ import androidx.compose.runtime.setValue
 import io.nosyntax.foundation.core.utility.WebKitChromeClient
 import io.nosyntax.foundation.presentation.web.utility.FileChooserDelegate
 
-sealed class JsDialog {
-    data class Alert(val message: String) : JsDialog()
-    data class Confirm(val message: String) : JsDialog()
-    data class Prompt(val message: String, val defaultValue: String = "") : JsDialog()
-}
-
 @Composable
 fun chromeClient(
     context: Context,
-    onJsDialog: (JsDialog, JsResult) -> Unit,
+    onJsDialogEvent: (JsDialog, JsResult) -> Unit,
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
     onCustomViewHidden: () -> Unit
 ): WebKitChromeClient {
@@ -47,18 +41,30 @@ fun chromeClient(
     val chromeClient = remember {
         object: WebKitChromeClient() {
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Alert(it), result!!) }
-                return true
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Alert(message), result)
+                    return true
+                }
+                result?.cancel()
+                return false
             }
 
             override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Confirm(it), result!!) }
-                return true
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Confirm(message), result)
+                    return true
+                }
+                result?.cancel()
+                return false
             }
 
             override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                message?.let { onJsDialog(JsDialog.Prompt(it, defaultValue.toString()), result!!) }
-                return true
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Prompt(message, defaultValue.orEmpty()), result)
+                    return true
+                }
+                result?.cancel()
+                return false
             }
 
             override fun getDefaultVideoPoster(): Bitmap? {

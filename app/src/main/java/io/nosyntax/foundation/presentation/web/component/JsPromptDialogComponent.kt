@@ -68,11 +68,12 @@ fun JsPromptDialog(
                     promptValue.value = it
                 })
                 Spacer(modifier = Modifier.height(20.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row {
                     OutlinedButton(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                         shape = MaterialTheme.shapes.medium,
@@ -81,16 +82,15 @@ fun JsPromptDialog(
                     ) {
                         Text(
                             text = stringResource(id = R.string.cancel),
-                            modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary
+                            style = MaterialTheme.typography.labelLarge
                         )
                     }
                     Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         shape = MaterialTheme.shapes.medium,
                         contentPadding = PaddingValues(0.dp),
@@ -98,9 +98,7 @@ fun JsPromptDialog(
                     ) {
                         Text(
                             text = stringResource(id = R.string.confirm),
-                            modifier = Modifier.padding(horizontal = 15.dp),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            style = MaterialTheme.typography.labelLarge
                         )
                     }
                 }
@@ -115,7 +113,7 @@ fun JsPromptDialogPreview() {
     DynamicTheme {
         JsPromptDialog(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            defaultValue = "",
+            defaultValue = "Default Value",
             onCancel = { },
             onConfirm = { }
         )
