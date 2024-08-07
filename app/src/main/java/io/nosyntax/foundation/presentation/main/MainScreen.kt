@@ -1,8 +1,7 @@
 package io.nosyntax.foundation.presentation.main
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -29,10 +28,11 @@ import io.nosyntax.foundation.core.component.NavigationAction
 import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
-import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.core.component.NavigationDrawer
+import io.nosyntax.foundation.domain.model.app_config.AppConfig
+import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.navigation.NavigationGraph
-import io.nosyntax.foundation.presentation.navigation.Navigator
+import io.nosyntax.foundation.presentation.navigation.NavigationHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -47,32 +47,32 @@ fun MainScreen(
     val appConfig by viewModel.appConfig.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val navigator = remember { Navigator(context, navController) }
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val navHandler = remember { NavigationHandler(context, navController) }
 
     appConfig.response?.let { config ->
         val content: @Composable () -> Unit = {
             MainContent(
-                appConfig = config,
+                config = config,
                 coroutineScope = coroutineScope,
                 navController = navController,
+                navHandler = navHandler,
                 currentRoute = currentRoute,
-                navigator = navigator,
-                deeplink = deeplink,
-                drawerState = drawerState
+                drawerState = drawerState,
+                deeplink = deeplink
             )
         }
 
         config.components.navigationDrawer.takeIf { it.visible }?.let {
             NavigationDrawer(
-                config = config.components.navigationDrawer,
+                config = it,
                 currentRoute = currentRoute,
                 drawerState = drawerState,
                 content = content,
                 onItemClick = { item ->
-                    navigator.handleItemClick(item)
+                    navHandler.onItemClick(item)
                     coroutineScope.launch { drawerState.close() }
-                },
+                }
             )
         } ?: content()
     }
@@ -84,72 +84,106 @@ fun MainScreen(
 
 @Composable
 private fun MainContent(
-    appConfig: AppConfig,
+    config: AppConfig,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
+    navHandler: NavigationHandler,
     currentRoute: String,
-    navigator: Navigator,
-    deeplink: Deeplink?,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    deeplink: Deeplink?
 ) {
-    val context = LocalContext.current
-    val components = appConfig.components
-
     Scaffold(
         snackbarHost = {
-            SnackbarHost(
-                hostState = remember { SnackbarHostState() },
-                snackbar = { SnackbarComponent(it.visuals.message) }
-            )
+            MainSnackbarHost()
         },
         topBar = {
-            if (components.appBar.visible) {
-                val title = when (currentRoute) {
-                    "about" -> stringResource(id = R.string.about_us)
-                    else -> (components.navigationDrawer.items + components.navigationBar.items).find {
-                        it.route == currentRoute
-                    }?.label.orEmpty()
-                }
-
-                val action = if (currentRoute.startsWith("settings") || currentRoute.startsWith("about")) {
-                    NavigationAction.Back {
-                        (context.findActivity() as MainActivity).showInterstitial {
-                            navController.popBackStack()
-                        }
-                    }
-                } else {
-                    NavigationAction.Menu(enabled = true) {
-                        coroutineScope.launch { drawerState.open() }
-                    }
-                }
-
-                AppBar(
-                    config = components.appBar,
-                    title = title,
-                    navigationAction = action
-                )
-            }
+            MainAppBar(
+                config = config.components,
+                coroutineScope = coroutineScope,
+                navController = navController,
+                currentRoute = currentRoute,
+                drawerState = drawerState
+            )
         },
-        content = { inline ->
-            Column(modifier = Modifier.fillMaxSize().padding(inline)) {
+        content = { padding ->
+            Box(modifier = Modifier.padding(padding)) {
                 NavigationGraph(
-                    appConfig = appConfig,
+                    appConfig = config,
                     navController = navController,
-                    deeplink = deeplink,
-                    drawerState = drawerState
+                    drawerState = drawerState,
+                    deeplink = deeplink
                 )
             }
         },
         bottomBar = {
-            if (components.navigationBar.visible && (!currentRoute.startsWith("settings") && !currentRoute.startsWith("about"))) {
-                NavigationBar(
-                    config = components.navigationBar,
-                    currentRoute = currentRoute,
-                    onItemClick = { item ->
-                        navigator.handleItemClick(item)
-                    }
-                )
-            }
+            MainNavigationBar(
+                config = config.components.navigationBar,
+                navHandler = navHandler,
+                currentRoute = currentRoute
+            )
         }
     )
+}
+
+@Composable
+private fun MainSnackbarHost() {
+    SnackbarHost(
+        hostState = remember { SnackbarHostState() },
+        snackbar = { SnackbarComponent(it.visuals.message) }
+    )
+}
+
+@Composable
+private fun MainAppBar(
+    config: Components,
+    coroutineScope: CoroutineScope,
+    navController: NavHostController,
+    currentRoute: String,
+    drawerState: DrawerState
+) {
+    val context = LocalContext.current
+
+    config.appBar.takeIf { it.visible }?.let {
+        val title = when (currentRoute) {
+            "about" -> stringResource(id = R.string.about_us)
+            else -> (config.navigationDrawer.items + config.navigationBar.items).find { item ->
+                item.route == currentRoute
+            }?.label.orEmpty()
+        }
+
+        val action = if (listOf("settings", "about").any { currentRoute.startsWith(it) }) {
+            NavigationAction.Back {
+                (context.findActivity() as MainActivity).showInterstitial {
+                    navController.popBackStack()
+                }
+            }
+        } else {
+            NavigationAction.Menu(enabled = true) {
+                coroutineScope.launch { drawerState.open() }
+            }
+        }
+
+        AppBar(
+            config = it,
+            title = title,
+            navigationAction = action
+        )
+    }
+}
+
+@Composable
+private fun MainNavigationBar(
+    config: Components.NavigationBar,
+    navHandler: NavigationHandler,
+    currentRoute: String
+) {
+    if (config.visible && listOf("settings", "about").none { currentRoute.startsWith(it) }) {
+        NavigationBar(
+            config = config,
+            currentRoute = currentRoute,
+            onItemClick = { item ->
+                navHandler.onItemClick(item)
+            }
+        )
+    }
 }

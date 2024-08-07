@@ -8,12 +8,12 @@ import io.nosyntax.foundation.core.utility.Intents.openSMS
 import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.domain.model.NavigationItem
 
-class Navigator(private val context: Context, private val navController: NavHostController) {
-    fun handleItemClick(item: NavigationItem) {
+class NavigationHandler(private val context: Context, private val navController: NavHostController) {
+    fun onItemClick(item: NavigationItem) {
         if (item.type in setOf("browser", "mail", "dial", "sms")) {
-            performAction(item.type, item.action!!)
+            item.action?.let { performAction(item.type, it) }
         } else {
-            navigate(item.route!!, item.type)
+            item.route?.let { navigate(it, item.type) }
         }
     }
 

@@ -56,7 +56,7 @@ fun NavigationDrawer(
 }
 
 @Composable
-fun NavigationDrawerContent(
+private fun NavigationDrawerContent(
     config: Components.NavigationDrawer,
     currentRoute: String,
     onItemClick: (NavigationItem) -> Unit,
@@ -115,7 +115,7 @@ fun NavigationDrawerContent(
 }
 
 @Composable
-fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150.dp) {
+private fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150.dp) {
     if (config.header.visible) {
         Image(
             modifier = Modifier
@@ -129,7 +129,7 @@ fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150
 }
 
 @Composable
-fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
+private fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
     val dividerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
         MaterialTheme.colorScheme.outline
     } else {
@@ -143,7 +143,7 @@ fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
 }
 
 @Composable
-fun NavigationDrawerItem(
+private fun NavigationDrawerItem(
     config: Components.NavigationDrawer,
     currentRoute: String,
     item: NavigationItem,

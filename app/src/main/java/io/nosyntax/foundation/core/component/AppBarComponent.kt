@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +53,7 @@ fun AppBar(
         )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
-                listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
+                colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
             )
         )
         else -> Modifier
@@ -82,24 +81,20 @@ fun AppBar(
             modifier = appBarModifier,
             colors = appBarColors,
             title = { AppBarTitle(config, title) },
-            navigationIcon = {
-                AppBarNavigationIcon(navigationAction)
-            }
+            navigationIcon = { AppBarNavigationIcon(navigationAction) }
         )
     } else {
         TopAppBar(
             modifier = appBarModifier,
             colors = appBarColors,
             title = { AppBarTitle(config, title) },
-            navigationIcon = {
-                AppBarNavigationIcon(navigationAction)
-            }
+            navigationIcon = { AppBarNavigationIcon(navigationAction) }
         )
     }
 }
 
 @Composable
-fun AppBarTitle(config: Components.AppBar, title: String) {
+private fun AppBarTitle(config: Components.AppBar, title: String) {
     if (config.title.visible) {
         Box(
             modifier = Modifier.fillMaxHeight(),
@@ -114,38 +109,31 @@ fun AppBarTitle(config: Components.AppBar, title: String) {
 }
 
 @Composable
-fun AppBarNavigationIcon(navigationAction: NavigationAction) {
+private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
     val iconPainter = when (navigationAction) {
         is NavigationAction.Back -> painterResource(id = R.drawable.icon_arrow_left_filled)
         is NavigationAction.Menu -> if (navigationAction.enabled) {
             painterResource(id = R.drawable.icon_menu_filled)
-        } else {
-            null
+        } else null
+    }
+
+    iconPainter?.let { icon ->
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            ClickableIcon(
+                modifier = Modifier.size(30.dp),
+                source = icon,
+                onClick = navigationAction::onClick
+            )
         }
-    }
-
-    iconPainter?.let {
-        AppBarActionIcon(icon = it, onClick = navigationAction::onClick)
-    }
-}
-
-@Composable
-fun AppBarActionIcon(icon: Painter, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ) {
-        ClickableIcon(
-            modifier = Modifier.size(30.dp),
-            source = icon,
-            onClick = onClick
-        )
     }
 }
 
 @Preview
 @Composable
-fun AppBarPreview() {
+private fun AppBarPreview() {
     DynamicTheme {
         AppBar(
             config = Components.AppBar(

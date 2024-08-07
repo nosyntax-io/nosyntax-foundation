@@ -72,7 +72,7 @@ fun NavigationBar(
 }
 
 @Composable
-fun RowScope.NavigationBarItem(
+private fun RowScope.NavigationBarItem(
     config: Components.NavigationBar,
     currentRoute: String,
     item: NavigationItem,
@@ -121,11 +121,11 @@ fun RowScope.NavigationBarItem(
 @Previews
 @Composable
 private fun NavigationBarPreview(
-    @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
+    @PreviewParameter(AppConfigProvider::class) config: AppConfig
 ) {
     DynamicTheme {
         NavigationBar(
-            config = appConfig.components.navigationBar,
+            config = config.components.navigationBar,
             currentRoute = "web-000",
             onItemClick = { }
         )
