@@ -152,14 +152,14 @@ private fun MainAppBar(
             }?.label.orEmpty()
         }
 
-        val action = if (listOf("settings", "about").any { currentRoute.startsWith(it) }) {
+        val action = if (listOf("settings", "about").any { routes -> currentRoute.startsWith(routes) }) {
             NavigationAction.Back {
                 (context.findActivity() as MainActivity).showInterstitial {
                     navController.popBackStack()
                 }
             }
         } else {
-            NavigationAction.Menu(enabled = true) {
+            NavigationAction.Menu(enabled = config.components.navigationDrawer.visible) {
                 coroutineScope.launch { drawerState.open() }
             }
         }
