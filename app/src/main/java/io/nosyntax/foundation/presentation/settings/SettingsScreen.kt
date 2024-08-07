@@ -1,6 +1,5 @@
 package io.nosyntax.foundation.presentation.settings
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,21 +17,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Intents.openEmail
 import io.nosyntax.foundation.core.utility.Intents.openPlayStore
 import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
+fun SettingsScreen(appConfig: AppConfig, navigateToAbout: () -> Unit) {
     val context = LocalContext.current
 
     Column(
@@ -58,19 +53,13 @@ fun SettingsScreen(appConfig: AppConfig, navController: NavController) {
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.about_us)) {
-            navController.navigate("about")
+            navigateToAbout()
         }
-    }
-
-    BackHandler(enabled = true) {
-        (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
-            navController.popBackStack()
-        })
     }
 }
 
 @Composable
-fun SettingItem(text: String, onClick: () -> Unit) {
+private fun SettingItem(text: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +75,7 @@ fun SettingItem(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun SettingDivider() {
+private fun SettingDivider() {
     HorizontalDivider(
         thickness = 1.dp,
         color = MaterialTheme.colorScheme.outline
@@ -101,7 +90,7 @@ fun SettingsScreenPreview(
     DynamicTheme {
         SettingsScreen(
             appConfig = appConfig,
-            navController = rememberNavController()
+            navigateToAbout = { }
         )
     }
 }

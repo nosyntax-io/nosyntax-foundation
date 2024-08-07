@@ -58,7 +58,7 @@ import kotlinx.coroutines.CoroutineScope
 fun WebScreen(
     appConfig: AppConfig,
     url: String,
-    drawerState: DrawerState,
+    captureBackPresses: Boolean,
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     val context = LocalContext.current
@@ -90,7 +90,7 @@ fun WebScreen(
             modifier = Modifier.fillMaxSize(),
             state = webViewState,
             navigator = navigator,
-            captureBackPresses = !drawerState.isOpen,
+            captureBackPresses = captureBackPresses,
             onCreated = { webView ->
                 webView.apply {
                     layoutParams = ViewGroup.LayoutParams(

@@ -1,6 +1,5 @@
 package io.nosyntax.foundation.presentation.about
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,27 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.core.utility.Utilities
-import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
-    val context = LocalContext.current
-
+fun AboutScreen(appConfig: AppConfig) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -77,17 +70,13 @@ fun AboutScreen(appConfig: AppConfig, navController: NavHostController) {
                     "${Utilities.getCurrentYear()} " +
                     "${stringResource(R.string.app_name)}.\n" +
                     stringResource(R.string.all_rights_reserved),
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Normal
+                ),
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
                 textAlign = TextAlign.Center
             )
         }
-    }
-
-    BackHandler(enabled = true) {
-        (context.findActivity() as MainActivity).showInterstitial(onAdDismissed = {
-            navController.popBackStack()
-        })
     }
 }
 
@@ -97,9 +86,6 @@ fun AboutScreenPreview(
     @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
 ) {
     DynamicTheme {
-        AboutScreen(
-            appConfig = appConfig,
-            navController = rememberNavController()
-        )
+        AboutScreen(appConfig = appConfig)
     }
 }

@@ -36,16 +36,17 @@ fun NavigationGraph(
                 when (item.type) {
                     "webview" -> WebScreen(
                         appConfig = appConfig,
-                        drawerState = drawerState,
-                        url = item.action.orEmpty()
+                        url = item.action.orEmpty(),
+                        captureBackPresses = !drawerState.isOpen
                     )
                     "settings" -> SettingsScreen(
                         appConfig = appConfig,
-                        navController = navController
+                        navigateToAbout = {
+                            navController.navigate("about")
+                        }
                     )
                     "about" -> AboutScreen(
-                        appConfig = appConfig,
-                        navController = navController
+                        appConfig = appConfig
                     )
                 }
             }
@@ -53,14 +54,13 @@ fun NavigationGraph(
         composable(route = "deeplink") {
             WebScreen(
                 appConfig = appConfig,
-                drawerState = drawerState,
-                url = deeplink?.destination.orEmpty()
+                url = deeplink?.destination.orEmpty(),
+                captureBackPresses = !drawerState.isOpen
             )
         }
         composable(route = "about") {
             AboutScreen(
-                appConfig = appConfig,
-                navController = navController
+                appConfig = appConfig
             )
         }
     }
