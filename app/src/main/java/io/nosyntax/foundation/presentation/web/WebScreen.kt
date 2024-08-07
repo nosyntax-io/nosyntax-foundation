@@ -43,11 +43,11 @@ import io.nosyntax.foundation.core.utility.rememberSaveableWebViewState
 import io.nosyntax.foundation.core.utility.rememberWebViewNavigator
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.main.MainActivity
-import io.nosyntax.foundation.presentation.web.component.AlertDialogComponent
-import io.nosyntax.foundation.presentation.web.component.ConfirmDialogComponent
+import io.nosyntax.foundation.presentation.web.component.JsAlertDialog
+import io.nosyntax.foundation.presentation.web.component.JsConfirmDialog
 import io.nosyntax.foundation.presentation.web.component.JsDialog
+import io.nosyntax.foundation.presentation.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.web.component.LoadingIndicator
-import io.nosyntax.foundation.presentation.web.component.PromptDialogComponent
 import io.nosyntax.foundation.presentation.web.component.chromeClient
 import io.nosyntax.foundation.presentation.web.component.webClient
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
@@ -224,20 +224,20 @@ fun WebScreen(
 
         when(dialog) {
             is JsDialog.Alert -> {
-                AlertDialogComponent(
+                JsAlertDialog(
                     message = dialog.message,
                     onConfirm = confirmDialog
                 )
             }
             is JsDialog.Confirm -> {
-                ConfirmDialogComponent(
+                JsConfirmDialog(
                     message = dialog.message,
                     onCancel = cancelDialog,
                     onConfirm = confirmDialog
                 )
             }
             is JsDialog.Prompt -> {
-                PromptDialogComponent(
+                JsPromptDialog(
                     message = dialog.message,
                     defaultValue = dialog.defaultValue,
                     onCancel = cancelDialog,

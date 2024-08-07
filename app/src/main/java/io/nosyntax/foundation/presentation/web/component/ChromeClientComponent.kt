@@ -20,6 +20,12 @@ import androidx.compose.runtime.setValue
 import io.nosyntax.foundation.core.utility.WebKitChromeClient
 import io.nosyntax.foundation.presentation.web.utility.FileChooserDelegate
 
+sealed class JsDialog {
+    data class Alert(val message: String) : JsDialog()
+    data class Confirm(val message: String) : JsDialog()
+    data class Prompt(val message: String, val defaultValue: String = "") : JsDialog()
+}
+
 @Composable
 fun chromeClient(
     context: Context,
