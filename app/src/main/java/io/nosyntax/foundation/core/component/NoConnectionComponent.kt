@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -67,13 +66,10 @@ fun NoConnectionView(onRetry: () -> Unit) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            shape = MaterialTheme.shapes.medium,
-            contentPadding = PaddingValues(0.dp),
             onClick = onRetry
         ) {
             Text(
                 text = stringResource(id = R.string.try_again),
-                modifier = Modifier.padding(horizontal = 30.dp),
                 style = MaterialTheme.typography.labelLarge
             )
         }
