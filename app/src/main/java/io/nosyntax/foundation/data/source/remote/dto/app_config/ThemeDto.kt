@@ -27,6 +27,10 @@ data class ThemeDto(
         val surfaceLight: String,
         @SerializedName("on_surface_light")
         val onSurfaceLight: String,
+        @SerializedName("surface_variant_light")
+        val surfaceVariantLight: String,
+        @SerializedName("on_surface_variant_light")
+        val onSurfaceVariantLight: String,
         @SerializedName("outline_light")
         val outlineLight: String,
         @SerializedName("outline_variant_light")
@@ -39,6 +43,10 @@ data class ThemeDto(
         val surfaceDark: String,
         @SerializedName("on_surface_dark")
         val onSurfaceDark: String,
+        @SerializedName("surface_variant_dark")
+        val surfaceVariantDark: String,
+        @SerializedName("on_surface_variant_dark")
+        val onSurfaceVariantDark: String,
         @SerializedName("outline_dark")
         val outlineDark: String,
         @SerializedName("outline_variant_dark")
