@@ -46,11 +46,13 @@ fun ThemeDto.toTheme(): Theme {
             surfaceLight = colorScheme.surfaceLight,
             onSurfaceLight = colorScheme.onSurfaceLight,
             outlineLight = colorScheme.outlineLight,
+            outlineVariantLight = colorScheme.outlineVariantLight,
             backgroundDark = colorScheme.backgroundDark,
             onBackgroundDark = colorScheme.onBackgroundDark,
             surfaceDark = colorScheme.surfaceDark,
             onSurfaceDark = colorScheme.onSurfaceDark,
-            outlineDark = colorScheme.outlineDark
+            outlineDark = colorScheme.outlineDark,
+            outlineVariantDark = colorScheme.outlineVariantDark
         ),
         typography = Theme.Typography(
             primaryFontFamily = typography.primaryFontFamily,

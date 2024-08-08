@@ -45,11 +45,13 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                     surfaceLight = "#f4f4f4",
                     onSurfaceLight = "#19191a",
                     outlineLight = "#f4f4f4",
+                    outlineVariantLight = "#121212",
                     backgroundDark = "#181A20",
                     onBackgroundDark = "#FFFFFF",
                     surfaceDark = "#21252F",
                     onSurfaceDark = "#F0F0F0",
-                    outlineDark = "#2C2F36"
+                    outlineDark = "#2C2F36",
+                    outlineVariantDark = "#121212"
                 ),
                 typography = Theme.Typography(
                     primaryFontFamily = "Poppins",
