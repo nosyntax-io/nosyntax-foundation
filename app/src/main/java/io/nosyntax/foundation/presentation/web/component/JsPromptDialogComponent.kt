@@ -73,9 +73,9 @@ fun JsPromptDialog(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
+                            contentColor = MaterialTheme.colorScheme.primary
                         ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                         shape = MaterialTheme.shapes.medium,
                         contentPadding = PaddingValues(0.dp),
                         onClick = onCancel
