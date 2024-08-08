@@ -130,7 +130,7 @@ private fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: 
 @Composable
 private fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
     val dividerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.outline
+        MaterialTheme.colorScheme.outlineVariant
     } else {
         MaterialTheme.colorScheme.onPrimary.copy(alpha = .3f)
     }

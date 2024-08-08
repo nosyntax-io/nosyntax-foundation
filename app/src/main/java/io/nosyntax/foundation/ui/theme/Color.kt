@@ -12,11 +12,13 @@ data class DynamicColorScheme(
     val surfaceLight: Color = ColorSurfaceLight,
     val onSurfaceLight: Color = ColorOnSurfaceLight,
     val outlineLight: Color = ColorOutlineLight,
+    val outlineVariantLight: Color = ColorOutlineVariantLight,
     val backgroundDark: Color = ColorBackgroundDark,
     val onBackgroundDark: Color = ColorOnBackgroundDark,
     val surfaceDark: Color = ColorSurfaceDark,
     val onSurfaceDark: Color = ColorOnSurfaceDark,
-    val outlineDark: Color = ColorOutlineDark
+    val outlineDark: Color = ColorOutlineDark,
+    val outlineVariantDark: Color = ColorOutlineVariantDark
 )
 
 val ColorPrimary = Color(0xFF369770)
@@ -28,8 +30,10 @@ val ColorOnBackgroundLight = Color(0xFF19191a)
 val ColorSurfaceLight = Color(0xFFf4f4f4)
 val ColorOnSurfaceLight = Color(0xFF19191a)
 val ColorOutlineLight = Color(0xFFf4f4f4)
+val ColorOutlineVariantLight = Color(0xFFf4f4f4)
 val ColorBackgroundDark = Color(0xFF181A20)
 val ColorOnBackgroundDark = Color(0xFFFFFFFF)
 val ColorSurfaceDark = Color(0xFF21252F)
 val ColorOnSurfaceDark = Color(0xFFF0F0F0)
 val ColorOutlineDark = Color(0xFF2C2F36)
+val ColorOutlineVariantDark = Color(0xFFf4f4f4)

@@ -15,11 +15,13 @@ data class Theme(
         val surfaceLight: String,
         val onSurfaceLight: String,
         val outlineLight: String,
+        val outlineVariantLight: String,
         val backgroundDark: String,
         val onBackgroundDark: String,
         val surfaceDark: String,
         val onSurfaceDark: String,
-        val outlineDark: String
+        val outlineDark: String,
+        val outlineVariantDark: String
     )
 
     data class Typography(

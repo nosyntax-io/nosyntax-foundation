@@ -61,11 +61,13 @@ class MainActivity: ComponentActivity() {
                     surfaceLight = Color(parseColor(colorScheme.surfaceLight)),
                     onSurfaceLight = Color(parseColor(colorScheme.onSurfaceLight)),
                     outlineLight = Color(parseColor(colorScheme.outlineLight)),
+                    outlineVariantLight = Color(parseColor(colorScheme.outlineVariantLight)),
                     backgroundDark = Color(parseColor(colorScheme.backgroundDark)),
                     onBackgroundDark = Color(parseColor(colorScheme.onBackgroundDark)),
                     surfaceDark = Color(parseColor(colorScheme.surfaceDark)),
                     onSurfaceDark = Color(parseColor(colorScheme.onSurfaceDark)),
-                    outlineDark = Color(parseColor(colorScheme.outlineDark))
+                    outlineDark = Color(parseColor(colorScheme.outlineDark)),
+                    outlineVariantDark = Color(parseColor(colorScheme.outlineVariantDark))
                 )
 
                 val dynamicTypography = DynamicTypography(
