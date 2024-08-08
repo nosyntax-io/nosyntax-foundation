@@ -1,9 +1,7 @@
 package io.nosyntax.foundation.presentation.web.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,7 +46,7 @@ fun JsConfirmDialog(
                         color = MaterialTheme.colorScheme.background,
                         shape = MaterialTheme.shapes.large
                     )
-                    .padding(20.dp),
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -65,9 +63,6 @@ fun JsConfirmDialog(
                             containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.primary
                         ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        shape = MaterialTheme.shapes.medium,
-                        contentPadding = PaddingValues(0.dp),
                         onClick = onCancel
                     ) {
                         Text(
@@ -75,15 +70,13 @@ fun JsConfirmDialog(
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
-                    Spacer(modifier = Modifier.width(20.dp))
+                    Spacer(modifier = Modifier.width(15.dp))
                     Button(
                         modifier = Modifier.weight(1f).height(40.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
-                        shape = MaterialTheme.shapes.medium,
-                        contentPadding = PaddingValues(0.dp),
                         onClick = onConfirm
                     ) {
                         Text(

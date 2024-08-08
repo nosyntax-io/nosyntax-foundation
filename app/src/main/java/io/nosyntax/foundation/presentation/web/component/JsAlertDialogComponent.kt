@@ -2,7 +2,6 @@ package io.nosyntax.foundation.presentation.web.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,7 +41,7 @@ fun JsAlertDialog(
                     color = MaterialTheme.colorScheme.background,
                     shape = MaterialTheme.shapes.large
                 )
-                .padding(20.dp),
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -58,8 +57,6 @@ fun JsAlertDialog(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                shape = MaterialTheme.shapes.medium,
-                contentPadding = PaddingValues(0.dp),
                 onClick = onConfirm
             ) {
                 Text(
