@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.nosyntax.foundation.core.utility.ThemePreviews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun SnackbarComponent(
+fun Snackbar(
     message: String,
     isRtl: Boolean = true
 ) {
@@ -35,13 +35,12 @@ fun SnackbarComponent(
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
-fun SnackbarComponentPreview() {
-    DynamicTheme(darkTheme = false) {
-        SnackbarComponent(
-            message = "Lorem Ipsum is simply dummy text of the printing.",
-            isRtl = true
+fun SnackbarPreview() {
+    DynamicTheme {
+        Snackbar(
+            message = "Lorem Ipsum is simply dummy text of the printing."
         )
     }
 }

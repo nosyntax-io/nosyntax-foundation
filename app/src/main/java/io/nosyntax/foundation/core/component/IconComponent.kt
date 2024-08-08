@@ -5,7 +5,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -25,15 +24,17 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun Icon(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     source: Any,
+    contentDescription: String? = null,
     tint: Color = LocalContentColor.current,
 ) {
     when (source) {
         is String -> {
-            AsyncImageIcon(
+            AsyncIcon(
                 modifier = modifier,
                 url = source,
+                contentDescription = contentDescription,
                 tint = tint
             )
         }
@@ -41,7 +42,7 @@ fun Icon(
             Icon(
                 modifier = modifier,
                 painter = source,
-                contentDescription = null,
+                contentDescription = contentDescription,
                 tint = tint
             )
         }
@@ -49,29 +50,10 @@ fun Icon(
 }
 
 @Composable
-fun ClickableIcon(
-    modifier: Modifier,
-    source: Any,
-    tint: Color = LocalContentColor.current,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    IconButton(
-        onClick = onClick,
-        enabled = enabled
-    ) {
-        Icon(
-            modifier = modifier,
-            source = source,
-            tint = tint
-        )
-    }
-}
-
-@Composable
-private fun AsyncImageIcon(
+private fun AsyncIcon(
     modifier: Modifier,
     url: String,
+    contentDescription: String?,
     tint: Color = LocalContentColor.current
 ) {
     val painter = rememberAsyncImagePainter(
@@ -88,7 +70,7 @@ private fun AsyncImageIcon(
     Icon(
         modifier = modifier,
         painter = painter,
-        contentDescription = null,
+        contentDescription = contentDescription,
         tint = iconTint
     )
 }
@@ -102,21 +84,6 @@ fun IconPreview() {
                 modifier = Modifier.size(80.dp),
                 source = painterResource(id = R.drawable.icon_circle_outline),
                 tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-    }
-}
-
-@ThemePreviews
-@Composable
-fun ClickableIconPreview() {
-    DynamicTheme {
-        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            ClickableIcon(
-                modifier = Modifier.size(80.dp),
-                source = painterResource(id = R.drawable.icon_circle_outline),
-                tint = MaterialTheme.colorScheme.onBackground,
-                onClick = { }
             )
         }
     }

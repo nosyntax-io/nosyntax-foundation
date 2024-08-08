@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.nosyntax.foundation.R
-import io.nosyntax.foundation.core.component.TextFieldComponent
+import io.nosyntax.foundation.core.component.TextField
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -64,7 +64,7 @@ fun JsPromptDialog(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextFieldComponent(defaultValue = defaultValue, onValueChange = {
+                TextField(defaultValue = defaultValue, onValueChange = {
                     promptValue.value = it
                 })
                 Spacer(modifier = Modifier.height(20.dp))

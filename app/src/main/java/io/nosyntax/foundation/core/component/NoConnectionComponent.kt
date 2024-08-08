@@ -29,7 +29,7 @@ import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun NoConnectionComponent(onRetry: () -> Unit) {
+fun NoConnectionView(onRetry: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +64,8 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
         Button(
             modifier = Modifier.height(40.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(0.dp),
@@ -73,8 +74,7 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.try_again),
                 modifier = Modifier.padding(horizontal = 30.dp),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimary
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
@@ -84,6 +84,6 @@ fun NoConnectionComponent(onRetry: () -> Unit) {
 @Composable
 fun NoConnectionPreview() {
     DynamicTheme {
-        NoConnectionComponent { }
+        NoConnectionView { }
     }
 }

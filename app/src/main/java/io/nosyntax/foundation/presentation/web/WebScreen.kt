@@ -30,7 +30,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.ChangeScreenOrientationComponent
-import io.nosyntax.foundation.core.component.NoConnectionComponent
+import io.nosyntax.foundation.core.component.NoConnectionView
 import io.nosyntax.foundation.core.component.SystemUIControllerComponent
 import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.utility.Connectivity
@@ -203,7 +203,7 @@ fun WebScreen(
 
     // TODO: Reset connection state when update navigate.
     if (noConnectionState) {
-        NoConnectionComponent(onRetry = {
+        NoConnectionView(onRetry = {
             if (Connectivity.getInstance().isOnline()) {
                 noConnectionState = false
                 navigator.reload()

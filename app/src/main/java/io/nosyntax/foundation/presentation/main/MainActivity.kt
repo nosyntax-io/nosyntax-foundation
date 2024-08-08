@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import io.nosyntax.foundation.core.component.NoConnectionComponent
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.collectLatestOnLifecycleStarted
 import io.nosyntax.foundation.core.utility.monetize.InterstitialAd
@@ -20,6 +19,7 @@ import io.nosyntax.foundation.ui.theme.DynamicColorScheme
 import io.nosyntax.foundation.ui.theme.DynamicTypography
 import io.nosyntax.foundation.ui.theme.googleFontProvider
 import dagger.hilt.android.AndroidEntryPoint
+import io.nosyntax.foundation.core.component.NoConnectionView
 import io.nosyntax.foundation.core.utility.Utilities.getSerializable
 import io.nosyntax.foundation.domain.model.Deeplink
 
@@ -92,7 +92,7 @@ class MainActivity: ComponentActivity() {
             } ?: run {
                 setContent {
                     DynamicTheme {
-                        NoConnectionComponent(onRetry = {
+                        NoConnectionView(onRetry = {
                             if (Connectivity.getInstance().isOnline()) {
                                 mainViewModel.getAppConfig()
                             }

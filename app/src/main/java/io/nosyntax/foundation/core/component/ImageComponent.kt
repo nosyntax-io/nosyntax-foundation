@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -20,21 +23,32 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun Image(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     source: Any,
-    contentScale: ContentScale = ContentScale.Crop
+    contentDescription: String? = null,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Crop,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null
 ) {
     when (source) {
         is String -> AsyncImage(
             modifier = modifier,
             url = source,
-            contentScale = contentScale
+            contentDescription = contentDescription,
+            alignment = alignment,
+            contentScale = contentScale,
+            alpha = alpha,
+            colorFilter = colorFilter
         )
         is Painter -> Image(
             modifier = modifier,
             painter = source,
-            contentDescription = null,
-            contentScale = contentScale
+            contentDescription = contentDescription,
+            alignment = alignment,
+            contentScale = contentScale,
+            alpha = alpha,
+            colorFilter = colorFilter
         )
     }
 }
@@ -43,7 +57,11 @@ fun Image(
 private fun AsyncImage(
     modifier: Modifier,
     url: String,
-    contentScale: ContentScale
+    contentDescription: String?,
+    alignment: Alignment,
+    contentScale: ContentScale,
+    alpha: Float,
+    colorFilter: ColorFilter?
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,
@@ -55,8 +73,11 @@ private fun AsyncImage(
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentDescription = contentDescription,
+            alignment = alignment,
+            contentScale = ContentScale.Crop,
+            alpha = alpha,
+            colorFilter = colorFilter
         )
 
         if (painter.state is AsyncImagePainter.State.Loading) {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -122,11 +123,12 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
             modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
-            ClickableIcon(
-                modifier = Modifier.size(30.dp),
-                source = icon,
-                onClick = navigationAction::onClick
-            )
+            IconButton(onClick = navigationAction::onClick) {
+                Icon(
+                    modifier = Modifier.size(30.dp),
+                    source = icon
+                )
+            }
         }
     }
 }

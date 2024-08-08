@@ -29,8 +29,8 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
-
     val transition = rememberInfiniteTransition("shimmer_transition")
+
     val startOffsetX by transition.animateFloat(
         initialValue = -2 * size.width.toFloat(),
         targetValue = 2 * size.width.toFloat(),
@@ -61,11 +61,12 @@ private fun shimmerColors(baseColor: Color): List<Color> {
 @Composable
 fun ShimmerPreview() {
     DynamicTheme {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(170.dp)
-            .background(MaterialTheme.colorScheme.background)
-            .shimmerEffect()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .shimmerEffect()
         )
     }
 }

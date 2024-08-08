@@ -22,7 +22,7 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextFieldComponent(
+fun TextField(
     placeholder: String = "",
     defaultValue: String = "",
     onValueChange: (String) -> Unit
@@ -94,7 +94,7 @@ fun TextFieldComponent(
 @Composable
 fun TextFieldPreview() {
     DynamicTheme {
-        TextFieldComponent(
+        TextField(
             placeholder = "Enter Text",
             onValueChange = { }
         )

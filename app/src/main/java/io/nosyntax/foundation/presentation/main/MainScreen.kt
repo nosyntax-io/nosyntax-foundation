@@ -25,10 +25,10 @@ import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.AppBar
 import io.nosyntax.foundation.core.component.NavigationBar
 import io.nosyntax.foundation.core.component.NavigationAction
-import io.nosyntax.foundation.core.component.SnackbarComponent
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.core.component.NavigationDrawer
+import io.nosyntax.foundation.core.component.Snackbar
 import io.nosyntax.foundation.core.extension.getNavigationItems
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
@@ -130,7 +130,7 @@ private fun MainContent(
 private fun MainSnackbarHost() {
     SnackbarHost(
         hostState = remember { SnackbarHostState() },
-        snackbar = { SnackbarComponent(it.visuals.message) }
+        snackbar = { Snackbar(it.visuals.message) }
     )
 }
 
