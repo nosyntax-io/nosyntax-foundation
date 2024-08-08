@@ -14,12 +14,16 @@ data class Theme(
         val onBackgroundLight: String,
         val surfaceLight: String,
         val onSurfaceLight: String,
+        val surfaceVariantLight: String,
+        val onSurfaceVariantLight: String,
         val outlineLight: String,
         val outlineVariantLight: String,
         val backgroundDark: String,
         val onBackgroundDark: String,
         val surfaceDark: String,
         val onSurfaceDark: String,
+        val surfaceVariantDark: String,
+        val onSurfaceVariantDark: String,
         val outlineDark: String,
         val outlineVariantDark: String
     )
