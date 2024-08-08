@@ -65,7 +65,7 @@ fun JsConfirmDialog(
                             containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.primary
                         ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                         shape = MaterialTheme.shapes.medium,
                         contentPadding = PaddingValues(0.dp),
                         onClick = onCancel
