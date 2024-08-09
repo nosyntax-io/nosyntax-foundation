@@ -131,7 +131,6 @@ fun WebScreen(
                 }
             },
             client = webClient(
-                context = context,
                 onPageLoaded = {
                     if (totalLoadedPages < 7) {
                         totalLoadedPages++
@@ -202,6 +201,7 @@ fun WebScreen(
     }
 
     // TODO: Reset connection state when update navigate.
+    // TODO: Hide internal no internet connection page
     if (noConnectionState) {
         NoConnectionView(onRetry = {
             if (Connectivity.getInstance().isOnline()) {

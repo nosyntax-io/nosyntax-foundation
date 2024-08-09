@@ -1,22 +1,23 @@
 package io.nosyntax.foundation.presentation.web.component
 
-import android.content.Context
 import android.webkit.URLUtil
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import io.nosyntax.foundation.core.utility.Intents.handleUrl
+import androidx.compose.ui.platform.LocalContext
 import io.nosyntax.foundation.core.utility.WebKitClient
+import io.nosyntax.foundation.core.utility.handleIntent
 
 @Composable
 fun webClient(
-    context: Context,
     onPageLoaded: () -> Unit,
     onResourceLoaded: () -> Unit,
     onRequestInterrupted: () -> Unit
 ): WebKitClient {
+    val context = LocalContext.current
+
     val webClient = remember {
         object: WebKitClient() {
             override fun onPageFinished(view: WebView, url: String?) {
@@ -25,9 +26,9 @@ fun webClient(
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val url = request?.url.toString()
+                val url = request?.url?.toString().orEmpty()
                 if (!URLUtil.isValidUrl(url)) {
-                    context.handleUrl(url)
+                    context.handleIntent(url)
                     return true
                 }
                 return false
