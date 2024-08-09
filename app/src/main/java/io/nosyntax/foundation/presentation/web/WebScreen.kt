@@ -1,7 +1,9 @@
 package io.nosyntax.foundation.presentation.web
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsPromptResult
@@ -10,7 +12,6 @@ import android.webkit.URLUtil
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import io.nosyntax.foundation.R
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.ChangeScreenOrientationComponent
 import io.nosyntax.foundation.core.component.NoConnectionView
@@ -52,6 +55,7 @@ import io.nosyntax.foundation.presentation.web.component.webClient
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
 import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(
@@ -74,6 +78,9 @@ fun WebScreen(
     var noConnectionState by rememberSaveable { mutableStateOf(false) }
 
     var totalLoadedPages by remember { mutableIntStateOf(0) }
+
+    // Required for Android 10 (API 29) and below.
+    val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -118,15 +125,18 @@ fun WebScreen(
                         ), "io"
                     )
 
-                    setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
-                        val fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
-                        Downloader(context).downloadFile(
-                            fileName = fileName,
-                            url = url,
-                            userAgent = userAgent,
-                            mimeType = mimeType
-                        )
-                        Toast.makeText(context, "${context.getString(R.string.download_started)} $fileName", Toast.LENGTH_LONG).show()
+                    setDownloadListener { url, userAgent, disposition, mimeType, _ ->
+                        if (Build.VERSION.SDK_INT in 24..29 && !writePermissionState.status.isGranted) {
+                            writePermissionState.launchPermissionRequest()
+                        } else {
+                            val fileName = URLUtil.guessFileName(url, disposition, mimeType)
+                            Downloader(context).downloadFile(
+                                fileName = fileName,
+                                url = url,
+                                userAgent = userAgent,
+                                mimeType = mimeType
+                            )
+                        }
                     }
                 }
             },
