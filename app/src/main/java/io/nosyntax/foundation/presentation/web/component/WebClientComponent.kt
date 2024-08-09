@@ -1,5 +1,7 @@
 package io.nosyntax.foundation.presentation.web.component
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.webkit.URLUtil
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -9,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import io.nosyntax.foundation.core.utility.WebKitClient
 import io.nosyntax.foundation.core.utility.handleIntent
+import io.nosyntax.foundation.core.utility.openContent
 
 @Composable
 fun webClient(
@@ -17,6 +20,7 @@ fun webClient(
     onRequestInterrupted: () -> Unit
 ): WebKitClient {
     val context = LocalContext.current
+    val knownDomains = remember { loadKnownDomains(context) }
 
     val webClient = remember {
         object: WebKitClient() {
@@ -27,10 +31,21 @@ fun webClient(
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString().orEmpty()
+
                 if (!URLUtil.isValidUrl(url)) {
                     context.handleIntent(url)
                     return true
                 }
+
+                if (knownDomains.any { url.contains(it, ignoreCase = true) }) {
+                    return try {
+                        context.openContent(url)
+                        true
+                    } catch (e: ActivityNotFoundException) {
+                        false
+                    }
+                }
+
                 return false
             }
 
@@ -50,4 +65,10 @@ fun webClient(
     }
 
     return webClient
+}
+
+private fun loadKnownDomains(context: Context): List<String> {
+    return context.assets.open("known-domains.txt").bufferedReader().useLines { lines ->
+        lines.toList()
+    }
 }
