@@ -37,19 +37,19 @@ fun SettingsScreen(appConfig: AppConfig, navigateToAbout: () -> Unit) {
             .verticalScroll(rememberScrollState())
     ) {
         SettingItem(text = stringResource(id = R.string.rate_us)) {
-            context.openPlayStore(packageName = context.packageName)
+            context.openPlayStore(context.packageName)
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.send_feedback)) {
-            context.openMailer(recipients = arrayOf(appConfig.settings.email))
+            context.openMailer(arrayOf(appConfig.settings.email))
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.privacy_policy)) {
-            context.openContent(data = appConfig.settings.privacyPolicy)
+            context.openContent(appConfig.settings.privacyPolicy)
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.terms_of_service)) {
-            context.openContent(data = appConfig.settings.termsOfService)
+            context.openContent(appConfig.settings.termsOfService)
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.about_us)) {
