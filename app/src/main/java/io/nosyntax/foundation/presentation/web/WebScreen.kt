@@ -27,13 +27,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
+import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.ChangeScreenOrientationComponent
 import io.nosyntax.foundation.core.component.NoConnectionView
+import io.nosyntax.foundation.core.component.PermissionDialog
 import io.nosyntax.foundation.core.component.SystemUIControllerComponent
 import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.utility.Connectivity
@@ -41,6 +46,7 @@ import io.nosyntax.foundation.core.utility.Downloader
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
 import io.nosyntax.foundation.core.utility.WebView
 import io.nosyntax.foundation.core.utility.monetize.BannerAd
+import io.nosyntax.foundation.core.utility.openAppSettings
 import io.nosyntax.foundation.core.utility.rememberSaveableWebViewState
 import io.nosyntax.foundation.core.utility.rememberWebViewNavigator
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -79,8 +85,8 @@ fun WebScreen(
 
     var totalLoadedPages by remember { mutableIntStateOf(0) }
 
-    // Required for Android 10 (API 29) and below.
-    val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    var showStoragePermissionDialog by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -126,16 +132,16 @@ fun WebScreen(
                     )
 
                     setDownloadListener { url, userAgent, disposition, mimeType, _ ->
-                        if (Build.VERSION.SDK_INT in 24..29 && !writePermissionState.status.isGranted) {
-                            writePermissionState.launchPermissionRequest()
+                        val fileName = URLUtil.guessFileName(url, disposition, mimeType)
+
+                        if (Build.VERSION.SDK_INT in 24..29) {
+                            if (storagePermissionState.status.isGranted) {
+                                Downloader(context).downloadFile(fileName, url, userAgent, mimeType)
+                            } else {
+                                showStoragePermissionDialog = true
+                            }
                         } else {
-                            val fileName = URLUtil.guessFileName(url, disposition, mimeType)
-                            Downloader(context).downloadFile(
-                                fileName = fileName,
-                                url = url,
-                                userAgent = userAgent,
-                                mimeType = mimeType
-                            )
+                            Downloader(context).downloadFile(fileName, url, userAgent, mimeType)
                         }
                     }
                 }
@@ -208,6 +214,23 @@ fun WebScreen(
         if (indicatorConfig.visible) {
             LoadingIndicator(indicatorConfig = indicatorConfig)
         }
+    }
+
+    if (showStoragePermissionDialog) {
+        PermissionDialog(
+            icon = painterResource(R.drawable.icon_folder_outline),
+            title = stringResource(R.string.storage_required),
+            description = stringResource(R.string.storage_required_description),
+            onDismiss = { showStoragePermissionDialog = false },
+            onConfirm = {
+                showStoragePermissionDialog = false
+                if (storagePermissionState.status.shouldShowRationale) {
+                    storagePermissionState.launchPermissionRequest()
+                } else {
+                    context.openAppSettings()
+                }
+            }
+        )
     }
 
     // TODO: Reset connection state when update navigate.

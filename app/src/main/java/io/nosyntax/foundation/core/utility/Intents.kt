@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.MailTo
 import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import io.nosyntax.foundation.R
 
@@ -40,9 +41,8 @@ fun Context.handleIntent(url: String) {
  * @param data The URI or intent data to be opened.
  */
 fun Context.openContent(data: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data))
     try {
-        startActivity(intent)
+        Intent(Intent.ACTION_VIEW, Uri.parse(data)).also(::startActivity)
     } catch (exception: ActivityNotFoundException) {
         Toast.makeText(this, R.string.no_apps_handle, Toast.LENGTH_LONG).show()
     }
@@ -100,8 +100,7 @@ fun Context.openMailer(recipients: Array<String>, subject: String = "", body: St
 fun Context.openDialer(data: String) {
     val uriString = if (data.startsWith("tel:")) data else "tel:$data"
     try {
-        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(uriString))
-        startActivity(intent)
+        Intent(Intent.ACTION_DIAL, Uri.parse(uriString)).also(::startActivity)
     } catch (e: ActivityNotFoundException) {
         Toast.makeText(this, getString(R.string.no_apps_handle), Toast.LENGTH_LONG).show()
     }
@@ -118,8 +117,7 @@ fun Context.openDialer(data: String) {
 fun Context.openSMS(data: String) {
     val uriString = if (data.startsWith("sms:")) data else "sms:$data"
     try {
-        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse(uriString))
-        startActivity(intent)
+        Intent(Intent.ACTION_SENDTO, Uri.parse(uriString)).also(::startActivity)
     } catch (e: ActivityNotFoundException) {
         Toast.makeText(this, getString(R.string.no_apps_handle), Toast.LENGTH_LONG).show()
     }
@@ -143,4 +141,15 @@ fun Context.openPlayStore(packageName: String) {
             startActivity(intent)
         }
     }
+}
+
+/**
+ * Opens the app's settings page in the device settings,
+ * allowing the user to manage permissions, storage, and other app-specific settings.
+ */
+fun Context.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
 }
