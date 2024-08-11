@@ -2,19 +2,27 @@ package io.nosyntax.foundation.presentation.web
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.GeolocationPermissions
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.URLUtil
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,6 +56,7 @@ import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.Downloader
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
+import io.nosyntax.foundation.core.utility.WebKitChromeClient
 import io.nosyntax.foundation.core.utility.WebKitClient
 import io.nosyntax.foundation.core.utility.WebView
 import io.nosyntax.foundation.core.utility.handleIntent
@@ -63,7 +72,7 @@ import io.nosyntax.foundation.presentation.web.component.JsConfirmDialog
 import io.nosyntax.foundation.presentation.web.component.JsDialog
 import io.nosyntax.foundation.presentation.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.web.component.LoadingIndicator
-import io.nosyntax.foundation.presentation.web.component.chromeClient
+import io.nosyntax.foundation.presentation.web.utility.FileChooserDelegate
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
 import io.nosyntax.foundation.presentation.web.utility.PermissionUtil
 import kotlinx.coroutines.CoroutineScope
@@ -420,4 +429,90 @@ fun webClient(
     }
 
     return webClient
+}
+
+@Composable
+fun chromeClient(
+    context: Context,
+    onJsDialogEvent: (JsDialog, JsResult) -> Unit,
+    onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
+    onCustomViewHidden: () -> Unit,
+    onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit
+): WebKitChromeClient {
+    var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
+
+    val fileChooserDelegate = FileChooserDelegate(context) { uris ->
+        filePath?.onReceiveValue(uris)
+        filePath = null
+    }
+
+    val fileChooser = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+        fileChooserDelegate.onActivityResult(result.data)
+    }
+
+    val chromeClient = remember {
+        object: WebKitChromeClient() {
+            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Alert(message), result)
+                    return true
+                }
+                result?.cancel()
+                return false
+            }
+
+            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Confirm(message), result)
+                    return true
+                }
+                result?.cancel()
+                return false
+            }
+
+            override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+                if (message != null && result != null) {
+                    onJsDialogEvent(JsDialog.Prompt(message, defaultValue.orEmpty()), result)
+                    return true
+                }
+                result?.cancel()
+                return false
+            }
+
+            override fun getDefaultVideoPoster(): Bitmap? {
+                return BitmapFactory.decodeResource(context.resources, 2130837573)
+            }
+
+            override fun onHideCustomView() {
+                onCustomViewHidden()
+            }
+
+            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                if (view != null && callback != null) {
+                    onCustomViewShown(view, callback)
+                }
+            }
+
+            override fun onGeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissions.Callback?) {
+                onGeolocationPrompt(origin, callback)
+            }
+
+            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
+                filePath?.onReceiveValue(null)
+                filePath = filePathCallback
+
+                val customFileChooserParams = object: FileChooserParams() {
+                    override fun getMode() = 1
+                    override fun getAcceptTypes() = arrayOf("image/*")
+                    override fun isCaptureEnabled() = true
+                    override fun getTitle() = fileChooserParams.title
+                    override fun getFilenameHint() = fileChooserParams.filenameHint
+                    override fun createIntent() = fileChooserParams.createIntent()
+                }
+                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
+            }
+        }
+    }
+
+    return chromeClient
 }
