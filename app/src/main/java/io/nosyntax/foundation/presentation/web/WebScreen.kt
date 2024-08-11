@@ -59,6 +59,7 @@ import io.nosyntax.foundation.presentation.web.component.LoadingIndicator
 import io.nosyntax.foundation.presentation.web.component.chromeClient
 import io.nosyntax.foundation.presentation.web.component.webClient
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
+import io.nosyntax.foundation.presentation.web.utility.PermissionUtil
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -224,10 +225,17 @@ fun WebScreen(
             onDismiss = { showStoragePermissionDialog = false },
             onConfirm = {
                 showStoragePermissionDialog = false
-                if (storagePermissionState.status.shouldShowRationale) {
-                    storagePermissionState.launchPermissionRequest()
-                } else {
-                    context.openAppSettings()
+                when {
+                    PermissionUtil.isFirstRequest(context, storagePermissionState.permission) -> {
+                        PermissionUtil.setFirstRequest(context, storagePermissionState.permission, false)
+                        storagePermissionState.launchPermissionRequest()
+                    }
+                    storagePermissionState.status.shouldShowRationale -> {
+                        storagePermissionState.launchPermissionRequest()
+                    }
+                    else -> {
+                        context.openAppSettings()
+                    }
                 }
             }
         )
