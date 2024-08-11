@@ -2,7 +2,9 @@ package io.nosyntax.foundation.presentation.web
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,10 @@ import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.URLUtil
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,9 +50,12 @@ import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.Downloader
 import io.nosyntax.foundation.core.utility.Utilities.findActivity
+import io.nosyntax.foundation.core.utility.WebKitClient
 import io.nosyntax.foundation.core.utility.WebView
+import io.nosyntax.foundation.core.utility.handleIntent
 import io.nosyntax.foundation.core.utility.monetize.BannerAd
 import io.nosyntax.foundation.core.utility.openAppSettings
+import io.nosyntax.foundation.core.utility.openContent
 import io.nosyntax.foundation.core.utility.rememberSaveableWebViewState
 import io.nosyntax.foundation.core.utility.rememberWebViewNavigator
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -58,7 +66,6 @@ import io.nosyntax.foundation.presentation.web.component.JsDialog
 import io.nosyntax.foundation.presentation.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.web.component.LoadingIndicator
 import io.nosyntax.foundation.presentation.web.component.chromeClient
-import io.nosyntax.foundation.presentation.web.component.webClient
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
 import io.nosyntax.foundation.presentation.web.utility.PermissionUtil
 import kotlinx.coroutines.CoroutineScope
@@ -162,8 +169,7 @@ fun WebScreen(
                         totalLoadedPages = 1
                     }
                 },
-                onResourceLoaded = { },
-                onRequestInterrupted = {
+                onReceivedError = {
                     noConnectionState = true
                 }
             ),
@@ -332,4 +338,60 @@ fun WebScreen(
             else -> { }
         }
     }
+}
+
+@Composable
+fun webClient(
+    onPageLoaded: () -> Unit,
+    onReceivedError: () -> Unit
+): WebKitClient {
+    val context = LocalContext.current
+    val knownDomains = remember {
+        context.assets.open("known-domains.txt").bufferedReader().readLines()
+    }
+
+    val webClient = remember {
+        object : WebKitClient() {
+            override fun onPageFinished(view: WebView, url: String?) {
+                super.onPageFinished(view, url)
+                onPageLoaded()
+            }
+
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                val url = request?.url?.toString().orEmpty()
+
+                if (url == "about:blank") {
+                    return true
+                }
+
+                if (!URLUtil.isValidUrl(url)) {
+                    context.handleIntent(url)
+                    return true
+                }
+
+                if (knownDomains.any { url.contains(it, ignoreCase = true) }) {
+                    return runCatching { context.openContent(url) }.isSuccess
+                }
+
+                return false
+            }
+
+            override fun onReceivedError(
+                view: WebView,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+                val networkErrors = listOf(ERROR_CONNECT, ERROR_TIMEOUT, ERROR_HOST_LOOKUP, ERROR_UNKNOWN)
+                if (request?.isForMainFrame == true && error?.errorCode in networkErrors) {
+                    onReceivedError()
+                }
+            }
+        }
+    }
+
+    return webClient
 }
