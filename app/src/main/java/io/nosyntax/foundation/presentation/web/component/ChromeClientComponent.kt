@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
+import android.webkit.GeolocationPermissions
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.ValueCallback
@@ -25,7 +26,8 @@ fun chromeClient(
     context: Context,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
-    onCustomViewHidden: () -> Unit
+    onCustomViewHidden: () -> Unit,
+    onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit
 ): WebKitChromeClient {
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
@@ -79,6 +81,10 @@ fun chromeClient(
                 if (view != null && callback != null) {
                     onCustomViewShown(view, callback)
                 }
+            }
+
+            override fun onGeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissions.Callback?) {
+                onGeolocationPrompt(origin, callback)
             }
 
             override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {

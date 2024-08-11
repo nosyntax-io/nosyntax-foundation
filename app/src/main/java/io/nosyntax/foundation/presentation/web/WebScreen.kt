@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import io.nosyntax.foundation.R
@@ -88,6 +89,11 @@ fun WebScreen(
 
     val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     var showStoragePermissionDialog by remember { mutableStateOf(false) }
+
+    val locationPermissionState = rememberMultiplePermissionsState(
+        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    )
+    var showLocationPermissionDialog by remember { mutableStateOf(false) }
 
     SystemUIControllerComponent(systemUiState = systemUiState)
     ChangeScreenOrientationComponent(orientation = requestedOrientation)
@@ -191,6 +197,14 @@ fun WebScreen(
                         customWebViewCallback?.onCustomViewHidden()
                         customWebViewCallback = null
                     }
+                },
+                onGeolocationPrompt = { origin, callback ->
+                    if (locationPermissionState.allPermissionsGranted) {
+                        callback?.invoke(origin, true, false)
+                    } else {
+                        callback?.invoke(origin, false, false)
+                        showLocationPermissionDialog = true
+                    }
                 }
             )
         )
@@ -232,6 +246,32 @@ fun WebScreen(
                     }
                     storagePermissionState.status.shouldShowRationale -> {
                         storagePermissionState.launchPermissionRequest()
+                    }
+                    else -> {
+                        context.openAppSettings()
+                    }
+                }
+            }
+        )
+    }
+
+   if (showLocationPermissionDialog) {
+        PermissionDialog(
+            icon = painterResource(R.drawable.icon_location_outline),
+            title = stringResource(R.string.location_required),
+            description = stringResource(R.string.location_required_description),
+            onDismiss = { showLocationPermissionDialog = false },
+            onConfirm = {
+                showLocationPermissionDialog = false
+                when {
+                    locationPermissionState.permissions.any { PermissionUtil.isFirstRequest(context, it.permission) } -> {
+                        locationPermissionState.permissions.forEach { permission ->
+                            PermissionUtil.setFirstRequest(context, permission.permission, false)
+                        }
+                        locationPermissionState.launchMultiplePermissionRequest()
+                    }
+                    locationPermissionState.shouldShowRationale -> {
+                        locationPermissionState.launchMultiplePermissionRequest()
                     }
                     else -> {
                         context.openAppSettings()
