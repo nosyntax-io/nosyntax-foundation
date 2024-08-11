@@ -2,9 +2,7 @@ package io.nosyntax.foundation.presentation.web
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -76,31 +74,31 @@ import kotlinx.coroutines.CoroutineScope
 fun WebScreen(
     appConfig: AppConfig,
     url: String,
-    captureBackPresses: Boolean,
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    captureBackPresses: Boolean
 ) {
     val context = LocalContext.current
-
-    val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
-    var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
-
+    val coroutineScope = rememberCoroutineScope()
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
 
+    val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val locationPermissionsState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    )
+
+    var showStoragePermissionDialog by rememberSaveable { mutableStateOf(false) }
+    var showLocationPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    var showNoConnectionDialog by rememberSaveable { mutableStateOf(false) }
+
+    val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
+    var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var jsDialogInfo by rememberSaveable { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
     var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
     var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
-    var noConnectionState by rememberSaveable { mutableStateOf(false) }
-
     var totalLoadedPages by remember { mutableIntStateOf(0) }
-
-    val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    var showStoragePermissionDialog by remember { mutableStateOf(false) }
-
-    val locationPermissionState = rememberMultiplePermissionsState(
-        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-    )
-    var showLocationPermissionDialog by remember { mutableStateOf(false) }
 
     SystemUIController(systemUiState = systemUiState)
     ScreenOrientationController(orientation = requestedOrientation)
@@ -118,36 +116,10 @@ fun WebScreen(
             navigator = navigator,
             captureBackPresses = captureBackPresses,
             onCreated = { webView ->
-                webView.apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    isVerticalScrollBarEnabled = false
-                    isHorizontalScrollBarEnabled = false
-
-                    settings.apply {
-                        javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
-                        allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
-                        allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
-                        domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
-                        databaseEnabled = Constants.WEB_DATABASE_ENABLED
-                        javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
-                        cacheMode = WebSettings.LOAD_DEFAULT
-                        supportMultipleWindows()
-                        setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
-                    }
-
-                    addJavascriptInterface(
-                        JavaScriptInterface(
-                            context = context,
-                            coroutineScope = coroutineScope
-                        ), "io"
-                    )
-
-                    setDownloadListener { url, userAgent, disposition, mimeType, _ ->
-                        val fileName = URLUtil.guessFileName(url, disposition, mimeType)
-
+                initWebView(
+                    webView = webView,
+                    coroutineScope = coroutineScope,
+                    onDownloadRequest = { fileName, url, userAgent, mimeType ->
                         if (Build.VERSION.SDK_INT in 24..29) {
                             if (storagePermissionState.status.isGranted) {
                                 Downloader(context).download(fileName, url, userAgent, mimeType)
@@ -158,7 +130,7 @@ fun WebScreen(
                             Downloader(context).download(fileName, url, userAgent, mimeType)
                         }
                     }
-                }
+                )
             },
             client = webClient(
                 onPageLoaded = {
@@ -170,7 +142,7 @@ fun WebScreen(
                     }
                 },
                 onReceivedError = {
-                    noConnectionState = true
+                    showNoConnectionDialog = true
                 }
             ),
             chromeClient = chromeClient(
@@ -205,7 +177,7 @@ fun WebScreen(
                     }
                 },
                 onGeolocationPrompt = { origin, callback ->
-                    if (locationPermissionState.allPermissionsGranted) {
+                    if (locationPermissionsState.allPermissionsGranted) {
                         callback?.invoke(origin, true, false)
                     } else {
                         callback?.invoke(origin, false, false)
@@ -216,9 +188,10 @@ fun WebScreen(
         )
 
         val ads = appConfig.monetization.ads
-        BannerAd(enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
+        BannerAd(
+            enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         )
     }
 
@@ -247,7 +220,11 @@ fun WebScreen(
                 showStoragePermissionDialog = false
                 when {
                     PermissionUtil.isFirstRequest(context, storagePermissionState.permission) -> {
-                        PermissionUtil.setFirstRequest(context, storagePermissionState.permission, false)
+                        PermissionUtil.setFirstRequest(
+                            context = context,
+                            permission = storagePermissionState.permission,
+                            isFirstTime = false
+                        )
                         storagePermissionState.launchPermissionRequest()
                     }
                     storagePermissionState.status.shouldShowRationale -> {
@@ -261,7 +238,7 @@ fun WebScreen(
         )
     }
 
-   if (showLocationPermissionDialog) {
+    if (showLocationPermissionDialog) {
         PermissionDialog(
             icon = painterResource(R.drawable.icon_location_outline),
             title = stringResource(R.string.location_required),
@@ -270,14 +247,23 @@ fun WebScreen(
             onConfirm = {
                 showLocationPermissionDialog = false
                 when {
-                    locationPermissionState.permissions.any { PermissionUtil.isFirstRequest(context, it.permission) } -> {
-                        locationPermissionState.permissions.forEach { permission ->
-                            PermissionUtil.setFirstRequest(context, permission.permission, false)
+                    locationPermissionsState.permissions.any { permissionState ->
+                        PermissionUtil.isFirstRequest(
+                            context = context,
+                            permission = permissionState.permission
+                        )
+                    } -> {
+                        locationPermissionsState.permissions.forEach { permission ->
+                            PermissionUtil.setFirstRequest(
+                                context = context,
+                                permission.permission,
+                                isFirstTime = false
+                            )
                         }
-                        locationPermissionState.launchMultiplePermissionRequest()
+                        locationPermissionsState.launchMultiplePermissionRequest()
                     }
-                    locationPermissionState.shouldShowRationale -> {
-                        locationPermissionState.launchMultiplePermissionRequest()
+                    locationPermissionsState.shouldShowRationale -> {
+                        locationPermissionsState.launchMultiplePermissionRequest()
                     }
                     else -> {
                         context.openAppSettings()
@@ -289,10 +275,10 @@ fun WebScreen(
 
     // TODO: Reset connection state when update navigate.
     // TODO: Hide internal no internet connection page
-    if (noConnectionState) {
+    if (showNoConnectionDialog) {
         NoConnectionView(onRetry = {
             if (Connectivity.getInstance().isOnline()) {
-                noConnectionState = false
+                showNoConnectionDialog = false
                 navigator.reload()
             }
         })
@@ -308,7 +294,7 @@ fun WebScreen(
             result?.confirm()
         }
 
-        when(dialog) {
+        when (dialog) {
             is JsDialog.Alert -> {
                 JsAlertDialog(
                     message = dialog.message,
@@ -335,7 +321,47 @@ fun WebScreen(
                     }
                 )
             }
-            else -> { }
+            else -> {}
+        }
+    }
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+fun initWebView(
+    webView: WebView,
+    coroutineScope: CoroutineScope,
+    onDownloadRequest: (String, String, String?, String) -> Unit
+) {
+    webView.apply {
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        isVerticalScrollBarEnabled = false
+        isHorizontalScrollBarEnabled = false
+
+        settings.apply {
+            javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
+            allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
+            allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
+            domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
+            databaseEnabled = Constants.WEB_DATABASE_ENABLED
+            javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
+            cacheMode = WebSettings.LOAD_DEFAULT
+            supportMultipleWindows()
+            setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+        }
+
+        addJavascriptInterface(
+            JavaScriptInterface(
+                context = context,
+                coroutineScope = coroutineScope
+            ), "io"
+        )
+
+        setDownloadListener { url, userAgent, disposition, mimeType, _ ->
+            val fileName = URLUtil.guessFileName(url, disposition, mimeType)
+            onDownloadRequest(fileName, url, userAgent, mimeType)
         }
     }
 }
