@@ -440,19 +440,26 @@ fun chromeClient(
     onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit
 ): WebKitChromeClient {
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
-
-    val fileChooserDelegate = FileChooserDelegate(context) { uris ->
+    val fileChooserDelegate = FileChooserDelegate(context = context, onReceiveResult = { uris ->
         filePath?.onReceiveValue(uris)
         filePath = null
-    }
+    })
 
-    val fileChooser = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
-        fileChooserDelegate.onActivityResult(result.data)
-    }
+    val fileChooser = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            fileChooserDelegate.onActivityResult(result.data)
+        }
+    )
 
     val chromeClient = remember {
-        object: WebKitChromeClient() {
-            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        object : WebKitChromeClient() {
+            override fun onJsAlert(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
                 if (message != null && result != null) {
                     onJsDialogEvent(JsDialog.Alert(message), result)
                     return true
@@ -461,7 +468,12 @@ fun chromeClient(
                 return false
             }
 
-            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+            override fun onJsConfirm(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
                 if (message != null && result != null) {
                     onJsDialogEvent(JsDialog.Confirm(message), result)
                     return true
@@ -470,13 +482,43 @@ fun chromeClient(
                 return false
             }
 
-            override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+            override fun onJsPrompt(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                defaultValue: String?,
+                result: JsPromptResult?
+            ): Boolean {
                 if (message != null && result != null) {
                     onJsDialogEvent(JsDialog.Prompt(message, defaultValue.orEmpty()), result)
                     return true
                 }
                 result?.cancel()
                 return false
+            }
+
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>,
+                fileChooserParams: FileChooserParams
+            ): Boolean {
+                filePath = filePathCallback
+
+                val isCaptureEnabled = fileChooserParams.acceptTypes.any {
+                    it in setOf("image/*", "image/jpg")
+                } && fileChooserParams.isCaptureEnabled
+
+                return fileChooserDelegate.onShowFileChooser(
+                    params = object : FileChooserParams() {
+                        override fun getMode() = fileChooserParams.mode
+                        override fun getAcceptTypes() = fileChooserParams.acceptTypes
+                        override fun isCaptureEnabled() = isCaptureEnabled
+                        override fun getTitle() = fileChooserParams.title
+                        override fun getFilenameHint() = fileChooserParams.filenameHint
+                        override fun createIntent() = fileChooserParams.createIntent()
+                    },
+                    launcher = fileChooser
+                )
             }
 
             override fun getDefaultVideoPoster(): Bitmap? {
@@ -493,23 +535,11 @@ fun chromeClient(
                 }
             }
 
-            override fun onGeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissions.Callback?) {
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback?
+            ) {
                 onGeolocationPrompt(origin, callback)
-            }
-
-            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-                filePath?.onReceiveValue(null)
-                filePath = filePathCallback
-
-                val customFileChooserParams = object: FileChooserParams() {
-                    override fun getMode() = 1
-                    override fun getAcceptTypes() = arrayOf("image/*")
-                    override fun isCaptureEnabled() = true
-                    override fun getTitle() = fileChooserParams.title
-                    override fun getFilenameHint() = fileChooserParams.filenameHint
-                    override fun createIntent() = fileChooserParams.createIntent()
-                }
-                return fileChooserDelegate.onShowFileChooser(customFileChooserParams, fileChooser)
             }
         }
     }
