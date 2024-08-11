@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.core.component
+package io.nosyntax.foundation.presentation.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.core.component.Icon
+import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
@@ -71,7 +73,10 @@ private fun NavigationDrawerContent(
         )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             brush = Brush.verticalGradient(
-                colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
             )
         )
         else -> Modifier
@@ -80,9 +85,11 @@ private fun NavigationDrawerContent(
     ModalDrawerSheet(
         modifier = Modifier
             .padding(end = 100.dp)
-            .clip(shape = RoundedCornerShape(
-                topEnd = 15.dp, bottomEnd = 15.dp
-            ))
+            .clip(
+                shape = RoundedCornerShape(
+                    topEnd = 15.dp, bottomEnd = 15.dp
+                )
+            )
             .then(backgroundModifier),
         drawerContainerColor = Color.Transparent,
         drawerContentColor = Color.Transparent

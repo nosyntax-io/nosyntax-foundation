@@ -8,7 +8,10 @@ import io.nosyntax.foundation.core.utility.openMailer
 import io.nosyntax.foundation.core.utility.openSMS
 import io.nosyntax.foundation.domain.model.NavigationItem
 
-class NavigationHandler(private val context: Context, private val navController: NavHostController) {
+class NavigationHandler(
+    private val context: Context,
+    private val navController: NavHostController
+) {
     fun onItemClick(item: NavigationItem) {
         if (item.type in setOf("browser", "mail", "dial", "sms")) {
             item.action?.let { performAction(item.type, it) }

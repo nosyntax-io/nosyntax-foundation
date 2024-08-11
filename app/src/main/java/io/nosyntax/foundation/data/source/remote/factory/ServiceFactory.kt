@@ -11,8 +11,8 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 sealed class Auth {
-    data class Bearer(val token: String): Auth()
-    data class Basic(val username: String, val password: String): Auth()
+    data class Bearer(val token: String) : Auth()
+    data class Basic(val username: String, val password: String) : Auth()
 }
 
 class ServiceFactory(

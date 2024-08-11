@@ -37,10 +37,10 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.ChangeScreenOrientationComponent
+import io.nosyntax.foundation.core.component.ScreenOrientationController
 import io.nosyntax.foundation.core.component.NoConnectionView
 import io.nosyntax.foundation.core.component.PermissionDialog
-import io.nosyntax.foundation.core.component.SystemUIControllerComponent
+import io.nosyntax.foundation.core.component.SystemUIController
 import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.utility.Connectivity
 import io.nosyntax.foundation.core.utility.Downloader
@@ -95,8 +95,8 @@ fun WebScreen(
     )
     var showLocationPermissionDialog by remember { mutableStateOf(false) }
 
-    SystemUIControllerComponent(systemUiState = systemUiState)
-    ChangeScreenOrientationComponent(orientation = requestedOrientation)
+    SystemUIController(systemUiState = systemUiState)
+    ScreenOrientationController(orientation = requestedOrientation)
 
     LaunchedEffect(navigator) {
         if (webViewState.viewState == null) {
@@ -143,12 +143,12 @@ fun WebScreen(
 
                         if (Build.VERSION.SDK_INT in 24..29) {
                             if (storagePermissionState.status.isGranted) {
-                                Downloader(context).downloadFile(fileName, url, userAgent, mimeType)
+                                Downloader(context).download(fileName, url, userAgent, mimeType)
                             } else {
                                 showStoragePermissionDialog = true
                             }
                         } else {
-                            Downloader(context).downloadFile(fileName, url, userAgent, mimeType)
+                            Downloader(context).download(fileName, url, userAgent, mimeType)
                         }
                     }
                 }

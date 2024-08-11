@@ -18,7 +18,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppConfigRepositoryImpl @Inject constructor(private val context: Context, private val service: AppService): AppConfigRepository {
+class AppConfigRepositoryImpl @Inject constructor(
+    private val context: Context,
+    private val service: AppService
+) : AppConfigRepository {
     override suspend fun getAppConfig(): Flow<Resource<AppConfig>> = flow {
         emit(Resource.Loading(true))
 

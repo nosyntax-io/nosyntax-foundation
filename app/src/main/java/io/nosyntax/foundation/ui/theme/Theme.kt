@@ -19,6 +19,8 @@ fun DynamicTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val view = LocalView.current
+
     val colorScheme = if (darkTheme) {
         darkColorScheme(
             primary = dynamicColorScheme.primary,
@@ -46,8 +48,6 @@ fun DynamicTheme(
             outlineVariant = dynamicColorScheme.outlineVariantLight
         )
     }
-
-    val view = LocalView.current
 
     if (!view.isInEditMode) {
         SideEffect {

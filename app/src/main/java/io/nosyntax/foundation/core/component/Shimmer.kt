@@ -41,10 +41,12 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
     background(
         brush = Brush.linearGradient(
-            colors = shimmerColors(baseColor = setColorContrast(
-                isDark = isSystemInDarkTheme(),
-                color = MaterialTheme.colorScheme.surface
-            )),
+            colors = shimmerColors(
+                baseColor = setColorContrast(
+                    isDark = isSystemInDarkTheme(),
+                    color = MaterialTheme.colorScheme.surface
+                )
+            ),
             start = Offset(x = startOffsetX, y = 0f),
             end = Offset(x = startOffsetX + size.width.toFloat(), y = size.height.toFloat())
         )

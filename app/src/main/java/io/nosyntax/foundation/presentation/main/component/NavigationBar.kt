@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.core.component
+package io.nosyntax.foundation.presentation.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
@@ -41,7 +42,10 @@ fun NavigationBar(
         )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
-                colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
             )
         )
         else -> Modifier
@@ -91,7 +95,7 @@ private fun RowScope.NavigationBarItem(
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = contentColor,
             selectedTextColor = contentColor,
-            indicatorColor =  indicatorColor.copy(alpha = 0.12f),
+            indicatorColor = indicatorColor.copy(alpha = 0.12f),
             unselectedIconColor = contentColor.copy(alpha = 0.8f),
             unselectedTextColor = contentColor.copy(alpha = 0.8f),
         ),
