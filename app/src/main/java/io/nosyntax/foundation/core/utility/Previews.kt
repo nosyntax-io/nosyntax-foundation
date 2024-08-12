@@ -10,6 +10,7 @@ import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.domain.model.app_config.Settings
 import io.nosyntax.foundation.domain.model.app_config.Monetization
 import io.nosyntax.foundation.domain.model.app_config.Theme
+import io.nosyntax.foundation.domain.model.app_config.WebViewSettings
 
 @Preview(name = "Light Mode", group = "LTR", showBackground = true, locale = "en", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode", group = "LTR", showBackground = true, locale = "en", uiMode = UI_MODE_NIGHT_YES)
@@ -156,6 +157,13 @@ class AppConfigProvider: PreviewParameterProvider<AppConfig> {
                     background = "solid",
                     color = "neutral"
                 )
+            ),
+            webViewSettings = WebViewSettings(
+                javaScriptEnabled = true,
+                cacheEnabled = true,
+                geolocationEnabled = true,
+                allowFileUploads = true,
+                allowCameraAccess = true
             ),
             monetization = Monetization(
                 ads = Monetization.Ads(

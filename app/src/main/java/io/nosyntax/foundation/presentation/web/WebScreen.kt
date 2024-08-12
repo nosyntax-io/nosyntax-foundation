@@ -66,6 +66,7 @@ import io.nosyntax.foundation.core.utility.openContent
 import io.nosyntax.foundation.core.utility.rememberSaveableWebViewState
 import io.nosyntax.foundation.core.utility.rememberWebViewNavigator
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
+import io.nosyntax.foundation.domain.model.app_config.WebViewSettings
 import io.nosyntax.foundation.presentation.main.MainActivity
 import io.nosyntax.foundation.presentation.web.component.JsAlertDialog
 import io.nosyntax.foundation.presentation.web.component.JsConfirmDialog
@@ -127,6 +128,7 @@ fun WebScreen(
             onCreated = { webView ->
                 initWebView(
                     webView = webView,
+                    settings = appConfig.webViewSettings,
                     coroutineScope = coroutineScope,
                     onDownloadRequest = { fileName, url, userAgent, mimeType ->
                         if (Build.VERSION.SDK_INT in 24..29) {
@@ -155,7 +157,7 @@ fun WebScreen(
                 }
             ),
             chromeClient = chromeClient(
-                context = context,
+                settings = appConfig.webViewSettings,
                 onJsDialogEvent = { dialog, result ->
                     jsDialogInfo = dialog to result
                 },
@@ -338,6 +340,7 @@ fun WebScreen(
 @SuppressLint("SetJavaScriptEnabled")
 fun initWebView(
     webView: WebView,
+    settings: WebViewSettings,
     coroutineScope: CoroutineScope,
     onDownloadRequest: (String, String, String?, String) -> Unit
 ) {
@@ -349,16 +352,16 @@ fun initWebView(
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
 
-        settings.apply {
-            javaScriptEnabled = Constants.WEB_JAVASCRIPT_OPTION
-            allowFileAccess = Constants.WEB_ALLOW_FILE_ACCESS
-            allowContentAccess = Constants.WEB_ALLOW_CONTENT_ACCESS
-            domStorageEnabled = Constants.WEB_DOM_STORAGE_ENABLED
-            databaseEnabled = Constants.WEB_DATABASE_ENABLED
-            javaScriptCanOpenWindowsAutomatically = Constants.JAVASCRIPT_CAN_OPEN_WINDOWS_AUTOMATICALLY
-            cacheMode = WebSettings.LOAD_DEFAULT
+        this.settings.apply {
+            javaScriptEnabled = settings.javaScriptEnabled
+            allowFileAccess = true
+            allowContentAccess = true
+            domStorageEnabled = true
+            databaseEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true
+            cacheMode = if (settings.cacheEnabled) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_NO_CACHE
             supportMultipleWindows()
-            setGeolocationEnabled(Constants.WEB_SET_GEOLOCATION_ENABLED)
+            setGeolocationEnabled(settings.geolocationEnabled)
         }
 
         addJavascriptInterface(
@@ -433,12 +436,14 @@ fun webClient(
 
 @Composable
 fun chromeClient(
-    context: Context,
+    settings: WebViewSettings,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
     onCustomViewHidden: () -> Unit,
     onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit
 ): WebKitChromeClient {
+    val context = LocalContext.current
+
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
     val fileChooserDelegate = FileChooserDelegate(context = context, onReceiveResult = { uris ->
         filePath?.onReceiveValue(uris)
@@ -502,11 +507,14 @@ fun chromeClient(
                 filePathCallback: ValueCallback<Array<Uri>>,
                 fileChooserParams: FileChooserParams
             ): Boolean {
+                if (!settings.allowFileUploads) return false
+
+                filePath?.onReceiveValue(null)
                 filePath = filePathCallback
 
-                val isCaptureEnabled = fileChooserParams.acceptTypes.any {
+                val isCaptureEnabled = (fileChooserParams.acceptTypes.any {
                     it in setOf("image/*", "image/jpg")
-                } && fileChooserParams.isCaptureEnabled
+                } || fileChooserParams.isCaptureEnabled) && settings.allowCameraAccess
 
                 return fileChooserDelegate.onShowFileChooser(
                     params = object : FileChooserParams() {

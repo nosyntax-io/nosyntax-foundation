@@ -8,5 +8,6 @@ data class AppConfig(
     val settings: Settings,
     val theme: Theme,
     val components: Components,
+    val webViewSettings: WebViewSettings,
     val monetization: Monetization
 )

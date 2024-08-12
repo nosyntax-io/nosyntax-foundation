@@ -17,6 +17,8 @@ data class AppConfigDto(
     val theme: ThemeDto,
     @SerializedName("components")
     val components: ComponentsDto,
+    @SerializedName("webview_settings")
+    val webViewSettings: WebViewSettingsDto,
     @SerializedName("monetization_options")
     val monetization: MonetizationDto
 )

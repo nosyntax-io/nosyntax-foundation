@@ -5,12 +5,14 @@ import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.MonetizationDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.SettingsDto
+import io.nosyntax.foundation.data.source.remote.dto.app_config.WebViewSettingsDto
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.Theme
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Monetization
 import io.nosyntax.foundation.domain.model.app_config.Settings
+import io.nosyntax.foundation.domain.model.app_config.WebViewSettings
 
 fun AppConfigDto.toAppConfig(): AppConfig {
     return AppConfig(
@@ -21,6 +23,7 @@ fun AppConfigDto.toAppConfig(): AppConfig {
         settings = this.settings.toSettings(),
         theme = this.theme.toTheme(),
         components = this.components.toComponents(),
+        webViewSettings = this.webViewSettings.toWebViewSettings(),
         monetization = this.monetization.toMonetization()
     )
 }
@@ -123,5 +126,15 @@ fun MonetizationDto.toMonetization(): Monetization {
             bannerDisplay = this.ads.bannerDisplay,
             interstitialDisplay = this.ads.interstitialDisplay
         )
+    )
+}
+
+fun WebViewSettingsDto.toWebViewSettings(): WebViewSettings {
+    return WebViewSettings(
+        javaScriptEnabled = this.javaScriptEnabled,
+        cacheEnabled = this.cacheEnabled,
+        geolocationEnabled = this.geolocationEnabled,
+        allowFileUploads = this.allowFileUploads,
+        allowCameraAccess = this.allowCameraAccess
     )
 }
