@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
@@ -92,6 +93,7 @@ fun WebScreen(
     val navigator = rememberWebViewNavigator()
 
     val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val locationPermissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -101,6 +103,7 @@ fun WebScreen(
 
     var showStoragePermissionDialog by rememberSaveable { mutableStateOf(false) }
     var showLocationPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    var showCameraPermissionDialog by rememberSaveable { mutableStateOf(false) }
     var showNoConnectionDialog by rememberSaveable { mutableStateOf(false) }
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
@@ -194,6 +197,10 @@ fun WebScreen(
                         callback?.invoke(origin, false, false)
                         showLocationPermissionDialog = true
                     }
+                },
+                cameraPermissionState = cameraPermissionState,
+                onRequestCameraPermission = {
+                    showCameraPermissionDialog = true
                 }
             )
         )
@@ -240,6 +247,34 @@ fun WebScreen(
                     }
                     storagePermissionState.status.shouldShowRationale -> {
                         storagePermissionState.launchPermissionRequest()
+                    }
+                    else -> {
+                        context.openAppSettings()
+                    }
+                }
+            }
+        )
+    }
+
+    if (showCameraPermissionDialog) {
+        PermissionDialog(
+            icon = painterResource(R.drawable.icon_camera_outline),
+            title = stringResource(R.string.camera_required),
+            description = stringResource(R.string.camera_required_description),
+            onDismiss = { showCameraPermissionDialog = false },
+            onConfirm = {
+                showCameraPermissionDialog = false
+                when {
+                    PermissionUtil.isFirstRequest(context, cameraPermissionState.permission) -> {
+                        PermissionUtil.setFirstRequest(
+                            context = context,
+                            permission = cameraPermissionState.permission,
+                            isFirstTime = false
+                        )
+                        cameraPermissionState.launchPermissionRequest()
+                    }
+                    cameraPermissionState.status.shouldShowRationale -> {
+                        cameraPermissionState.launchPermissionRequest()
                     }
                     else -> {
                         context.openAppSettings()
@@ -434,13 +469,16 @@ fun webClient(
     return webClient
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun chromeClient(
     settings: WebViewSettings,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
     onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
     onCustomViewHidden: () -> Unit,
-    onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit
+    onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit,
+    cameraPermissionState: PermissionState,
+    onRequestCameraPermission: () -> Unit
 ): WebKitChromeClient {
     val context = LocalContext.current
 
@@ -509,12 +547,16 @@ fun chromeClient(
             ): Boolean {
                 if (!settings.allowFileUploads) return false
 
-                filePath?.onReceiveValue(null)
                 filePath = filePathCallback
 
                 val isCaptureEnabled = (fileChooserParams.acceptTypes.any {
                     it in setOf("image/*", "image/jpg")
                 } || fileChooserParams.isCaptureEnabled) && settings.allowCameraAccess
+
+                if (isCaptureEnabled && !cameraPermissionState.status.isGranted) {
+                    onRequestCameraPermission()
+                    return false
+                }
 
                 return fileChooserDelegate.onShowFileChooser(
                     params = object : FileChooserParams() {

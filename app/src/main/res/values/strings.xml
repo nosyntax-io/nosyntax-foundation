@@ -23,4 +23,6 @@
     <string name="storage_required_description">We need access to your storage to download and save files directly on your device. We do not access or modify any other files or data on your device.</string>
     <string name="location_required">Location Access Required</string>
     <string name="location_required_description">We need access to your storage to download and save files directly on your device. We do not access or modify any other files or data on your device.</string>
+    <string name="camera_required">Camera Access Required</string>
+    <string name="camera_required_description">We need access to your camera to allow you to capture and upload files directly from your device. We do not access or modify any other data or files on your device.</string>
 </resources>
