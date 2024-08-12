@@ -1,26 +1,20 @@
 package io.nosyntax.foundation.presentation.web
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.GeolocationPermissions
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.URLUtil
 import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.widget.FrameLayout
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -40,15 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import io.nosyntax.foundation.R
-import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.ScreenOrientationController
 import io.nosyntax.foundation.core.component.NoConnectionView
 import io.nosyntax.foundation.core.component.PermissionDialog
@@ -62,7 +54,6 @@ import io.nosyntax.foundation.core.utility.WebKitClient
 import io.nosyntax.foundation.core.utility.WebView
 import io.nosyntax.foundation.core.utility.handleIntent
 import io.nosyntax.foundation.core.utility.monetize.BannerAd
-import io.nosyntax.foundation.core.utility.openAppSettings
 import io.nosyntax.foundation.core.utility.openContent
 import io.nosyntax.foundation.core.utility.rememberSaveableWebViewState
 import io.nosyntax.foundation.core.utility.rememberWebViewNavigator
@@ -76,11 +67,9 @@ import io.nosyntax.foundation.presentation.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.web.component.LoadingIndicator
 import io.nosyntax.foundation.presentation.web.utility.FileChooserDelegate
 import io.nosyntax.foundation.presentation.web.utility.JavaScriptInterface
-import io.nosyntax.foundation.presentation.web.utility.PermissionUtil
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalPermissionsApi::class)
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebScreen(
     appConfig: AppConfig,
@@ -89,16 +78,16 @@ fun WebScreen(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
+
+    val permissionManager = remember { PermissionManager(context) }
 
     val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val locationPermissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     )
 
     var showStoragePermissionDialog by rememberSaveable { mutableStateOf(false) }
@@ -109,8 +98,6 @@ fun WebScreen(
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
     var jsDialogInfo by rememberSaveable { mutableStateOf<Pair<JsDialog?, JsResult?>?>(null) }
-    var customWebView by rememberSaveable { mutableStateOf<View?>(null) }
-    var customWebViewCallback by rememberSaveable { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var totalLoadedPages by remember { mutableIntStateOf(0) }
 
     SystemUIController(systemUiState = systemUiState)
@@ -130,23 +117,16 @@ fun WebScreen(
             captureBackPresses = captureBackPresses,
             onCreated = { webView ->
                 initWebView(
+                    context = context,
+                    coroutineScope = coroutineScope,
                     webView = webView,
                     settings = appConfig.webViewSettings,
-                    coroutineScope = coroutineScope,
-                    onDownloadRequest = { fileName, url, userAgent, mimeType ->
-                        if (Build.VERSION.SDK_INT in 24..29) {
-                            if (storagePermissionState.status.isGranted) {
-                                Downloader(context).download(fileName, url, userAgent, mimeType)
-                            } else {
-                                showStoragePermissionDialog = true
-                            }
-                        } else {
-                            Downloader(context).download(fileName, url, userAgent, mimeType)
-                        }
-                    }
+                    storagePermissionState = storagePermissionState,
+                    onStoragePermissionRequest = { showStoragePermissionDialog = true }
                 )
             },
             client = webClient(
+                context = context,
                 onPageLoaded = {
                     if (totalLoadedPages < 7) {
                         totalLoadedPages++
@@ -160,48 +140,13 @@ fun WebScreen(
                 }
             ),
             chromeClient = chromeClient(
+                context = context,
                 settings = appConfig.webViewSettings,
-                onJsDialogEvent = { dialog, result ->
-                    jsDialogInfo = dialog to result
-                },
-                onCustomViewShown = { view, callback ->
-                    if (customWebView != null) {
-                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                        customWebView = null
-                        customWebViewCallback?.onCustomViewHidden()
-                        customWebViewCallback = null
-                    } else {
-                        customWebView = view
-                        customWebViewCallback = callback
-
-                        systemUiState.value = SystemUIState.SYSTEM_UI_HIDDEN
-                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    }
-                },
-                onCustomViewHidden = {
-                    if (customWebView != null) {
-                        systemUiState.value = SystemUIState.SYSTEM_UI_VISIBLE
-                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-                        customWebView = null
-                        customWebViewCallback?.onCustomViewHidden()
-                        customWebViewCallback = null
-                    }
-                },
-                onGeolocationPrompt = { origin, callback ->
-                    if (locationPermissionsState.allPermissionsGranted) {
-                        callback?.invoke(origin, true, false)
-                    } else {
-                        callback?.invoke(origin, false, false)
-                        showLocationPermissionDialog = true
-                    }
-                },
+                onJsDialogEvent = { d, r -> jsDialogInfo = d to r },
                 cameraPermissionState = cameraPermissionState,
-                onRequestCameraPermission = {
-                    showCameraPermissionDialog = true
-                }
+                onCameraPermissionRequest = { showCameraPermissionDialog = true },
+                locationPermissionState = locationPermissionsState,
+                onLocationPermissionRequest = { showLocationPermissionDialog = true }
             )
         )
 
@@ -211,14 +156,6 @@ fun WebScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         )
-    }
-
-    if (customWebView != null) {
-        AndroidView(modifier = Modifier.fillMaxSize(), factory = { mContext ->
-            val frameLayout = FrameLayout(mContext)
-            frameLayout.addView(customWebView)
-            frameLayout
-        })
     }
 
     if (webViewState.isLoading) {
@@ -236,22 +173,7 @@ fun WebScreen(
             onDismiss = { showStoragePermissionDialog = false },
             onConfirm = {
                 showStoragePermissionDialog = false
-                when {
-                    PermissionUtil.isFirstRequest(context, storagePermissionState.permission) -> {
-                        PermissionUtil.setFirstRequest(
-                            context = context,
-                            permission = storagePermissionState.permission,
-                            isFirstTime = false
-                        )
-                        storagePermissionState.launchPermissionRequest()
-                    }
-                    storagePermissionState.status.shouldShowRationale -> {
-                        storagePermissionState.launchPermissionRequest()
-                    }
-                    else -> {
-                        context.openAppSettings()
-                    }
-                }
+                permissionManager.requestPermission(storagePermissionState)
             }
         )
     }
@@ -264,22 +186,7 @@ fun WebScreen(
             onDismiss = { showCameraPermissionDialog = false },
             onConfirm = {
                 showCameraPermissionDialog = false
-                when {
-                    PermissionUtil.isFirstRequest(context, cameraPermissionState.permission) -> {
-                        PermissionUtil.setFirstRequest(
-                            context = context,
-                            permission = cameraPermissionState.permission,
-                            isFirstTime = false
-                        )
-                        cameraPermissionState.launchPermissionRequest()
-                    }
-                    cameraPermissionState.status.shouldShowRationale -> {
-                        cameraPermissionState.launchPermissionRequest()
-                    }
-                    else -> {
-                        context.openAppSettings()
-                    }
-                }
+                permissionManager.requestPermission(cameraPermissionState)
             }
         )
     }
@@ -292,29 +199,7 @@ fun WebScreen(
             onDismiss = { showLocationPermissionDialog = false },
             onConfirm = {
                 showLocationPermissionDialog = false
-                when {
-                    locationPermissionsState.permissions.any { permissionState ->
-                        PermissionUtil.isFirstRequest(
-                            context = context,
-                            permission = permissionState.permission
-                        )
-                    } -> {
-                        locationPermissionsState.permissions.forEach { permission ->
-                            PermissionUtil.setFirstRequest(
-                                context = context,
-                                permission.permission,
-                                isFirstTime = false
-                            )
-                        }
-                        locationPermissionsState.launchMultiplePermissionRequest()
-                    }
-                    locationPermissionsState.shouldShowRationale -> {
-                        locationPermissionsState.launchMultiplePermissionRequest()
-                    }
-                    else -> {
-                        context.openAppSettings()
-                    }
-                }
+                permissionManager.requestMultiplePermissions(locationPermissionsState)
             }
         )
     }
@@ -335,49 +220,44 @@ fun WebScreen(
             jsDialogInfo = null
             result?.cancel()
         }
+
         val confirmDialog: () -> Unit = {
             jsDialogInfo = null
             result?.confirm()
         }
 
         when (dialog) {
-            is JsDialog.Alert -> {
-                JsAlertDialog(
-                    message = dialog.message,
-                    onConfirm = confirmDialog
-                )
-            }
-            is JsDialog.Confirm -> {
-                JsConfirmDialog(
-                    message = dialog.message,
-                    onCancel = cancelDialog,
-                    onConfirm = confirmDialog
-                )
-            }
-            is JsDialog.Prompt -> {
-                JsPromptDialog(
-                    message = dialog.message,
-                    defaultValue = dialog.defaultValue,
-                    onCancel = cancelDialog,
-                    onConfirm = { promptResult ->
-                        if (result is JsPromptResult) {
-                            result.confirm(promptResult)
-                        }
-                        cancelDialog()
-                    }
-                )
-            }
+            is JsDialog.Alert -> JsAlertDialog(
+                message = dialog.message,
+                onConfirm = confirmDialog
+            )
+            is JsDialog.Confirm -> JsConfirmDialog(
+                message = dialog.message,
+                onCancel = cancelDialog,
+                onConfirm = confirmDialog
+            )
+            is JsDialog.Prompt -> JsPromptDialog(
+                message = dialog.message,
+                defaultValue = dialog.defaultValue,
+                onCancel = cancelDialog,
+                onConfirm = { promptResult ->
+                    (result as? JsPromptResult)?.confirm(promptResult)
+                    cancelDialog()
+                }
+            )
             else -> {}
         }
     }
 }
 
-@SuppressLint("SetJavaScriptEnabled")
-fun initWebView(
+@OptIn(ExperimentalPermissionsApi::class)
+private fun initWebView(
+    context: Context,
+    coroutineScope: CoroutineScope,
     webView: WebView,
     settings: WebViewSettings,
-    coroutineScope: CoroutineScope,
-    onDownloadRequest: (String, String, String?, String) -> Unit
+    storagePermissionState: PermissionState,
+    onStoragePermissionRequest: () -> Unit
 ) {
     webView.apply {
         layoutParams = ViewGroup.LayoutParams(
@@ -408,17 +288,25 @@ fun initWebView(
 
         setDownloadListener { url, userAgent, disposition, mimeType, _ ->
             val fileName = URLUtil.guessFileName(url, disposition, mimeType)
-            onDownloadRequest(fileName, url, userAgent, mimeType)
+            if (Build.VERSION.SDK_INT in 24..29) {
+                if (storagePermissionState.status.isGranted) {
+                    Downloader(context).download(fileName, url, userAgent, mimeType)
+                } else {
+                    onStoragePermissionRequest()
+                }
+            } else {
+                Downloader(context).download(fileName, url, userAgent, mimeType)
+            }
         }
     }
 }
 
 @Composable
-fun webClient(
+private fun webClient(
+    context: Context,
     onPageLoaded: () -> Unit,
     onReceivedError: () -> Unit
 ): WebKitClient {
-    val context = LocalContext.current
     val knownDomains = remember {
         context.assets.open("known-domains.txt").bufferedReader().readLines()
     }
@@ -457,7 +345,6 @@ fun webClient(
                 request: WebResourceRequest?,
                 error: WebResourceError?
             ) {
-                super.onReceivedError(view, request, error)
                 val networkErrors = listOf(ERROR_CONNECT, ERROR_TIMEOUT, ERROR_HOST_LOOKUP, ERROR_UNKNOWN)
                 if (request?.isForMainFrame == true && error?.errorCode in networkErrors) {
                     onReceivedError()
@@ -471,22 +358,23 @@ fun webClient(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun chromeClient(
+private fun chromeClient(
+    context: Context,
     settings: WebViewSettings,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
-    onCustomViewShown: (View, WebChromeClient.CustomViewCallback) -> Unit,
-    onCustomViewHidden: () -> Unit,
-    onGeolocationPrompt: (origin: String?, callback: GeolocationPermissions.Callback?) -> Unit,
     cameraPermissionState: PermissionState,
-    onRequestCameraPermission: () -> Unit
+    onCameraPermissionRequest: () -> Unit,
+    locationPermissionState: MultiplePermissionsState,
+    onLocationPermissionRequest: () -> Unit
 ): WebKitChromeClient {
-    val context = LocalContext.current
-
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
-    val fileChooserDelegate = FileChooserDelegate(context = context, onReceiveResult = { uris ->
-        filePath?.onReceiveValue(uris)
-        filePath = null
-    })
+
+    val fileChooserDelegate = remember {
+        FileChooserDelegate(context = context, onReceiveResult = { uris ->
+            filePath?.onReceiveValue(uris)
+            filePath = null
+        })
+    }
 
     val fileChooser = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -542,54 +430,56 @@ fun chromeClient(
 
             override fun onShowFileChooser(
                 webView: WebView?,
-                filePathCallback: ValueCallback<Array<Uri>>,
-                fileChooserParams: FileChooserParams
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
             ): Boolean {
                 if (!settings.allowFileUploads) return false
 
-                filePath = filePathCallback
+                filePathCallback?.let { callback ->
+                    val isCaptureEnabled = (fileChooserParams?.acceptTypes?.any {
+                        it in setOf("image/*", "image/jpg")
+                    } == true) && settings.allowCameraAccess
 
-                val isCaptureEnabled = (fileChooserParams.acceptTypes.any {
-                    it in setOf("image/*", "image/jpg")
-                } || fileChooserParams.isCaptureEnabled) && settings.allowCameraAccess
+                    if (isCaptureEnabled && !cameraPermissionState.status.isGranted) {
+                        onCameraPermissionRequest()
+                        return false
+                    }
 
-                if (isCaptureEnabled && !cameraPermissionState.status.isGranted) {
-                    onRequestCameraPermission()
-                    return false
+                    filePath?.onReceiveValue(null)
+                    filePath = callback
+
+                    val fileChooserParamsOverride = fileChooserParams?.let {
+                        object : FileChooserParams() {
+                            override fun getMode() = it.mode
+                            override fun getAcceptTypes() = it.acceptTypes
+                            override fun isCaptureEnabled() = isCaptureEnabled
+                            override fun getTitle() = it.title
+                            override fun getFilenameHint() = it.filenameHint
+                            override fun createIntent() = it.createIntent()
+                        }
+                    }
+
+                    return fileChooserParamsOverride?.let {
+                        fileChooserDelegate.onShowFileChooser(
+                            params = fileChooserParamsOverride,
+                            launcher = fileChooser
+                        )
+                    } ?: false
                 }
 
-                return fileChooserDelegate.onShowFileChooser(
-                    params = object : FileChooserParams() {
-                        override fun getMode() = fileChooserParams.mode
-                        override fun getAcceptTypes() = fileChooserParams.acceptTypes
-                        override fun isCaptureEnabled() = isCaptureEnabled
-                        override fun getTitle() = fileChooserParams.title
-                        override fun getFilenameHint() = fileChooserParams.filenameHint
-                        override fun createIntent() = fileChooserParams.createIntent()
-                    },
-                    launcher = fileChooser
-                )
-            }
-
-            override fun getDefaultVideoPoster(): Bitmap? {
-                return BitmapFactory.decodeResource(context.resources, 2130837573)
-            }
-
-            override fun onHideCustomView() {
-                onCustomViewHidden()
-            }
-
-            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-                if (view != null && callback != null) {
-                    onCustomViewShown(view, callback)
-                }
+                return false
             }
 
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
             ) {
-                onGeolocationPrompt(origin, callback)
+                if (locationPermissionState.allPermissionsGranted) {
+                    callback?.invoke(origin, true, false)
+                } else {
+                    callback?.invoke(origin, false, false)
+                    onLocationPermissionRequest()
+                }
             }
         }
     }
