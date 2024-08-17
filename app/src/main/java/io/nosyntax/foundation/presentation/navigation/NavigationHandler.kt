@@ -2,13 +2,16 @@ package io.nosyntax.foundation.presentation.navigation
 
 import android.content.Context
 import androidx.navigation.NavHostController
-import io.nosyntax.foundation.core.utility.Intents.openDial
-import io.nosyntax.foundation.core.utility.Intents.openEmail
-import io.nosyntax.foundation.core.utility.Intents.openSMS
-import io.nosyntax.foundation.core.utility.Intents.openUrl
+import io.nosyntax.foundation.core.utility.openContent
+import io.nosyntax.foundation.core.utility.openDialer
+import io.nosyntax.foundation.core.utility.openMailer
+import io.nosyntax.foundation.core.utility.openSMS
 import io.nosyntax.foundation.domain.model.NavigationItem
 
-class NavigationHandler(private val context: Context, private val navController: NavHostController) {
+class NavigationHandler(
+    private val context: Context,
+    private val navController: NavHostController
+) {
     fun onItemClick(item: NavigationItem) {
         if (item.type in setOf("browser", "mail", "dial", "sms")) {
             item.action?.let { performAction(item.type, it) }
@@ -19,9 +22,9 @@ class NavigationHandler(private val context: Context, private val navController:
 
     private fun performAction(type: String, action: String) {
         when (type) {
-            "browser" -> context.openUrl(action)
-            "mail" -> context.openEmail(action)
-            "dial" -> context.openDial(action)
+            "browser" -> context.openContent(action)
+            "mail" -> context.openMailer(action)
+            "dial" -> context.openDialer(action)
             "sms" -> context.openSMS(action)
         }
     }

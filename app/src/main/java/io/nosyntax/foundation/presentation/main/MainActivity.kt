@@ -24,7 +24,7 @@ import io.nosyntax.foundation.core.utility.Utilities.getSerializable
 import io.nosyntax.foundation.domain.model.Deeplink
 
 @AndroidEntryPoint
-class MainActivity: ComponentActivity() {
+class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
     private var interstitialAd: InterstitialAd? = null
@@ -71,8 +71,18 @@ class MainActivity: ComponentActivity() {
                 )
 
                 val dynamicTypography = DynamicTypography(
-                    primaryFontFamily = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)),
-                    secondaryFontFamily = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
+                    primaryFontFamily = FontFamily(
+                        Font(
+                            GoogleFont(typography.primaryFontFamily),
+                            googleFontProvider
+                        )
+                    ),
+                    secondaryFontFamily = FontFamily(
+                        Font(
+                            GoogleFont(typography.secondaryFontFamily),
+                            googleFontProvider
+                        )
+                    )
                 )
 
                 setContent {

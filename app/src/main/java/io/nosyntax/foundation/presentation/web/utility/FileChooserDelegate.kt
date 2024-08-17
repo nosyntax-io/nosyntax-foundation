@@ -18,26 +18,36 @@ import java.io.File
 import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
-class FileChooserDelegate(val context: Context, val onReceiveResult: (results: Array<Uri>?) -> Unit): CoroutineScope {
+class FileChooserDelegate(
+    val context: Context,
+    val onReceiveResult: (results: Array<Uri>?) -> Unit
+) : CoroutineScope {
     private val browseFilesDelegate = BrowseFilesDelegate(context)
     private val cameraCaptureDelegate = CameraCaptureDelegate(context)
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + Job()
 
-    fun onShowFileChooser(params: WebChromeClient.FileChooserParams, launcher: ManagedActivityResultLauncher<Intent, ActivityResult>): Boolean {
+    fun onShowFileChooser(
+        params: WebChromeClient.FileChooserParams,
+        launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
+    ): Boolean {
         openChooser(params, launcher)
         return true
     }
 
     fun onActivityResult(intent: Intent?) {
-        when (intent.containsFileResult()) {
-            true -> browseFilesDelegate.handleResult(intent) { onReceiveResult(it) }
-            else -> cameraCaptureDelegate.handleResult { onReceiveResult(it) }
+        if (intent.containsFileResult()) {
+            browseFilesDelegate.handleResult(intent) { onReceiveResult(it) }
+        } else {
+            cameraCaptureDelegate.handleResult { onReceiveResult(it) }
         }
     }
 
-    private fun openChooser(params: WebChromeClient.FileChooserParams, launcher : ManagedActivityResultLauncher<Intent, ActivityResult>) {
+    private fun openChooser(
+        params: WebChromeClient.FileChooserParams,
+        launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
+    ) {
         val cameraIntent = cameraCaptureDelegate.buildIntent(params)
         val chooserIntent = browseFilesDelegate.buildIntent(params)
         val extraIntents = listOfNotNull(cameraIntent).toTypedArray()
@@ -88,11 +98,10 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
 
         private fun createEmptyImageFile(): File? {
             return try {
-                val directory = File(context.cacheDir, "app_cache")
-                if (!directory.exists()) {
-                    directory.mkdir()
+                val directory = File(context.cacheDir, "app_cache").apply {
+                    if (!exists()) mkdir()
                 }
-                return File.createTempFile("Capture_", ".jpg", directory)
+                File.createTempFile("Capture_", ".jpg", directory)
             } catch (e: IOException) {
                 null
             }
@@ -101,7 +110,7 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
         private fun WebChromeClient.FileChooserParams.allowsCameraCapture(): Boolean {
             val accept = defaultAcceptType()
             val acceptsAny = accept == "*/*"
-            val acceptsImages = accept == "image/*" || accept == "image/jpg"
+            val acceptsImages = accept.startsWith("image/")
             return isCaptureEnabled && (acceptsAny || acceptsImages)
         }
 
@@ -118,10 +127,7 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
             return Intent(Intent.ACTION_GET_CONTENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                setDataAndType(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    "*/*"
-                )
+                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "*/*")
 
                 if (params.acceptTypes.size > 1) {
                     putExtra(Intent.EXTRA_MIME_TYPES, params.acceptTypes)
@@ -164,27 +170,23 @@ class FileChooserDelegate(val context: Context, val onReceiveResult: (results: A
         }
 
         private suspend fun buildResult(uris: List<Uri>): Array<Uri>? {
-            val results = uris.mapNotNull {
-                writeToCachedFile(it)
-            }
-
-            return when (results.isEmpty()) {
-                true -> null
-                else -> results.toTypedArray()
-            }
+            val results = uris.mapNotNull { writeToCachedFile(it) }
+            return if (results.isEmpty()) null else results.toTypedArray()
         }
 
         private suspend fun writeToCachedFile(uri: Uri): Uri? {
-            return AppFileProvider.writeUriToFile(context, File(context.cacheDir, "app_cache"), uri)?.let {
+            return AppFileProvider.writeUriToFile(
+                context = context,
+                directory = File(context.cacheDir, "app_cache"),
+                uri = uri
+            )?.let {
                 AppFileProvider.getUriForFile(context, it)
             }
         }
     }
 
     private fun Intent?.containsFileResult(): Boolean {
-        if (this == null) {
-            return false
-        }
+        if (this == null) return false
 
         val clipData = this.clipData
         val dataString = this.dataString

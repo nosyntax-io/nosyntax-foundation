@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
+    implementation(libs.accompanist.permissions)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.material3)

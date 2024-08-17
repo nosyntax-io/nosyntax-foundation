@@ -26,7 +26,9 @@ fun Snackbar(
         contentColor = Color.White,
         shape = MaterialTheme.shapes.medium
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+        CompositionLocalProvider(
+            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+        ) {
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium

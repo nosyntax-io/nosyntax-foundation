@@ -35,7 +35,7 @@ class OneSignalService(private val context: Context) {
      * @return The current instance of OneSignalService.
      */
     fun registerOnNotificationClick(onNotificationOpened: (Deeplink) -> Unit): OneSignalService {
-        OneSignal.Notifications.addClickListener(object: INotificationClickListener {
+        OneSignal.Notifications.addClickListener(object : INotificationClickListener {
             override fun onClick(event: INotificationClickEvent) {
                 val deeplink = extractDeeplink(event.notification)
                 onNotificationOpened(deeplink)

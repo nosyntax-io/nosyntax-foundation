@@ -5,4 +5,4 @@ import java.io.Serializable
 data class Deeplink(
     val destination: String = "",
     val action: String = ""
-): Serializable
+) : Serializable

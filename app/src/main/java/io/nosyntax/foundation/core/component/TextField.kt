@@ -74,7 +74,7 @@ fun TextField(
             ),
             shape = MaterialTheme.shapes.medium,
             visualTransformation = VisualTransformation.None,
-            trailingIcon = { /* ... */ },
+            trailingIcon = { },
             placeholder = {
                 Text(
                     text = placeholder,

@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.AppConfigProvider
-import io.nosyntax.foundation.core.utility.Intents.openEmail
-import io.nosyntax.foundation.core.utility.Intents.openPlayStore
-import io.nosyntax.foundation.core.utility.Intents.openUrl
 import io.nosyntax.foundation.core.utility.Previews
+import io.nosyntax.foundation.core.utility.openMailer
+import io.nosyntax.foundation.core.utility.openPlayStore
+import io.nosyntax.foundation.core.utility.openContent
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -41,15 +41,15 @@ fun SettingsScreen(appConfig: AppConfig, navigateToAbout: () -> Unit) {
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.send_feedback)) {
-            context.openEmail(url = "mailto:${appConfig.settings.email}")
+            context.openMailer(arrayOf(appConfig.settings.email))
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.privacy_policy)) {
-            context.openUrl(appConfig.settings.privacyPolicy)
+            context.openContent(appConfig.settings.privacyPolicy)
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.terms_of_service)) {
-            context.openUrl(appConfig.settings.termsOfService)
+            context.openContent(appConfig.settings.termsOfService)
         }
         SettingDivider()
         SettingItem(text = stringResource(id = R.string.about_us)) {

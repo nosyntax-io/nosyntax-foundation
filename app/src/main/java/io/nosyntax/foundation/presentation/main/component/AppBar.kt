@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.core.component
+package io.nosyntax.foundation.presentation.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
+import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -54,7 +55,10 @@ fun AppBar(
         )
         Constants.BACKGROUND_GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
-                colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
             )
         )
         else -> Modifier

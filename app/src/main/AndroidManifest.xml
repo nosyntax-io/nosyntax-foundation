@@ -8,8 +8,8 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoundationTheme.Splash"
         android:usesCleartextTraffic="true"
@@ -17,6 +17,7 @@
         <activity
             android:name="io.nosyntax.foundation.presentation.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true"
             android:theme="@style/Theme.FoundationTheme.Splash">
             <intent-filter>
@@ -33,13 +34,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
-        <receiver
-            android:name="io.nosyntax.foundation.presentation.broadcast.DownloadCompletedReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

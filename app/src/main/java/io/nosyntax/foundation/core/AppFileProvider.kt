@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class AppFileProvider: FileProvider() {
+class AppFileProvider : FileProvider() {
     companion object {
         fun getUriForFile(context: Context, uri: Uri): Uri? {
             return try {

@@ -41,10 +41,12 @@ fun NoConnectionView(onRetry: () -> Unit) {
             modifier = Modifier.size(130.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
-            colorFilter = ColorFilter.tint(color = setColorContrast(
-                isDark = isSystemInDarkTheme(),
-                color = MaterialTheme.colorScheme.surface
-            ))
+            colorFilter = ColorFilter.tint(
+                color = setColorContrast(
+                    isDark = isSystemInDarkTheme(),
+                    color = MaterialTheme.colorScheme.surface
+                )
+            )
         )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
