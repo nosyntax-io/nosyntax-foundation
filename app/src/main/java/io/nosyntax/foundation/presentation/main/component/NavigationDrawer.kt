@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.core.component
+package io.nosyntax.foundation.presentation.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
