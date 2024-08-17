@@ -23,8 +23,8 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun Image(
-    modifier: Modifier = Modifier,
     source: Any,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
@@ -33,18 +33,18 @@ fun Image(
 ) {
     when (source) {
         is String -> AsyncImage(
-            modifier = modifier,
             url = source,
             contentDescription = contentDescription,
+            modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             alpha = alpha,
             colorFilter = colorFilter
         )
         is Painter -> Image(
-            modifier = modifier,
             painter = source,
             contentDescription = contentDescription,
+            modifier = modifier,
             alignment = alignment,
             contentScale = contentScale,
             alpha = alpha,
@@ -55,9 +55,9 @@ fun Image(
 
 @Composable
 private fun AsyncImage(
-    modifier: Modifier,
     url: String,
     contentDescription: String?,
+    modifier: Modifier,
     alignment: Alignment,
     contentScale: ContentScale,
     alpha: Float,
@@ -71,9 +71,9 @@ private fun AsyncImage(
 
     Box(modifier = modifier) {
         Image(
-            modifier = Modifier.fillMaxSize(),
             painter = painter,
             contentDescription = contentDescription,
+            modifier = Modifier.fillMaxSize(),
             alignment = alignment,
             contentScale = ContentScale.Crop,
             alpha = alpha,

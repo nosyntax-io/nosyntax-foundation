@@ -24,25 +24,25 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun Icon(
-    modifier: Modifier = Modifier,
     source: Any,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current,
 ) {
     when (source) {
         is String -> {
             AsyncIcon(
-                modifier = modifier,
                 url = source,
                 contentDescription = contentDescription,
+                modifier = modifier,
                 tint = tint
             )
         }
         is Painter -> {
             Icon(
-                modifier = modifier,
                 painter = source,
                 contentDescription = contentDescription,
+                modifier = modifier,
                 tint = tint
             )
         }
@@ -51,9 +51,9 @@ fun Icon(
 
 @Composable
 private fun AsyncIcon(
-    modifier: Modifier,
     url: String,
     contentDescription: String?,
+    modifier: Modifier,
     tint: Color = LocalContentColor.current
 ) {
     val painter = rememberAsyncImagePainter(
@@ -68,9 +68,9 @@ private fun AsyncIcon(
     } ?: tint
 
     Icon(
-        modifier = modifier,
         painter = painter,
         contentDescription = contentDescription,
+        modifier = modifier,
         tint = iconTint
     )
 }

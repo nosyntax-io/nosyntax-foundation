@@ -24,8 +24,8 @@ import io.nosyntax.foundation.core.utility.ThemePreviews
 
 @Composable
 fun LottieAnimated(
-    modifier: Modifier = Modifier,
     source: LottieCompositionSpec,
+    modifier: Modifier = Modifier,
     color: Color = LocalContentColor.current,
     iterations: Int = LottieConstants.IterateForever,
     path: Array<String> = arrayOf("**"),
@@ -43,9 +43,9 @@ fun LottieAnimated(
         )
     )
     LottieAnimation(
-        modifier = modifier,
         composition = composition,
         progress = { progress },
+        modifier = modifier,
         dynamicProperties = dynamicProperties,
         safeMode = true
     )
