@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
 import io.nosyntax.foundation.core.component.AsyncIcon
-import io.nosyntax.foundation.core.component.Image
+import io.nosyntax.foundation.core.component.AsyncImage
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
@@ -123,13 +123,14 @@ private fun NavigationDrawerContent(
 @Composable
 private fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150.dp) {
     if (config.header.visible) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                 .clip(shape = MaterialTheme.shapes.large),
-            source = config.header.image
+            url = config.header.image,
+            contentDescription = null
         )
     }
 }

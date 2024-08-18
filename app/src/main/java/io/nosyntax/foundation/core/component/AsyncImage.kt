@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
@@ -22,46 +21,14 @@ import io.nosyntax.foundation.core.utility.ThemePreviews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun Image(
-    source: Any,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
+fun AsyncImage(
+    url: String,
+    contentDescription: String?,
+    modifier: Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null
-) {
-    when (source) {
-        is String -> AsyncImage(
-            url = source,
-            contentDescription = contentDescription,
-            modifier = modifier,
-            alignment = alignment,
-            contentScale = contentScale,
-            alpha = alpha,
-            colorFilter = colorFilter
-        )
-        is Painter -> Image(
-            painter = source,
-            contentDescription = contentDescription,
-            modifier = modifier,
-            alignment = alignment,
-            contentScale = contentScale,
-            alpha = alpha,
-            colorFilter = colorFilter
-        )
-    }
-}
-
-@Composable
-private fun AsyncImage(
-    url: String,
-    contentDescription: String?,
-    modifier: Modifier,
-    alignment: Alignment,
-    contentScale: ContentScale,
-    alpha: Float,
-    colorFilter: ColorFilter?
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,
@@ -91,9 +58,10 @@ private fun AsyncImage(
 fun ImagePreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            Image(
+            AsyncImage(
                 modifier = Modifier.fillMaxWidth().height(150.dp),
-                source = "https://via.placeholder.com/700x300"
+                url = "https://via.placeholder.com/700x300",
+                contentDescription = null
             )
         }
     }
