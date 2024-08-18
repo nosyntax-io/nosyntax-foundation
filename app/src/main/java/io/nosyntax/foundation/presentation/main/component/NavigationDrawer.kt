@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.Icon
+import io.nosyntax.foundation.core.component.AsyncIcon
 import io.nosyntax.foundation.core.component.Image
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
@@ -186,9 +186,10 @@ private fun NavigationDrawerItem(
         },
         icon = {
             if (item.icon != null) {
-                Icon(
+                AsyncIcon(
                     modifier = Modifier.size(22.dp),
-                    source = item.icon
+                    url = item.icon,
+                    contentDescription = null
                 )
             }
         }

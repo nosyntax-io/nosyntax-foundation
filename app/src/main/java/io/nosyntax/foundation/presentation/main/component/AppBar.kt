@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.Icon
 import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
@@ -130,7 +130,8 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
             IconButton(onClick = navigationAction::onClick) {
                 Icon(
                     modifier = Modifier.size(30.dp),
-                    source = icon
+                    painter = icon,
+                    contentDescription = null
                 )
             }
         }

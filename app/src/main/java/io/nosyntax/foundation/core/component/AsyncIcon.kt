@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -21,34 +20,7 @@ import io.nosyntax.foundation.core.utility.ThemePreviews
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun Icon(
-    source: Any,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    tint: Color = LocalContentColor.current,
-) {
-    when (source) {
-        is String -> {
-            AsyncIcon(
-                url = source,
-                contentDescription = contentDescription,
-                modifier = modifier,
-                tint = tint
-            )
-        }
-        is Painter -> {
-            Icon(
-                painter = source,
-                contentDescription = contentDescription,
-                modifier = modifier,
-                tint = tint
-            )
-        }
-    }
-}
-
-@Composable
-private fun AsyncIcon(
+fun AsyncIcon(
     url: String,
     contentDescription: String?,
     modifier: Modifier,
@@ -78,9 +50,10 @@ private fun AsyncIcon(
 fun IconPreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            Icon(
+            AsyncIcon(
                 modifier = Modifier.size(80.dp),
-                source = painterResource(id = R.drawable.icon_circle_outline),
+                url = "https://img.icons8.com/ios-glyphs/100/circled.png",
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }

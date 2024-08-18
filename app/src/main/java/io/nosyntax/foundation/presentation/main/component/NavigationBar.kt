@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.component.Icon
+import io.nosyntax.foundation.core.component.AsyncIcon
 import io.nosyntax.foundation.core.utility.AppConfigProvider
 import io.nosyntax.foundation.core.utility.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
@@ -113,9 +113,10 @@ private fun RowScope.NavigationBarItem(
         },
         icon = {
             if (item.icon != null) {
-                Icon(
+                AsyncIcon(
                     modifier = Modifier.size(22.dp),
-                    source = item.icon
+                    url = item.icon,
+                    contentDescription = null
                 )
             }
         }
