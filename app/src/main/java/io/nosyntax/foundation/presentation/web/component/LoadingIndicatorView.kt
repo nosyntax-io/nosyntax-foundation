@@ -22,7 +22,7 @@ import io.nosyntax.foundation.domain.model.app_config.Components
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun LoadingIndicator(indicatorConfig: Components.LoadingIndicator) {
+fun LoadingIndicatorView(indicatorConfig: Components.LoadingIndicator) {
     val context = LocalContext.current
     val resources = context.resources
 
@@ -65,7 +65,7 @@ fun LoadingIndicator(indicatorConfig: Components.LoadingIndicator) {
 @Composable
 fun LoadingIndicatorPreview() {
     DynamicTheme {
-        LoadingIndicator(
+        LoadingIndicatorView(
             indicatorConfig = Components.LoadingIndicator(
                 visible = true,
                 animation = "loading_indicator_1",
