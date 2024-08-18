@@ -2,7 +2,6 @@ package io.nosyntax.foundation.core.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
@@ -42,10 +40,7 @@ fun NoConnectionView(onRetry: () -> Unit) {
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
             colorFilter = ColorFilter.tint(
-                color = setColorContrast(
-                    isDark = isSystemInDarkTheme(),
-                    color = MaterialTheme.colorScheme.surface
-                )
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
         )
         Spacer(modifier = Modifier.height(15.dp))

@@ -1,7 +1,6 @@
 package io.nosyntax.foundation.core.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -16,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
-import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import io.nosyntax.foundation.core.utility.ThemePreviews
@@ -64,7 +62,7 @@ private fun AsyncIcon(
     )
 
     val iconTint = (painter.state as? AsyncImagePainter.State.Loading)?.let {
-        setColorContrast(isSystemInDarkTheme(), MaterialTheme.colorScheme.surface)
+        MaterialTheme.colorScheme.surfaceVariant
     } ?: tint
 
     Icon(

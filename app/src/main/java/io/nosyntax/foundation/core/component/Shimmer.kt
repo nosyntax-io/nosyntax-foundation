@@ -5,7 +5,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +23,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.utility.ThemePreviews
-import io.nosyntax.foundation.core.utility.Utilities.setColorContrast
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
@@ -42,10 +40,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     background(
         brush = Brush.linearGradient(
             colors = shimmerColors(
-                baseColor = setColorContrast(
-                    isDark = isSystemInDarkTheme(),
-                    color = MaterialTheme.colorScheme.surface
-                )
+                baseColor = MaterialTheme.colorScheme.surfaceVariant
             ),
             start = Offset(x = startOffsetX, y = 0f),
             end = Offset(x = startOffsetX + size.width.toFloat(), y = size.height.toFloat())
