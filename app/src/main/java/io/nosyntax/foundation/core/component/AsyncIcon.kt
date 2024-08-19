@@ -24,7 +24,8 @@ fun AsyncIcon(
     url: String,
     contentDescription: String?,
     modifier: Modifier,
-    tint: Color = LocalContentColor.current
+    tint: Color = LocalContentColor.current,
+    placeholderTint: Color = LocalContentColor.current
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,
@@ -34,7 +35,7 @@ fun AsyncIcon(
     )
 
     val iconTint = (painter.state as? AsyncImagePainter.State.Loading)?.let {
-        MaterialTheme.colorScheme.surfaceVariant
+        placeholderTint
     } ?: tint
 
     Icon(
