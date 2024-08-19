@@ -72,7 +72,7 @@ fun TextField(
                 disabledIndicatorColor = Color.Transparent,
                 errorIndicatorColor = Color.Transparent
             ),
-            shape = MaterialTheme.shapes.medium,
+            shape = MaterialTheme.shapes.small,
             visualTransformation = VisualTransformation.None,
             trailingIcon = { },
             placeholder = {

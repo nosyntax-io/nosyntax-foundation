@@ -131,7 +131,7 @@ private fun NavigationDrawerHeader(
                 .fillMaxWidth()
                 .height(height)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
-                .clip(shape = MaterialTheme.shapes.large),
+                .clip(shape = MaterialTheme.shapes.medium),
             url = config.header.image,
             contentDescription = null
         )
@@ -177,7 +177,7 @@ private fun NavigationDrawerItem(
             .padding(horizontal = 20.dp),
         selected = currentRoute == item.route,
         onClick = onClick,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = containerColor,
             unselectedContainerColor = Color.Transparent,
