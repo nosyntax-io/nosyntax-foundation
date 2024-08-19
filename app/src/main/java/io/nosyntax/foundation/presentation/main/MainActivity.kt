@@ -72,16 +72,10 @@ class MainActivity : ComponentActivity() {
 
                 val dynamicTypography = DynamicTypography(
                     primaryFontFamily = FontFamily(
-                        Font(
-                            GoogleFont(typography.primaryFontFamily),
-                            googleFontProvider
-                        )
+                        Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)
                     ),
                     secondaryFontFamily = FontFamily(
-                        Font(
-                            GoogleFont(typography.secondaryFontFamily),
-                            googleFontProvider
-                        )
+                        Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider)
                     )
                 )
 

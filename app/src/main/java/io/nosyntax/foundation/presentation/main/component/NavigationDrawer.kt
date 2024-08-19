@@ -45,16 +45,16 @@ fun NavigationDrawer(
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen,
-        content = content,
         drawerContent = {
             NavigationDrawerContent(
                 config = config,
                 currentRoute = currentRoute,
                 onItemClick = onItemClick
             )
-        }
+        },
+        drawerState = drawerState,
+        gesturesEnabled = drawerState.isOpen,
+        content = content
     )
 }
 
@@ -127,13 +127,13 @@ private fun NavigationDrawerHeader(
 ) {
     if (config.header.visible) {
         AsyncImage(
+            url = config.header.image,
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height)
                 .padding(start = 20.dp, top = 20.dp, end = 20.dp)
-                .clip(shape = MaterialTheme.shapes.medium),
-            url = config.header.image,
-            contentDescription = null
+                .clip(shape = MaterialTheme.shapes.medium)
         )
     }
 }
@@ -172,19 +172,19 @@ private fun NavigationDrawerItem(
     }
 
     NavigationDrawerItem(
+        selected = currentRoute == item.route,
+        onClick = onClick,
         modifier = Modifier
             .height(50.dp)
             .padding(horizontal = 20.dp),
-        selected = currentRoute == item.route,
-        onClick = onClick,
         shape = MaterialTheme.shapes.medium,
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = containerColor,
             unselectedContainerColor = Color.Transparent,
-            selectedTextColor = contentColor,
             selectedIconColor = contentColor,
-            unselectedTextColor = contentColor.copy(alpha = .8f),
-            unselectedIconColor = contentColor.copy(alpha = .8f)
+            unselectedIconColor = contentColor.copy(alpha = .8f),
+            selectedTextColor = contentColor,
+            unselectedTextColor = contentColor.copy(alpha = .8f)
         ),
         label = {
             if (item.label != null) {
@@ -197,9 +197,9 @@ private fun NavigationDrawerItem(
         icon = {
             if (item.icon != null) {
                 AsyncIcon(
-                    modifier = Modifier.size(22.dp),
                     url = item.icon,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }

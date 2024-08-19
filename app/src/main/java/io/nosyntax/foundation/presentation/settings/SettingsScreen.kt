@@ -27,7 +27,10 @@ import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
-fun SettingsScreen(appConfig: AppConfig, navigateToAbout: () -> Unit) {
+fun SettingsScreen(
+    appConfig: AppConfig,
+    navigateToAbout: () -> Unit
+) {
     val context = LocalContext.current
 
     Column(
@@ -59,7 +62,10 @@ fun SettingsScreen(appConfig: AppConfig, navigateToAbout: () -> Unit) {
 }
 
 @Composable
-private fun SettingItem(text: String, onClick: () -> Unit) {
+private fun SettingItem(
+    text: String,
+    onClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -68,8 +74,9 @@ private fun SettingItem(text: String, onClick: () -> Unit) {
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onBackground
+            )
         )
     }
 }

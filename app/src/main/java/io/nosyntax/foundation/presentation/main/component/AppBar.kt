@@ -76,24 +76,24 @@ fun AppBar(
 
     val appBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,
-        titleContentColor = contentColor,
         navigationIconContentColor = contentColor,
+        titleContentColor = contentColor,
         actionIconContentColor = contentColor
     )
 
     if (config.title.alignment == Constants.ALIGNMENT_CENTER) {
         CenterAlignedTopAppBar(
-            modifier = appBarModifier,
-            colors = appBarColors,
             title = { AppBarTitle(config, title) },
-            navigationIcon = { AppBarNavigationIcon(navigationAction) }
+            modifier = appBarModifier,
+            navigationIcon = { AppBarNavigationIcon(navigationAction) },
+            colors = appBarColors
         )
     } else {
         TopAppBar(
-            modifier = appBarModifier,
-            colors = appBarColors,
             title = { AppBarTitle(config, title) },
-            navigationIcon = { AppBarNavigationIcon(navigationAction) }
+            modifier = appBarModifier,
+            navigationIcon = { AppBarNavigationIcon(navigationAction) },
+            colors = appBarColors
         )
     }
 }
@@ -132,9 +132,9 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
         ) {
             IconButton(onClick = navigationAction::onClick) {
                 Icon(
-                    modifier = Modifier.size(30.dp),
                     painter = icon,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
                 )
             }
         }

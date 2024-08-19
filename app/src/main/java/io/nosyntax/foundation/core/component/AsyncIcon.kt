@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,25 +25,25 @@ fun AsyncIcon(
     url: String,
     contentDescription: String?,
     modifier: Modifier,
+    placeholder: Painter = painterResource(id = R.drawable.icon_circle_outline),
     tint: Color = LocalContentColor.current,
     placeholderTint: Color = LocalContentColor.current.copy(alpha = .4f)
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,
-        placeholder = painterResource(id = R.drawable.icon_circle_outline),
+        placeholder = placeholder,
         contentScale = ContentScale.Fit,
         filterQuality = FilterQuality.High
     )
-
-    val iconTint = (painter.state as? AsyncImagePainter.State.Loading)?.let {
-        placeholderTint
-    } ?: tint
 
     Icon(
         painter = painter,
         contentDescription = contentDescription,
         modifier = modifier,
-        tint = iconTint
+        tint = when (painter.state) {
+            is AsyncImagePainter.State.Loading -> placeholderTint
+            else -> tint
+        }
     )
 }
 
@@ -52,9 +53,9 @@ fun IconPreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             AsyncIcon(
-                modifier = Modifier.size(80.dp),
                 url = "https://img.icons8.com/ios-glyphs/100/circled.png",
                 contentDescription = null,
+                modifier = Modifier.size(80.dp),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }

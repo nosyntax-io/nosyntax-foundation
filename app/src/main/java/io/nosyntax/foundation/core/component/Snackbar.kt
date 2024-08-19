@@ -22,9 +22,9 @@ fun Snackbar(
 ) {
     Snackbar(
         modifier = Modifier.padding(10.dp).alpha(.8f),
+        shape = MaterialTheme.shapes.medium,
         containerColor = Color.Black,
-        contentColor = Color.White,
-        shape = MaterialTheme.shapes.medium
+        contentColor = Color.White
     ) {
         CompositionLocalProvider(
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr

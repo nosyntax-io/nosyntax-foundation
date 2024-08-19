@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,40 +51,33 @@ fun PermissionDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                modifier = Modifier.size(30.dp),
                 painter = icon,
                 contentDescription = null,
+                modifier = Modifier.size(30.dp),
                 tint = MaterialTheme.colorScheme.secondary
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
             )
             Spacer(modifier = Modifier.height(7.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
+                    textAlign = TextAlign.Center
+                )
             )
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                onClick = onConfirm
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth().height(40.dp),
             ) {
-                Text(
-                    text = stringResource(id = R.string.grant_permission),
-                    style = MaterialTheme.typography.labelLarge
-                )
+                Text(text = stringResource(id = R.string.grant_permission))
             }
         }
     }
@@ -96,9 +88,9 @@ fun PermissionDialog(
 fun PermissionDialogPreview() {
     DynamicTheme {
         PermissionDialog(
-            icon = painterResource(R.drawable.icon_circle_outline),
             title = "Permission Required",
             description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            icon = painterResource(R.drawable.icon_circle_outline),
             onDismiss = { },
             onConfirm = { }
         )

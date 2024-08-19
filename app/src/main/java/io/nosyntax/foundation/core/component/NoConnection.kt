@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,13 +31,13 @@ fun NoConnectionView(onRetry: () -> Unit) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(30.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.size(130.dp),
             painter = painterResource(id = R.drawable.icon_wifi_outline),
             contentDescription = stringResource(id = R.string.no_internet_connection),
+            modifier = Modifier.size(130.dp),
             colorFilter = ColorFilter.tint(
                 color = MaterialTheme.colorScheme.surfaceVariant
             )
@@ -46,29 +45,24 @@ fun NoConnectionView(onRetry: () -> Unit) {
         Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = stringResource(id = R.string.no_internet_connection),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            style = MaterialTheme.typography.titleLarge.copy(
+                color = MaterialTheme.colorScheme.onBackground
+            )
         )
         Spacer(modifier = Modifier.height(7.dp))
         Text(
             text = stringResource(id = R.string.no_internet_connection_description),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
-            textAlign = TextAlign.Center
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
+                textAlign = TextAlign.Center,
+            )
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            modifier = Modifier.height(40.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            onClick = onRetry
+            onClick = onRetry,
+            modifier = Modifier.height(40.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.try_again),
-                style = MaterialTheme.typography.labelLarge
-            )
+            Text(text = stringResource(id = R.string.try_again))
         }
     }
 }

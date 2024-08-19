@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,23 +45,17 @@ fun JsAlertDialog(
         ) {
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
             )
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                modifier = Modifier.fillMaxWidth().height(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                onClick = onConfirm
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth().height(40.dp)
             ) {
-                Text(
-                    text = stringResource(id = R.string.i_understand),
-                    style = MaterialTheme.typography.labelLarge
-                )
+                Text(text = stringResource(id = R.string.i_understand))
             }
         }
     }

@@ -108,21 +108,22 @@ private fun RowScope.NavigationBarItem(
         label = {
             if (item.label != null && config.label != Constants.LABEL_HIDDEN) {
                 Text(
-                    modifier = Modifier,
                     text = item.label,
-                    style = MaterialTheme.typography.labelMedium,
-                    textAlign = TextAlign.Center,
+                    modifier = Modifier,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        textAlign = TextAlign.Center
+                    )
                 )
             }
         },
         icon = {
             if (item.icon != null) {
                 AsyncIcon(
-                    modifier = Modifier.size(22.dp),
                     url = item.icon,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }

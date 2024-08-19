@@ -57,10 +57,10 @@ fun LottieAnimatedPreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             AnimatedLottie(
-                modifier = Modifier.size(30.dp),
                 source = LottieCompositionSpec.Url(
                     url = "https://lottie.host/b668a47d-6c6a-4016-b065-d7148975cd91/b8d2lCbOmv.json"
-                )
+                ),
+                modifier = Modifier.size(30.dp)
             )
         }
     }
