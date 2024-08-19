@@ -99,7 +99,10 @@ fun AppBar(
 }
 
 @Composable
-private fun AppBarTitle(config: Components.AppBar, title: String) {
+private fun AppBarTitle(
+    config: Components.AppBar,
+    title: String
+) {
     if (config.title.visible) {
         Box(
             modifier = Modifier.fillMaxHeight(),
@@ -152,9 +155,7 @@ private fun AppBarPreview() {
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            navigationAction = NavigationAction.Menu(enabled = true) {
-
-            }
+            navigationAction = NavigationAction.Menu(enabled = true) { }
         )
     }
 }

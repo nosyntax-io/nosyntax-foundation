@@ -28,9 +28,9 @@ import io.nosyntax.foundation.ui.theme.DynamicTheme
 
 @Composable
 fun PermissionDialog(
-    icon: Painter,
     title: String,
     description: String,
+    icon: Painter,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {

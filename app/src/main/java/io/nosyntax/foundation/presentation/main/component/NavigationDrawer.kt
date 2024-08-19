@@ -121,7 +121,10 @@ private fun NavigationDrawerContent(
 }
 
 @Composable
-private fun NavigationDrawerHeader(config: Components.NavigationDrawer, height: Dp = 150.dp) {
+private fun NavigationDrawerHeader(
+    config: Components.NavigationDrawer,
+    height: Dp = 150.dp
+) {
     if (config.header.visible) {
         AsyncImage(
             modifier = Modifier
@@ -156,10 +159,16 @@ private fun NavigationDrawerItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val (containerColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
+    val containerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
     } else {
-        MaterialTheme.colorScheme.onPrimary to MaterialTheme.colorScheme.onPrimary
+        MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
+    }
+
+    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onPrimary
     }
 
     NavigationDrawerItem(
@@ -170,12 +179,12 @@ private fun NavigationDrawerItem(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = containerColor.copy(alpha = .12f),
+            selectedContainerColor = containerColor,
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = contentColor,
             selectedIconColor = contentColor,
-            unselectedTextColor = contentColor.copy(alpha = 0.8f),
-            unselectedIconColor = contentColor.copy(alpha = 0.8f)
+            unselectedTextColor = contentColor.copy(alpha = .8f),
+            unselectedIconColor = contentColor.copy(alpha = .8f)
         ),
         label = {
             if (item.label != null) {

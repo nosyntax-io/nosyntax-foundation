@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.ui.theme.DynamicTheme
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import io.nosyntax.foundation.core.component.LottieAnimated
+import io.nosyntax.foundation.core.component.AnimatedLottie
 import io.nosyntax.foundation.domain.model.app_config.Components
 
 @SuppressLint("DiscouragedApi")
@@ -52,7 +52,7 @@ fun LoadingIndicatorView(indicatorConfig: Components.LoadingIndicator) {
         verticalArrangement = Arrangement.Center
     ) {
         animationResource[indicatorConfig.animation]?.let { animation ->
-            LottieAnimated(
+            AnimatedLottie(
                 modifier = Modifier.size(120.dp),
                 source = LottieCompositionSpec.RawRes(animation),
                 color = progressColor

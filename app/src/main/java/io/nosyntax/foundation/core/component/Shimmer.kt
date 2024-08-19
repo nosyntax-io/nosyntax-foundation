@@ -51,7 +51,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 }
 
 private fun shimmerColors(baseColor: Color): List<Color> {
-    return listOf(baseColor, baseColor.copy(alpha = 0.3f), baseColor)
+    return listOf(baseColor, baseColor.copy(alpha = .3f), baseColor)
 }
 
 @ThemePreviews

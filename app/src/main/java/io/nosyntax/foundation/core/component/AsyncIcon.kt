@@ -25,7 +25,7 @@ fun AsyncIcon(
     contentDescription: String?,
     modifier: Modifier,
     tint: Color = LocalContentColor.current,
-    placeholderTint: Color = LocalContentColor.current.copy(alpha = 0.4f)
+    placeholderTint: Color = LocalContentColor.current.copy(alpha = .4f)
 ) {
     val painter = rememberAsyncImagePainter(
         model = url,

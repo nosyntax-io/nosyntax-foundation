@@ -23,7 +23,7 @@ import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import io.nosyntax.foundation.core.utility.ThemePreviews
 
 @Composable
-fun LottieAnimated(
+fun AnimatedLottie(
     source: LottieCompositionSpec,
     modifier: Modifier = Modifier,
     color: Color = LocalContentColor.current,
@@ -56,7 +56,7 @@ fun LottieAnimated(
 fun LottieAnimatedPreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            LottieAnimated(
+            AnimatedLottie(
                 modifier = Modifier.size(30.dp),
                 source = LottieCompositionSpec.Url(
                     url = "https://lottie.host/b668a47d-6c6a-4016-b065-d7148975cd91/b8d2lCbOmv.json"

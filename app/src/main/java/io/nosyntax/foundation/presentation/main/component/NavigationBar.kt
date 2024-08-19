@@ -82,10 +82,16 @@ private fun RowScope.NavigationBarItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val (indicatorColor, contentColor) = if (config.background == Constants.BACKGROUND_NEUTRAL) {
-        MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSurface
+    val indicatorColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
     } else {
-        MaterialTheme.colorScheme.onPrimary to MaterialTheme.colorScheme.onPrimary
+        MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
+    }
+
+    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onPrimary
     }
 
     NavigationBarItem(
@@ -95,9 +101,9 @@ private fun RowScope.NavigationBarItem(
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = contentColor,
             selectedTextColor = contentColor,
-            indicatorColor = indicatorColor.copy(alpha = 0.12f),
-            unselectedIconColor = contentColor.copy(alpha = 0.8f),
-            unselectedTextColor = contentColor.copy(alpha = 0.8f),
+            indicatorColor = indicatorColor,
+            unselectedIconColor = contentColor.copy(alpha = .8f),
+            unselectedTextColor = contentColor.copy(alpha = .8f),
         ),
         label = {
             if (item.label != null && config.label != Constants.LABEL_HIDDEN) {

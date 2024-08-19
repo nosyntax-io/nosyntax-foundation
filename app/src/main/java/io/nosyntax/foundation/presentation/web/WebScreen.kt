@@ -190,9 +190,9 @@ fun WebScreen(
 
     if (showStoragePermissionDialog) {
         PermissionDialog(
-            icon = painterResource(R.drawable.icon_folder_outline),
             title = stringResource(R.string.storage_required),
             description = stringResource(R.string.storage_required_description),
+            icon = painterResource(R.drawable.icon_folder_outline),
             onDismiss = { showStoragePermissionDialog = false },
             onConfirm = {
                 showStoragePermissionDialog = false
@@ -203,9 +203,9 @@ fun WebScreen(
 
     if (showCameraPermissionDialog) {
         PermissionDialog(
-            icon = painterResource(R.drawable.icon_camera_outline),
             title = stringResource(R.string.camera_required),
             description = stringResource(R.string.camera_required_description),
+            icon = painterResource(R.drawable.icon_camera_outline),
             onDismiss = { showCameraPermissionDialog = false },
             onConfirm = {
                 showCameraPermissionDialog = false
@@ -216,9 +216,9 @@ fun WebScreen(
 
     if (showLocationPermissionDialog) {
         PermissionDialog(
-            icon = painterResource(R.drawable.icon_location_outline),
             title = stringResource(R.string.location_required),
             description = stringResource(R.string.location_required_description),
+            icon = painterResource(R.drawable.icon_location_outline),
             onDismiss = { showLocationPermissionDialog = false },
             onConfirm = {
                 showLocationPermissionDialog = false
