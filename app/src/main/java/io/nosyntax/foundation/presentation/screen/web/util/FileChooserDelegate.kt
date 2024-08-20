@@ -90,17 +90,12 @@ class FileChooserDelegate(
             val file = File(filePath)
             val uri = AppFileProvider.getUriForFile(context, file.toUri()) ?: return null
 
-            return when (file.length()) {
-                0L -> null
-                else -> arrayOf(uri)
-            }
+            return if (file.length() > 0) arrayOf(uri) else null
         }
 
         private fun createEmptyImageFile(): File? {
             return try {
-                val directory = File(context.cacheDir, "app_cache").apply {
-                    if (!exists()) mkdir()
-                }
+                val directory = File(context.cacheDir, "app_cache").apply { mkdirs() }
                 File.createTempFile("Capture_", ".jpg", directory)
             } catch (e: IOException) {
                 null
@@ -108,10 +103,7 @@ class FileChooserDelegate(
         }
 
         private fun WebChromeClient.FileChooserParams.allowsCameraCapture(): Boolean {
-            val accept = defaultAcceptType()
-            val acceptsAny = accept == "*/*"
-            val acceptsImages = accept.startsWith("image/")
-            return isCaptureEnabled && (acceptsAny || acceptsImages)
+            return isCaptureEnabled && (defaultAcceptType() == "*/*" || defaultAcceptType().startsWith("image/"))
         }
 
         private fun defaultAcceptType(): String {
@@ -129,7 +121,7 @@ class FileChooserDelegate(
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "*/*")
 
-                if (params.acceptTypes.size > 1) {
+                if (params.acceptTypes.isNotEmpty()) {
                     putExtra(Intent.EXTRA_MIME_TYPES, params.acceptTypes)
                 }
             }
@@ -155,12 +147,7 @@ class FileChooserDelegate(
         }
 
         private suspend fun buildMultipleFilesResult(clipData: ClipData): Array<Uri>? {
-            val uris = mutableListOf<Uri>()
-
-            for (i in 0 until clipData.itemCount) {
-                uris.add(clipData.getItemAt(i).uri)
-            }
-
+            val uris = List(clipData.itemCount) { clipData.getItemAt(it).uri }
             return buildResult(uris)
         }
 
@@ -171,7 +158,7 @@ class FileChooserDelegate(
 
         private suspend fun buildResult(uris: List<Uri>): Array<Uri>? {
             val results = uris.mapNotNull { writeToCachedFile(it) }
-            return if (results.isEmpty()) null else results.toTypedArray()
+            return if (results.isNotEmpty()) results.toTypedArray() else null
         }
 
         private suspend fun writeToCachedFile(uri: Uri): Uri? {
@@ -187,10 +174,6 @@ class FileChooserDelegate(
 
     private fun Intent?.containsFileResult(): Boolean {
         if (this == null) return false
-
-        val clipData = this.clipData
-        val dataString = this.dataString
-
-        return clipData != null || dataString != null
+        return this.clipData != null || this.dataString != null
     }
 }
