@@ -1,7 +1,7 @@
 package io.nosyntax.foundation.data.source.remote.factory
 
-import io.nosyntax.foundation.core.Constants
-import io.nosyntax.foundation.core.utility.Connectivity
+import io.nosyntax.foundation.core.constant.Constants
+import io.nosyntax.foundation.core.util.Connectivity
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import io.nosyntax.foundation.core.service.OneSignalService
-import io.nosyntax.foundation.core.utility.Connectivity
-import io.nosyntax.foundation.core.utility.monetize.MonetizeController
-import io.nosyntax.foundation.presentation.main.MainActivity
+import io.nosyntax.foundation.core.util.Connectivity
+import io.nosyntax.foundation.core.util.monetize.MonetizeController
+import io.nosyntax.foundation.presentation.MainActivity
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -14,7 +14,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Connectivity.getInstance().initialize(context = this)
+        Connectivity.getInstance().initialize(this)
 
         OneSignalService(this)
             .initialize(appId = BuildConfig.ONESIGNAL_APP_ID)

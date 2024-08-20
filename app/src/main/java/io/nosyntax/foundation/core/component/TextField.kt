@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import io.nosyntax.foundation.core.utility.Previews
-import io.nosyntax.foundation.ui.theme.DynamicTheme
+import io.nosyntax.foundation.core.util.Previews
+import io.nosyntax.foundation.presentation.theme.DynamicTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

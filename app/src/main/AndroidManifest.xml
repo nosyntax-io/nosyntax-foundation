@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="io.nosyntax.foundation.presentation.main.MainActivity"
+            android:name="io.nosyntax.foundation.presentation.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustPan"
             android:exported="true"
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:name="io.nosyntax.foundation.core.AppFileProvider"
+            android:name="io.nosyntax.foundation.core.provider.AppFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

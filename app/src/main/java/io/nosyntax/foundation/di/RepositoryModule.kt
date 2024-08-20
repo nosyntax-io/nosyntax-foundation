@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun providesAppConfigRepository(
+    fun provideAppConfigRepository(
         @ApplicationContext context: Context,
         appService: AppService
     ): AppConfigRepository {

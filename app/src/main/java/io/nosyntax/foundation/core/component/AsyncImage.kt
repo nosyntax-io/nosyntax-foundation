@@ -17,8 +17,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import io.nosyntax.foundation.core.utility.ThemePreviews
-import io.nosyntax.foundation.ui.theme.DynamicTheme
+import io.nosyntax.foundation.core.util.ThemePreviews
+import io.nosyntax.foundation.presentation.theme.DynamicTheme
 
 @Composable
 fun AsyncImage(

@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import io.nosyntax.foundation.core.utility.Utilities.findActivity
+import io.nosyntax.foundation.core.util.Utilities.findActivity
 
 enum class SystemUIState {
     SYSTEM_UI_VISIBLE,

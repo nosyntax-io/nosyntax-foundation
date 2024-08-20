@@ -2,10 +2,10 @@ package io.nosyntax.foundation.presentation.navigation
 
 import android.content.Context
 import androidx.navigation.NavHostController
-import io.nosyntax.foundation.core.utility.openContent
-import io.nosyntax.foundation.core.utility.openDialer
-import io.nosyntax.foundation.core.utility.openMailer
-import io.nosyntax.foundation.core.utility.openSMS
+import io.nosyntax.foundation.core.util.openContent
+import io.nosyntax.foundation.core.util.openDialer
+import io.nosyntax.foundation.core.util.openMailer
+import io.nosyntax.foundation.core.util.openSMS
 import io.nosyntax.foundation.domain.model.NavigationItem
 
 class NavigationHandler(

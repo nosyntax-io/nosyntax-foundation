@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import io.nosyntax.foundation.core.utility.ThemePreviews
-import io.nosyntax.foundation.ui.theme.DynamicTheme
+import io.nosyntax.foundation.core.util.ThemePreviews
+import io.nosyntax.foundation.presentation.theme.DynamicTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }

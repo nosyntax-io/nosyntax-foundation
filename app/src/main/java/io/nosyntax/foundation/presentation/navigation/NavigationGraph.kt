@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import io.nosyntax.foundation.core.extension.getNavigationItems
+import io.nosyntax.foundation.core.util.getNavigationItems
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.about.AboutScreen
-import io.nosyntax.foundation.presentation.settings.SettingsScreen
-import io.nosyntax.foundation.presentation.web.WebScreen
+import io.nosyntax.foundation.presentation.screen.about.AboutScreen
+import io.nosyntax.foundation.presentation.screen.settings.SettingsScreen
+import io.nosyntax.foundation.presentation.screen.web.WebScreen
 
 @Composable
 fun NavigationGraph(

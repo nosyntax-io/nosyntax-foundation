@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import io.nosyntax.foundation.ui.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.DynamicTheme
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -20,7 +20,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
-import io.nosyntax.foundation.core.utility.ThemePreviews
+import io.nosyntax.foundation.core.util.ThemePreviews
 
 @Composable
 fun AnimatedLottie(
@@ -53,7 +53,7 @@ fun AnimatedLottie(
 
 @ThemePreviews
 @Composable
-fun LottieAnimatedPreview() {
+fun AnimatedLottiePreview() {
     DynamicTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             AnimatedLottie(

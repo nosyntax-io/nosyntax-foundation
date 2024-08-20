@@ -21,7 +21,7 @@ interface AppService {
         fun getInstance(): AppService {
             return ServiceFactory(
                 baseUrl = BASE_URL,
-                timeout = 10000
+                timeout = 10000L
             ).create(AppService::class.java)
         }
     }
