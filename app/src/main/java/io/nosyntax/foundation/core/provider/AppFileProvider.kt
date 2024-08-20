@@ -12,41 +12,35 @@ import java.io.FileOutputStream
 class AppFileProvider : FileProvider() {
     companion object {
         fun getUriForFile(context: Context, uri: Uri): Uri? {
-            return try {
-                val file = File(uri.path ?: return null)
+            return runCatching {
+                val file = File(uri.path.orEmpty())
                 val authority = "${context.packageName}.provider"
-                val fileUri = getUriForFile(context, authority, file)
-
-                fileUri
-            } catch (e: Exception) {
-                e.printStackTrace()
+                getUriForFile(context, authority, file)
+            }.getOrElse { exception ->
+                exception.printStackTrace()
                 null
             }
         }
 
         suspend fun writeUriToFile(context: Context, directory: File, uri: Uri): Uri? {
-            if (!directory.exists()) {
-                directory.mkdir()
+            if (!directory.exists() && !directory.mkdir()) {
+                return null
             }
 
-            val fileName = DocumentFile.fromSingleUri(context, uri)?.name
-            val outputFile = File(directory, fileName ?: return null)
+            val fileName = DocumentFile.fromSingleUri(context, uri)?.name ?: return null
+            val outputFile = File(directory, fileName)
 
-            return try {
-                val inputStream = context.contentResolver.openInputStream(uri) ?: return null
-                val outputStream = withContext(Dispatchers.IO) {
-                    FileOutputStream(outputFile)
-                }
-
-                inputStream.use { input ->
-                    outputStream.use { output ->
-                        input.copyTo(output)
+            return runCatching {
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    withContext(Dispatchers.IO) {
+                        FileOutputStream(outputFile).use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
                     }
                 }
-
                 Uri.fromFile(outputFile)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }.getOrElse { exception ->
+                exception.printStackTrace()
                 null
             }
         }
