@@ -2,7 +2,7 @@ package io.nosyntax.foundation.data.repository
 
 import android.content.Context
 import io.nosyntax.foundation.BuildConfig
-import io.nosyntax.foundation.core.constant.Constants
+import io.nosyntax.foundation.core.util.Exception
 import io.nosyntax.foundation.core.util.Resource
 import io.nosyntax.foundation.core.util.Utilities.getDtoFromJson
 import io.nosyntax.foundation.data.mapper.toAppConfig
@@ -30,9 +30,9 @@ class AppConfigRepositoryImpl @Inject constructor(
                 onSuccess = { Resource.Success(it) },
                 onFailure = {
                     when (it) {
-                        is IOException -> Resource.Error(Constants.NETWORK_FAILURE_EXCEPTION)
-                        is HttpException -> Resource.Error(Constants.HTTP_RESPONSE_EXCEPTION)
-                        else -> Resource.Error(Constants.MALFORMED_REQUEST_EXCEPTION)
+                        is IOException -> Resource.Error(Exception.NetworkError)
+                        is HttpException -> Resource.Error(Exception.ServerError)
+                        else -> Resource.Error(Exception.InvalidRequest)
                     }
                 }
             )
@@ -47,5 +47,5 @@ class AppConfigRepositoryImpl @Inject constructor(
         getDtoFromJson(context, "local/app-config.json", AppConfigDto::class.java)
             ?.toAppConfig()
             ?.let { Resource.Success(it) }
-            ?: Resource.Error(Constants.LOADING_LOCAL_JSON_EXCEPTION)
+            ?: Resource.Error(Exception.LocalDataError)
 }

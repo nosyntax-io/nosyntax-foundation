@@ -1,7 +1,7 @@
 package io.nosyntax.foundation.data.source.remote.factory
 
-import io.nosyntax.foundation.core.constant.Constants
 import io.nosyntax.foundation.core.util.Connectivity
+import io.nosyntax.foundation.core.util.Exception
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -38,7 +38,7 @@ class ServiceFactory(
 
     private fun createInterceptor() = Interceptor { chain ->
         if (!Connectivity.getInstance().isOnline()) {
-            throw IOException(Constants.INTERNET_CONNECTION_EXCEPTION)
+            throw IOException(Exception.NetworkError.message)
         }
 
         val requestBuilder = chain.request().newBuilder()
