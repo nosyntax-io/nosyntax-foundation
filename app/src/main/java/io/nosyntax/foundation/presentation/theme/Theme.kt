@@ -54,7 +54,7 @@ fun FoundationTheme(
             val window = (view.context as Activity).window
 
             val resolvedStatusBarColor = when (statusBarColor) {
-                "neutral" -> if (darkTheme) colorScheme.surfaceDark else colorScheme.surfaceLight
+                "neutral" -> resolvedColorScheme.surface
                 else -> colorScheme.primary
             }
             window.statusBarColor = resolvedStatusBarColor.toArgb()

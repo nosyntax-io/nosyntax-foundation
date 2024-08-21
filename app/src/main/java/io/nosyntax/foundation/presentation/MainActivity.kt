@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
 
                 setContent {
                     val (colorScheme, typography) = themeProvider.getTheme(theme)
-                    val statusBarColor = components.appBar.background
+                    val statusBarColor = "neutral"
                     val isDarkTheme = if (theme.darkMode) isSystemInDarkTheme() else false
 
                     FoundationTheme(
