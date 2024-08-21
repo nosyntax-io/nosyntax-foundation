@@ -6,10 +6,11 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import io.nosyntax.foundation.domain.model.app_config.Theme
 
 class ThemeProvider {
-    fun getTheme(theme: Theme): Pair<ColorScheme, DynamicTypography> {
-        return Pair(
-            mapColorScheme(theme.colorScheme),
-            mapTypography(theme.typography)
+    fun resolveTheme(theme: Theme): ThemeData {
+        return ThemeData(
+            colorScheme = mapColorScheme(theme.colorScheme),
+            typography = mapTypography(theme.typography),
+            shapes = Shapes
         )
     }
 

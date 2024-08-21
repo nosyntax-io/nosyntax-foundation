@@ -20,7 +20,6 @@ import io.nosyntax.foundation.presentation.theme.ThemeProvider
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
-
     private lateinit var themeProvider: ThemeProvider
 
     private var interstitialAd: InterstitialAd? = null
@@ -42,19 +41,13 @@ class MainActivity : ComponentActivity() {
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             state.response?.let { response ->
-                val theme = response.theme
-                val components = response.components
+                val resolvedTheme = themeProvider.resolveTheme(response.theme)
 
                 setContent {
-                    val (colorScheme, typography) = themeProvider.getTheme(theme)
-                    val statusBarColor = "neutral"
-                    val isDarkTheme = if (theme.darkMode) isSystemInDarkTheme() else false
-
                     FoundationTheme(
-                        colorScheme = colorScheme,
-                        typography = typography,
-                        statusBarColor = statusBarColor,
-                        darkTheme = isDarkTheme,
+                        theme = resolvedTheme,
+                        darkTheme = response.theme.darkMode && isSystemInDarkTheme(),
+                        statusBarColor = response.components.appBar.background,
                         content = { MainScreen(deeplink = deeplink) }
                     )
                 }

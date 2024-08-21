@@ -3,6 +3,7 @@ package io.nosyntax.foundation.presentation.theme
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -11,41 +12,46 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+data class ThemeData(
+    val colorScheme: ColorScheme = ColorScheme(),
+    val typography: DynamicTypography = DynamicTypography(),
+    val shapes: Shapes = Shapes
+)
+
 @Composable
 fun FoundationTheme(
-    colorScheme: ColorScheme = ColorScheme(),
-    typography: DynamicTypography = DynamicTypography(),
-    statusBarColor: String = "neutral",
+    theme: ThemeData = ThemeData(),
     darkTheme: Boolean = isSystemInDarkTheme(),
+    statusBarColor: String = "neutral",
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
 
-    val resolvedColorScheme = if (darkTheme) {
+    val colorScheme = if (darkTheme) {
         darkColorScheme(
-            primary = colorScheme.primary,
-            onPrimary = colorScheme.onPrimary,
-            secondary = colorScheme.secondary,
-            onSecondary = colorScheme.onSecondary,
-            background = colorScheme.backgroundDark,
-            onBackground = colorScheme.onBackgroundDark,
-            surface = colorScheme.surfaceDark,
-            onSurface = colorScheme.onSurfaceDark,
-            outline = colorScheme.outlineDark,
-            outlineVariant = colorScheme.outlineVariantDark
+            primary = theme.colorScheme.primary,
+            onPrimary = theme.colorScheme.onPrimary,
+            secondary = theme.colorScheme.secondary,
+            onSecondary = theme.colorScheme.onSecondary,
+            background = theme.colorScheme.backgroundDark,
+            onBackground = theme.colorScheme.onBackgroundDark,
+            surface = theme.colorScheme.surfaceDark,
+            onSurface = theme.colorScheme.onSurfaceDark,
+            outline = theme.colorScheme.outlineDark,
+            outlineVariant = theme.colorScheme.outlineVariantDark
         )
     } else {
         lightColorScheme(
-            primary = colorScheme.primary,
-            onPrimary = colorScheme.onPrimary,
-            secondary = colorScheme.secondary,
-            onSecondary = colorScheme.onSecondary,
-            background = colorScheme.backgroundLight,
-            onBackground = colorScheme.onBackgroundLight,
-            surface = colorScheme.surfaceLight,
-            onSurface = colorScheme.onSurfaceLight,
-            outline = colorScheme.outlineLight,
-            outlineVariant = colorScheme.outlineVariantLight
+            primary = theme.colorScheme.primary,
+            onPrimary = theme.colorScheme.onPrimary,
+            secondary = theme.colorScheme.secondary,
+            onSecondary = theme.colorScheme.onSecondary,
+            background = theme.colorScheme.backgroundLight,
+            onBackground = theme.colorScheme.onBackgroundLight,
+            surface = theme.colorScheme.surfaceLight,
+            onSurface = theme.colorScheme.onSurfaceLight,
+            outline = theme.colorScheme.outlineLight,
+            outlineVariant = theme.colorScheme.outlineVariantLight
         )
     }
 
@@ -53,29 +59,27 @@ fun FoundationTheme(
         SideEffect {
             val window = (view.context as Activity).window
 
-            val resolvedStatusBarColor = when (statusBarColor) {
-                "neutral" -> resolvedColorScheme.surface
+            window.statusBarColor = when (statusBarColor) {
+                "neutral" -> colorScheme.surface
                 else -> colorScheme.primary
-            }
-            window.statusBarColor = resolvedStatusBarColor.toArgb()
+            }.toArgb()
 
-            if (statusBarColor != "solid") {
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-            }
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                statusBarColor == "neutral" && !darkTheme
         }
     }
 
     MaterialTheme(
-        colorScheme = resolvedColorScheme,
+        colorScheme = colorScheme,
         typography = Typography.copy(
             titleMedium = Typography.titleMedium.copy(
-                fontFamily = typography.primaryFontFamily
+                fontFamily = theme.typography.primaryFontFamily
             ),
             bodyMedium = Typography.bodyMedium.copy(
-                fontFamily = typography.secondaryFontFamily
+                fontFamily = theme.typography.secondaryFontFamily
             )
         ),
-        shapes = Shapes,
+        shapes = theme.shapes,
         content = content
     )
 }
