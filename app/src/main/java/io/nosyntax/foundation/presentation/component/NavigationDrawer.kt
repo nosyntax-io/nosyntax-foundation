@@ -34,7 +34,7 @@ import io.nosyntax.foundation.core.util.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun NavigationDrawer(
@@ -211,7 +211,7 @@ private fun NavigationDrawerItem(
 private fun NavigationDrawerPreview(
     @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
 ) {
-    DynamicTheme {
+    FoundationTheme {
         NavigationDrawer(
             config = appConfig.components.navigationDrawer,
             currentRoute = "web-000",

@@ -19,7 +19,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun JsAlertDialog(
@@ -64,7 +64,7 @@ fun JsAlertDialog(
 @Previews
 @Composable
 fun JsAlertDialogPreview() {
-    DynamicTheme {
+    FoundationTheme {
         JsAlertDialog(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onConfirm = { }

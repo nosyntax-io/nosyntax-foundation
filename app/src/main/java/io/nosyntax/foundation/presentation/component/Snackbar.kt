@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.util.ThemePreviews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun Snackbar(
@@ -40,7 +40,7 @@ fun Snackbar(
 @ThemePreviews
 @Composable
 fun SnackbarPreview() {
-    DynamicTheme {
+    FoundationTheme {
         Snackbar(
             message = "Lorem Ipsum is simply dummy text of the printing."
         )

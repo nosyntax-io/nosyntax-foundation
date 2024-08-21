@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import io.nosyntax.foundation.core.component.AnimatedLottie
 import io.nosyntax.foundation.domain.model.app_config.Components
@@ -64,7 +64,7 @@ fun LoadingIndicatorView(indicatorConfig: Components.LoadingIndicator) {
 @Preview
 @Composable
 fun LoadingIndicatorPreview() {
-    DynamicTheme {
+    FoundationTheme {
         LoadingIndicatorView(
             indicatorConfig = Components.LoadingIndicator(
                 visible = true,

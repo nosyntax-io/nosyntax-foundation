@@ -2,7 +2,7 @@ package io.nosyntax.foundation.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-data class DynamicColorScheme(
+data class ColorScheme(
     val primary: Color = ColorPrimary,
     val onPrimary: Color = ColorOnPrimary,
     val secondary: Color = ColorSecondary,

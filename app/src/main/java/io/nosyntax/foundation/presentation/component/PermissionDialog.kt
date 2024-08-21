@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.nosyntax.foundation.R
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun PermissionDialog(
@@ -86,7 +86,7 @@ fun PermissionDialog(
 @Preview
 @Composable
 fun PermissionDialogPreview() {
-    DynamicTheme {
+    FoundationTheme {
         PermissionDialog(
             title = "Permission Required",
             description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",

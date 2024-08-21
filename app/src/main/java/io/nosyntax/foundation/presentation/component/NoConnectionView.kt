@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun NoConnectionView(onRetry: () -> Unit) {
@@ -70,7 +70,7 @@ fun NoConnectionView(onRetry: () -> Unit) {
 @Previews
 @Composable
 fun NoConnectionPreview() {
-    DynamicTheme {
+    FoundationTheme {
         NoConnectionView { }
     }
 }

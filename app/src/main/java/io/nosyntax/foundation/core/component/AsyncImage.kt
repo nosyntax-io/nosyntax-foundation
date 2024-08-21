@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import io.nosyntax.foundation.core.util.ThemePreviews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun AsyncImage(
@@ -56,7 +56,7 @@ fun AsyncImage(
 @ThemePreviews
 @Composable
 fun ImagePreview() {
-    DynamicTheme {
+    FoundationTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             AsyncImage(
                 modifier = Modifier.fillMaxWidth().height(150.dp),

@@ -2,6 +2,7 @@ package io.nosyntax.foundation.core.util
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.nosyntax.foundation.domain.model.NavigationItem
@@ -37,26 +38,26 @@ class AppConfigProvider : PreviewParameterProvider<AppConfig> {
             ),
             theme = Theme(
                 colorScheme = Theme.ColorScheme(
-                    primary = "#369770",
-                    onPrimary = "#FFFFFF",
-                    secondary = "#1d6af5",
-                    onSecondary = "#FFFFFF",
-                    backgroundLight = "#fcfcfc",
-                    onBackgroundLight = "#19191a",
-                    surfaceLight = "#f4f4f4",
-                    onSurfaceLight = "#19191a",
-                    surfaceVariantLight = "#f4f4f4",
-                    onSurfaceVariantLight = "#f4f4f4",
-                    outlineLight = "#f4f4f4",
-                    outlineVariantLight = "#121212",
-                    backgroundDark = "#181A20",
-                    onBackgroundDark = "#FFFFFF",
-                    surfaceDark = "#21252F",
-                    onSurfaceDark = "#F0F0F0",
-                    surfaceVariantDark = "#f4f4f4",
-                    onSurfaceVariantDark = "#f4f4f4",
-                    outlineDark = "#2C2F36",
-                    outlineVariantDark = "#121212"
+                    primary = Color(0xFF369770),
+                    onPrimary = Color(0xFFFFFFFF),
+                    secondary = Color(0xFF1d6af5),
+                    onSecondary = Color(0xFFFFFFFF),
+                    backgroundLight = Color(0xFFfcfcfc),
+                    onBackgroundLight = Color(0xFF19191a),
+                    surfaceLight = Color(0xFFf4f4f4),
+                    onSurfaceLight = Color(0xFF19191a),
+                    surfaceVariantLight = Color(0xFFf4f4f4),
+                    onSurfaceVariantLight = Color(0xFFf4f4f4),
+                    outlineLight = Color(0xFFf4f4f4),
+                    outlineVariantLight = Color(0xFF121212),
+                    backgroundDark = Color(0xFF181A20),
+                    onBackgroundDark = Color(0xFFFFFFFF),
+                    surfaceDark = Color(0xFF21252F),
+                    onSurfaceDark = Color(0xFFF0F0F0),
+                    surfaceVariantDark = Color(0xFFf4f4f4),
+                    onSurfaceVariantDark = Color(0xFFf4f4f4),
+                    outlineDark = Color(0xFF2C2F36),
+                    outlineVariantDark = Color(0xFF121212)
                 ),
                 typography = Theme.Typography(
                     primaryFontFamily = "Poppins",

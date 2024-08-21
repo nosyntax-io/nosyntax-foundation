@@ -18,7 +18,7 @@ import io.nosyntax.foundation.R
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import io.nosyntax.foundation.core.util.ThemePreviews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun AsyncIcon(
@@ -50,7 +50,7 @@ fun AsyncIcon(
 @ThemePreviews
 @Composable
 fun IconPreview() {
-    DynamicTheme {
+    FoundationTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             AsyncIcon(
                 url = "https://img.icons8.com/ios-glyphs/100/circled.png",

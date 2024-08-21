@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +93,7 @@ fun TextField(
 @Previews
 @Composable
 fun TextFieldPreview() {
-    DynamicTheme {
+    FoundationTheme {
         TextField(
             placeholder = "Enter Text",
             onValueChange = { }

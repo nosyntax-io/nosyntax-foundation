@@ -22,7 +22,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun JsConfirmDialog(
@@ -78,7 +78,7 @@ fun JsConfirmDialog(
 @Previews
 @Composable
 fun JsConfirmDialogPreview() {
-    DynamicTheme {
+    FoundationTheme {
         JsConfirmDialog(
             message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             onCancel = { },

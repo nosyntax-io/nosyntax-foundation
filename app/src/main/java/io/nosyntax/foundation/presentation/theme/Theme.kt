@@ -12,40 +12,40 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun DynamicTheme(
-    dynamicColorScheme: DynamicColorScheme = DynamicColorScheme(),
-    dynamicTypography: DynamicTypography = DynamicTypography(),
+fun FoundationTheme(
+    colorScheme: ColorScheme = ColorScheme(),
+    typography: DynamicTypography = DynamicTypography(),
     statusBarColor: String = "neutral",
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
 
-    val colorScheme = if (darkTheme) {
+    val resolvedColorScheme = if (darkTheme) {
         darkColorScheme(
-            primary = dynamicColorScheme.primary,
-            onPrimary = dynamicColorScheme.onPrimary,
-            secondary = dynamicColorScheme.secondary,
-            onSecondary = dynamicColorScheme.onSecondary,
-            background = dynamicColorScheme.backgroundDark,
-            onBackground = dynamicColorScheme.onBackgroundDark,
-            surface = dynamicColorScheme.surfaceDark,
-            onSurface = dynamicColorScheme.onSurfaceDark,
-            outline = dynamicColorScheme.outlineDark,
-            outlineVariant = dynamicColorScheme.outlineVariantDark
+            primary = colorScheme.primary,
+            onPrimary = colorScheme.onPrimary,
+            secondary = colorScheme.secondary,
+            onSecondary = colorScheme.onSecondary,
+            background = colorScheme.backgroundDark,
+            onBackground = colorScheme.onBackgroundDark,
+            surface = colorScheme.surfaceDark,
+            onSurface = colorScheme.onSurfaceDark,
+            outline = colorScheme.outlineDark,
+            outlineVariant = colorScheme.outlineVariantDark
         )
     } else {
         lightColorScheme(
-            primary = dynamicColorScheme.primary,
-            onPrimary = dynamicColorScheme.onPrimary,
-            secondary = dynamicColorScheme.secondary,
-            onSecondary = dynamicColorScheme.onSecondary,
-            background = dynamicColorScheme.backgroundLight,
-            onBackground = dynamicColorScheme.onBackgroundLight,
-            surface = dynamicColorScheme.surfaceLight,
-            onSurface = dynamicColorScheme.onSurfaceLight,
-            outline = dynamicColorScheme.outlineLight,
-            outlineVariant = dynamicColorScheme.outlineVariantLight
+            primary = colorScheme.primary,
+            onPrimary = colorScheme.onPrimary,
+            secondary = colorScheme.secondary,
+            onSecondary = colorScheme.onSecondary,
+            background = colorScheme.backgroundLight,
+            onBackground = colorScheme.onBackgroundLight,
+            surface = colorScheme.surfaceLight,
+            onSurface = colorScheme.onSurfaceLight,
+            outline = colorScheme.outlineLight,
+            outlineVariant = colorScheme.outlineVariantLight
         )
     }
 
@@ -53,25 +53,26 @@ fun DynamicTheme(
         SideEffect {
             val window = (view.context as Activity).window
 
-            val statusBarColorToSet = when (statusBarColor) {
-                "neutral" -> if (darkTheme) dynamicColorScheme.surfaceDark else dynamicColorScheme.surfaceLight
-                else -> dynamicColorScheme.primary
+            val resolvedStatusBarColor = when (statusBarColor) {
+                "neutral" -> if (darkTheme) colorScheme.surfaceDark else colorScheme.surfaceLight
+                else -> colorScheme.primary
             }
-            window.statusBarColor = statusBarColorToSet.toArgb()
+            window.statusBarColor = resolvedStatusBarColor.toArgb()
 
             if (statusBarColor != "solid") {
                 WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
             }
         }
     }
+
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = resolvedColorScheme,
         typography = Typography.copy(
             titleMedium = Typography.titleMedium.copy(
-                fontFamily = dynamicTypography.primaryFontFamily
+                fontFamily = typography.primaryFontFamily
             ),
             bodyMedium = Typography.bodyMedium.copy(
-                fontFamily = dynamicTypography.secondaryFontFamily
+                fontFamily = typography.secondaryFontFamily
             )
         ),
         shapes = Shapes,

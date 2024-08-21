@@ -1,5 +1,6 @@
 package io.nosyntax.foundation.data.mapper
 
+import io.nosyntax.foundation.core.util.toColor
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto
@@ -40,26 +41,26 @@ fun SettingsDto.toSettings(): Settings {
 fun ThemeDto.toTheme(): Theme {
     return Theme(
         colorScheme = Theme.ColorScheme(
-            primary = colorScheme.primary,
-            onPrimary = colorScheme.onPrimary,
-            secondary = colorScheme.secondary,
-            onSecondary = colorScheme.onSecondary,
-            backgroundLight = colorScheme.backgroundLight,
-            onBackgroundLight = colorScheme.onBackgroundLight,
-            surfaceLight = colorScheme.surfaceLight,
-            onSurfaceLight = colorScheme.onSurfaceLight,
-            surfaceVariantLight = colorScheme.surfaceVariantLight,
-            onSurfaceVariantLight = colorScheme.onSurfaceVariantLight,
-            outlineLight = colorScheme.outlineLight,
-            outlineVariantLight = colorScheme.outlineVariantLight,
-            backgroundDark = colorScheme.backgroundDark,
-            onBackgroundDark = colorScheme.onBackgroundDark,
-            surfaceDark = colorScheme.surfaceDark,
-            onSurfaceDark = colorScheme.onSurfaceDark,
-            surfaceVariantDark = colorScheme.surfaceVariantDark,
-            onSurfaceVariantDark = colorScheme.onSurfaceVariantDark,
-            outlineDark = colorScheme.outlineDark,
-            outlineVariantDark = colorScheme.outlineVariantDark
+            primary = colorScheme.primary.toColor(),
+            onPrimary = colorScheme.onPrimary.toColor(),
+            secondary = colorScheme.secondary.toColor(),
+            onSecondary = colorScheme.onSecondary.toColor(),
+            backgroundLight = colorScheme.backgroundLight.toColor(),
+            onBackgroundLight = colorScheme.onBackgroundLight.toColor(),
+            surfaceLight = colorScheme.surfaceLight.toColor(),
+            onSurfaceLight = colorScheme.onSurfaceLight.toColor(),
+            surfaceVariantLight = colorScheme.surfaceVariantLight.toColor(),
+            onSurfaceVariantLight = colorScheme.onSurfaceVariantLight.toColor(),
+            outlineLight = colorScheme.outlineLight.toColor(),
+            outlineVariantLight = colorScheme.outlineVariantLight.toColor(),
+            backgroundDark = colorScheme.backgroundDark.toColor(),
+            onBackgroundDark = colorScheme.onBackgroundDark.toColor(),
+            surfaceDark = colorScheme.surfaceDark.toColor(),
+            onSurfaceDark = colorScheme.onSurfaceDark.toColor(),
+            surfaceVariantDark = colorScheme.surfaceVariantDark.toColor(),
+            onSurfaceVariantDark = colorScheme.onSurfaceVariantDark.toColor(),
+            outlineDark = colorScheme.outlineDark.toColor(),
+            outlineVariantDark = colorScheme.outlineVariantDark.toColor()
         ),
         typography = Theme.Typography(
             primaryFontFamily = typography.primaryFontFamily,

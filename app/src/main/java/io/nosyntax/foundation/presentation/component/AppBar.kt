@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.constant.Constants
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 sealed class NavigationAction {
     abstract fun onClick()
@@ -144,7 +144,7 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
 @Preview
 @Composable
 private fun AppBarPreview() {
-    DynamicTheme {
+    FoundationTheme {
         AppBar(
             config = Components.AppBar(
                 visible = true,

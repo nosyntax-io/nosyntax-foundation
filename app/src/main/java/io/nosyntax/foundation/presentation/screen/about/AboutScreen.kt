@@ -26,7 +26,7 @@ import io.nosyntax.foundation.core.util.AppConfigProvider
 import io.nosyntax.foundation.core.util.Previews
 import io.nosyntax.foundation.core.util.Utilities
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun AboutScreen(appConfig: AppConfig) {
@@ -79,7 +79,7 @@ fun AboutScreen(appConfig: AppConfig) {
 fun AboutScreenPreview(
     @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
 ) {
-    DynamicTheme {
+    FoundationTheme {
         AboutScreen(appConfig = appConfig)
     }
 }

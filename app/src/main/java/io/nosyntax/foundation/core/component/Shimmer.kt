@@ -23,7 +23,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.core.util.ThemePreviews
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -64,7 +64,7 @@ private fun shimmerColors(baseColor: Color): List<Color> {
 @ThemePreviews
 @Composable
 fun ShimmerPreview() {
-    DynamicTheme {
+    FoundationTheme {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

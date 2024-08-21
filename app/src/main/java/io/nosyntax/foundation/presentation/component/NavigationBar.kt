@@ -25,7 +25,7 @@ import io.nosyntax.foundation.core.util.Previews
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun NavigationBar(
@@ -135,7 +135,7 @@ private fun RowScope.NavigationBarItem(
 private fun NavigationBarPreview(
     @PreviewParameter(AppConfigProvider::class) config: AppConfig
 ) {
-    DynamicTheme {
+    FoundationTheme {
         NavigationBar(
             config = config.components.navigationBar,
             currentRoute = "web-000",

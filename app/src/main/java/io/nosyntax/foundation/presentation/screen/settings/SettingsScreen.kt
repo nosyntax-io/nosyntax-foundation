@@ -24,7 +24,7 @@ import io.nosyntax.foundation.core.util.openMailer
 import io.nosyntax.foundation.core.util.openPlayStore
 import io.nosyntax.foundation.core.util.openContent
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
-import io.nosyntax.foundation.presentation.theme.DynamicTheme
+import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 @Composable
 fun SettingsScreen(
@@ -94,7 +94,7 @@ private fun SettingDivider() {
 fun SettingsScreenPreview(
     @PreviewParameter(AppConfigProvider::class) appConfig: AppConfig
 ) {
-    DynamicTheme {
+    FoundationTheme {
         SettingsScreen(
             appConfig = appConfig,
             navigateToAbout = { }
