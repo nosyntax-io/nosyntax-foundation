@@ -1,5 +1,6 @@
 package io.nosyntax.foundation.presentation.theme
 
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
@@ -35,14 +36,13 @@ class ThemeProvider {
         )
     }
 
-    private fun mapTypography(typography: Theme.Typography): DynamicTypography {
-        return DynamicTypography(
-            primaryFontFamily = FontFamily(
-                Font(GoogleFont(typography.primaryFontFamily), googleFontProvider)
-            ),
-            secondaryFontFamily = FontFamily(
-                Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider)
-            )
+    private fun mapTypography(typography: Theme.Typography): Typography {
+        val primaryFont = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider))
+        val secondaryFont = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
+
+        return Typography().resolveTypography(
+            primaryFont = primaryFont,
+            secondaryFont = secondaryFont
         )
     }
 }

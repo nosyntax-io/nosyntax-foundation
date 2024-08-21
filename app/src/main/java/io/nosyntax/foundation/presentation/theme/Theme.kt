@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -14,7 +15,7 @@ import androidx.core.view.WindowCompat
 
 data class ThemeData(
     val colorScheme: ColorScheme = ColorScheme(),
-    val typography: DynamicTypography = DynamicTypography(),
+    val typography: Typography = Typography(),
     val shapes: Shapes = Shapes
 )
 
@@ -71,14 +72,7 @@ fun FoundationTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography.copy(
-            titleMedium = Typography.titleMedium.copy(
-                fontFamily = theme.typography.primaryFontFamily
-            ),
-            bodyMedium = Typography.bodyMedium.copy(
-                fontFamily = theme.typography.secondaryFontFamily
-            )
-        ),
+        typography = theme.typography,
         shapes = theme.shapes,
         content = content
     )

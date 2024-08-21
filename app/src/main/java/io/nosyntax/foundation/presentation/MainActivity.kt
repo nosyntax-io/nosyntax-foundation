@@ -1,6 +1,7 @@
 package io.nosyntax.foundation.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -16,6 +17,8 @@ import io.nosyntax.foundation.core.util.Utilities.getSerializable
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.presentation.screen.main.MainScreen
 import io.nosyntax.foundation.presentation.theme.ThemeProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
