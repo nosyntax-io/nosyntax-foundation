@@ -1,4 +1,4 @@
-package io.nosyntax.foundation.core.util
+package io.nosyntax.foundation.core.extension
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle

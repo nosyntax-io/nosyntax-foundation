@@ -2,10 +2,7 @@ package io.nosyntax.foundation.core.util
 
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
-import android.graphics.Color.parseColor
 import android.os.Build
-import androidx.compose.ui.graphics.Color
 import com.google.gson.Gson
 import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -19,18 +16,10 @@ import java.util.Locale
 val AppConfig.getNavigationItems: List<NavigationItem>
     get() = components.navigationBar.items + components.navigationDrawer.items
 
-fun String.toColor(): Color = Color(parseColor(this))
-
 object Utilities {
     fun getCurrentYear(): String {
         val calendar = Calendar.getInstance().time
         return SimpleDateFormat("yyyy", Locale.getDefault()).format(calendar)
-    }
-
-    fun Context.findActivity(): Activity? = when (this) {
-        is Activity -> this
-        is ContextWrapper -> baseContext.findActivity()
-        else -> null
     }
 
     fun <T : Serializable?> getSerializable(activity: Activity, name: String, clazz: Class<T>): T? {

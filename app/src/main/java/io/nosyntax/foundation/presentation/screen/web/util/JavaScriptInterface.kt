@@ -2,7 +2,7 @@ package io.nosyntax.foundation.presentation.screen.web.util
 
 import android.content.Context
 import android.webkit.JavascriptInterface
-import io.nosyntax.foundation.core.util.Utilities.findActivity
+import io.nosyntax.foundation.core.extension.findActivity
 import io.nosyntax.foundation.presentation.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

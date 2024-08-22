@@ -5,6 +5,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import io.nosyntax.foundation.core.extension.openAppSettings
 
 @OptIn(ExperimentalPermissionsApi::class)
 class PermissionManager(private val context: Context) {

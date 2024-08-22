@@ -1,14 +1,13 @@
 package io.nosyntax.foundation.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import io.nosyntax.foundation.core.util.Connectivity
-import io.nosyntax.foundation.core.util.collectLatestOnLifecycleStarted
+import io.nosyntax.foundation.core.extension.collectLatestOnLifecycleStarted
 import io.nosyntax.foundation.core.util.monetize.InterstitialAd
 import io.nosyntax.foundation.presentation.theme.FoundationTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,8 +16,6 @@ import io.nosyntax.foundation.core.util.Utilities.getSerializable
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.presentation.screen.main.MainScreen
 import io.nosyntax.foundation.presentation.theme.ThemeProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

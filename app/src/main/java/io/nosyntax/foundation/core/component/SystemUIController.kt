@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import io.nosyntax.foundation.core.util.Utilities.findActivity
+import io.nosyntax.foundation.core.extension.findActivity
 
 enum class SystemUIState {
     SYSTEM_UI_VISIBLE,
@@ -18,26 +18,26 @@ enum class SystemUIState {
 fun SystemUIController(systemUiState: MutableState<SystemUIState>) {
     val context = LocalContext.current
     val view = LocalView.current
-    val activity = context.findActivity()
-    val insetsController = activity?.let {
-        WindowInsetsControllerCompat(it.window, view)
-    }
+
+    val insetsController = WindowInsetsControllerCompat(context.findActivity().window, view)
 
     DisposableEffect(systemUiState) {
-        insetsController?.let {
-            when (systemUiState.value) {
-                SystemUIState.SYSTEM_UI_VISIBLE -> {
-                    it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    it.show(WindowInsetsCompat.Type.systemBars())
+        when (systemUiState.value) {
+            SystemUIState.SYSTEM_UI_VISIBLE -> {
+                insetsController.apply {
+                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    show(WindowInsetsCompat.Type.systemBars())
                 }
-                SystemUIState.SYSTEM_UI_HIDDEN -> {
-                    it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    it.hide(WindowInsetsCompat.Type.systemBars())
+            }
+            SystemUIState.SYSTEM_UI_HIDDEN -> {
+                insetsController.apply {
+                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    hide(WindowInsetsCompat.Type.systemBars())
                 }
             }
         }
         onDispose {
-            insetsController?.apply {
+            insetsController.apply {
                 systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 show(WindowInsetsCompat.Type.systemBars())
             }

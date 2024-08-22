@@ -1,13 +1,33 @@
-package io.nosyntax.foundation.core.util
+package io.nosyntax.foundation.core.extension
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.MailTo
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import io.nosyntax.foundation.R
+
+/**
+ * Recursively finds the enclosing Activity from a given Context.
+ *
+ * This function traverses through the Context hierarchy to locate the
+ * nearest Activity. If no Activity is found, it throws an IllegalStateException.
+ *
+ * @return The Activity associated with the provided Context.
+ * @throws IllegalStateException if no Activity is found in the Context hierarchy.
+ */
+internal fun Context.findActivity(): Activity {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    throw IllegalStateException("No Activity found in the context hierarchy.")
+}
 
 /**
  * Handles different types of URIs by delegating to appropriate functions based on the URI scheme.

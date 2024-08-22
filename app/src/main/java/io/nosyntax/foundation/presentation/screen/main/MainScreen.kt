@@ -22,10 +22,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
+import io.nosyntax.foundation.core.extension.findActivity
 import io.nosyntax.foundation.presentation.component.AppBar
 import io.nosyntax.foundation.presentation.component.NavigationBar
 import io.nosyntax.foundation.presentation.component.NavigationAction
-import io.nosyntax.foundation.core.util.Utilities.findActivity
 import io.nosyntax.foundation.core.util.getNavigationItems
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.presentation.component.NavigationDrawer

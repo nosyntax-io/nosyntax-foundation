@@ -1,6 +1,6 @@
 package io.nosyntax.foundation.data.mapper
 
-import io.nosyntax.foundation.core.util.toColor
+import io.nosyntax.foundation.core.extension.toColor
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ThemeDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.ComponentsDto
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto

@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.util.AppConfigProvider
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.core.util.openMailer
-import io.nosyntax.foundation.core.util.openPlayStore
-import io.nosyntax.foundation.core.util.openContent
+import io.nosyntax.foundation.core.extension.openMailer
+import io.nosyntax.foundation.core.extension.openPlayStore
+import io.nosyntax.foundation.core.extension.openContent
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
