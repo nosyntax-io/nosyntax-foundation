@@ -65,13 +65,13 @@ private fun NavigationDrawerContent(
     onItemClick: (NavigationItem) -> Unit,
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+        Constants.COLOR_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.BACKGROUND_SOLID -> Modifier.background(
+        Constants.COLOR_SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.BACKGROUND_GRADIENT -> Modifier.background(
+        Constants.COLOR_GRADIENT -> Modifier.background(
             brush = Brush.verticalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -85,11 +85,9 @@ private fun NavigationDrawerContent(
     ModalDrawerSheet(
         modifier = Modifier
             .padding(end = 100.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    topEnd = 15.dp, bottomEnd = 15.dp
-                )
-            )
+            .clip(shape = RoundedCornerShape(
+                topEnd = 15.dp, bottomEnd = 15.dp
+            ))
             .then(backgroundModifier),
         drawerContainerColor = Color.Transparent,
         drawerContentColor = Color.Transparent
@@ -139,15 +137,17 @@ private fun NavigationDrawerHeader(
 }
 
 @Composable
-private fun NavigationDrawerDivider(config: Components.NavigationDrawer) {
-    val dividerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+private fun NavigationDrawerDivider(
+    config: Components.NavigationDrawer
+) {
+    val dividerColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.outlineVariant
     } else {
         MaterialTheme.colorScheme.onPrimary.copy(alpha = .3f)
     }
+
     HorizontalDivider(
         modifier = Modifier.padding(vertical = 7.dp),
-        thickness = 1.dp,
         color = dividerColor
     )
 }
@@ -159,13 +159,13 @@ private fun NavigationDrawerItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val containerColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+    val containerColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
     } else {
         MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
     }
 
-    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onPrimary
@@ -214,7 +214,7 @@ private fun NavigationDrawerPreview(
     FoundationTheme {
         NavigationDrawer(
             config = appConfig.components.navigationDrawer,
-            currentRoute = "web-000",
+            currentRoute = "route",
             drawerState = DrawerState(DrawerValue.Open),
             onItemClick = { },
             content = { }

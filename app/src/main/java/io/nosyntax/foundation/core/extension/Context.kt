@@ -95,7 +95,11 @@ fun Context.openMailer(data: String) {
  * @param subject The subject of the email (optional).
  * @param body The body of the email (optional).
  */
-fun Context.openMailer(recipients: Array<String>, subject: String = "", body: String = "") {
+fun Context.openMailer(
+    recipients: Array<String>,
+    subject: String = "",
+    body: String = ""
+) {
     val intent = Intent(Intent.ACTION_SENDTO).apply {
         data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, recipients)

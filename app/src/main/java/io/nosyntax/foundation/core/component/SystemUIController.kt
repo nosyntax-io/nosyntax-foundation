@@ -24,23 +24,24 @@ fun SystemUIController(systemUiState: MutableState<SystemUIState>) {
     DisposableEffect(systemUiState) {
         when (systemUiState.value) {
             SystemUIState.SYSTEM_UI_VISIBLE -> {
-                insetsController.apply {
-                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    show(WindowInsetsCompat.Type.systemBars())
-                }
+                insetsController.showSystemBars()
             }
             SystemUIState.SYSTEM_UI_HIDDEN -> {
-                insetsController.apply {
-                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    hide(WindowInsetsCompat.Type.systemBars())
-                }
+                insetsController.hideSystemBars()
             }
         }
         onDispose {
-            insetsController.apply {
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                show(WindowInsetsCompat.Type.systemBars())
-            }
+            insetsController.showSystemBars()
         }
     }
+}
+
+private fun WindowInsetsControllerCompat.showSystemBars() {
+    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    show(WindowInsetsCompat.Type.systemBars())
+}
+
+private fun WindowInsetsControllerCompat.hideSystemBars() {
+    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    hide(WindowInsetsCompat.Type.systemBars())
 }

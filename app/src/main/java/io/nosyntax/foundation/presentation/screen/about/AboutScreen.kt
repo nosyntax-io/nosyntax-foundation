@@ -17,14 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.util.AppConfigProvider
 import io.nosyntax.foundation.core.util.Previews
-import io.nosyntax.foundation.core.util.Utilities
+import io.nosyntax.foundation.core.util.Utils
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
@@ -55,19 +54,18 @@ fun AboutScreen(appConfig: AppConfig) {
         Text(
             text = appConfig.description,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
                 textAlign = TextAlign.Center
             ),
         )
         Spacer(modifier = Modifier.height(30.dp))
         Text(
             text = "${stringResource(R.string.copyright)} " +
-                    "${Utilities.getCurrentYear()} " +
+                    "${Utils.getCurrentYear()} " +
                     "${stringResource(R.string.app_name)}.\n" +
                     stringResource(R.string.all_rights_reserved),
-            style = MaterialTheme.typography.labelMedium.copy(
+            style = MaterialTheme.typography.bodySmall.copy(
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .8f),
-                fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
             )
         )

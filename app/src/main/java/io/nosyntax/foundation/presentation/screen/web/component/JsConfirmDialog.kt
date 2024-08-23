@@ -41,7 +41,7 @@ fun JsConfirmDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = MaterialTheme.colorScheme.background,
+                        color = MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.large
                     )
                     .padding(24.dp),
@@ -50,7 +50,7 @@ fun JsConfirmDialog(
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
                     )
                 )

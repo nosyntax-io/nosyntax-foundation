@@ -66,7 +66,7 @@ import io.nosyntax.foundation.presentation.screen.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.component.LoadingIndicatorView
 import io.nosyntax.foundation.presentation.screen.web.util.FileChooserDelegate
 import io.nosyntax.foundation.presentation.screen.web.util.JavaScriptInterface
-import io.nosyntax.foundation.core.util.PermissionManager
+import io.nosyntax.foundation.core.util.PermissionsUtil
 import io.nosyntax.foundation.presentation.screen.web.util.JsDialog
 import kotlinx.coroutines.CoroutineScope
 
@@ -83,7 +83,7 @@ fun WebScreen(
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
 
-    val permissionManager = remember { PermissionManager(context) }
+    val permissionsUtil = remember { PermissionsUtil(context) }
 
     val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -174,7 +174,7 @@ fun WebScreen(
             onDismiss = { showStoragePermissionDialog = false },
             onConfirm = {
                 showStoragePermissionDialog = false
-                permissionManager.requestPermission(storagePermissionState)
+                permissionsUtil.requestPermission(storagePermissionState)
             }
         )
     }
@@ -187,7 +187,7 @@ fun WebScreen(
             onDismiss = { showCameraPermissionDialog = false },
             onConfirm = {
                 showCameraPermissionDialog = false
-                permissionManager.requestPermission(cameraPermissionState)
+                permissionsUtil.requestPermission(cameraPermissionState)
             }
         )
     }
@@ -200,7 +200,7 @@ fun WebScreen(
             onDismiss = { showLocationPermissionDialog = false },
             onConfirm = {
                 showLocationPermissionDialog = false
-                permissionManager.requestMultiplePermissions(locationPermissionsState)
+                permissionsUtil.requestMultiplePermissions(locationPermissionsState)
             }
         )
     }

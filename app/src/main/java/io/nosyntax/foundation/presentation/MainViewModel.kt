@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.nosyntax.foundation.AppConfigState
 import io.nosyntax.foundation.core.util.Resource
-import io.nosyntax.foundation.domain.usecase.main.MainUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.nosyntax.foundation.domain.usecase.app_config.GetAppConfigUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val getAppConfigUseCase: GetAppConfigUseCase
+) : ViewModel() {
     private val _isInitialized = MutableStateFlow(false)
     val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
 
@@ -26,7 +28,7 @@ class MainViewModel @Inject constructor(private val mainUseCases: MainUseCases) 
 
     fun getAppConfig() {
         viewModelScope.launch {
-            mainUseCases.getAppConfigUseCase().collect { result ->
+            getAppConfigUseCase().collect { result ->
                 when (result) {
                     is Resource.Loading -> {
                         _appConfig.emit(

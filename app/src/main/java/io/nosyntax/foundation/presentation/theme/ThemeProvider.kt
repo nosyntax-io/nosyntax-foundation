@@ -25,24 +25,35 @@ class ThemeProvider {
             onBackgroundLight = colorScheme.onBackgroundLight,
             surfaceLight = colorScheme.surfaceLight,
             onSurfaceLight = colorScheme.onSurfaceLight,
+            surfaceVariantLight = colorScheme.surfaceVariantLight,
+            onSurfaceVariantLight = colorScheme.onSurfaceVariantLight,
             outlineLight = colorScheme.outlineLight,
             outlineVariantLight = colorScheme.outlineVariantLight,
             backgroundDark = colorScheme.backgroundDark,
             onBackgroundDark = colorScheme.onBackgroundDark,
             surfaceDark = colorScheme.surfaceDark,
             onSurfaceDark = colorScheme.onSurfaceDark,
+            surfaceVariantDark = colorScheme.surfaceVariantDark,
+            onSurfaceVariantDark = colorScheme.onSurfaceVariantDark,
             outlineDark = colorScheme.outlineDark,
             outlineVariantDark = colorScheme.outlineVariantDark
         )
     }
 
     private fun mapTypography(typography: Theme.Typography): Typography {
-        val primaryFont = FontFamily(Font(GoogleFont(typography.primaryFontFamily), googleFontProvider))
-        val secondaryFont = FontFamily(Font(GoogleFont(typography.secondaryFontFamily), googleFontProvider))
-
         return Typography().resolveTypography(
-            primaryFont = primaryFont,
-            secondaryFont = secondaryFont
+            primaryFontFamily = FontFamily(
+                Font(
+                    googleFont = GoogleFont(typography.primaryFontFamily),
+                    fontProvider = googleFontProvider
+                )
+            ),
+            secondaryFontFamily = FontFamily(
+                Font(
+                    googleFont = GoogleFont(typography.secondaryFontFamily),
+                    fontProvider = googleFontProvider
+                )
+            )
         )
     }
 }

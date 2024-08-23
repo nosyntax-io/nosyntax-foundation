@@ -4,7 +4,7 @@ import android.content.Context
 import io.nosyntax.foundation.BuildConfig
 import io.nosyntax.foundation.core.util.Exception
 import io.nosyntax.foundation.core.util.Resource
-import io.nosyntax.foundation.core.util.Utilities.getDtoFromJson
+import io.nosyntax.foundation.core.util.Utils.getDtoFromJson
 import io.nosyntax.foundation.data.mapper.toAppConfig
 import io.nosyntax.foundation.data.source.remote.AppService
 import io.nosyntax.foundation.data.source.remote.dto.app_config.AppConfigDto

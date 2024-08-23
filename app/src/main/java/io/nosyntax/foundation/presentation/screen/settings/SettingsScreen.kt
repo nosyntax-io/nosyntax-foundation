@@ -42,19 +42,19 @@ fun SettingsScreen(
         SettingItem(text = stringResource(id = R.string.rate_us)) {
             context.openPlayStore(context.packageName)
         }
-        SettingDivider()
+        HorizontalDivider()
         SettingItem(text = stringResource(id = R.string.send_feedback)) {
             context.openMailer(arrayOf(appConfig.settings.email))
         }
-        SettingDivider()
+        HorizontalDivider()
         SettingItem(text = stringResource(id = R.string.privacy_policy)) {
             context.openContent(appConfig.settings.privacyPolicy)
         }
-        SettingDivider()
+        HorizontalDivider()
         SettingItem(text = stringResource(id = R.string.terms_of_service)) {
             context.openContent(appConfig.settings.termsOfService)
         }
-        SettingDivider()
+        HorizontalDivider()
         SettingItem(text = stringResource(id = R.string.about_us)) {
             navigateToAbout()
         }
@@ -70,7 +70,7 @@ private fun SettingItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 15.dp)
+            .padding(horizontal = 25.dp, vertical = 15.dp)
     ) {
         Text(
             text = text,
@@ -79,14 +79,6 @@ private fun SettingItem(
             )
         )
     }
-}
-
-@Composable
-private fun SettingDivider() {
-    HorizontalDivider(
-        thickness = 1.dp,
-        color = MaterialTheme.colorScheme.outlineVariant
-    )
 }
 
 @Previews

@@ -38,6 +38,8 @@ fun FoundationTheme(
             onBackground = theme.colorScheme.onBackgroundDark,
             surface = theme.colorScheme.surfaceDark,
             onSurface = theme.colorScheme.onSurfaceDark,
+            surfaceVariant = theme.colorScheme.surfaceVariantDark,
+            onSurfaceVariant = theme.colorScheme.onSurfaceVariantDark,
             outline = theme.colorScheme.outlineDark,
             outlineVariant = theme.colorScheme.outlineVariantDark
         )
@@ -51,6 +53,8 @@ fun FoundationTheme(
             onBackground = theme.colorScheme.onBackgroundLight,
             surface = theme.colorScheme.surfaceLight,
             onSurface = theme.colorScheme.onSurfaceLight,
+            surfaceVariant = theme.colorScheme.surfaceVariantLight,
+            onSurfaceVariant = theme.colorScheme.onSurfaceVariantLight,
             outline = theme.colorScheme.outlineLight,
             outlineVariant = theme.colorScheme.outlineVariantLight
         )

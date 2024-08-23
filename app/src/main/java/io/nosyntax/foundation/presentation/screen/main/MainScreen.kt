@@ -11,31 +11,27 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import io.nosyntax.foundation.R
-import io.nosyntax.foundation.core.extension.findActivity
+import io.nosyntax.foundation.core.extension.getDistinctNavigationItems
+import io.nosyntax.foundation.core.extension.isTopLevelRoute
 import io.nosyntax.foundation.presentation.component.AppBar
 import io.nosyntax.foundation.presentation.component.NavigationBar
 import io.nosyntax.foundation.presentation.component.NavigationAction
-import io.nosyntax.foundation.core.util.getNavigationItems
 import io.nosyntax.foundation.domain.model.Deeplink
+import io.nosyntax.foundation.domain.model.NavigationItem
 import io.nosyntax.foundation.presentation.component.NavigationDrawer
 import io.nosyntax.foundation.presentation.component.Snackbar
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
 import io.nosyntax.foundation.domain.model.app_config.Components
-import io.nosyntax.foundation.presentation.navigation.NavigationGraph
-import io.nosyntax.foundation.presentation.navigation.NavigationHandler
-import io.nosyntax.foundation.presentation.MainActivity
+import io.nosyntax.foundation.presentation.navigation.NavigationHost
+import io.nosyntax.foundation.presentation.navigation.NavigationManager
 import io.nosyntax.foundation.presentation.MainViewModel
+import io.nosyntax.foundation.presentation.navigation.rememberNavManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,37 +39,32 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     viewModel: MainViewModel = viewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController(),
+    navManager: NavigationManager = rememberNavManager(),
     deeplink: Deeplink? = null
 ) {
-    val context = LocalContext.current
-    val appConfig by viewModel.appConfig.collectAsState()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val navHandler = remember { NavigationHandler(context, navController) }
 
-    appConfig.response?.let { config ->
+    viewModel.appConfig.collectAsState().value.response?.let { appConfig ->
         val content: @Composable () -> Unit = {
             MainContent(
-                config = config,
+                appConfig = appConfig,
                 coroutineScope = coroutineScope,
-                navController = navController,
-                navHandler = navHandler,
-                currentRoute = currentRoute,
+                navManager = navManager,
                 drawerState = drawerState,
                 deeplink = deeplink
             )
         }
 
-        config.components.navigationDrawer.takeIf { it.visible }?.let {
+        appConfig.components.navigationDrawer.takeIf {
+            it.visible
+        }?.let { navDrawerConfig ->
             NavigationDrawer(
-                config = it,
-                currentRoute = currentRoute,
+                config = navDrawerConfig,
+                currentRoute = navManager.currentRoute,
                 drawerState = drawerState,
                 content = content,
                 onItemClick = { item ->
-                    navHandler.onItemClick(item)
+                    navManager.handleNavItemClick(item)
                     coroutineScope.launch { drawerState.close() }
                 }
             )
@@ -87,11 +78,9 @@ fun MainScreen(
 
 @Composable
 private fun MainContent(
-    config: AppConfig,
+    appConfig: AppConfig,
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
-    navHandler: NavigationHandler,
-    currentRoute: String,
+    navManager: NavigationManager,
     drawerState: DrawerState,
     deeplink: Deeplink?
 ) {
@@ -101,18 +90,17 @@ private fun MainContent(
         },
         topBar = {
             MainAppBar(
-                config = config,
-                coroutineScope = coroutineScope,
-                navController = navController,
-                currentRoute = currentRoute,
-                drawerState = drawerState
+                appConfig = appConfig,
+                currentRoute = navManager.currentRoute,
+                navigateBack = { navManager.navController.popBackStack() },
+                openDrawer = { coroutineScope.launch { drawerState.open() } }
             )
         },
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
-                NavigationGraph(
-                    appConfig = config,
-                    navController = navController,
+                NavigationHost(
+                    appConfig = appConfig,
+                    navController = navManager.navController,
                     drawerState = drawerState,
                     deeplink = deeplink
                 )
@@ -120,9 +108,11 @@ private fun MainContent(
         },
         bottomBar = {
             MainNavigationBar(
-                config = config.components.navigationBar,
-                navHandler = navHandler,
-                currentRoute = currentRoute
+                navBarConfig = appConfig.components.navigationBar,
+                currentRoute = navManager.currentRoute,
+                onItemClick = { item ->
+                    navManager.handleNavItemClick(item)
+                }
             )
         }
     )
@@ -138,36 +128,29 @@ private fun MainSnackbarHost() {
 
 @Composable
 private fun MainAppBar(
-    config: AppConfig,
-    coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    appConfig: AppConfig,
     currentRoute: String,
-    drawerState: DrawerState
+    navigateBack: () -> Unit,
+    openDrawer: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    config.components.appBar.takeIf { it.visible }?.let {
+    if (appConfig.components.appBar.visible) {
         val title = when (currentRoute) {
             "about" -> stringResource(id = R.string.about_us)
-            else -> config.getNavigationItems.find { item ->
+            else -> appConfig.getDistinctNavigationItems.find { item ->
                 item.route == currentRoute
             }?.label.orEmpty()
         }
 
-        val action = if (listOf("settings", "about").any { routes -> currentRoute.startsWith(routes) }) {
-            NavigationAction.Back {
-                (context.findActivity() as MainActivity).showInterstitial {
-                    navController.popBackStack()
-                }
-            }
+        val action = if (!currentRoute.isTopLevelRoute()) {
+            NavigationAction.Back { navigateBack() }
         } else {
-            NavigationAction.Menu(enabled = config.components.navigationDrawer.visible) {
-                coroutineScope.launch { drawerState.open() }
-            }
+            NavigationAction.Menu(
+                isEnabled = appConfig.components.navigationDrawer.visible
+            ) { openDrawer() }
         }
 
         AppBar(
-            config = it,
+            config = appConfig.components.appBar,
             title = title,
             navigationAction = action
         )
@@ -176,17 +159,15 @@ private fun MainAppBar(
 
 @Composable
 private fun MainNavigationBar(
-    config: Components.NavigationBar,
-    navHandler: NavigationHandler,
-    currentRoute: String
+    navBarConfig: Components.NavigationBar,
+    currentRoute: String,
+    onItemClick: (NavigationItem) -> Unit
 ) {
-    if (config.visible && listOf("settings", "about").none { currentRoute.startsWith(it) }) {
+    if (navBarConfig.visible && currentRoute.isTopLevelRoute()) {
         NavigationBar(
-            config = config,
+            config = navBarConfig,
             currentRoute = currentRoute,
-            onItemClick = { item ->
-                navHandler.onItemClick(item)
-            }
+            onItemClick = onItemClick
         )
     }
 }

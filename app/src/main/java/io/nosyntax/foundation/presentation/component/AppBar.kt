@@ -30,7 +30,7 @@ import io.nosyntax.foundation.presentation.theme.FoundationTheme
 sealed class NavigationAction {
     abstract fun onClick()
 
-    data class Menu(val enabled: Boolean, val clickAction: () -> Unit) : NavigationAction() {
+    data class Menu(val isEnabled: Boolean, val clickAction: () -> Unit) : NavigationAction() {
         override fun onClick() = clickAction()
     }
 
@@ -47,13 +47,13 @@ fun AppBar(
     navigationAction: NavigationAction
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+        Constants.COLOR_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.BACKGROUND_SOLID -> Modifier.background(
+        Constants.COLOR_SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.BACKGROUND_GRADIENT -> Modifier.background(
+        Constants.COLOR_GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -64,7 +64,7 @@ fun AppBar(
         else -> Modifier
     }
 
-    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onPrimary
@@ -120,7 +120,7 @@ private fun AppBarTitle(
 private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
     val iconPainter = when (navigationAction) {
         is NavigationAction.Back -> painterResource(id = R.drawable.icon_arrow_left_filled)
-        is NavigationAction.Menu -> if (navigationAction.enabled) {
+        is NavigationAction.Menu -> if (navigationAction.isEnabled) {
             painterResource(id = R.drawable.icon_menu_filled)
         } else null
     }
@@ -134,7 +134,7 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
                 Icon(
                     painter = icon,
                     contentDescription = null,
-                    modifier = Modifier.size(30.dp),
+                    modifier = Modifier.size(30.dp)
                 )
             }
         }
@@ -148,14 +148,14 @@ private fun AppBarPreview() {
         AppBar(
             config = Components.AppBar(
                 visible = true,
-                background = Constants.BACKGROUND_SOLID,
+                background = Constants.COLOR_NEUTRAL,
                 title = Components.AppBar.Title(
                     visible = true,
                     alignment = Constants.ALIGNMENT_CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),
-            navigationAction = NavigationAction.Menu(enabled = true) { }
+            navigationAction = NavigationAction.Menu(isEnabled = true) { }
         )
     }
 }

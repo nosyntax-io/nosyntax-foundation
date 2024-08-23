@@ -12,8 +12,9 @@ import io.nosyntax.foundation.core.util.monetize.InterstitialAd
 import io.nosyntax.foundation.presentation.theme.FoundationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.nosyntax.foundation.presentation.component.NoConnectionView
-import io.nosyntax.foundation.core.util.Utilities.getSerializable
+import io.nosyntax.foundation.core.util.Utils.getSerializable
 import io.nosyntax.foundation.domain.model.Deeplink
+import io.nosyntax.foundation.domain.model.app_config.Monetization
 import io.nosyntax.foundation.presentation.screen.main.MainScreen
 import io.nosyntax.foundation.presentation.theme.ThemeProvider
 
@@ -41,23 +42,16 @@ class MainActivity : ComponentActivity() {
 
         collectLatestOnLifecycleStarted(mainViewModel.appConfig) { state ->
             state.response?.let { response ->
-                val resolvedTheme = themeProvider.resolveTheme(response.theme)
-
                 setContent {
                     FoundationTheme(
-                        theme = resolvedTheme,
+                        theme = themeProvider.resolveTheme(response.theme),
                         darkTheme = response.theme.darkMode && isSystemInDarkTheme(),
                         statusBarColor = response.components.appBar.background,
                         content = { MainScreen(deeplink = deeplink) }
                     )
                 }
 
-                val ads = response.monetization.ads
-                if (ads.enabled && ads.interstitialDisplay) {
-                    interstitialAd = InterstitialAd(this@MainActivity).load()
-                }
-                isAdsEnabled = ads.enabled && ads.interstitialDisplay
-                isInterstitialAdEnabled = ads.interstitialDisplay
+                setupMonetization(response.monetization.ads)
             } ?: run {
                 setContent {
                     FoundationTheme {
@@ -68,6 +62,17 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                 }
+            }
+        }
+    }
+
+    private fun setupMonetization(ads: Monetization.Ads) {
+        if (ads.enabled) {
+            isAdsEnabled = true
+            isInterstitialAdEnabled = ads.interstitialDisplay
+
+            if (isInterstitialAdEnabled) {
+                interstitialAd = InterstitialAd(this@MainActivity).load()
             }
         }
     }

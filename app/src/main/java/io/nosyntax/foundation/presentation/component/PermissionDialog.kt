@@ -44,7 +44,7 @@ fun PermissionDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.large
                 )
                 .padding(24.dp),
@@ -60,15 +60,14 @@ fun PermissionDialog(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .85f),
                     textAlign = TextAlign.Center
                 )
             )

@@ -54,7 +54,7 @@ fun NoConnectionView(onRetry: () -> Unit) {
             text = stringResource(id = R.string.no_internet_connection_description),
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .85f),
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Center
             )
         )
         Spacer(modifier = Modifier.height(20.dp))

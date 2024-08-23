@@ -34,13 +34,13 @@ fun NavigationBar(
     onItemClick: (NavigationItem) -> Unit
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.BACKGROUND_NEUTRAL -> Modifier.background(
+        Constants.COLOR_NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.BACKGROUND_SOLID -> Modifier.background(
+        Constants.COLOR_SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.BACKGROUND_GRADIENT -> Modifier.background(
+        Constants.COLOR_GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -82,13 +82,13 @@ private fun RowScope.NavigationBarItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val indicatorColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+    val indicatorColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
     } else {
         MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
     }
 
-    val contentColor = if (config.background == Constants.BACKGROUND_NEUTRAL) {
+    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
         MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onPrimary
@@ -97,7 +97,7 @@ private fun RowScope.NavigationBarItem(
     NavigationBarItem(
         selected = currentRoute == item.route,
         onClick = onClick,
-        alwaysShowLabel = config.label != Constants.LABEL_SELECTED,
+        alwaysShowLabel = config.label == Constants.LABEL_ALWAYS,
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = contentColor,
             selectedTextColor = contentColor,
@@ -110,11 +110,9 @@ private fun RowScope.NavigationBarItem(
                 Text(
                     text = item.label,
                     modifier = Modifier,
+                    textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        textAlign = TextAlign.Center
-                    )
+                    maxLines = 1
                 )
             }
         },
@@ -138,7 +136,7 @@ private fun NavigationBarPreview(
     FoundationTheme {
         NavigationBar(
             config = config.components.navigationBar,
-            currentRoute = "web-000",
+            currentRoute = "route",
             onItemClick = { }
         )
     }

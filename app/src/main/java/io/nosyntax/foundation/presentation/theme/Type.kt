@@ -15,70 +15,69 @@ val googleFontProvider = GoogleFont.Provider(
 )
 
 fun Typography.resolveTypography(
-    primaryFont: FontFamily,
-    secondaryFont: FontFamily
+    primaryFontFamily: FontFamily,
+    secondaryFontFamily: FontFamily
 ) = Typography(
     displayLarge = displayLarge.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     displayMedium = displayMedium.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     displaySmall = displaySmall.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     headlineLarge = headlineLarge.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     headlineMedium = headlineMedium.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     headlineSmall = headlineSmall.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     titleLarge = titleLarge.copy(
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     titleMedium = titleMedium.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     titleSmall = titleSmall.copy(
-        fontFamily = primaryFont,
+        fontFamily = primaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     bodyLarge = bodyLarge.copy(
-        fontFamily = secondaryFont,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     bodyMedium = bodyMedium.copy(
-        fontFamily = secondaryFont,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     bodySmall = bodySmall.copy(
-        fontFamily = secondaryFont,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     labelLarge = labelLarge.copy(
-        fontFamily = secondaryFont,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     labelMedium = labelMedium.copy(
-        fontFamily = secondaryFont,
-        lineHeight = 20.0.sp,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     ),
     labelSmall = labelSmall.copy(
-        fontFamily = secondaryFont,
+        fontFamily = secondaryFontFamily,
         platformStyle = PlatformTextStyle(false)
     )
 )
