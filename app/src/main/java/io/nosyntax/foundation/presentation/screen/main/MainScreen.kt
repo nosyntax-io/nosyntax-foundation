@@ -133,7 +133,7 @@ private fun MainAppBar(
     navigateBack: () -> Unit,
     openDrawer: () -> Unit
 ) {
-    if (appConfig.components.appBar.visible) {
+    if (appConfig.components.appBar.visible || !currentRoute.isTopLevelRoute()) {
         val title = when (currentRoute) {
             "about" -> stringResource(id = R.string.about_us)
             else -> appConfig.getDistinctNavigationItems.find { item ->
