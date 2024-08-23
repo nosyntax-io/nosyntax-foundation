@@ -34,13 +34,13 @@ fun NavigationBar(
     onItemClick: (NavigationItem) -> Unit
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.COLOR_NEUTRAL -> Modifier.background(
+        Constants.Color.NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.COLOR_SOLID -> Modifier.background(
+        Constants.Color.SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.COLOR_GRADIENT -> Modifier.background(
+        Constants.Color.GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -51,10 +51,9 @@ fun NavigationBar(
         else -> Modifier
     }
 
-    val heightModifier = if (config.label == Constants.LABEL_HIDDEN) {
-        Modifier.height(55.dp)
-    } else {
-        Modifier
+    val heightModifier = when (config.label) {
+        Constants.Label.HIDDEN -> Modifier.height(55.dp)
+        else -> Modifier
     }
 
     NavigationBar(
@@ -82,22 +81,20 @@ private fun RowScope.NavigationBarItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val indicatorColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
-    } else {
-        MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
+    val indicatorColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
+        else -> MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
     }
 
-    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
+    val contentColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.onPrimary
     }
 
     NavigationBarItem(
         selected = currentRoute == item.route,
         onClick = onClick,
-        alwaysShowLabel = config.label == Constants.LABEL_ALWAYS,
+        alwaysShowLabel = config.label == Constants.Label.ALWAYS,
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = contentColor,
             selectedTextColor = contentColor,
@@ -106,7 +103,7 @@ private fun RowScope.NavigationBarItem(
             unselectedTextColor = contentColor.copy(alpha = .8f),
         ),
         label = {
-            if (item.label != null && config.label != Constants.LABEL_HIDDEN) {
+            if (item.label != null && config.label != Constants.Label.HIDDEN) {
                 Text(
                     text = item.label,
                     modifier = Modifier,

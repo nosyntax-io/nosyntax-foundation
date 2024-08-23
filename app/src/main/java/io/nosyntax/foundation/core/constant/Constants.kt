@@ -1,12 +1,37 @@
 package io.nosyntax.foundation.core.constant
 
 object Constants {
-    const val COLOR_NEUTRAL = "neutral"
-    const val COLOR_SOLID = "solid"
-    const val COLOR_GRADIENT = "gradient"
-    const val ALIGNMENT_START = "start"
-    const val ALIGNMENT_CENTER = "center"
-    const val LABEL_ALWAYS = "always"
-    const val LABEL_SELECTED = "selected"
-    const val LABEL_HIDDEN = "hidden"
+    object Routes {
+        const val SETTINGS = "settings"
+        const val ABOUT = "about"
+        const val DEEPLINK = "deeplink"
+    }
+
+    object Navigation {
+        const val WEBVIEW = "webview"
+        const val SETTINGS = "settings"
+        const val ABOUT = "about"
+        const val DIVIDER = "divider"
+        const val BROWSER = "browser"
+        const val MAIL = "mail"
+        const val DIAL = "dial"
+        const val SMS = "sms"
+    }
+
+    object Color {
+        const val NEUTRAL = "neutral"
+        const val SOLID = "solid"
+        const val GRADIENT = "gradient"
+    }
+
+    object Alignment {
+        const val START = "start"
+        const val CENTER = "center"
+    }
+
+    object Label {
+        const val ALWAYS = "always"
+        const val SELECTED = "selected"
+        const val HIDDEN = "hidden"
+    }
 }

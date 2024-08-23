@@ -2,6 +2,7 @@ package io.nosyntax.foundation.core.extension
 
 import android.graphics.Color.parseColor
 import androidx.compose.ui.graphics.Color
+import io.nosyntax.foundation.core.constant.Constants
 
 /**
  * Converts a hexadecimal color string (e.g., "#FFFFFF") to a Compose [Color].
@@ -20,4 +21,6 @@ fun String.toColor(): Color = Color(parseColor(this))
  * @return True if the route is a top-level route; false otherwise.
  */
 fun String.isTopLevelRoute(): Boolean =
-    !listOf("settings", "about").any { this.startsWith(it) }
+    !listOf(Constants.Routes.SETTINGS, Constants.Routes.ABOUT).any {
+        this.startsWith(it)
+    }

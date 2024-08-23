@@ -65,13 +65,13 @@ private fun NavigationDrawerContent(
     onItemClick: (NavigationItem) -> Unit,
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.COLOR_NEUTRAL -> Modifier.background(
+        Constants.Color.NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.COLOR_SOLID -> Modifier.background(
+        Constants.Color.SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.COLOR_GRADIENT -> Modifier.background(
+        Constants.Color.GRADIENT -> Modifier.background(
             brush = Brush.verticalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -99,7 +99,7 @@ private fun NavigationDrawerContent(
             }
             items(items = config.items) { item ->
                 when (item.type) {
-                    "divider" -> {
+                    Constants.Navigation.DIVIDER -> {
                         NavigationDrawerDivider(
                             config = config
                         )
@@ -140,10 +140,9 @@ private fun NavigationDrawerHeader(
 private fun NavigationDrawerDivider(
     config: Components.NavigationDrawer
 ) {
-    val dividerColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.outlineVariant
-    } else {
-        MaterialTheme.colorScheme.onPrimary.copy(alpha = .3f)
+    val dividerColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.outlineVariant
+        else -> MaterialTheme.colorScheme.onPrimary.copy(alpha = .3f)
     }
 
     HorizontalDivider(
@@ -159,16 +158,14 @@ private fun NavigationDrawerItem(
     item: NavigationItem,
     onClick: () -> Unit
 ) {
-    val containerColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
-    } else {
-        MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
+    val containerColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.secondary.copy(alpha = .12f)
+        else -> MaterialTheme.colorScheme.onPrimary.copy(alpha = .12f)
     }
 
-    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
+    val contentColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.onPrimary
     }
 
     NavigationDrawerItem(

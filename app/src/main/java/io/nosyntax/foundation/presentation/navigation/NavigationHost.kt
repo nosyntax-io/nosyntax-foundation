@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import io.nosyntax.foundation.core.constant.Constants
 import io.nosyntax.foundation.core.extension.getDistinctNavigationItems
 import io.nosyntax.foundation.domain.model.Deeplink
 import io.nosyntax.foundation.domain.model.app_config.AppConfig
@@ -20,7 +21,7 @@ fun NavigationHost(
     deeplink: Deeplink?
 ) {
     val startDestination = deeplink?.let {
-        "deeplink"
+        Constants.Routes.DEEPLINK
     } ?: appConfig.settings.entryPage
 
     NavHost(
@@ -30,31 +31,33 @@ fun NavigationHost(
         appConfig.getDistinctNavigationItems.forEach { item ->
             composable(route = item.route!!) {
                 when (item.type) {
-                    "webview" -> WebScreen(
+                    Constants.Navigation.WEBVIEW -> WebScreen(
                         appConfig = appConfig,
                         url = item.action.orEmpty(),
                         captureBackPresses = !drawerState.isOpen
                     )
-                    "settings" -> SettingsScreen(
+                    Constants.Navigation.SETTINGS -> SettingsScreen(
                         appConfig = appConfig,
                         navigateToAbout = {
-                            navController.navigate("about")
+                            navController.navigate(
+                                route = Constants.Routes.ABOUT
+                            )
                         }
                     )
-                    "about" -> AboutScreen(
+                    Constants.Navigation.ABOUT -> AboutScreen(
                         appConfig = appConfig
                     )
                 }
             }
         }
-        composable(route = "deeplink") {
+        composable(route = Constants.Routes.DEEPLINK) {
             WebScreen(
                 appConfig = appConfig,
                 url = deeplink?.destination.orEmpty(),
                 captureBackPresses = !drawerState.isOpen
             )
         }
-        composable(route = "about") {
+        composable(route = Constants.Routes.ABOUT) {
             AboutScreen(
                 appConfig = appConfig
             )

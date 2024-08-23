@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.nosyntax.foundation.R
+import io.nosyntax.foundation.core.constant.Constants
 import io.nosyntax.foundation.core.extension.getDistinctNavigationItems
 import io.nosyntax.foundation.core.extension.isTopLevelRoute
 import io.nosyntax.foundation.presentation.component.AppBar
@@ -135,7 +136,7 @@ private fun MainAppBar(
 ) {
     if (appConfig.components.appBar.visible || !currentRoute.isTopLevelRoute()) {
         val title = when (currentRoute) {
-            "about" -> stringResource(id = R.string.about_us)
+            Constants.Routes.ABOUT -> stringResource(id = R.string.about_us)
             else -> appConfig.getDistinctNavigationItems.find { item ->
                 item.route == currentRoute
             }?.label.orEmpty()

@@ -28,14 +28,14 @@ import io.nosyntax.foundation.domain.model.app_config.Components
 import io.nosyntax.foundation.presentation.theme.FoundationTheme
 
 sealed class NavigationAction {
-    abstract fun onClick()
+    abstract fun onNavigationClick()
 
-    data class Menu(val isEnabled: Boolean, val clickAction: () -> Unit) : NavigationAction() {
-        override fun onClick() = clickAction()
+    data class Menu(val isEnabled: Boolean, val onClick: () -> Unit) : NavigationAction() {
+        override fun onNavigationClick() = onClick()
     }
 
-    data class Back(val clickAction: () -> Unit) : NavigationAction() {
-        override fun onClick() = clickAction()
+    data class Back(val onClick: () -> Unit) : NavigationAction() {
+        override fun onNavigationClick() = onClick()
     }
 }
 
@@ -47,13 +47,13 @@ fun AppBar(
     navigationAction: NavigationAction
 ) {
     val backgroundModifier = when (config.background) {
-        Constants.COLOR_NEUTRAL -> Modifier.background(
+        Constants.Color.NEUTRAL -> Modifier.background(
             color = MaterialTheme.colorScheme.surface
         )
-        Constants.COLOR_SOLID -> Modifier.background(
+        Constants.Color.SOLID -> Modifier.background(
             color = MaterialTheme.colorScheme.primary
         )
-        Constants.COLOR_GRADIENT -> Modifier.background(
+        Constants.Color.GRADIENT -> Modifier.background(
             brush = Brush.horizontalGradient(
                 colors = listOf(
                     MaterialTheme.colorScheme.primary,
@@ -64,10 +64,9 @@ fun AppBar(
         else -> Modifier
     }
 
-    val contentColor = if (config.background == Constants.COLOR_NEUTRAL) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
+    val contentColor = when (config.background) {
+        Constants.Color.NEUTRAL -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.onPrimary
     }
 
     val appBarModifier = Modifier
@@ -81,7 +80,7 @@ fun AppBar(
         actionIconContentColor = contentColor
     )
 
-    if (config.title.alignment == Constants.ALIGNMENT_CENTER) {
+    if (config.title.alignment == Constants.Alignment.CENTER) {
         CenterAlignedTopAppBar(
             title = { AppBarTitle(config, title) },
             modifier = appBarModifier,
@@ -130,7 +129,7 @@ private fun AppBarNavigationIcon(navigationAction: NavigationAction) {
             modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
-            IconButton(onClick = navigationAction::onClick) {
+            IconButton(onClick = navigationAction::onNavigationClick) {
                 Icon(
                     painter = icon,
                     contentDescription = null,
@@ -148,10 +147,10 @@ private fun AppBarPreview() {
         AppBar(
             config = Components.AppBar(
                 visible = true,
-                background = Constants.COLOR_NEUTRAL,
+                background = Constants.Color.NEUTRAL,
                 title = Components.AppBar.Title(
                     visible = true,
-                    alignment = Constants.ALIGNMENT_CENTER
+                    alignment = Constants.Alignment.CENTER
                 )
             ),
             title = stringResource(id = R.string.app_name),

@@ -12,6 +12,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import io.nosyntax.foundation.core.constant.Constants
 
 data class ThemeData(
     val colorScheme: ColorScheme = ColorScheme(),
@@ -23,7 +24,7 @@ data class ThemeData(
 fun FoundationTheme(
     theme: ThemeData = ThemeData(),
     darkTheme: Boolean = isSystemInDarkTheme(),
-    statusBarColor: String = "neutral",
+    statusBarColor: String = Constants.Color.NEUTRAL,
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
@@ -65,7 +66,7 @@ fun FoundationTheme(
             val window = (view.context as Activity).window
 
             window.statusBarColor = when (statusBarColor) {
-                "neutral" -> colorScheme.surface
+                Constants.Color.NEUTRAL -> colorScheme.surface
                 else -> colorScheme.primary
             }.toArgb()
 

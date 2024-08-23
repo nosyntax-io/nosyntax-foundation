@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.nosyntax.foundation.core.constant.Constants
 import io.nosyntax.foundation.core.extension.openContent
 import io.nosyntax.foundation.core.extension.openDialer
 import io.nosyntax.foundation.core.extension.openMailer
@@ -38,25 +39,30 @@ class NavigationManager(
             .currentBackStackEntryAsState().value?.destination?.route.orEmpty()
 
     fun handleNavItemClick(item: NavigationItem) {
-        if (item.type in setOf("browser", "mail", "dial", "sms")) {
-            item.action?.let { action -> performAction(item.type, action) }
-        } else {
-            item.route?.let { route -> navigate(route, item.type) }
+        when (item.type) {
+            in setOf(
+                Constants.Navigation.BROWSER,
+                Constants.Navigation.MAIL,
+                Constants.Navigation.DIAL,
+                Constants.Navigation.SMS
+            ) -> item.action?.let { action -> performAction(item.type, action) }
+
+            else -> item.route?.let { route -> navigate(route, item.type) }
         }
     }
 
     fun performAction(type: String, action: String) {
         when (type) {
-            "browser" -> context.openContent(action)
-            "mail" -> context.openMailer(action)
-            "dial" -> context.openDialer(action)
-            "sms" -> context.openSMS(action)
+            Constants.Navigation.BROWSER -> context.openContent(action)
+            Constants.Navigation.MAIL -> context.openMailer(action)
+            Constants.Navigation.DIAL -> context.openDialer(action)
+            Constants.Navigation.SMS -> context.openSMS(action)
         }
     }
 
     fun navigate(route: String, type: String) {
         navController.navigate(route = route) {
-            if (type in setOf("settings", "about")) {
+            if (type in setOf(Constants.Navigation.SETTINGS, Constants.Navigation.ABOUT)) {
                 popUpTo(navController.currentBackStackEntry?.destination?.route ?: route) {
                     inclusive = false
                 }
