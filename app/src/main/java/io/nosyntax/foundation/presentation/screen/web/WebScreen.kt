@@ -1,6 +1,5 @@
 package io.nosyntax.foundation.presentation.screen.web
 
-import android.Manifest
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -33,16 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
 import io.nosyntax.foundation.R
 import io.nosyntax.foundation.core.component.ScreenOrientationController
 import io.nosyntax.foundation.presentation.component.NoConnectionView
-import io.nosyntax.foundation.presentation.component.PermissionDialog
 import io.nosyntax.foundation.core.component.SystemUIController
 import io.nosyntax.foundation.core.component.SystemUIState
 import io.nosyntax.foundation.core.extension.findActivity
@@ -63,13 +55,14 @@ import io.nosyntax.foundation.presentation.screen.web.component.JsAlertDialog
 import io.nosyntax.foundation.presentation.screen.web.component.JsConfirmDialog
 import io.nosyntax.foundation.presentation.screen.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.component.LoadingIndicatorView
+import io.nosyntax.foundation.presentation.component.PermissionDialog
 import io.nosyntax.foundation.presentation.screen.web.util.FileChooserDelegate
 import io.nosyntax.foundation.presentation.screen.web.util.JavaScriptInterface
-import io.nosyntax.foundation.core.util.PermissionsUtil
 import io.nosyntax.foundation.presentation.screen.web.util.JsDialog
+import io.nosyntax.foundation.presentation.screen.web.util.WebViewPermissions
+import io.nosyntax.foundation.presentation.screen.web.util.rememberWebViewPermissions
 import kotlinx.coroutines.CoroutineScope
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WebScreen(
     appConfig: AppConfig,
@@ -81,18 +74,7 @@ fun WebScreen(
 
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
-
-    val permissionsUtil = remember { PermissionsUtil(context) }
-
-    val storagePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    val locationPermissionsState = rememberMultiplePermissionsState(
-        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-    )
-
-    var showStoragePermissionDialog by rememberSaveable { mutableStateOf(false) }
-    var showLocationPermissionDialog by rememberSaveable { mutableStateOf(false) }
-    var showCameraPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    val webViewPermissions = rememberWebViewPermissions()
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
@@ -120,8 +102,7 @@ fun WebScreen(
                     coroutineScope = coroutineScope,
                     webView = webView,
                     settings = appConfig.webViewSettings,
-                    storagePermissionState = storagePermissionState,
-                    onStoragePermissionRequest = { showStoragePermissionDialog = true }
+                    webViewPermissions = webViewPermissions
                 )
             },
             client = webClient(
@@ -139,10 +120,7 @@ fun WebScreen(
                 context = context,
                 settings = appConfig.webViewSettings,
                 onJsDialogEvent = { d, r -> jsDialogInfo = d to r },
-                cameraPermissionState = cameraPermissionState,
-                onCameraPermissionRequest = { showCameraPermissionDialog = true },
-                locationPermissionState = locationPermissionsState,
-                onLocationPermissionRequest = { showLocationPermissionDialog = true }
+                webViewPermissions = webViewPermissions
             )
         )
 
@@ -151,45 +129,6 @@ fun WebScreen(
             enabled = ads.enabled && ads.bannerDisplay, modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-        )
-    }
-
-    if (showStoragePermissionDialog) {
-        PermissionDialog(
-            title = stringResource(R.string.storage_required),
-            description = stringResource(R.string.storage_required_description),
-            icon = painterResource(R.drawable.icon_folder_outline),
-            onDismiss = { showStoragePermissionDialog = false },
-            onConfirm = {
-                showStoragePermissionDialog = false
-                permissionsUtil.requestPermission(storagePermissionState)
-            }
-        )
-    }
-
-    if (showCameraPermissionDialog) {
-        PermissionDialog(
-            title = stringResource(R.string.camera_required),
-            description = stringResource(R.string.camera_required_description),
-            icon = painterResource(R.drawable.icon_camera_outline),
-            onDismiss = { showCameraPermissionDialog = false },
-            onConfirm = {
-                showCameraPermissionDialog = false
-                permissionsUtil.requestPermission(cameraPermissionState)
-            }
-        )
-    }
-
-    if (showLocationPermissionDialog) {
-        PermissionDialog(
-            title = stringResource(R.string.location_required),
-            description = stringResource(R.string.location_required_description),
-            icon = painterResource(R.drawable.icon_location_outline),
-            onDismiss = { showLocationPermissionDialog = false },
-            onConfirm = {
-                showLocationPermissionDialog = false
-                permissionsUtil.requestMultiplePermissions(locationPermissionsState)
-            }
         )
     }
 
@@ -240,16 +179,18 @@ fun WebScreen(
             else -> {}
         }
     }
+
+    WebViewPermissionsHandler(
+        webViewPermissions = webViewPermissions
+    )
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 private fun initWebView(
     context: Context,
     coroutineScope: CoroutineScope,
     webView: WebView,
     settings: WebViewSettings,
-    storagePermissionState: PermissionState,
-    onStoragePermissionRequest: () -> Unit
+    webViewPermissions: WebViewPermissions
 ) {
     webView.apply {
         layoutParams = ViewGroup.LayoutParams(
@@ -280,11 +221,12 @@ private fun initWebView(
 
         setDownloadListener { url, userAgent, disposition, mimeType, _ ->
             val fileName = URLUtil.guessFileName(url, disposition, mimeType)
+
             if (Build.VERSION.SDK_INT in 24..29) {
-                if (storagePermissionState.status.isGranted) {
+                if (webViewPermissions.isStoragePermissionGranted()) {
                     Downloader(context).download(fileName, url, userAgent, mimeType)
                 } else {
-                    onStoragePermissionRequest()
+                    webViewPermissions.showStoragePermissionRationale()
                 }
             } else {
                 Downloader(context).download(fileName, url, userAgent, mimeType)
@@ -336,16 +278,12 @@ private fun webClient(
     return webClient
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun chromeClient(
     context: Context,
     settings: WebViewSettings,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
-    cameraPermissionState: PermissionState,
-    onCameraPermissionRequest: () -> Unit,
-    locationPermissionState: MultiplePermissionsState,
-    onLocationPermissionRequest: () -> Unit
+    webViewPermissions: WebViewPermissions
 ): WebKitChromeClient {
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
@@ -418,10 +356,10 @@ private fun chromeClient(
                 filePathCallback?.let { callback ->
                     val isCaptureEnabled = (fileChooserParams?.acceptTypes?.any {
                         it in setOf("image/*", "image/jpg")
-                    } == true) && settings.allowCameraAccess
+                    } == true) || settings.allowCameraAccess
 
-                    if (isCaptureEnabled && !cameraPermissionState.status.isGranted) {
-                        onCameraPermissionRequest()
+                    if (isCaptureEnabled && !webViewPermissions.isCameraPermissionGranted()) {
+                        webViewPermissions.showCameraPermissionRationale()
                         return false
                     }
 
@@ -454,11 +392,11 @@ private fun chromeClient(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
             ) {
-                if (locationPermissionState.allPermissionsGranted) {
+                if (webViewPermissions.isLocationPermissionsGranted()) {
                     callback?.invoke(origin, true, false)
                 } else {
                     callback?.invoke(origin, false, false)
-                    onLocationPermissionRequest()
+                    webViewPermissions.showLocationPermissionsRationale()
                 }
             }
         }
@@ -466,3 +404,58 @@ private fun chromeClient(
 
     return chromeClient
 }
+
+@Composable
+private fun WebViewPermissionsHandler(
+    webViewPermissions: WebViewPermissions
+) {
+    webViewPermissions.rationaleState.value?.let { state ->
+        when (state) {
+            WebViewPermissions.RationaleType.StorageRequired -> {
+                PermissionDialog(
+                    title = stringResource(R.string.storage_required),
+                    description = stringResource(R.string.storage_required_description),
+                    icon = painterResource(R.drawable.icon_folder_outline),
+                    onDismiss = { webViewPermissions.dismissRationale() },
+                    onConfirm = {
+                        webViewPermissions.apply {
+                            dismissRationale()
+                            requestStoragePermission()
+                        }
+                    }
+                )
+            }
+
+            is WebViewPermissions.RationaleType.CameraRequired -> {
+                PermissionDialog(
+                    title = stringResource(R.string.camera_required),
+                    description = stringResource(R.string.camera_required_description),
+                    icon = painterResource(R.drawable.icon_camera_outline),
+                    onDismiss = { webViewPermissions.dismissRationale() },
+                    onConfirm = {
+                        webViewPermissions.apply {
+                            dismissRationale()
+                            requestCameraPermission()
+                        }
+                    }
+                )
+            }
+
+            is WebViewPermissions.RationaleType.LocationRequired -> {
+                PermissionDialog(
+                    title = stringResource(R.string.location_required),
+                    description = stringResource(R.string.location_required_description),
+                    icon = painterResource(R.drawable.icon_location_outline),
+                    onDismiss = { webViewPermissions.dismissRationale() },
+                    onConfirm = {
+                        webViewPermissions.apply {
+                            dismissRationale()
+                            requestLocationPermissions()
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+

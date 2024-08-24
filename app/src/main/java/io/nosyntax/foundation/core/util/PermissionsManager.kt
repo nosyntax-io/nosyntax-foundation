@@ -8,7 +8,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import io.nosyntax.foundation.core.extension.openAppSettings
 
 @OptIn(ExperimentalPermissionsApi::class)
-class PermissionsUtil(private val context: Context) {
+class PermissionsManager(private val context: Context) {
     private val preferences = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE)
 
     /**
@@ -23,9 +23,11 @@ class PermissionsUtil(private val context: Context) {
                 setFirstRequest(permissionState.permission)
                 permissionState.launchPermissionRequest()
             }
+
             permissionState.status.shouldShowRationale -> {
                 permissionState.launchPermissionRequest()
             }
+
             else -> {
                 context.openAppSettings()
             }
