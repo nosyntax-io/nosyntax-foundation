@@ -154,13 +154,6 @@ fun WebScreen(
         )
     }
 
-    if (webViewState.isLoading) {
-        val indicatorConfig = appConfig.components.loadingIndicator
-        if (indicatorConfig.visible) {
-            LoadingIndicatorView(indicatorConfig = indicatorConfig)
-        }
-    }
-
     if (showStoragePermissionDialog) {
         PermissionDialog(
             title = stringResource(R.string.storage_required),
@@ -198,6 +191,12 @@ fun WebScreen(
                 permissionsUtil.requestMultiplePermissions(locationPermissionsState)
             }
         )
+    }
+
+    appConfig.components.loadingIndicator.takeIf {
+        webViewState.isLoading && it.visible
+    }?.let {
+        LoadingIndicatorView(indicatorConfig = it)
     }
 
     if (webViewState.capturedErrors.isNotEmpty()) {
