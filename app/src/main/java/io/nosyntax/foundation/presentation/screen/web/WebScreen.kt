@@ -11,7 +11,6 @@ import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.URLUtil
 import android.webkit.ValueCallback
-import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -94,7 +93,6 @@ fun WebScreen(
     var showStoragePermissionDialog by rememberSaveable { mutableStateOf(false) }
     var showLocationPermissionDialog by rememberSaveable { mutableStateOf(false) }
     var showCameraPermissionDialog by rememberSaveable { mutableStateOf(false) }
-    var showNoConnectionDialog by rememberSaveable { mutableStateOf(false) }
 
     val systemUiState = remember { mutableStateOf(SystemUIState.SYSTEM_UI_VISIBLE) }
     var requestedOrientation by remember { mutableIntStateOf(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }
@@ -135,9 +133,6 @@ fun WebScreen(
                         (context.findActivity() as MainActivity).showInterstitial()
                         totalLoadedPages = 1
                     }
-                },
-                onReceivedError = {
-                    showNoConnectionDialog = true
                 }
             ),
             chromeClient = chromeClient(
@@ -205,12 +200,9 @@ fun WebScreen(
         )
     }
 
-    // TODO: Reset connection state when update navigate.
-    // TODO: Hide internal no internet connection page
-    if (showNoConnectionDialog) {
+    if (webViewState.capturedErrors.isNotEmpty()) {
         NoConnectionView(onRetry = {
             if (Connectivity.getInstance().isOnline()) {
-                showNoConnectionDialog = false
                 navigator.reload()
             }
         })
@@ -305,8 +297,7 @@ private fun initWebView(
 @Composable
 private fun webClient(
     context: Context,
-    onPageLoaded: () -> Unit,
-    onReceivedError: () -> Unit
+    onPageLoaded: () -> Unit
 ): WebKitClient {
     val knownDomains = remember {
         context.assets.open("known-domains.txt").bufferedReader().readLines()
@@ -339,17 +330,6 @@ private fun webClient(
                 }
 
                 return false
-            }
-
-            override fun onReceivedError(
-                view: WebView,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-                val networkErrors = listOf(ERROR_CONNECT, ERROR_TIMEOUT, ERROR_HOST_LOOKUP, ERROR_UNKNOWN)
-                if (request?.isForMainFrame == true && error?.errorCode in networkErrors) {
-                    onReceivedError()
-                }
             }
         }
     }
