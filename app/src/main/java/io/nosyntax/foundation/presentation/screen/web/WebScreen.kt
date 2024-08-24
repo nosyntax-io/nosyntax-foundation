@@ -57,7 +57,6 @@ import io.nosyntax.foundation.presentation.screen.web.component.JsPromptDialog
 import io.nosyntax.foundation.presentation.component.LoadingIndicatorView
 import io.nosyntax.foundation.presentation.component.PermissionDialog
 import io.nosyntax.foundation.presentation.screen.web.util.FileChooserDelegate
-import io.nosyntax.foundation.presentation.screen.web.util.JavaScriptInterface
 import io.nosyntax.foundation.presentation.screen.web.util.JsDialog
 import io.nosyntax.foundation.presentation.screen.web.util.WebViewPermissions
 import io.nosyntax.foundation.presentation.screen.web.util.rememberWebViewPermissions
@@ -211,13 +210,6 @@ private fun initWebView(
             supportMultipleWindows()
             setGeolocationEnabled(settings.geolocationEnabled)
         }
-
-        addJavascriptInterface(
-            JavaScriptInterface(
-                context = context,
-                coroutineScope = coroutineScope
-            ), "io"
-        )
 
         setDownloadListener { url, userAgent, disposition, mimeType, _ ->
             val fileName = URLUtil.guessFileName(url, disposition, mimeType)
