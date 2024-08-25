@@ -1,10 +1,10 @@
 package io.nosyntax.foundation.presentation.screen.web
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
-import android.view.ViewGroup
 import android.webkit.GeolocationPermissions
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
@@ -65,11 +65,11 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun WebScreen(
     appConfig: AppConfig,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     url: String,
     captureBackPresses: Boolean
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
     val webViewState = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
@@ -98,10 +98,9 @@ fun WebScreen(
             onCreated = { webView ->
                 initWebView(
                     context = context,
-                    coroutineScope = coroutineScope,
                     webView = webView,
                     settings = appConfig.webViewSettings,
-                    webViewPermissions = webViewPermissions
+                    permissions = webViewPermissions
                 )
             },
             client = webClient(
@@ -184,29 +183,26 @@ fun WebScreen(
     )
 }
 
+@SuppressLint("SetJavaScriptEnabled")
 private fun initWebView(
     context: Context,
-    coroutineScope: CoroutineScope,
     webView: WebView,
     settings: WebViewSettings,
-    webViewPermissions: WebViewPermissions
+    permissions: WebViewPermissions
 ) {
     webView.apply {
-        layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
 
         this.settings.apply {
-            javaScriptEnabled = settings.javaScriptEnabled
+            javaScriptEnabled = true
             allowFileAccess = true
             allowContentAccess = true
             domStorageEnabled = true
             databaseEnabled = true
             javaScriptCanOpenWindowsAutomatically = true
-            cacheMode = if (settings.cacheEnabled) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_NO_CACHE
+            cacheMode = WebSettings.LOAD_DEFAULT
+
             supportMultipleWindows()
             setGeolocationEnabled(settings.geolocationEnabled)
         }
@@ -215,10 +211,10 @@ private fun initWebView(
             val fileName = URLUtil.guessFileName(url, disposition, mimeType)
 
             if (Build.VERSION.SDK_INT in 24..29) {
-                if (webViewPermissions.isStoragePermissionGranted()) {
+                if (permissions.isStoragePermissionGranted()) {
                     Downloader(context).download(fileName, url, userAgent, mimeType)
                 } else {
-                    webViewPermissions.showStoragePermissionRationale()
+                    permissions.showStoragePermissionRationale()
                 }
             } else {
                 Downloader(context).download(fileName, url, userAgent, mimeType)
@@ -233,7 +229,9 @@ private fun webClient(
     onPageLoaded: () -> Unit
 ): WebKitClient {
     val knownDomains = remember {
-        context.assets.open("known-domains.txt").bufferedReader().readLines()
+        context.assets.open(
+            "known-domains.txt"
+        ).bufferedReader().readLines()
     }
 
     val webClient = remember {
@@ -249,20 +247,20 @@ private fun webClient(
             ): Boolean {
                 val url = request?.url?.toString().orEmpty()
 
-                if (url == "about:blank") {
-                    return true
-                }
+                return when {
+                    url == "about:blank" -> true
 
-                if (!URLUtil.isValidUrl(url)) {
-                    context.handleIntent(url)
-                    return true
-                }
+                    !URLUtil.isValidUrl(url) -> {
+                        context.handleIntent(url)
+                        true
+                    }
 
-                if (knownDomains.any { url.contains(it, ignoreCase = true) }) {
-                    return runCatching { context.openContent(url) }.isSuccess
-                }
+                    knownDomains.any { url.contains(it) } -> {
+                        context.openContent(url).let { true }
+                    }
 
-                return false
+                    else -> false
+                }
             }
         }
     }
@@ -453,4 +451,3 @@ private fun WebViewPermissionsHandler(
         }
     }
 }
-
