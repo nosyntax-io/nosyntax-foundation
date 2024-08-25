@@ -32,7 +32,7 @@ play-services-ads = "23.2.0"
 retrofit = "2.11.0"
 snakeyaml = "2.2"
 # @keep
-target-sdk = "35"
+target-sdk = "34"
 version-catalog-update = "0.8.4"
 
 [libraries]
