@@ -4,13 +4,12 @@ app:
   version: 1.0
   build_number: 1
 
-build:
-  environment: ci
+dynamic_config:
+  enabled: false
+  access_token: access_token
 
 permissions:
-  - permission1
-  - permission2
-  - permission3
+  - internet
 
 integrations:
   onesignal:
