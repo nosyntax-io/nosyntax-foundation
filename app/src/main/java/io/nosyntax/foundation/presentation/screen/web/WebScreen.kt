@@ -118,8 +118,8 @@ fun WebScreen(
             chromeClient = chromeClient(
                 context = context,
                 settings = appConfig.webViewSettings,
+                permissions = webViewPermissions,
                 onJsDialogEvent = { d, r -> jsDialogInfo = d to r },
-                webViewPermissions = webViewPermissions
             )
         )
 
@@ -274,8 +274,8 @@ private fun webClient(
 private fun chromeClient(
     context: Context,
     settings: WebViewSettings,
+    permissions: WebViewPermissions,
     onJsDialogEvent: (JsDialog, JsResult) -> Unit,
-    webViewPermissions: WebViewPermissions
 ): WebKitChromeClient {
     var filePath by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
@@ -346,12 +346,15 @@ private fun chromeClient(
                 if (!settings.allowFileUploads) return false
 
                 filePathCallback?.let { callback ->
-                    val isCaptureEnabled = (fileChooserParams?.acceptTypes?.any {
-                        it in setOf("image/*", "image/jpg")
-                    } == true) || settings.allowCameraAccess
+                    val isCaptureEnabled = fileChooserParams?.acceptTypes?.any { type ->
+                        setOf(
+                            "image", "jpg", "jpeg", "gif", "webp", "tiff",
+                            "bmp", "ico", "pjp", "svg", "tif", "png"
+                        ).any { type.contains(it, ignoreCase = true) }
+                    } == true
 
-                    if (isCaptureEnabled && !webViewPermissions.isCameraPermissionGranted()) {
-                        webViewPermissions.showCameraPermissionRationale()
+                    if (isCaptureEnabled && !permissions.isCameraPermissionGranted()) {
+                        permissions.showCameraPermissionRationale()
                         return false
                     }
 
@@ -384,11 +387,11 @@ private fun chromeClient(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
             ) {
-                if (webViewPermissions.isLocationPermissionsGranted()) {
+                if (permissions.isLocationPermissionsGranted()) {
                     callback?.invoke(origin, true, false)
                 } else {
                     callback?.invoke(origin, false, false)
-                    webViewPermissions.showLocationPermissionsRationale()
+                    permissions.showLocationPermissionsRationale()
                 }
             }
         }

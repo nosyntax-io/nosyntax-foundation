@@ -118,11 +118,10 @@ class FileChooserDelegate(
         fun buildIntent(params: WebChromeClient.FileChooserParams): Intent {
             return Intent(Intent.ACTION_GET_CONTENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "*/*")
+                setDataAndType(null, "*/*")
 
-                if (params.acceptTypes.isNotEmpty()) {
-                    putExtra(Intent.EXTRA_MIME_TYPES, params.acceptTypes)
+                if (params.mode == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE) {
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 }
             }
         }
