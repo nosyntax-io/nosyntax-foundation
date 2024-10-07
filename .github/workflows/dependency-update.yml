@@ -36,6 +36,8 @@ jobs:
           author: nosyntax-bot <github-bot@nosyntax.io>
           branch: bot-update-dependencies
           delete-branch: true
+          assignees: aelrahmanashraf
+          reviewers: aelrahmanashraf
           title: 🤖 Update Dependencies
           body: |
             🚀 Dependencies Updated!
