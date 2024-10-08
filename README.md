@@ -5,9 +5,9 @@
   <p align="center">
     Foundation template for the NoSyntax app builder.
     <br />
-    <a href="https://github.com/aelrahmanashraf/nosyntax-foundation-android/issues">Report Bug</a>
+    <a href="https://github.com/nosyntax-io/nosyntax-foundation/issues">Report Bug</a>
     ·
-    <a href="https://github.com/aelrahmanashraf/nosyntax-foundation-android/issues">Request Feature</a>
+    <a href="https://github.com/nosyntax-io/nosyntax-foundation/issues">Request Feature</a>
   </p>
 </div>
 
