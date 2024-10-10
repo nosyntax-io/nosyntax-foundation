@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Set Up Environment Variables
         run: |
           PROJECT_ID=$(jq -r '.inputs["project-id"]' $GITHUB_EVENT_PATH)
@@ -60,7 +63,7 @@ jobs:
 
       - name: Update Signing Settings
         run: |
-          curl -s -i -X POST "https://api.nosyntax.io/actions/update_signing_settings" \
+          response=$(curl -s -X POST "https://api.nosyntax.io/actions/update_signing_settings" \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "API-KEY: ${{ secrets.API_KEY }}" \
             -d "project_id=${{ env.PROJECT_ID }}" \
@@ -69,4 +72,6 @@ jobs:
             -d "key_alias=${{ env.KEY_ALIAS }}" \
             -d "key_password=${{ env.KEY_PASSWORD }}" \
             -d "sha1_fingerprint=${{ env.SHA1_FINGERPRINT }}" \
-            -d "sha256_fingerprint=${{ env.SHA256_FINGERPRINT }}"
+            -d "sha256_fingerprint=${{ env.SHA256_FINGERPRINT }}")
+          
+          echo "$response" | ./.github/scripts/log_curl_response.sh
