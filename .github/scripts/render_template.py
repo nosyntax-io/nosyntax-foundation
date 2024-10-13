@@ -25,9 +25,6 @@ def render_template(
 			autoescape=select_autoescape()
 		)
 
-		env.filters['lower'] = str.lower
-		env.filters['upper'] = str.upper
-
 		template = env.get_template(os.path.basename(template_path))
 
 		with open(output_path, 'w', encoding='utf-8') as f:
