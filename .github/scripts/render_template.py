@@ -52,8 +52,8 @@ def parse_data(data: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
 			with open(data, 'r', encoding='utf-8') as f:
 				return json.load(f)
 		return json.loads(data)
-	except (json.JSONDecodeError, FileNotFoundError) as e:
-		raise ValueError(f"Failed to decode JSON: {e}") from e
+	except Exception as e:
+		raise ValueError(f"Error decoding JSON: {e}") from e
 
 def main() -> None:
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -65,9 +65,11 @@ def main() -> None:
 
 	args = parser.parse_args()
 
-	parsed_data = parse_data(args.data)
-
-	render_template(args.template_file, args.output_file, parsed_data)
+	try:
+		parsed_data = parse_data(args.data)
+		render_template(args.template_file, args.output_file, parsed_data)
+	except Exception as e:
+		logging.error(e)
 
 if __name__ == "__main__":
 	main()
